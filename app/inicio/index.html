@@ -117,6 +117,36 @@ body{padding-bottom:40px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.action{transition:none}}
 </style>
+<style id="promovie-app-card-detail-20261010">
+.careTile{overflow:visible !important;border-radius:16px}
+.careTileInteractive{height:100%;position:relative;overflow:hidden;border-radius:15px;display:flex;flex-direction:column}
+.careTileText{flex:1}
+.careLearnMore{display:flex;align-items:center;justify-content:space-between;padding:0 10px 11px;color:#6936b4;font-size:.66rem;font-weight:800;line-height:1.3;pointer-events:none}
+.careTile.informational .careLearnMore{color:#058da3}
+.careLearnMore span{font-size:.91rem;line-height:1}
+.careTileTap{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit;background:transparent;cursor:pointer;z-index:4;touch-action:manipulation}
+.careTile:focus-within{outline:3px solid #00bde8;outline-offset:2px;border-color:transparent}
+.careTile:hover{border-color:#d5bff3;box-shadow:0 7px 21px rgba(66,32,121,.11)}
+.careTile.informational:hover{border-color:#afe3e9}
+.careDetailDialog{box-sizing:border-box;width:min(calc(100vw - 26px),440px);max-height:min(88dvh,680px);overflow-y:auto;overscroll-behavior:contain;border:1px solid #e8e2f2;border-radius:23px;background:#fff;box-shadow:0 25px 70px rgba(25,13,69,.27);padding:0;color:#202640}
+.careDetailDialog::backdrop{background:rgba(27,18,65,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.careDetailSurface{padding:25px}
+.careDetailHeader{display:flex;align-items:flex-start;gap:11px;margin-bottom:16px}
+.careDetailSymbol{width:41px;height:41px;flex:0 0 41px;border-radius:13px;display:grid;place-items:center;color:#6b35b9;background:#f1eaff}
+.careDetailDialog[data-kind="informational"] .careDetailSymbol{color:#008ba3;background:#e6f8fb}
+.careDetailSymbol svg{width:23px;height:23px;stroke-width:1.8}
+.careDetailHeader>div{min-width:0;flex:1}
+.careDetailGroup{margin:1px 0 4px !important;font-size:.64rem;letter-spacing:.11em;text-transform:uppercase;font-weight:850;color:#8357b4}
+.careDetailDialog[data-kind="informational"] .careDetailGroup{color:#028b9e}
+.careDetailHeader h2{font-size:1.31rem;font-weight:850;letter-spacing:-.035em;line-height:1.17;margin:0}
+.careDetailClose{width:32px;height:32px;flex:0 0 32px;border:0;background:#f5f2fa;color:#5a397e;font-size:1.4rem;cursor:pointer;border-radius:50%;display:grid;place-items:center;line-height:1}
+.careDetailLead{color:#6330ad;font-size:.88rem;font-weight:770;margin:0 0 10px !important;line-height:1.5}
+.careDetailDialog[data-kind="informational"] .careDetailLead{color:#07899e}
+.careDetailBody{font-size:.91rem;color:#566078;line-height:1.66;margin:0 0 23px !important}
+.careDetailDone{border:0;background:linear-gradient(112deg,#4b0c8f,#7334d8);color:#fff;border-radius:13px;display:block;width:100%;min-height:47px;padding:10px 15px;font-size:.87rem;font-weight:850;cursor:pointer}
+.careDetailDialog[data-kind="informational"] .careDetailDone{background:#087f94}
+@media(max-width:650px){.careTileText{padding-bottom:7px}.careLearnMore{font-size:.62rem;padding-bottom:10px;padding-left:10px;padding-right:10px}.careDetailDialog{margin:auto;border-radius:22px}.careDetailSurface{padding:22px 21px}.careDetailBody{font-size:.87rem}}
+</style>
 </head>
 <body id="inicio">
 <header class="appHeader">
@@ -136,64 +166,88 @@ body{padding-bottom:40px}
 </div>
 <section class="group professionalGroup" id="consultas" aria-labelledby="titleConsultas">
 <div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg></span><div><p class="headingMeta">Atendimentos profissionais</p><h2 id="titleConsultas">Telemedicina</h2></div></div>
-<p class="groupDesc">Quatro especialidades com atendimento on-line. Todas utilizam o mesmo acesso à plataforma.</p>
+<p class="groupDesc">Toque nas imagens para conhecer cada especialidade. Para acessar as consultas, utilize o botão único abaixo.</p>
 <div class="careTiles" role="list" aria-label="Especialidades de telemedicina">
-<article class="careTile professional" aria-label="Clínico Geral 24h: Consulta médica online">
+<article class="careTile professional" role="listitem" aria-label="Clínico Geral 24h"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="" loading="eager" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg></span>
   </div>
   <div class="careTileText"><h3>Clínico Geral 24h</h3><p>Consulta médica online</p></div>
-</article>
-<article class="careTile professional" aria-label="Psicologia: Consulta psicológica online">
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="0" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Clínico Geral 24h"></button>
+</div></article>
+<article class="careTile professional" role="listitem" aria-label="Psicologia"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg></span>
   </div>
   <div class="careTileText"><h3>Psicologia</h3><p>Consulta psicológica online</p></div>
-</article>
-<article class="careTile professional" aria-label="Médico da Família: Consulta médica online">
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="1" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Psicologia"></button>
+</div></article>
+<article class="careTile professional" role="listitem" aria-label="Médico da Família"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://images.pexels.com/photos/4266936/pexels-photo-4266936.jpeg?auto=compress&amp;dpr=1&amp;h=750&amp;w=1260" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg></span>
   </div>
   <div class="careTileText"><h3>Médico da Família</h3><p>Consulta médica online</p></div>
-</article>
-<article class="careTile professional" aria-label="Pediatra: Consulta médica online">
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="2" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Médico da Família"></button>
+</div></article>
+<article class="careTile professional" role="listitem" aria-label="Pediatra"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg></span>
   </div>
   <div class="careTileText"><h3>Pediatra</h3><p>Consulta médica online</p></div>
-</article>
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="3" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Pediatra"></button>
+</div></article>
 </div>
 <div class="groupCTA"><a class="action actionTele" href="/app/telemedicina/" id="telemedicinaAccess" aria-label="Acessar Telemedicina PromoVie para as quatro especialidades"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg><span>Acessar Telemedicina PromoVie</span></a></div>
 <p class="groupNotice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4.2v5.5c0 5-2.7 8.3-8 10.3-5.3-2-8-5.3-8-10.3V6.2Z"/><path d="m8.5 12 2.4 2.4 4.7-5.1"/></svg><span>As imagens apresentam as especialidades. Utilize o único botão acima para acessar. Integração Levita em preparação.</span></p>
 </section>
 <section class="group infoGroup" id="acolhimento" aria-labelledby="titleInfo">
 <div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span><div><p class="headingMeta">Acolhimento e informações</p><h2 id="titleInfo">Orientações e cuidado</h2></div></div>
-<p class="groupDesc">Escuta, acolhimento e informações confiáveis para dúvidas e cuidados do dia a dia.</p>
+<p class="groupDesc">Toque nas imagens para conhecer cada área. O acolhimento é solicitado pelo botão único abaixo.</p>
 <div class="careTiles" role="list" aria-label="Áreas de orientação e acolhimento">
-<article class="careTile informational" aria-label="Nutrição: Alimentação e hábitos">
+<article class="careTile informational" role="listitem" aria-label="Nutrição"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="" loading="eager" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span>
   </div>
   <div class="careTileText"><h3>Nutrição</h3><p>Alimentação e hábitos</p></div>
-</article>
-<article class="careTile informational" aria-label="Condicionamento Físico: Movimento e bem-estar">
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="4" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Nutrição"></button>
+</div></article>
+<article class="careTile informational" role="listitem" aria-label="Condicionamento Físico"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span>
   </div>
   <div class="careTileText"><h3>Condicionamento Físico</h3><p>Movimento e bem-estar</p></div>
-</article>
-<article class="careTile informational" aria-label="Saúde da Mulher: Autocuidado e prevenção">
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="5" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Condicionamento Físico"></button>
+</div></article>
+<article class="careTile informational" role="listitem" aria-label="Saúde da Mulher"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span>
   </div>
   <div class="careTileText"><h3>Saúde da Mulher</h3><p>Autocuidado e prevenção</p></div>
-</article>
-<article class="careTile informational" aria-label="Cuidados Pet: Bem-estar dos animais">
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="6" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Saúde da Mulher"></button>
+</div></article>
+<article class="careTile informational" role="listitem" aria-label="Cuidados Pet"><div class="careTileInteractive">
+
   <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span>
   </div>
   <div class="careTileText"><h3>Cuidados Pet</h3><p>Bem-estar dos animais</p></div>
-</article>
+<span class="careLearnMore" aria-hidden="true">Toque para saber mais <span>↗</span></span>
+<button class="careTileTap" type="button" data-care-index="7" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Cuidados Pet"></button>
+</div></article>
 </div>
 <div class="groupCTA"><a class="action actionInfo" href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20acolhimento%20e%20orienta%C3%A7%C3%B5es%20pela%20PromoVie." target="_blank" rel="noopener noreferrer" id="orientacaoAccess" aria-label="Solicitar acolhimento e orientações pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.2h16v11.7H8.6L4 20V5.2Z"/><path d="M8.4 10.4h7.2M8.4 13.1h4.8"/></svg><span>Conversar com a PromoVie</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a></div>
 <p class="groupNotice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.5 2.4 7.1L21.5 12l-7.1 2.4-2.4 7.1-2.4-7.1L2.5 12l7.1-2.4Z"/></svg><span>As quatro áreas de acolhimento compartilham o botão de contato acima.</span></p>
@@ -205,10 +259,51 @@ body{padding-bottom:40px}
 <a class="appTabItem" href="#consultas" data-section="consultas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg><span>Telemedicina</span></a>
 <a class="appTabItem" href="#acolhimento" data-section="acolhimento"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg><span>Acolhimento</span></a>
 </nav>
+<dialog class="careDetailDialog" id="careDetailDialog" aria-labelledby="careDetailTitle" aria-describedby="careDetailBody">
+  <div class="careDetailSurface">
+    <div class="careDetailHeader"><span class="careDetailSymbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-8.5-5.1-8.5-10.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1C20.5 15.9 12 21 12 21Z"/></svg></span>
+      <div><p class="careDetailGroup" id="careDetailGroup"></p><h2 id="careDetailTitle"></h2></div>
+      <button class="careDetailClose" type="button" id="careDetailClose" aria-label="Fechar detalhes">×</button>
+    </div>
+    <p class="careDetailLead" id="careDetailLead"></p>
+    <p class="careDetailBody" id="careDetailBody"></p>
+    <button class="careDetailDone" type="button" id="careDetailDone">Entendi</button>
+  </div>
+</dialog>
 <script src="/app/config.js"></script>
 <script>
 (function(){
 "use strict";
+const careSource=[{"title":"Clínico Geral 24h","lead":"Consulta médica online.","details":"Consulta médica para avaliação de sintomas, dúvidas gerais e encaminhamento presencial quando clinicamente indicado."},{"title":"Psicologia","lead":"Consulta psicológica online.","details":"Espaço de escuta qualificada para emoções, relações, ansiedade, conflitos e desafios da vida pessoal ou profissional, conforme a modalidade contratada."},{"title":"Médico da Família","lead":"Consulta médica online.","details":"Atendimento médico para questões gerais de saúde e cuidado da pessoa e da família, conforme as condições da modalidade contratada."},{"title":"Pediatra","lead":"Consulta médica online.","details":"Atendimento médico infantil para orientar responsáveis sobre questões de saúde, quando o atendimento remoto for adequado e estiver incluído na modalidade contratada."},{"title":"Nutrição","lead":"Escuta, acolhimento e informação.","details":"Conversa on-line para ouvir dúvidas sobre alimentação e rotina, acolher necessidades e ajudar a encontrar informações confiáveis e organizar hábitos do dia a dia."},{"title":"Condicionamento Físico","lead":"Escuta, acolhimento e informação.","details":"Escuta e bate-papo sobre movimento, motivação e bem-estar, com apoio para esclarecer dúvidas, buscar informações confiáveis e organizar hábitos possíveis na rotina."},{"title":"Saúde da Mulher","lead":"Escuta, acolhimento e informação.","details":"Acolhimento e conversa sobre saúde da mulher, autocuidado e prevenção, com auxílio para esclarecer dúvidas e encontrar informações confiáveis para o cotidiano."},{"title":"Cuidados Pet","lead":"Escuta, acolhimento e informação.","details":"Escuta e conversa com tutores sobre os cuidados e o bem-estar dos animais de estimação, com auxílio para esclarecer dúvidas e informações confiáveis."}];
+
+const infoDialog=document.getElementById("careDetailDialog");
+const infoTitle=document.getElementById("careDetailTitle");
+const infoGroup=document.getElementById("careDetailGroup");
+const infoLead=document.getElementById("careDetailLead");
+const infoBody=document.getElementById("careDetailBody");
+let lastCareButton=null;
+function closeCareDetails(){
+ if(typeof infoDialog.close==="function" && infoDialog.open) infoDialog.close();
+ else infoDialog.removeAttribute("open");
+ if(lastCareButton)lastCareButton.focus({preventScroll:true});
+}
+document.querySelectorAll(".careTileTap").forEach(btn=>btn.addEventListener("click",function(){
+ const i=Number(btn.dataset.careIndex);
+ const entry=careSource[i];
+ if(!entry)return;
+ lastCareButton=btn;
+ infoTitle.textContent=entry.title;
+ infoGroup.textContent=i<4?"Atendimento profissional":"Acolhimento e informação";
+ infoLead.textContent=entry.lead;
+ infoBody.textContent=entry.details;
+ infoDialog.dataset.kind=i<4?"professional":"informational";
+ if(typeof infoDialog.showModal==="function")infoDialog.showModal();else infoDialog.setAttribute("open","");
+ document.getElementById("careDetailClose").focus();
+}));
+document.getElementById("careDetailClose").addEventListener("click",closeCareDetails);
+document.getElementById("careDetailDone").addEventListener("click",closeCareDetails);
+infoDialog.addEventListener("click",event=>{if(event.target===infoDialog)closeCareDetails();});
+infoDialog.addEventListener("close",()=>{if(lastCareButton)lastCareButton.focus({preventScroll:true});});
 const tabs=Array.from(document.querySelectorAll(".appTabItem"));
 function activate(id){
  tabs.forEach(tab=>{
