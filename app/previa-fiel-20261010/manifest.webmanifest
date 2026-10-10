@@ -1,0 +1,26 @@
+{
+  "id": "/app/previa-fiel-20261010/",
+  "name": "PromoVie | Prévia",
+  "short_name": "PromoVie Prévia",
+  "description": "Prévia visual para avaliação da PromoVie no iPhone e notebook.",
+  "lang": "pt-BR",
+  "start_url": "/app/previa-fiel-20261010/inicio/",
+  "scope": "/app/previa-fiel-20261010/",
+  "display": "standalone",
+  "background_color": "#f9faff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/app/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
