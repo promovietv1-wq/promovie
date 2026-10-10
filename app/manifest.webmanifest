@@ -1,8 +1,8 @@
 {
   "id": "/app/",
-  "name": "PromoVie | Saúde e Cuidado",
+  "name": "PromoVie",
   "short_name": "PromoVie",
-  "description": "Acesso à Telemedicina PromoVie e a informações e canais de cuidado.",
+  "description": "PromoVie no celular: telemedicina, cuidados e atendimento.",
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "/app/",
@@ -49,5 +49,6 @@
         }
       ]
     }
-  ]
+  ],
+  "prefer_related_applications": false
 }
