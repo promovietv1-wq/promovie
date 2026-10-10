@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4b0c8f">
+<meta name="color-scheme" content="light">
+<meta name="description" content="PromoVie no seu celular: acesso à Telemedicina PromoVie, informações de saúde e canais de atendimento em um só lugar.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PromoVie">
+<meta name="application-name" content="PromoVie">
+<link rel="canonical" href="https://www.promovie.tv.br/app/inicio/">
+<link rel="manifest" href="/app/manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="/app/icons/icon.svg">
+<link rel="apple-touch-icon" href="/app/icons/icon-192.png">
+<title>PromoVie | Início</title>
+<style>
+:root{--purple:#4b0c8f;--violet:#7334d8;--cyan:#00bde8;--ink:#1e2542;--muted:#657086;--line:#e7eaf4;--paper:#fff;--cloud:#f6f8ff;--shadow:0 17px 45px rgba(40,31,98,.085)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;background:#f8f9fd;color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100dvh}
+a{text-decoration:none;color:inherit}button{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a:focus-visible,button:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}svg{display:block}img{max-width:100%}
+.page{width:min(100% - 44px,990px);margin:auto}
+header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.top{height:78px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand img{width:154px;height:auto;max-height:64px;object-fit:contain}.brandText{font-weight:800;letter-spacing:-.035em;color:var(--purple);font-size:24px}
+.nav{display:flex;align-items:center;gap:10px}.nav a{font-size:.85rem;font-weight:750;color:#56617d;padding:11px 13px;border-radius:12px}.nav a:hover{background:#f2effb;color:var(--purple)}
+.nav .contact{color:var(--purple);background:#f1eafb;border:1px solid #e9dafb}
+main{padding:34px 0 28px}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(230px,.85fr);align-items:center;gap:25px;background:linear-gradient(119deg,#4b0c8f 0%,#6331b5 54%,#4537a4 100%);position:relative;isolation:isolate;overflow:hidden;min-height:319px;border-radius:30px;padding:40px 44px;box-shadow:0 24px 48px rgba(75,12,143,.16)}
+.hero:before{content:"";position:absolute;width:450px;height:450px;right:-185px;top:-245px;border:1px solid rgba(255,255,255,.16);border-radius:50%;box-shadow:0 0 0 50px rgba(255,255,255,.018),0 0 0 102px rgba(255,255,255,.018);z-index:-1}
+.hero:after{content:"";position:absolute;width:240px;height:240px;bottom:-165px;left:34%;border-radius:50%;background:radial-gradient(circle,rgba(0,189,232,.30),transparent 72%);z-index:-1}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#e7dbff;text-transform:uppercase;letter-spacing:.14em;font-size:.68rem;font-weight:800;margin-bottom:18px}
+.eyebrow i{width:8px;height:8px;border-radius:50%;background:#70ddf2;box-shadow:0 0 0 5px rgba(112,221,242,.11)}
+h1{font-size:clamp(2rem,4.6vw,3.22rem);color:white;letter-spacing:-.052em;line-height:1.08;margin:0 0 18px;font-weight:850;max-width:540px}
+h1 strong{color:#84e9ff;font-weight:850}
+.hero p{margin:0;color:#f2eafa;opacity:.96;line-height:1.65;font-size:.99rem;max-width:430px}
+.heroArt{display:grid;place-items:center;position:relative;min-height:232px}
+.heroArt:before{content:"";position:absolute;width:213px;height:213px;border-radius:32%;transform:rotate(-15deg);border:1px solid rgba(255,255,255,.22);background:linear-gradient(150deg,rgba(255,255,255,.16),rgba(255,255,255,.015));box-shadow:0 24px 55px rgba(35,10,85,.23)}
+.heroArt>svg{width:152px;height:152px;position:relative;filter:drop-shadow(0 12px 16px rgba(27,9,78,.14))}
+.heroArt .bubble{position:absolute;right:0;bottom:12px;display:flex;align-items:center;gap:7px;padding:9px 11px;border-radius:100px;font-size:.69rem;font-weight:800;background:white;color:var(--purple);box-shadow:0 10px 25px rgba(16,4,59,.21)}
+.bubble span{height:7px;width:7px;border-radius:100%;background:var(--cyan)}
+.contentGrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(275px,.8fr);gap:22px;margin-top:24px}
+.panel{background:white;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.mainCard{padding:30px;position:relative;overflow:hidden}.mainCard:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:linear-gradient(180deg,var(--cyan),var(--violet));border-radius:12px}
+.panelHeader{display:flex;align-items:center;gap:12px}.iconBox{height:48px;width:48px;border-radius:15px;display:grid;place-items:center;flex:none;background:#f0eaff;color:var(--violet)}
+.iconBox svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.overline{font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--violet);font-weight:850;margin-bottom:4px}
+h2{font-size:1.5rem;letter-spacing:-.035em;line-height:1.2;margin:0;font-weight:850}
+.muted{font-size:.92rem;line-height:1.65;color:var(--muted);margin:15px 0 22px}
+.button{display:inline-flex;justify-content:center;align-items:center;gap:10px;border:0;border-radius:13px;padding:15px 21px;font-weight:800;font-size:.91rem;min-height:52px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+.button:hover{transform:translateY(-2px)}.button svg{width:18px;height:18px;flex:none}
+.buttonPrimary{background:linear-gradient(110deg,var(--purple),#7b39d7);color:white;box-shadow:0 11px 27px rgba(75,12,143,.20)}.buttonPrimary:hover{box-shadow:0 14px 30px rgba(75,12,143,.29)}.buttonSoft{background:#f1edff;color:var(--purple)}.buttonNeutral{background:white;border:1px solid #dedfeb;color:var(--purple)}.mainCard>.button{width:100%}
+.status{font-size:.73rem;color:#72788e;margin-top:12px;display:flex;align-items:center;gap:7px;line-height:1.45}.status span{width:6px;height:6px;background:#b399ec;border-radius:50%;flex:none}.status.ready span{background:#23a980}
+.side{display:grid;gap:17px;grid-template-rows:1fr 1fr}.smallCard{padding:22px;display:flex;align-items:flex-start;gap:14px}.smallCard .iconBox{height:42px;width:42px;border-radius:13px;background:#edfaff;color:#087db4}.smallCard h3{font-size:.99rem;margin:1px 0 6px;letter-spacing:-.02em}.smallCard p{font-size:.81rem;line-height:1.57;color:var(--muted);margin:0}.smallCard a{color:#6436bc;font-size:.81rem;font-weight:800;display:inline-block;margin-top:8px}
+.serviceSection{margin-top:39px}.sectionTop{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:16px}.sectionTop h2{font-size:1.38rem}.sectionTop p{font-size:.84rem;color:var(--muted);margin:6px 0 0;line-height:1.55}
+.serviceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.serviceCard{border:1px solid var(--line);border-radius:19px;background:white;padding:18px;display:flex;gap:13px;align-items:center}
+.serviceCard svg{width:19px;height:19px;stroke:var(--violet);fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.8}
+.serviceCard .ico{height:38px;width:38px;flex:none;border-radius:12px;background:#f4efff;display:grid;place-items:center}
+.serviceCard.info .ico{background:#eefdff}.serviceCard.info svg{stroke:#0b8aa6}
+.serviceCard span{display:block;font-weight:780;color:#26324d;font-size:.89rem}.serviceCard small{font-size:.74rem;color:#788298;display:block;margin-top:3px}
+.installBox{margin-top:30px;border:1px solid #e5e3f3;background:linear-gradient(135deg,#f2f0fb,#f0fbff);border-radius:23px;padding:25px;display:flex;align-items:center;justify-content:space-between;gap:17px}.installBox h2{font-size:1.22rem}.installBox p{color:#5d6980;font-size:.85rem;line-height:1.55;margin:8px 0 0}.installBox .button{white-space:nowrap}
+footer{border-top:1px solid var(--line);padding:24px 0 calc(28px + env(safe-area-inset-bottom));color:#798195;font-size:.74rem}.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}footer a{color:var(--purple);font-weight:750}
+.guide{position:fixed;inset:0;z-index:90;background:rgba(19,15,50,.55);display:grid;place-items:end center;padding:18px;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}.guide[hidden]{display:none}.guideContent{position:relative;background:white;width:min(100%,470px);padding:28px;border-radius:25px;box-shadow:0 32px 80px rgba(9,6,37,.32)}.guideContent h2{margin-right:30px}.guideContent p{line-height:1.65;color:var(--muted);font-size:.91rem}.guideContent ol{padding-left:22px;line-height:1.85;color:#434c62}.closeGuide{position:absolute;top:13px;right:13px;background:#f5f3fb;border:none;width:38px;height:38px;border-radius:50%;font-weight:bold;cursor:pointer;color:var(--purple)}
+@media(max-width:760px){.page{width:min(100% - 30px,680px)}.top{height:69px}.brand img{width:126px}.nav a{font-size:.78rem;padding:9px}.nav .homeLink{display:none}main{padding-top:17px}.hero{padding:31px 26px;grid-template-columns:1fr;min-height:auto;gap:10px;border-radius:25px}.heroArt{min-height:150px}.heroArt:before{width:140px;height:140px;border-radius:32px}.heroArt>svg{width:100px;height:100px}.heroArt .bubble{bottom:0;right:calc(50% - 120px)}.hero h1{font-size:2.35rem;max-width:550px}.contentGrid{grid-template-columns:1fr}.side{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto}.smallCard{padding:17px;display:block}.smallCard .iconBox{margin-bottom:11px}.installBox{align-items:flex-start;flex-direction:column}.installBox .button{width:100%}}
+@media(max-width:460px){.page{width:calc(100% - 26px)}.brand img{width:108px}.brandText{font-size:20px}.top{gap:8px}.nav{gap:3px}.nav a{padding:8px 9px;font-size:.75rem}.hero{padding:30px 22px 26px}.hero h1{font-size:2.05rem}.eyebrow{font-size:.62rem}.heroArt{min-height:128px}.heroArt>svg{width:87px;height:87px}.heroArt:before{width:118px;height:118px}.heroArt .bubble{font-size:.65rem;right:3%}.mainCard{padding:23px}.side{grid-template-columns:1fr}.smallCard{display:flex;padding:18px}.smallCard .iconBox{margin:0}.serviceGrid{gap:9px}.serviceCard{padding:13px 11px;gap:9px;align-items:flex-start}.serviceCard span{font-size:.81rem;line-height:1.35}.serviceCard small{font-size:.7rem;line-height:1.3}.serviceCard .ico{width:31px;height:31px;border-radius:9px}.serviceCard svg{width:16px;height:16px}.installBox{padding:21px}footer{font-size:.71rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto !important;transition:none !important}}
+</style>
+<style id="promovie-app-native-shell-v2">
+/* Superfície de aplicativo: conteúdo próprio, navegação persistente e sem links institucionais. */
+body {overscroll-behavior-y:contain}
+.appTabBar{display:none}
+#servicesTitle{scroll-margin-top:86px}
+.appInstalled .installBox{display:none !important}
+@media(display-mode:standalone){.installBox{display:none !important}}
+header .top {height:70px}
+header .top .brand img{width:132px}
+header .top .nav{gap:0}
+header .top .nav .contact{display:inline-flex !important;align-items:center;justify-content:center;min-height:38px;background:#f0eafb;border:1px solid #e9dafb;border-radius:12px;color:#5925a0;padding:8px 15px;font-size:.81rem;letter-spacing:0}
+.hero{border-radius:25px}
+.hero .eyebrow{letter-spacing:.12em}
+.hero h1{max-width:460px}
+.mainCard .buttonPrimary{border-radius:15px}
+.serviceGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.serviceCard{flex-direction:column;align-items:flex-start;min-height:133px;justify-content:flex-start}
+.serviceCard small{line-height:1.35}
+.installBox{border-radius:19px}
+footer .foot{justify-content:center;text-align:center}
+@media(max-width:850px){
+ html{scroll-padding-top:74px}
+ body{background:#f5f7fc;padding-bottom:calc(85px + env(safe-area-inset-bottom))}
+ header{position:sticky;top:0;padding-top:env(safe-area-inset-top);box-shadow:0 1px 12px rgba(43,35,98,.05)}
+ header .top{height:60px !important}
+ header .top .brand img{width:118px !important;max-height:50px}
+ header .top .nav .contact{min-height:34px;padding:7px 12px !important}
+ main{padding-top:15px !important}
+ .page{width:calc(100% - 28px)}
+ .hero{min-height:0;grid-template-columns:1fr;border-radius:22px;padding:24px 24px 23px !important;gap:0;box-shadow:0 12px 26px rgba(75,12,143,.14)}
+ .hero .eyebrow{font-size:.61rem;margin-bottom:11px;letter-spacing:.11em}
+ .hero h1{font-size:clamp(1.88rem,7vw,2.55rem);line-height:1.13;letter-spacing:-.04em;margin:0 0 10px}
+ .hero p{font-size:.84rem;line-height:1.5;max-width:480px}
+ .heroArt{display:none}
+ .contentGrid{margin-top:14px !important;grid-template-columns:1fr;gap:13px}
+ .mainCard{padding:21px !important;border-radius:20px;box-shadow:0 8px 22px rgba(48,33,108,.055)}
+ .mainCard:before{width:4px}
+ .mainCard .panelHeader{gap:11px}
+ .mainCard .iconBox{height:42px;width:42px;border-radius:13px}
+ .mainCard h2{font-size:1.23rem;line-height:1.25}
+ .mainCard .overline{font-size:.63rem}
+ .mainCard .muted{font-size:.82rem;line-height:1.53;margin:13px 0 17px}
+ .mainCard .button{min-height:49px;padding:12px 14px;font-size:.86rem}
+ .mainCard .status{font-size:.72rem}
+ .side{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+ .smallCard{padding:15px;border-radius:18px;display:block}
+ .smallCard .iconBox{height:37px;width:37px;border-radius:11px;margin:0 0 10px}
+ .smallCard .iconBox svg{width:20px;height:20px}
+ .smallCard h3{font-size:.86rem;line-height:1.3;margin:0 0 5px}
+ .smallCard p{font-size:.75rem;line-height:1.45}
+ .smallCard a{font-size:.74rem;margin-top:8px}
+ .serviceSection{margin-top:25px}
+ .sectionTop{margin-bottom:12px}
+ .sectionTop h2{font-size:1.22rem}
+ .sectionTop p{font-size:.75rem;line-height:1.5}
+ .serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .serviceCard{min-height:121px;flex-direction:column;align-items:flex-start;padding:14px;border-radius:17px;gap:10px;box-shadow:0 3px 10px rgba(36,20,90,.02)}
+ .serviceCard .ico{width:36px;height:36px;border-radius:11px}
+ .serviceCard .ico svg{width:18px;height:18px}
+ .serviceCard span{font-size:.84rem}
+ .serviceCard small{font-size:.7rem}
+ .installBox{margin-top:21px;gap:12px;padding:20px;border-radius:18px}
+ .installBox h2{font-size:1.03rem}
+ .installBox p{font-size:.78rem}
+ .installBox .button{min-height:44px;font-size:.81rem}
+ footer{padding-top:21px;padding-bottom:12px;font-size:.7rem}
+ .appTabBar{
+ display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr));
+ position:fixed;z-index:80;bottom:0;left:0;right:0;
+ padding:7px max(10px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+ gap:2px;background:rgba(255,255,255,.97);
+ border-top:1px solid #e9e7f3;box-shadow:0 -9px 30px rgba(24,16,69,.08);
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+ }
+ .appTabBar .appTabItem{min-height:54px;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#81869a;font-size:.63rem;font-weight:760;letter-spacing:0;transition:background .18s ease,color .18s ease}
+ .appTabBar .appTabItem svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+ .appTabBar .appTabItem.is-active{color:#6330ad;background:#f4effc}
+ .appTabBar .appTabItem:active{background:#efebf8;color:#6330ad}
+ .appTabBar .appTabItem:focus-visible{outline:2px solid var(--cyan,#00bde8);outline-offset:-1px}
+ .guide{z-index:100;padding-bottom:calc(13px + env(safe-area-inset-bottom))}
+}
+@media(max-width:400px){
+ .hero{padding:22px 20px !important}
+ .hero h1{font-size:1.91rem}
+ .side{gap:9px}
+ .smallCard{padding:13px}
+ .serviceCard{padding:12px;min-height:119px}
+ .appTabBar .appTabItem{font-size:.61rem}
+}
+@media(prefers-reduced-motion:reduce){.appTabBar .appTabItem{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="page top">
+<a class="brand" href="/app/inicio/" aria-label="PromoVie, início do aplicativo"><img src="/preview-promovie-logo.webp" alt="PromoVie" width="154" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="brandText" hidden>PromoVie</span></a>
+<nav class="nav" aria-label="Contato"><a class="contact" href="https://wa.me/5527999417458" target="_blank" rel="noopener noreferrer" aria-label="Ajuda via WhatsApp">Ajuda</a></nav>
+</div></header>
+<main class="page">
+<section class="hero" aria-labelledby="appTitle">
+<div><span class="eyebrow"><i></i>Bem-vindo à PromoVie</span><h1 id="appTitle">Seu cuidado,<br><strong>mais perto.</strong></h1><p>Acesse atendimentos e informações de saúde com praticidade, em um só lugar.</p></div>
+<div class="heroArt" aria-hidden="true"><svg viewBox="0 0 180 180"><rect x="38" y="10" width="104" height="160" rx="19" fill="#fff" fill-opacity=".15" stroke="#fff" stroke-opacity=".7" stroke-width="3"/><rect x="45" y="20" width="90" height="132" rx="12" fill="#fff" fill-opacity=".95"/><circle cx="90" cy="162" r="4" fill="white"/><path d="M90 111s-35-20-35-43a20 20 0 0 1 35-13 20 20 0 0 1 35 13c0 23-35 43-35 43Z" fill="#7334d8"/><path d="M67 78h14l7-10 7 21 7-11h11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="bubble"><span></span>PromoVie no celular</div></div>
+</section>
+<div class="contentGrid">
+<section class="panel mainCard" aria-labelledby="teleTitle">
+<div class="panelHeader"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="3"/><path d="M8.5 10.5h7M12 7v7M9 22h6"/></svg></div><div><div class="overline">Acesso principal</div><h2 id="teleTitle">Telemedicina PromoVie</h2></div></div>
+<p class="muted">Acesse o ambiente de atendimento e cuidado da PromoVie. A integração com a Levita está em preparação.</p>
+<a class="button buttonPrimary" id="accessTelemedicine" href="/app/telemedicina/" aria-label="Acessar Telemedicina PromoVie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5"/></svg>Acessar Telemedicina PromoVie</a>
+<div class="status" id="teleStatus"><span></span>Integração com a plataforma em preparação</div>
+</section>
+<div class="side">
+<section class="panel smallCard"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v12H7l-3 3V5Z"/><path d="M8 10h8M8 13h5"/></svg></div><div><h3>Atendimento e orientação</h3><p>Conheça os serviços disponíveis e esclareça dúvidas com a equipe.</p><a href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20TeleSa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer">Conversar no WhatsApp →</a></div></section>
+<section class="panel smallCard"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><h3>Cuidado e acolhimento</h3><p>Informações confiáveis, escuta e atenção às necessidades do dia a dia.</p><a href="#servicesTitle">Ver áreas de cuidado →</a></div></section>
+</div>
+</div>
+<section class="serviceSection" aria-labelledby="servicesTitle"><div class="sectionTop"><div><h2 id="servicesTitle">Áreas de cuidado</h2><p>Atendimentos profissionais e apoio informativo, conforme as condições de cada serviço.</p></div></div>
+<div class="serviceGrid">
+<div class="serviceCard"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Clínico Geral 24h</span><small>Consulta médica online</small></div></div>
+<div class="serviceCard"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Psicologia</span><small>Consulta psicológica online</small></div></div>
+<div class="serviceCard"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Médico da Família</span><small>Consulta médica online</small></div></div>
+<div class="serviceCard"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Pediatria</span><small>Consulta médica online</small></div></div>
+<div class="serviceCard info"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Nutrição</span><small>Escuta e informação</small></div></div>
+<div class="serviceCard info"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Condicionamento Físico</span><small>Escuta e informação</small></div></div>
+<div class="serviceCard info"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Saúde da Mulher</span><small>Escuta e informação</small></div></div>
+<div class="serviceCard info"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><span>Cuidados Pet</span><small>Escuta e informação</small></div></div>
+</div></section>
+<section class="installBox" aria-labelledby="installTitle"><div><div class="overline">Acesso rápido</div><h2 id="installTitle">PromoVie na tela inicial do seu celular</h2><p>Instale gratuitamente pelo navegador. Sem precisar entrar na App Store ou na Google Play.</p></div><button class="button buttonSoft" id="installButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></svg>Como instalar</button></section>
+</main>
+<footer><div class="page foot"><span>PromoVie · Saúde, comunicação e cuidado.</span></div></footer>
+<nav class="appTabBar" aria-label="Navegação do aplicativo"><a class="appTabItem is-active" href="/app/inicio/" aria-current="page" aria-label="Início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-6H9v6H3z"/></svg><span>Início</span></a><a class="appTabItem" href="/app/telemedicina/" aria-label="Telemedicina"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="2"/><path d="M9 11.5h6m-3-3v6M9 22h6"/></svg><span>Telemedicina</span></a><a class="appTabItem" href="/app/inicio/#servicesTitle" aria-label="Cuidados"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8.6-5.4-8.6-11.1a4.9 4.9 0 0 1 8.6-3.1 4.9 4.9 0 0 1 8.6 3.1C20.6 15.6 12 21 12 21z"/></svg><span>Cuidados</span></a><a class="appTabItem" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20TeleSa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Ajuda"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.2 0-2.3-.2-3.3-.6L4 21l1.6-5.2a8.5 8.5 0 1 1 15.4-4.3z"/><path d="M8.5 11.5h7"/></svg><span>Ajuda</span></a></nav>
+<div class="guide" id="guide" hidden role="dialog" aria-modal="true" aria-labelledby="guideTitle"><div class="guideContent"><button class="closeGuide" id="closeGuide" aria-label="Fechar instruções" type="button">✕</button><div class="overline">Instalação gratuita</div><h2 id="guideTitle">Adicione a PromoVie ao celular</h2><div id="guideSteps"></div><button class="button buttonPrimary" id="guideDone" style="width:100%" type="button">Entendi</button></div></div>
+<script src="/app/config.js"></script>
+<script>
+(function(){
+"use strict";
+const cfg=window.PROMOVIE_APP_CONFIG||{};
+const portal=(typeof cfg.telemedicinaUrl==="string" && /^https:\/\/\S+$/i.test(cfg.telemedicinaUrl))?cfg.telemedicinaUrl:"";
+const access=document.getElementById("accessTelemedicine"),status=document.getElementById("teleStatus");
+if(portal){access.href=portal;access.rel="noopener noreferrer";status.classList.add("ready");status.lastChild.textContent="Portal de telemedicina disponível para acesso";}
+let deferredInstall=null;
+const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+document.documentElement.classList.toggle("appInstalled",standalone);
+const install=document.getElementById("installButton"),dialog=document.getElementById("guide"),steps=document.getElementById("guideSteps");
+if(standalone){install.textContent="Aplicativo instalado";install.disabled=true;install.setAttribute("aria-label","Aplicativo já está instalado");}
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferredInstall=e;if(!standalone)install.textContent="Instalar aplicativo";});
+window.addEventListener("appinstalled",function(){deferredInstall=null;install.textContent="Aplicativo instalado";install.disabled=true;dialog.hidden=true;});
+function showHelp(){
+ steps.innerHTML=isIOS?
+ "<p>No iPhone ou iPad, use o <strong>Safari</strong> para instalar:</p><ol><li>Abra esta página no Safari.</li><li>Toque em <strong>Compartilhar</strong>.</li><li>Escolha <strong>Adicionar à Tela de Início</strong> e confirme.</li></ol><p>Depois, abra pelo ícone PromoVie na tela inicial.</p>":
+ "<p>Abra esta página no <strong>Chrome</strong> do Android:</p><ol><li>Toque no menu de <strong>três pontos</strong>.</li><li>Escolha <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</li><li>Confirme a instalação.</li></ol><p>O ícone PromoVie ficará na tela inicial do celular.</p>";
+ dialog.hidden=false;document.getElementById("closeGuide").focus();
+}
+install.addEventListener("click",async function(){
+ if(deferredInstall){let prompt=deferredInstall;deferredInstall=null;try{await prompt.prompt();await prompt.userChoice;}catch(e){showHelp()}return;}
+ showHelp();
+});
+function closeGuide(){dialog.hidden=true;install.focus()}
+document.getElementById("closeGuide").addEventListener("click",closeGuide);
+document.getElementById("guideDone").addEventListener("click",closeGuide);
+dialog.addEventListener("click",function(e){if(e.target===dialog)closeGuide()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!dialog.hidden)closeGuide()});
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/app/sw.js",{scope:"/app/"}).catch(function(){});});}
+})();
+</script>
+</body>
+</html>
