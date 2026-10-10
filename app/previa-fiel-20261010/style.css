@@ -338,3 +338,41 @@ html,body{max-width:100%;overflow-x:clip}
  .appTop h1 {max-width:100%;}
  .appWelcome {min-height:100px;}
 }
+
+
+/* PromoVie: conexão visual dos quatro serviços ao botão único (prévia de 10/10). */
+.appTop{min-height:76px;margin-bottom:18px}
+.appTop h1{font-size:clamp(33px,3.65vw,56px);font-weight:930;line-height:1.08;letter-spacing:-.06em}
+.groupHead h2{font-weight:900;letter-spacing:-.028em}
+.groupText p{max-width:920px}
+.pvServiceFlow{display:block;position:relative;margin:8px 8px -1px;pointer-events:none;height:68px;overflow:visible}
+.pvServiceFlow .pvServiceFlowWide{display:block;width:100%;height:67px;overflow:visible}
+.pvServiceFlow .pvServiceFlowNarrow{display:none}
+.pvServiceFlow+.groupCTA{margin-top:0;box-shadow:0 9px 21px rgba(86,61,213,.17)}
+.groupPanel:has(.pvServiceFlow){padding-bottom:20px}
+@media(max-width:1120px) and (min-width:701px){
+ .appTop h1{font-size:clamp(32px,3.5vw,44px)}
+ .appTop{min-height:68px}
+ .pvServiceFlow{height:61px}
+ .pvServiceFlow .pvServiceFlowWide{height:60px}
+}
+@media(max-width:700px){
+ .appTop{min-height:0;margin-bottom:21px;padding-right:0}
+ .appTop h1{font-size:clamp(30px,7.2vw,41px);line-height:1.11}
+ .appTop .gradText{display:block}
+ .groupHead h2{font-size:19px;font-weight:900}
+ .groupHead p{font-size:11px;line-height:1.52}
+ .pvServiceFlow{margin:6px 8px -1px;height:61px}
+ .pvServiceFlow .pvServiceFlowWide{display:none}
+ .pvServiceFlow .pvServiceFlowNarrow{display:block;width:100%;height:61px;overflow:visible}
+ .groupPanel:has(.pvServiceFlow){padding-bottom:15px}
+ .pvServiceFlow+.groupCTA{margin-top:0}
+}
+@media(max-width:389px){
+ .appTop h1{font-size:clamp(28px,8vw,32px)}
+ .pvServiceFlow{height:57px}
+ .pvServiceFlow .pvServiceFlowNarrow{height:57px}
+}
+@media(prefers-reduced-motion:reduce){
+ .pvServiceFlow svg{animation:none!important}
+}
