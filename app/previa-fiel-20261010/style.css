@@ -326,3 +326,15 @@ html,body{max-width:100%;overflow-x:clip}
  .careTitle h3{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){.careCard,.careMedia img{transition:none}}
+
+/* Coração exclusivo do arquivo enviado: uma marca por viewport, sem duplicações decorativas. */
+.installHeader .brandHeart,.appSidebar .brandHeart,.appMobileBrand .brandHeart {object-fit:contain;filter:drop-shadow(0 3px 8px rgba(67,65,209,.10));}
+.installVisual .mockBrandReal .mockOriginalLogo {max-width:100%;width:152px;}
+.installVisual .mockBanner {justify-content:flex-start;}
+.appWelcome {justify-content:flex-start;}
+.appWelcome:after {background:radial-gradient(circle at 50% 50%,rgba(113,89,255,.065),transparent 69%);}
+@media(max-width:700px){
+ .appTop {min-height:0;padding-right:0;margin-bottom:20px;}
+ .appTop h1 {max-width:100%;}
+ .appWelcome {min-height:100px;}
+}
