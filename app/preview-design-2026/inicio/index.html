@@ -57,6 +57,19 @@ document.querySelectorAll(".infoButton").forEach(function(button){button.addEven
  document.getElementById("sheetBody").textContent=card.description;
  overlay.hidden=false;document.body.style.overflow="hidden";closeBtn.focus();
 });});
+// Como no aplicativo anterior, clicar na fotografia ou no cartão abre somente os detalhes.
+document.querySelectorAll(".careCard").forEach(function(card){
+ card.style.cursor="pointer";
+ card.setAttribute("tabindex","0");
+ card.setAttribute("aria-label","Ver detalhes de "+(card.querySelector("h3")?.textContent||"serviço"));
+ card.addEventListener("click",function(event){
+  if(event.target.closest(".infoButton"))return;
+  var info=card.querySelector(".infoButton");if(info)info.click();
+ });
+ card.addEventListener("keydown",function(event){
+  if(event.target===card && (event.key==="Enter"||event.key===" ")){event.preventDefault();var info=card.querySelector(".infoButton");if(info)info.click();}
+ });
+});
 closeBtn.addEventListener("click",close);
 document.getElementById("sheetDone").addEventListener("click",close);
 overlay.addEventListener("click",function(event){if(event.target===overlay)close();});
