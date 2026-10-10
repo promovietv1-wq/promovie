@@ -72,7 +72,7 @@ footer{border-top:1px solid var(--line);color:#82899b;font-size:.75rem;padding:2
 <body>
 <header><div class="wrap top">
 <a href="/app/" class="brand" aria-label="PromoVie"><img src="/preview-promovie-logo.webp" width="158" alt="PromoVie" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="fallback" hidden>PromoVie</span></a>
-<nav class="topNav" aria-label="Navegação"><a href="/">Conheça a PromoVie</a><a href="/app/inicio/">Ver aplicativo <span aria-hidden="true">↗</span></a></nav>
+<nav class="topNav" aria-label="Navegação"><a href="/">Conheça a PromoVie</a></nav>
 </div></header>
 <main class="wrap">
 <section class="hero" aria-labelledby="heroTitle">
@@ -97,7 +97,7 @@ footer{border-top:1px solid var(--line);color:#82899b;font-size:.75rem;padding:2
 <article class="feature"><div class="featureIcon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="2"/><path d="M12 7v8M8 11h8M9 22h6"/></svg></div><div><h2>Telemedicina PromoVie</h2><p>Quatro especialidades profissionais reunidas em um único botão de acesso.</p></div></article>
 <article class="feature"><div class="featureIcon"><svg viewBox="0 0 24 24"><path d="M12 21S3.5 15.8 3.5 10.5a4.9 4.9 0 0 1 8.5-3.3 4.9 4.9 0 0 1 8.5 3.3C20.5 15.8 12 21 12 21z"/></svg></div><div><h2>Instalação gratuita</h2><p>Sem precisar entrar na App Store ou na Google Play.</p></div></article>
 </section>
-<section class="lower" aria-labelledby="knowTitle"><div><h2 id="knowTitle">Conheça a experiência antes de instalar</h2><p>Veja a interface do aplicativo com os serviços de cuidado e o botão de Telemedicina PromoVie.</p></div><a class="secondary" href="/app/inicio/">Explorar aplicativo <span aria-hidden="true">→</span></a></section>
+
 </main>
 <footer><div class="wrap foot"><span>PromoVie · Saúde, comunicação e cuidado.</span><span>A instalação não exige cadastro nas lojas de aplicativos.</span></div></footer>
 <dialog class="installDialog" id="installDialog" aria-labelledby="dialogTitle">
@@ -142,10 +142,12 @@ window.addEventListener("beforeinstallprompt",function(e){
 });
 window.addEventListener("appinstalled",function(){
  installed=true;installEvent=null;label.textContent="Aplicativo instalado";
- btn.setAttribute("aria-label","PromoVie instalado: abrir aplicativo");
+ btn.setAttribute("aria-label","Aplicativo PromoVie instalado: abra pelo ícone do celular");
+ btn.disabled=true;
+ btn.title="Abra a PromoVie pelo ícone na tela inicial";
 });
 btn.addEventListener("click",async function(){
- if(installed){window.location.assign("/app/inicio/");return;}
+ if(installed){return;}
  if(installEvent){
   const event=installEvent;installEvent=null;
   try{await event.prompt();await event.userChoice;}catch(e){openInstructions();}
