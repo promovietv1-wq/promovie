@@ -109,7 +109,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 calc(28px + env(safe-area
 (function(){
 "use strict";
 const cfg=window.PROMOVIE_APP_CONFIG||{};
-const portal=(typeof cfg.telemedicinaUrl==="string" && /^https:\/\/[^\\s]+$/i.test(cfg.telemedicinaUrl))?cfg.telemedicinaUrl:"";
+const portal=(typeof cfg.telemedicinaUrl==="string" && /^https:\/\/\S+$/i.test(cfg.telemedicinaUrl))?cfg.telemedicinaUrl:"";
 const access=document.getElementById("accessTelemedicine"),status=document.getElementById("teleStatus");
 if(portal){access.href=portal;access.rel="noopener noreferrer";status.classList.add("ready");status.lastChild.textContent="Portal de telemedicina disponível para acesso";}
 let deferredInstall=null;
