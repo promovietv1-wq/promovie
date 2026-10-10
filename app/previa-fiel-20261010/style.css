@@ -340,21 +340,48 @@ html,body{max-width:100%;overflow-x:clip}
 }
 
 
-/* PromoVie: conexão visual dos quatro serviços ao botão único (prévia de 10/10). */
+
+
+/* Prévia outubro 2026: moldura azul contínua, sem setas */
+.groupPanel .pvAccessFrame{
+ position:relative;
+ border:1.8px solid #79b7f5;
+ border-radius:19px;
+ padding:10px;
+ background:linear-gradient(155deg,rgba(232,244,255,.65),rgba(255,255,255,.99) 45%);
+ box-shadow:0 7px 25px rgba(36,115,214,.075),inset 0 0 0 1px rgba(255,255,255,.88);
+ isolation:isolate;
+}
+.pvAccessFrame:before{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ inset:-1.8px;
+ border-radius:19px;
+ pointer-events:none;
+ background:linear-gradient(120deg,rgba(19,161,255,.19),transparent 35%,rgba(34,139,244,.20));
+ opacity:.55;
+}
+.pvAccessFrame .groupCards{gap:12px}
+.pvAccessFrame .careCard{background:#fff}
+.pvAccessFrame .groupCTA{
+ width:100%;
+ margin-top:12px;
+ margin-bottom:0;
+ border-radius:12px;
+ min-height:54px;
+ box-shadow:0 8px 18px rgba(68,69,198,.14);
+}
+.groupInfo .pvAccessFrame{border-color:#65b8ee}
+.groupPanel:has(.pvAccessFrame){padding-bottom:20px}
 .appTop{min-height:76px;margin-bottom:18px}
 .appTop h1{font-size:clamp(33px,3.65vw,56px);font-weight:930;line-height:1.08;letter-spacing:-.06em}
 .groupHead h2{font-weight:900;letter-spacing:-.028em}
 .groupText p{max-width:920px}
-.pvServiceFlow{display:block;position:relative;margin:8px 8px -1px;pointer-events:none;height:68px;overflow:visible}
-.pvServiceFlow .pvServiceFlowWide{display:block;width:100%;height:67px;overflow:visible}
-.pvServiceFlow .pvServiceFlowNarrow{display:none}
-.pvServiceFlow+.groupCTA{margin-top:0;box-shadow:0 9px 21px rgba(86,61,213,.17)}
-.groupPanel:has(.pvServiceFlow){padding-bottom:20px}
 @media(max-width:1120px) and (min-width:701px){
  .appTop h1{font-size:clamp(32px,3.5vw,44px)}
  .appTop{min-height:68px}
- .pvServiceFlow{height:61px}
- .pvServiceFlow .pvServiceFlowWide{height:60px}
+ .pvAccessFrame .groupCards{gap:9px}
 }
 @media(max-width:700px){
  .appTop{min-height:0;margin-bottom:21px;padding-right:0}
@@ -362,17 +389,64 @@ html,body{max-width:100%;overflow-x:clip}
  .appTop .gradText{display:block}
  .groupHead h2{font-size:19px;font-weight:900}
  .groupHead p{font-size:11px;line-height:1.52}
- .pvServiceFlow{margin:6px 8px -1px;height:61px}
- .pvServiceFlow .pvServiceFlowWide{display:none}
- .pvServiceFlow .pvServiceFlowNarrow{display:block;width:100%;height:61px;overflow:visible}
- .groupPanel:has(.pvServiceFlow){padding-bottom:15px}
- .pvServiceFlow+.groupCTA{margin-top:0}
+ .groupPanel .pvAccessFrame{padding:7px;border-radius:16px;border-width:1.5px}
+ .pvAccessFrame .groupCards{gap:8px}
+ .pvAccessFrame .groupCTA{margin-top:9px;min-height:49px;font-size:12.6px;border-radius:11px}
+ .groupPanel:has(.pvAccessFrame){padding-bottom:15px}
 }
 @media(max-width:389px){
  .appTop h1{font-size:clamp(28px,8vw,32px)}
- .pvServiceFlow{height:57px}
- .pvServiceFlow .pvServiceFlowNarrow{height:57px}
+ .pvAccessFrame .groupCards{gap:7px}
+ .pvAccessFrame .groupCTA{font-size:11.8px}
 }
-@media(prefers-reduced-motion:reduce){
- .pvServiceFlow svg{animation:none!important}
+
+/* Página de instalação: ilustração sempre em área separada do texto */
+.installCopy{position:relative;z-index:4;min-width:0}
+.installVisual{position:relative;z-index:1;min-width:0;pointer-events:none}
+.installHero{isolation:isolate}
+.installVisual .phoneShell{transform:scale(.91) rotate(2deg);transform-origin:center center}
+@media(min-width:701px) and (max-width:1020px){
+ .installHero{
+   display:grid;
+   grid-template-columns:minmax(0,1fr);
+   gap:30px;
+   align-items:start;
+   min-height:0;
+ }
+ .installCopy{max-width:760px;margin:0 auto;width:100%;padding-bottom:0}
+ .installVisual{min-height:590px;height:590px;margin:0 auto;width:min(100%,750px)}
+ .installVisual .phoneShell{transform:scale(.84) rotate(2deg);transform-origin:center center}
+ .installVisual:before{width:85%;height:74%;right:7%;bottom:8%}
+ .trustRow{margin-top:7px}
+}
+@media(max-width:700px){
+ .installHero{display:flex;flex-direction:column;gap:0;align-items:stretch}
+ .installCopy{z-index:4;max-width:100%;padding-bottom:0}
+ .installVisual{
+  display:block;
+  position:relative;
+  overflow:visible;
+  align-self:stretch;
+  flex:none;
+  width:100%;
+  height:535px;
+  min-height:535px;
+  margin:24px 0 8px;
+  z-index:1;
+ }
+ .installVisual .phoneShell{
+  position:absolute;
+  top:15px;
+  left:50%;
+  margin-left:-168px;
+  transform:scale(.76) rotate(2deg);
+  transform-origin:top center;
+ }
+ .installVisual:before{width:98%;height:79%;right:1%;bottom:5%}
+ .installVisual:after{width:95%;right:2%}
+ .trustRow{margin-top:7px}
+}
+@media(max-width:389px){
+ .installVisual{height:503px;min-height:503px;margin-top:22px}
+ .installVisual .phoneShell{transform:scale(.70) rotate(2deg)}
 }
