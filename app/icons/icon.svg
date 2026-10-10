@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="PromoVie">
+<defs><linearGradient id="g" x1="0" x2="1" y1="1" y2="0"><stop stop-color="#4b0c8f"/><stop offset="1" stop-color="#7334d8"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#g)" rx="104"/>
+<path fill="#fff" d="M155 115h124c88 0 139 53 139 125 0 78-54 126-139 126h-36v63h-88zm88 78v96h36c34 0 54-16 54-48 0-30-20-48-54-48z"/>
+<circle cx="389" cy="396" r="25" fill="#7eebf8"/>
+</svg>
