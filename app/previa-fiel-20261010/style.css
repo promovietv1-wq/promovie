@@ -1,0 +1,328 @@
+
+:root{--ink:#07134e;--ink2:#19275f;--body:#526297;--purple:#7725ed;--violet:#8b28f7;--blue:#007ff8;--aqua:#139bfa;--line:#e0e7ff;--paper:#fff;--pale:#f9faff;--shadow:0 14px 43px rgba(25,42,120,.085)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f9faff;color:var(--ink);-webkit-font-smoothing:antialiased}button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{text-decoration:none;color:inherit}button:focus-visible,a:focus-visible{outline:3px solid #3399ff;outline-offset:3px}svg{display:block}img{max-width:100%}[hidden]{display:none!important}
+.gradText{background:linear-gradient(92deg,#8910ff 0%,#6841f4 44%,#047cfa 100%);color:transparent;background-clip:text;-webkit-background-clip:text}.gradButton{color:#fff;background:linear-gradient(100deg,#8d19fc,#4859f7 60%,#008cff);border:0;box-shadow:0 10px 24px rgba(53,53,204,.17);transition:transform .18s,filter .18s}.gradButton:hover{transform:translateY(-1px);filter:saturate(1.16)}
+.heartArt{width:100%;height:100%;filter:drop-shadow(0 9px 18px rgba(73,41,213,.11))}
+.brand{display:inline-flex;align-items:center;gap:9px;flex-shrink:0}.brandLogo{width:155px;max-height:64px;object-fit:contain}.brandFallback{font-weight:900;font-size:28px;letter-spacing:-.055em;color:#0c1954}.brandFallback span{color:#8424f6}
+.softPanel{background:#fff;border:1px solid #eef0ff;border-radius:24px;box-shadow:var(--shadow)}
+/* PAGE DE APRESENTAÇÃO */
+.installPage{background:linear-gradient(130deg,#f4f3ff,#fff 36%,#f4faff 88%);overflow-x:hidden}
+.installHeader{height:89px;display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1270px;padding:0 30px;margin:auto;position:relative;z-index:3}
+.privacyLabel{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.82);border:1px solid #edf0fe;border-radius:18px;padding:10px 13px;box-shadow:0 5px 19px rgba(26,32,86,.06);font-size:12px;line-height:1.4;color:#1b2865;font-weight:730;max-width:250px}.privacyIcon{background:linear-gradient(120deg,#6335f3,#356cff);color:#fff;display:grid;place-items:center;width:37px;height:37px;flex:none;border-radius:12px}.privacyIcon svg{width:21px;height:21px}
+.installHero{max-width:1270px;padding:20px 30px 6px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.84fr);align-items:center;gap:20px;position:relative;min-height:570px}
+.installHero:before{content:"";position:absolute;left:-24vw;top:-33vh;width:80vw;height:67vh;background:linear-gradient(130deg,rgba(110,44,229,.10),rgba(146,133,255,.016));clip-path:polygon(0 0,100% 0,39% 100%,0 80%);pointer-events:none}
+.installCopy{position:relative;z-index:2}.miniEyebrow{font-size:11px;font-weight:900;letter-spacing:.22em;color:#6747bd;text-transform:uppercase;display:flex;align-items:center;gap:11px;margin:0 0 22px}.miniEyebrow:before{content:"";height:6px;width:6px;background:#7821f5;border-radius:50%}
+.installCopy h1{font-size:clamp(45px,5.4vw,76px);letter-spacing:-.07em;line-height:1.01;font-weight:950;text-transform:uppercase;margin:0 0 18px;color:#06114c}
+.installCopy h1 .gradText{display:block}
+.installCopy>p{color:#55649a;font-size:clamp(17px,1.6vw,21px);line-height:1.44;margin:0 0 27px;max-width:620px}
+.installActions{display:flex;flex-wrap:wrap;gap:12px}.installBtn,.previewBtn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:57px;padding:13px 23px;border-radius:15px;font-size:15px;font-weight:800;letter-spacing:-.015em}.installBtn svg,.previewBtn svg{height:22px;width:22px;flex:none}.previewBtn{color:#17276a;border:1px solid #bdc8ff;background:rgba(255,255,255,.86)}.previewBtn:hover{background:#f4f2ff}
+.installPlatforms{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px;max-width:640px}.platform{background:rgba(255,255,255,.81);border-radius:17px;border:1px solid #f0f2ff;display:flex;gap:9px;align-items:center;padding:13px 10px;min-width:0}.platform svg{height:28px;width:28px;flex:none;color:#6041ce}.platform strong{display:block;font-size:13px;line-height:1.2}.platform small{display:block;font-size:11px;color:#6471a4;line-height:1.25;margin-top:3px}
+.installVisual{min-height:530px;display:grid;place-items:center;position:relative}.installVisual:before{content:"";position:absolute;width:115%;height:65%;border-radius:40% 50% 20% 60%;background:linear-gradient(118deg,rgba(145,91,255,.13),rgba(59,117,255,.12));transform:rotate(-27deg);right:-25%;bottom:7%}
+.phoneShell{position:relative;width:286px;height:535px;border-radius:45px;background:linear-gradient(120deg,#181826,#616673 25%,#18191f 55%,#272932);padding:9px;box-shadow:0 26px 46px rgba(22,22,81,.24),0 0 0 3px #dbdeeb;transform:rotate(5deg);z-index:1}.phoneScreen{height:100%;border-radius:37px;background:#fbfcff;overflow:hidden;padding:31px 12px 46px;position:relative}.phoneNotch{position:absolute;top:16px;left:calc(50% - 44px);height:16px;width:88px;border-radius:12px;background:#12131a;z-index:4}.mockBrand{font-weight:900;display:flex;align-items:center;gap:6px;font-size:15px;margin-bottom:13px;letter-spacing:-.045em}.mockBrand .mockHeart{height:29px;width:29px}.mockGreeting{font-size:27px;line-height:1.1;font-weight:920;letter-spacing:-.06em;margin-bottom:12px}.mockBanner{border-radius:12px;background:linear-gradient(105deg,#f0eaff,#eef4ff);padding:10px 11px;display:flex;align-items:center;justify-content:space-between;min-height:67px;gap:7px}.mockBanner strong{font-size:10px;line-height:1.3;color:#4b17b2;display:block}.mockBanner small{font-size:8px;line-height:1.3;display:block;color:#6978b1;margin-top:4px}.mockBanner .heartArt{width:60px;height:55px;flex:none}
+.mockCaption{font-size:9px;font-weight:900;margin:11px 0 6px;color:#19235a}.mockGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.mockItem{min-width:0;background:#fff;border:1px solid #eaf0fd;border-radius:9px;overflow:hidden}.mockItem img{width:100%;height:75px;object-fit:cover;display:block}.mockItem span{display:block;font-size:7.5px;line-height:1.2;padding:5px 5px 7px;font-weight:850;white-space:normal;min-height:27px}.mockNav{position:absolute;left:0;right:0;bottom:0;height:44px;background:#fff;border-top:1px solid #e6eafd;display:flex;align-items:center;justify-content:space-around}.mockNav span{font-size:8px;font-weight:700;color:#6371a8}.mockNav span:first-child{color:#7723ed}
+.underInstall{max-width:1270px;margin:0 auto;padding:0 30px 34px}.trustRow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:-3px;position:relative}.trust{background:rgba(255,255,255,.92);border-radius:19px;padding:20px;display:flex;gap:14px;align-items:center;border:1px solid #edf0ff;min-height:91px}.trust .trustIcon{display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:50%;background:#eee8ff;color:#702cf0}.trust svg{width:22px;height:22px}.trust strong{font-size:14px;display:block;margin-bottom:4px}.trust p{margin:0;color:#6371a7;font-size:12px;line-height:1.38}
+.installHelp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}.helpHalf{border:1px solid #dfe3ff;background:#f4f2ff;border-radius:19px;padding:17px 20px}.helpHalf h2{font-size:15px;margin:0 0 6px}.helpHalf p{font-size:13px;line-height:1.5;margin:0;color:#4e5e93}.helpHalf svg{vertical-align:middle;height:18px;width:18px;display:inline}
+.previewNote{font-size:12px;color:#7180ad;text-align:center;margin:17px auto 0;line-height:1.5}
+.installModal{border:0;border-radius:24px;max-width:min(440px,calc(100% - 24px));width:100%;padding:0;box-shadow:0 22px 66px rgba(16,17,79,.25)}.installModal::backdrop{background:rgba(6,10,53,.47);backdrop-filter:blur(4px)}.modalInner{padding:26px}.modalInner h2{font-size:21px;margin:0 36px 11px 0}.modalInner p{color:#586798;line-height:1.6;font-size:14px}.modalInner ol{padding-left:21px;line-height:1.85;font-size:14px;color:#25366d}.modalInner button.closeModal{position:absolute;right:14px;top:14px;border:0;background:#f2edff;border-radius:50%;width:37px;height:37px;font-size:19px;color:#6023b9}.modalInner .installBtn{width:100%;margin-top:10px}
+@media(max-width:950px){.installHero{grid-template-columns:minmax(0,1fr) 300px;padding-top:14px}.installCopy h1{font-size:clamp(40px,5.2vw,59px)}.installVisual{min-height:505px}.phoneShell{transform:scale(.88) rotate(5deg)}.installActions{gap:9px}.installBtn,.previewBtn{padding:13px 18px}}
+@media(max-width:690px){.installHeader{height:71px;padding:0 17px}.brandLogo{width:131px}.privacyLabel{max-width:179px;font-size:10px;padding:7px}.privacyIcon{width:30px;height:30px}.privacyIcon svg{width:18px;height:18px}.installHero{padding:23px 18px 2px;display:flex;flex-direction:column;gap:0;min-height:0}.installCopy{text-align:center}.miniEyebrow{justify-content:center;font-size:9px;letter-spacing:.12em;margin-bottom:15px}.installCopy h1{font-size:clamp(37px,9.4vw,60px);line-height:1.04}.installCopy>p{font-size:15px;line-height:1.46;margin-bottom:18px}.installActions{display:grid;grid-template-columns:1fr;width:100%;max-width:450px;margin:auto}.installBtn,.previewBtn{width:100%;min-height:53px}.installPlatforms{margin:17px auto 0;width:100%;max-width:450px;gap:7px}.platform{flex-direction:column;align-items:center;text-align:center;padding:9px 4px;gap:4px;border-radius:12px}.platform svg{height:24px;width:24px}.platform strong{font-size:11px}.platform small{font-size:10px}.installVisual{min-height:406px;width:100%}.phoneShell{transform:scale(.73) rotate(4deg);margin:-50px 0}.underInstall{padding:0 17px 23px}.trustRow{gap:8px}.trust{padding:12px;display:block;border-radius:14px;min-height:123px;text-align:center}.trust .trustIcon{margin:0 auto 8px;width:36px;height:36px}.trust svg{height:19px;width:19px}.trust strong{font-size:11px}.trust p{font-size:10px}.installHelp{grid-template-columns:1fr;gap:9px}.helpHalf{padding:14px;border-radius:14px}.helpHalf h2{font-size:13px}.helpHalf p{font-size:12px}}
+@media(max-width:374px){.privacyLabel{max-width:148px}.installCopy h1{font-size:37px}.installPlatforms{gap:5px}.platform strong{font-size:10px}.phoneShell{transform:scale(.69) rotate(4deg)}}
+/* APP INSTALÁVEL: DESKTOP E IPHONE */
+.appPage{background:linear-gradient(122deg,#f5f5ff,#fbfdff 48%,#f4f6ff);min-height:100dvh;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+.appSidebar{position:fixed;z-index:20;top:0;bottom:0;left:0;width:216px;background:rgba(255,255,255,.93);border-right:1px solid #e7e9fa;padding:23px 16px;display:flex;flex-direction:column;gap:22px;box-shadow:4px 0 23px rgba(20,19,108,.025)}
+.appSidebar .brand{justify-content:center}.appSidebar .brandLogo{width:161px}.sideNav{display:grid;gap:7px}.sideNav a{border-radius:15px;display:flex;align-items:center;gap:12px;font-weight:760;font-size:14px;color:#57669f;padding:12px 14px}.sideNav a.active,.sideNav a:hover{color:#7022ed;background:#f4efff}.sideNav svg{height:19px;width:19px}.sideFine{margin-top:auto;border-radius:15px;padding:14px 11px;display:flex;gap:9px;background:#f5f4ff;color:#5e70a3;font-size:11px;line-height:1.45}.sideFine svg{height:18px;width:18px;color:#6e32ed;flex:none}
+.appMain{margin-left:216px;padding:24px 32px 40px;max-width:1635px}.appTop{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:25px}.appTop h1{font-size:clamp(35px,4vw,60px);letter-spacing:-.065em;margin:0;line-height:1}.appTop p{font-size:17px;color:#6775a9;margin:8px 0 0}.appActions{display:flex;align-items:center;gap:12px}.appSearch{font-size:13px;color:#7380af;padding:12px 15px;border:1px solid #e0e4ff;border-radius:14px;background:#fff;min-width:235px}.avatar{display:grid;place-items:center;background:#ded5ff;border-radius:50%;color:#5620af;font-weight:900;width:38px;height:38px;flex:none}
+.appWelcome{display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(111deg,#f3efff,#eef5ff);border:1px solid #e4e7ff;border-radius:19px;padding:15px 22px;margin-bottom:15px}.appWelcome strong{color:#5232e2;font-size:15px;line-height:1.3}.appWelcome p{font-size:12px;color:#6e7cab;margin:3px 0 0}.appWelcome .heartArt{width:108px;height:61px;flex:none}
+.groupPanel{background:rgba(255,255,255,.96);border-radius:23px;padding:23px 23px 19px;box-shadow:var(--shadow);border:1px solid #e9edff;margin-bottom:15px;scroll-margin-top:78px}
+.groupHead{display:flex;align-items:center;gap:15px;margin-bottom:17px}.groupIcon{height:49px;width:49px;display:grid;place-items:center;background:#eeeaff;color:#672cf0;border-radius:50%;flex:none}.groupIcon svg{width:25px;height:25px}.groupText{min-width:0;flex:1}.groupHead h2{font-size:clamp(16px,1.62vw,22px);letter-spacing:-.025em;line-height:1.23;margin:0}.groupHead p{color:#6473ab;font-size:13px;line-height:1.35;margin:5px 0 0}.groupInfo .groupIcon{background:#e8f2ff}
+.groupCards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.careCard{border:1px solid #e5ebfd;border-radius:16px;overflow:hidden;background:linear-gradient(#fff,#fafbff);position:relative;min-width:0;display:flex;flex-direction:column}.careMedia{height:118px;background:#ececff;position:relative;overflow:hidden}.careMedia img{height:100%;width:100%;object-fit:cover;display:block}.smallHeartBadge{position:absolute;bottom:7px;left:8px;background:#fff;box-shadow:0 4px 12px rgba(24,32,86,.14);height:28px;width:28px;border-radius:50%;display:grid;place-items:center;color:#7824ee}.smallHeartBadge svg{height:17px;width:17px}.careCopy{padding:11px 12px 12px;flex:1}.careTitle{display:flex;align-items:start;gap:5px;justify-content:space-between}.careTitle h3{font-size:14px;line-height:1.25;margin:0;letter-spacing:-.02em;font-weight:800}.infoButton{display:grid;place-items:center;height:25px;width:25px;flex:0 0 25px;color:#6733ee;background:#f3f0ff;border:0;border-radius:50%;font-size:14px;font-weight:850}.infoButton:hover{background:#e9dfff}.careCopy p{font-size:12px;color:#6573a8;line-height:1.45;margin:7px 0 0}
+.groupCTA{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(100deg,#9224ff,#4a5cf5 58%,#00a3f9);color:#fff;min-height:53px;width:100%;font-size:15px;font-weight:820;border-radius:13px;margin-top:13px;box-shadow:0 7px 17px rgba(91,66,227,.16)}.groupCTA svg{height:21px;width:21px}.groupCTA:hover{filter:saturate(1.17)}
+.groupFooter{color:#7280ad;font-size:11px;line-height:1.35;margin:9px 1px 0}.appBottom{display:none}
+.sheetOverlay{position:fixed;z-index:100;inset:0;background:rgba(17,20,72,.40);display:grid;place-items:end center;padding:18px}.sheetOverlay[hidden]{display:none}.infoSheet{width:min(100%,565px);background:#fff;border-radius:26px;padding:25px;position:relative;box-shadow:0 17px 56px rgba(19,21,82,.26)}.infoSheet:before{content:"";width:55px;height:5px;border-radius:5px;background:#c9cae5;position:absolute;top:10px;left:calc(50% - 27px)}.infoSheet .closeSheet{position:absolute;right:17px;top:18px;background:#f2f0ff;color:#6b42b4;border:0;width:38px;height:38px;border-radius:50%;font-size:22px}.sheetTop{display:flex;align-items:center;gap:17px;margin:12px 37px 16px 0}.sheetTop img{width:105px;height:100px;object-fit:cover;border-radius:14px}.sheetTop h2{margin:0 0 5px;font-size:23px;line-height:1.15}.sheetTop p{font-size:14px;color:#6473a1;margin:0}.sheetPills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}.sheetPills span{display:inline-flex;align-items:center;gap:5px;border-radius:11px;background:#f5f2ff;color:#62709c;font-size:11px;padding:9px 11px}.sheetPills svg{height:16px;width:16px;color:#682cde}.sheetBody{font-size:14px;line-height:1.6;color:#6573a0;margin:0 0 15px}
+.sheetButton{display:flex;align-items:center;justify-content:center;min-height:47px;border-radius:12px;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(102deg,#8c1fff,#008dff)}.sheetButton svg{height:18px;width:18px;margin-right:9px}
+/* BREAKPOINTS */
+@media(min-width:1300px){.appMain{padding-right:50px}.careMedia{height:147px}}
+@media(max-width:1100px) and (min-width:701px){.appSidebar{width:178px}.appMain{margin-left:178px;padding:20px}.groupCards{gap:8px}.careMedia{height:100px}.careCopy{padding:9px}.careTitle h3{font-size:12px}.careCopy p{font-size:11px}.groupPanel{padding:18px}}
+@media(max-width:700px){.appPage{padding-bottom:calc(80px + env(safe-area-inset-bottom))}.appSidebar{display:none}.appMain{margin-left:0;padding:15px 13px 24px}.appTop{margin-bottom:15px}.appTop h1{font-size:37px}.appTop p{font-size:13px;margin-top:4px}.appSearch{display:none}.avatar{height:35px;width:35px;font-size:12px}.appWelcome{padding:11px 15px;border-radius:16px;margin-bottom:12px}.appWelcome strong{font-size:13px}.appWelcome p{font-size:11px}.appWelcome .heartArt{width:76px;height:50px}.groupPanel{padding:15px 12px 13px;border-radius:20px;margin-bottom:13px}.groupHead{gap:10px;margin-bottom:12px}.groupIcon{height:41px;width:41px}.groupIcon svg{width:20px;height:20px}.groupHead h2{font-size:15px}.groupHead p{font-size:11px}.groupCards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.careMedia{height:112px}.careCopy{padding:9px}.careTitle h3{font-size:12px}.careCopy p{font-size:11px;margin-top:5px;line-height:1.3}.infoButton{height:23px;width:23px;flex-basis:23px}.groupCTA{margin-top:11px;min-height:49px;font-size:13px}.groupFooter{font-size:10px}.appBottom{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;z-index:70;bottom:0;left:0;right:0;gap:2px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid #e5e8ff;box-shadow:0 -7px 28px rgba(20,18,97,.065);backdrop-filter:blur(18px)}.appBottom a{display:grid;justify-items:center;gap:3px;align-content:center;color:#6272a0;font-size:10px;font-weight:750;border-radius:12px;min-height:48px}.appBottom a svg{height:21px;width:21px}.appBottom a.active{background:#f4efff;color:#7727ee}.sheetOverlay{padding:0}.infoSheet{border-radius:24px 24px 0 0;padding:25px 17px calc(20px + env(safe-area-inset-bottom))}.sheetTop img{width:89px;height:91px}.sheetTop h2{font-size:20px}.sheetPills span{font-size:10px}}
+@media(max-width:390px){.careMedia{height:96px}.appTop h1{font-size:33px}.careTitle h3{font-size:11px}.careCopy p{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Identidade fiel à referência: marca ORIGINAL e coração 3D em degradê ao lado */
+.brand .brandHeart{width:41px;height:41px;display:block;object-fit:contain;flex:none;margin-left:1px;filter:drop-shadow(0 3px 5px rgba(103,68,226,.13))}
+.installHeader .brand{gap:10px;min-width:0}
+.installHeader .brandLogo{width:155px;flex:none}
+.installHeader .brandHeart{width:42px;height:42px}
+.appSidebar .brand{gap:7px;justify-content:flex-start;flex-wrap:nowrap}
+.appSidebar .brandLogo{width:132px;max-height:62px}
+.appSidebar .brandHeart{width:35px;height:35px}
+.appMobileBrand{display:none}
+.appTop .approvedWelcome{font-size:12px;font-weight:850;color:#7340c2;letter-spacing:.08em;text-transform:uppercase;margin:0 0 7px}
+.groupText .approvedEyebrow{display:block;font-size:10px;letter-spacing:.10em;text-transform:uppercase;font-weight:850;color:#7d50db;margin-bottom:3px}
+.groupInfo .groupText .approvedEyebrow{color:#4a7cdd}
+.mockBrandReal{display:flex;align-items:center;gap:7px;min-height:32px;margin-bottom:8px}
+.mockBrandReal .mockOriginalLogo{width:112px;max-width:calc(100% - 39px);height:31px;object-fit:contain}
+.mockBrandReal .mockHeart{height:28px;width:28px;flex:none;display:inline-flex;align-items:center;justify-content:center}
+.mockBrandReal .mockHeart .heartArt{width:100%;height:100%;object-fit:contain}
+.mockBanner img.heartArt{height:55px;width:60px;object-fit:contain}
+.appWelcome img.heartArt{height:61px;width:108px;object-fit:contain}
+.installPage .mockItem img{height:41px}
+.installPage .mockItem span{font-size:7px;min-height:17px;padding:3px 4px}
+.installPage .mockCaption{margin:7px 0 5px}
+.installPage .phoneScreen{padding-top:29px}
+.installPage .mockGreeting{font-size:20px;line-height:1.12;margin-bottom:8px}
+.installPage .mockBanner{min-height:59px}
+.installPage .mockGrid{gap:6px}
+@media(max-width:700px){
+ .appMobileBrand{display:flex;align-items:center;justify-content:flex-start;padding:9px 17px;background:rgba(255,255,255,.97);border-bottom:1px solid #e8eaff;min-height:60px;position:relative;z-index:30}
+ .appMobileBrand .brand{gap:8px}
+ .appMobileBrand .brandLogo{width:130px;max-height:42px}
+ .appMobileBrand .brandHeart{height:35px;width:35px}
+ .appSidebar .brandHeart{width:34px;height:34px}
+ .appMain{padding-top:17px}
+ .appTop .approvedWelcome{font-size:10px;margin-bottom:5px}
+ .appTop h1{font-size:clamp(27px,7.2vw,38px);line-height:1.13}
+ .groupText .approvedEyebrow{font-size:9px}
+ .appWelcome img.heartArt{width:76px;height:50px}
+ .installHeader .brandLogo{width:126px}
+ .installHeader .brandHeart{width:33px;height:33px}
+}
+@media(max-width:375px){
+ .installHeader .brandLogo{width:112px}
+ .installHeader .brandHeart{width:29px;height:29px}
+ .appMobileBrand .brandLogo{width:120px}
+ .appMobileBrand .brandHeart{width:32px;height:32px}
+}
+
+
+
+/* PRÉVIA PROMOVIE 10/10: interpretação fiel das referências fornecidas.
+   A apresentação permanece feita em HTML/CSS e utiliza as oito fotografias existentes. */
+:root{--ink:#09164e;--body:#536396;--violet:#8124f5;--blue:#008bff;--purple:#7425f3;--line:#e2e8ff;--shadow:0 14px 35px rgba(46,35,126,.08)}
+html,body{max-width:100%;overflow-x:clip}
+.gradText{background:linear-gradient(98deg,#9215fa 5%,#6436f2 49%,#0278fa 94%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gradButton,.groupCTA,.sheetButton{background:linear-gradient(104deg,#9620fc 2%,#563af3 52%,#008ffa 100%)}
+.brand .brandLogo{object-fit:contain}
+.brand .brandHeart{filter:drop-shadow(0 7px 10px rgba(82,69,208,.12))}
+.installPage{position:relative;min-height:100dvh;background:radial-gradient(ellipse 39% 43% at 87% 18%,rgba(138,119,255,.17),transparent 85%),radial-gradient(ellipse 49% 40% at 6% 81%,rgba(102,129,255,.11),transparent 80%),linear-gradient(125deg,#fff 4%,#fafaff 46%,#f5f7ff 100%)}
+.installPage:before{position:absolute;content:"";top:-135px;left:-19%;height:570px;width:63%;border-radius:0 0 65% 0;transform:rotate(-29deg);background:linear-gradient(125deg,rgba(165,129,255,.16),rgba(150,137,255,0));pointer-events:none}
+.installPage:after{position:absolute;content:"";right:-24vw;top:24%;width:57vw;height:68vh;border-radius:50%;border:95px solid rgba(105,83,247,.065);transform:rotate(-28deg);pointer-events:none}
+.installHeader{height:100px;max-width:1390px;padding:0 46px}
+.installHeader .brand{gap:12px}
+.installHeader .brandLogo{width:195px;max-height:80px}
+.installHeader .brandHeart{width:70px;height:70px}
+.installHeader .privacyLabel{max-width:237px;border-radius:21px;padding:13px 16px;font-size:12px;background:rgba(255,255,255,.86);box-shadow:0 11px 38px rgba(65,51,119,.07)}
+.installHero{max-width:1390px;padding:22px 46px 8px;min-height:655px;grid-template-columns:minmax(0,1.04fr) minmax(350px,.96fr);gap:24px}
+.installHero:before{left:-24%;top:-51%;width:90%;height:100%;transform:rotate(-15deg);background:linear-gradient(135deg,rgba(177,150,255,.12),rgba(177,150,255,0))}
+.installCopy{padding:27px 0 18px}
+.installCopy .miniEyebrow{font-size:12px;color:#6b39ec;letter-spacing:.24em;margin-bottom:31px}
+.installCopy h1{font-size:clamp(48px,5.5vw,78px);max-width:660px;line-height:1.055;letter-spacing:-.072em;margin-bottom:26px;text-transform:none;font-weight:910}
+.installCopy h1 .gradText{display:block}
+.installCopy>p{max-width:610px;font-size:clamp(16px,1.5vw,21px);line-height:1.51;color:#55659c;margin-bottom:32px}
+.installActions{display:flex;flex-wrap:wrap;gap:12px;max-width:625px}
+.installBtn,.previewBtn{min-height:59px;border-radius:16px;font-size:16px;gap:14px;line-height:1.2}
+.installActions .installBtn{flex:1.16}.installActions .previewBtn{flex:1}
+.installBtn svg,.previewBtn svg{height:25px;width:25px}
+.previewBtn{background:rgba(255,255,255,.87);box-shadow:0 8px 25px rgba(75,53,179,.025)}
+.installPlatforms{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:22px;max-width:630px}
+.platform{border-radius:17px;min-height:86px;padding:13px 12px;box-shadow:0 10px 35px rgba(83,70,154,.055)}
+.platform svg{width:32px;height:32px;color:#5848bf}
+.platform strong{font-size:14px}
+.platform small{font-size:12px}
+.installVisual{position:relative;min-height:682px;isolation:isolate}
+.installVisual:before{width:112%;height:70%;bottom:7%;right:-12%;border-radius:48% 40% 52% 55%;transform:rotate(-30deg);background:linear-gradient(115deg,rgba(125,97,251,.15),rgba(79,138,250,.21) 58%,rgba(140,126,255,.08))}
+.installVisual:after{position:absolute;z-index:-1;content:"";bottom:10%;right:-25%;height:110px;width:125%;border-radius:55%;background:radial-gradient(ellipse,rgba(30,37,91,.13),transparent 65%);filter:blur(14px)}
+.heroFloatHeart{position:absolute;z-index:3;top:-2px;right:-18px;width:235px;height:215px;object-fit:contain;filter:drop-shadow(0 14px 26px rgba(119,73,230,.24));pointer-events:none}
+.installVisual .phoneShell{width:336px;height:650px;padding:10px;border-radius:51px;background:linear-gradient(105deg,#0e0f17 2%,#aaaab5 13%,#0e0f1c 22%,#151824 76%,#bcc3cf 93%,#1a1b25 99%);box-shadow:0 30px 54px rgba(21,19,70,.25),inset 0 0 0 2px #101119,0 0 0 3px #c6c8d5;transform:rotate(5deg) translate(-4px,6px)}
+.installVisual .phoneShell:after{content:"";position:absolute;right:-5px;top:125px;height:63px;width:4px;border-radius:0 3px 3px 0;background:#bfc5d0;box-shadow:0 85px 0 #a5acb8}
+.installVisual .phoneScreen{border-radius:41px;padding:39px 13px 50px;background:radial-gradient(circle at 90% 12%,#eef0ff,#fff 39%,#fafbff 100%)}
+.installVisual .phoneNotch{width:103px;height:21px;left:calc(50% - 51px);background:#080b13;top:15px;border-radius:40px;box-shadow:0 0 0 2px rgba(255,255,255,.06)}
+.installVisual .mockBrandReal{min-height:39px;gap:7px;margin:0 0 15px}
+.installVisual .mockBrandReal .mockOriginalLogo{width:142px;height:42px;max-width:calc(100% - 46px);object-fit:contain}
+.installVisual .mockBrandReal .mockHeart{height:32px;width:32px}
+.installVisual .mockGreeting{font-size:23px;margin-bottom:14px;letter-spacing:-.06em;color:#0b1550}
+.installVisual .mockBanner{padding:12px 12px;min-height:83px;border:1px solid #e9e5ff;border-radius:15px;background:linear-gradient(105deg,#f3ecff,#e7f2ff);box-shadow:0 6px 17px rgba(87,65,186,.07)}
+.installVisual .mockBanner strong{font-size:11px;color:#5031de}
+.installVisual .mockBanner small{font-size:9px;line-height:1.35}
+.installVisual .mockBanner .heartArt{width:82px;height:69px}
+.installVisual .mockCaption{margin:14px 0 8px;font-size:10px;letter-spacing:.02em}
+.installVisual .mockGrid{gap:8px}
+.installVisual .mockItem{border:1px solid #e6eafb;border-radius:11px;box-shadow:0 5px 13px rgba(45,32,102,.035)}
+.installVisual .mockItem img{height:79px!important;object-fit:cover;object-position:50% 30%}
+.installVisual .mockItem span{font-size:9px!important;min-height:24px!important;padding:5px 6px!important;color:#07134e}
+.installVisual .mockNav{height:46px;padding:7px 0;box-shadow:0 -4px 15px rgba(36,24,95,.025)}
+.installVisual .mockNav span{font-size:9px}
+.underInstall{max-width:1390px;padding:0 46px 45px}
+.trustRow{margin-top:-9px;position:relative;z-index:2;gap:13px}
+.trust{min-height:126px;padding:23px 24px;border-radius:22px;box-shadow:0 12px 30px rgba(60,55,127,.05);align-items:flex-start}
+.trust .trustIcon{width:54px;height:54px;background:#eeedff;color:#7630eb}
+.trust .trustIcon svg{width:28px;height:28px}
+.trust strong{font-size:17px;color:#07134e;line-height:1.2}
+.trust p{font-size:13px;line-height:1.45;margin-top:7px}
+.installHelp{gap:13px}
+.helpHalf{background:linear-gradient(120deg,#f1f0ff,#eef4ff);padding:22px 23px;border-radius:19px}
+.helpHalf h2{font-size:16px;margin:0 0 7px;color:#081651}
+.helpHalf p{font-size:13px;line-height:1.55}
+.installModal{border-radius:25px}
+/* APLICATIVO NO NOTEBOOK / DESKTOP */
+.appPage{position:relative;background:radial-gradient(ellipse 30% 23% at 92% 3%,rgba(133,101,255,.11),transparent 96%),radial-gradient(ellipse 28% 42% at 2% 94%,rgba(113,134,255,.13),transparent 83%),linear-gradient(125deg,#f9faff,#fff 52%,#f4f6ff);min-height:100dvh}
+.appSidebar{width:225px;background:rgba(255,255,255,.87);border-right:1px solid #e6e9f7;box-shadow:6px 0 30px rgba(62,50,155,.028);padding:25px 17px;gap:33px}
+.appSidebar:before{content:"";position:absolute;width:360px;height:380px;left:-150px;bottom:4%;z-index:-1;border-radius:50%;background:radial-gradient(circle at 75% 65%,rgba(139,117,249,.16),rgba(133,156,255,.05) 61%,transparent 63%)}
+.appSidebar .brand{justify-content:flex-start}
+.appSidebar .brandLogo{width:137px;max-height:68px}
+.appSidebar .brandHeart{width:51px;height:51px}
+.sideNav{gap:9px}
+.sideNav a{font-size:14px;min-height:48px;border-radius:15px;color:#546394}
+.sideNav a.active{background:linear-gradient(104deg,#f0e9ff,#f4f1ff);color:#7227ee}
+.appMain{margin-left:225px;max-width:1650px;padding:30px 36px 110px}
+.appTop{position:relative;margin-bottom:15px;min-height:106px;align-items:center;gap:24px}
+.appTop .approvedWelcome{font-size:11px;letter-spacing:.16em;color:#7641dc;margin:0 0 10px}
+.appTop h1{font-size:clamp(39px,4vw,60px);letter-spacing:-.064em;line-height:1.05;margin:0}
+.appTop .appSearch{background:rgba(255,255,255,.75);font-size:12px;min-width:0;border-radius:18px;border:1px solid #e5e5ff;box-shadow:0 8px 22px rgba(93,75,145,.035);padding:14px 17px}
+.appActions .avatar{background:#e9e1ff;height:41px;width:41px;color:#6830e0}
+.appWelcome{border:1px solid #e4e4ff;min-height:110px;padding:19px 26px;background:linear-gradient(105deg,rgba(242,237,255,.9),rgba(223,235,255,.85) 70%,rgba(243,222,255,.92));box-shadow:0 10px 26px rgba(76,60,161,.055);margin-bottom:19px;position:relative;overflow:hidden}
+.appWelcome:after{content:"";position:absolute;right:2%;top:-90px;width:310px;height:310px;border-radius:50%;border:44px solid rgba(119,87,240,.06);transform:rotate(-20deg)}
+.appWelcome strong{font-size:19px;line-height:1.28;color:#17206b;letter-spacing:-.02em}
+.appWelcome p{font-size:13px;line-height:1.3;margin-top:8px}
+.appWelcome img.heartArt{width:150px;height:104px;filter:drop-shadow(0 6px 16px rgba(84,53,208,.14));z-index:1;object-fit:contain}
+.groupPanel{border:1px solid #ebefff;padding:22px 23px 20px;border-radius:23px;box-shadow:0 13px 34px rgba(55,42,132,.06);margin-bottom:18px;background:rgba(255,255,255,.95)}
+.groupHead{margin-bottom:16px;align-items:center}
+.groupIcon{width:54px;height:54px;background:linear-gradient(130deg,#f0e9ff,#ece9ff);color:#7131ec}
+.groupIcon svg{width:27px;height:27px}
+.groupText .approvedEyebrow{font-size:10px;margin-bottom:4px;letter-spacing:.13em}
+.groupHead h2{font-size:clamp(20px,1.9vw,25px);color:#07134e}
+.groupHead p{font-size:13px;line-height:1.45;margin-top:7px;max-width:780px}
+.groupCards{gap:12px}
+.careCard{border:1px solid #e5eafc;border-radius:16px;background:linear-gradient(#fff,#fdfdff);overflow:hidden;box-shadow:0 4px 11px rgba(52,40,110,.033);transition:transform .17s,box-shadow .17s;cursor:pointer}
+.careCard:hover{transform:translateY(-2px);box-shadow:0 12px 21px rgba(52,40,110,.09)}
+.careMedia{height:clamp(111px,12.5vw,168px);border-radius:13px 13px 10px 10px;overflow:hidden;margin:5px 5px 0}
+.careMedia img{object-position:50% 25%;transition:transform .3s}
+.careCard:hover .careMedia img{transform:scale(1.045)}
+.smallHeartBadge{bottom:8px;left:8px;width:37px;height:37px;color:#7427ef;background:#fff;box-shadow:0 5px 15px rgba(52,38,121,.15)}
+.smallHeartBadge svg{width:22px;height:22px}
+.careCopy{padding:11px 12px 13px}
+.careTitle h3{color:#0a174e;font-size:clamp(12px,1.2vw,16px);line-height:1.25}
+.careCopy p{color:#6071a0;font-size:clamp(11px,1vw,13px);line-height:1.37;margin-top:6px}
+.infoButton{color:#6926e6;background:#f5f0ff;font-weight:900}
+.groupCTA{border-radius:15px;min-height:56px;margin-top:13px;font-size:15px;gap:12px;box-shadow:0 11px 21px rgba(87,63,212,.13)}
+.groupCTA svg{height:24px;width:24px}
+.groupFooter{font-size:11px;margin-top:10px;color:#8390b0}
+.groupInfo .groupIcon{background:#eee9ff}
+.sheetOverlay{background:rgba(9,14,70,.39);backdrop-filter:blur(4px);z-index:120}
+.infoSheet{box-shadow:0 22px 65px rgba(30,20,76,.24)}
+.appBottom{z-index:80}
+.appMobileBrand{display:none}
+/* BREAKPOINTS DESKTOP -> TABLET */
+@media(max-width:1120px) and (min-width:701px){
+ .appSidebar{width:185px;padding:21px 12px}
+ .appSidebar .brandLogo{width:112px}
+ .appSidebar .brandHeart{width:39px;height:39px}
+ .appMain{margin-left:185px;padding:22px 20px 90px}
+ .appTop{min-height:80px}
+ .appTop h1{font-size:42px}
+ .groupPanel{padding:18px}
+ .careMedia{height:105px}
+ .careCopy{padding:9px}
+ .careCopy p{font-size:11px}
+ .careTitle h3{font-size:12px}
+ .groupHead h2{font-size:18px}
+ .groupHead p{font-size:12px}
+ .installHeader,.underInstall{padding-left:25px;padding-right:25px}
+ .installHero{padding-left:25px;padding-right:25px;grid-template-columns:1fr 335px}
+ .installVisual .phoneShell{transform:scale(.89) rotate(5deg)}
+ .installVisual{min-height:590px}
+ .installHero{min-height:575px}
+ .heroFloatHeart{width:185px;right:-10px}
+ .installCopy h1{font-size:clamp(42px,5.2vw,59px)}
+ .installCopy>p{font-size:16px}
+ .platform{padding:11px 8px}
+ .platform small{font-size:10px}
+}
+/* REFERÊNCIA iPHONE, mantendo legibilidade real no aparelho */
+@media(max-width:700px){
+ .installPage:after{right:-115px;top:200px;width:370px;height:480px;border-width:55px}
+ .installHeader{height:72px;padding:0 17px}
+ .installHeader .brandLogo{width:140px}
+ .installHeader .brandHeart{height:45px;width:45px}
+ .installHeader .privacyLabel{font-size:10px;max-width:170px;padding:7px 8px;gap:7px}
+ .installHeader .privacyIcon{width:28px;height:28px}
+ .installHero{padding:24px 18px 0;display:flex;flex-direction:column;gap:0;min-height:0}
+ .installCopy{padding:0;text-align:left;width:100%}
+ .installCopy .miniEyebrow{font-size:10px;letter-spacing:.17em;justify-content:flex-start;margin:0 0 14px}
+ .installCopy h1{font-size:clamp(43px,10vw,64px);max-width:500px;letter-spacing:-.063em;line-height:1.07;margin:0 0 17px}
+ .installCopy>p{font-size:15px;line-height:1.52;text-align:left;max-width:525px;margin-bottom:20px}
+ .installActions{display:grid;grid-template-columns:1fr;gap:10px;width:100%;max-width:520px}
+ .installBtn,.previewBtn{width:100%;min-height:53px;border-radius:14px;font-size:15px}
+ .installPlatforms{max-width:530px;margin:16px 0 0;gap:7px}
+ .platform{min-height:69px;border-radius:14px;display:flex;flex-direction:column;gap:5px;padding:9px 3px;text-align:center}
+ .platform strong{font-size:11px}
+ .platform small{font-size:9px;margin-top:3px}
+ .platform svg{width:25px;height:25px}
+ .installVisual{width:100%;height:503px;min-height:503px;margin:8px 0 -8px}
+ .installVisual .phoneShell{position:absolute;top:-72px;left:50%;margin-left:-168px;transform:scale(.76) rotate(4deg);transform-origin:50% 50%}
+ .heroFloatHeart{width:172px;height:152px;top:0;right:calc(50% - 178px)}
+ .underInstall{padding:0 15px 30px}
+ .trustRow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .trust{min-height:165px;border-radius:17px;padding:13px 9px;display:block;text-align:center}
+ .trust .trustIcon{width:41px;height:41px;margin:0 auto 10px}
+ .trust .trustIcon svg{width:23px;height:23px}
+ .trust strong{font-size:12px;line-height:1.28}
+ .trust p{font-size:10px;line-height:1.36;margin-top:6px}
+ .installHelp{margin-top:13px}
+ .helpHalf{padding:14px 16px}
+ .helpHalf h2{font-size:14px}
+ .helpHalf p{font-size:12px}
+ .appPage{padding-bottom:calc(89px + env(safe-area-inset-bottom))}
+ .appSidebar{display:none}
+ .appMobileBrand{position:sticky;top:0;z-index:35;display:flex;align-items:center;min-height:66px;padding:8px 17px;background:rgba(255,255,255,.94);border-bottom:1px solid #e9eafd;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)}
+ .appMobileBrand .brandLogo{width:133px;max-height:46px}
+ .appMobileBrand .brandHeart{width:43px;height:43px}
+ .appMain{margin:0;padding:19px 13px 20px;max-width:100%}
+ .appTop{position:relative;min-height:118px;margin-bottom:7px;padding-right:95px;align-items:flex-start}
+ .appTop .approvedWelcome{font-size:10px;margin-bottom:8px;letter-spacing:.11em}
+ .appTop h1{font-size:clamp(32px,8.2vw,43px);line-height:1.1;letter-spacing:-.064em}
+ .appTop .appActions{display:none}
+ .appTop .appTopHeart{position:absolute;right:-4px;top:-11px;width:114px;height:115px;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(102,80,223,.11))}
+ .appWelcome{min-height:102px;border:2px solid rgba(255,255,255,.92);border-radius:22px;padding:18px 16px;box-shadow:0 9px 25px rgba(68,56,156,.08);margin-bottom:14px}
+ .appWelcome strong{font-size:16px;line-height:1.23;max-width:225px}
+ .appWelcome p{font-size:12px;line-height:1.38;max-width:250px}
+ .appWelcome img.heartArt{width:104px;height:94px;object-fit:contain;position:absolute;right:1px;top:4px}
+ .groupPanel{padding:15px 12px 13px;margin-bottom:13px;border-radius:22px;box-shadow:0 8px 25px rgba(65,52,155,.06)}
+ .groupHead{gap:11px;margin-bottom:14px}
+ .groupIcon{width:43px;height:43px}
+ .groupIcon svg{width:22px;height:22px}
+ .groupHead h2{font-size:19px;line-height:1.18}
+ .groupHead p{font-size:11px;line-height:1.45;margin-top:5px}
+ .groupText .approvedEyebrow{font-size:9px;letter-spacing:.08em}
+ .groupCards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .careMedia{height:clamp(95px,30vw,142px);margin:4px 4px 0;border-radius:12px 12px 9px 9px}
+ .smallHeartBadge{height:30px;width:30px;left:7px;bottom:6px}
+ .smallHeartBadge svg{height:19px;width:19px}
+ .careCopy{padding:9px 9px 12px}
+ .careTitle h3{font-size:clamp(11px,3.1vw,14px);line-height:1.24}
+ .careCopy p{font-size:clamp(10px,2.7vw,12px);line-height:1.36}
+ .infoButton{width:23px;height:23px;flex-basis:23px}
+ .groupCTA{min-height:51px;font-size:13px;margin-top:11px;gap:8px;padding:0 8px}
+ .groupCTA svg{height:20px;width:20px}
+ .groupFooter{font-size:10px;margin-top:10px;line-height:1.45}
+ .appBottom{grid-template-columns:repeat(3,1fr);padding:8px 9px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97)}
+ .appBottom a{font-size:11px;min-height:49px;gap:4px}
+ .appBottom a svg{height:22px;width:22px}
+ .sheetOverlay{padding:0}
+ .infoSheet{max-height:88dvh;overflow:auto;border-radius:25px 25px 0 0}
+}
+@media(max-width:389px){
+ .installHeader .brandLogo{width:118px}
+ .installHeader .brandHeart{width:36px;height:36px}
+ .installHeader .privacyLabel{max-width:145px;font-size:9px}
+ .installCopy h1{font-size:40px}
+ .installPlatforms .platform{min-height:74px}
+ .appTop h1{font-size:32px}
+ .appTop .appTopHeart{width:96px;height:96px}
+ .appTop{padding-right:86px;min-height:109px}
+ .appWelcome strong{font-size:15px}
+ .appWelcome img.heartArt{width:91px}
+ .careMedia{height:96px}
+ .careTitle h3{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.careCard,.careMedia img{transition:none}}
