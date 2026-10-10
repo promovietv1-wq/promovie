@@ -1,4 +1,4 @@
-const CACHE="promovie-preview-fiel-2026-v6";
+const CACHE="promovie-preview-fiel-2026-v7";
 const BASE="/app/previa-fiel-20261010/";
 const CORE=[BASE,BASE+"inicio/",BASE+"telemedicina/",BASE+"style.css",BASE+"manifest.webmanifest",BASE+"coracao-da-imagem.webp","/app/icons/icon-192.png","/app/icons/icon-512.png"];
 self.addEventListener("install",event=>{
