@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 224" role="img" aria-label="Coração PromoVie em azul, violeta e rosa">
+<defs>
+<linearGradient id="left" x1="0%" y1="100%" x2="100%" y2="0%"><stop stop-color="#017efa"/><stop offset=".28" stop-color="#1c9dfc"/><stop offset=".57" stop-color="#428ffc"/><stop offset=".82" stop-color="#9c93ff"/><stop offset="1" stop-color="#e8ccff"/></linearGradient>
+<linearGradient id="right" x1="0%" y1="90%" x2="100%" y2="0%"><stop stop-color="#3d2ee4"/><stop offset=".32" stop-color="#6230ee"/><stop offset=".57" stop-color="#a13ef5"/><stop offset=".82" stop-color="#d366fb"/><stop offset="1" stop-color="#ffe0fa"/></linearGradient>
+<linearGradient id="rim" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#fff" stop-opacity=".96"/><stop offset=".34" stop-color="#fff" stop-opacity=".28"/><stop offset=".68" stop-color="#c5b5fb" stop-opacity=".02"/><stop offset="1" stop-color="#5a3de5" stop-opacity=".42"/></linearGradient>
+<linearGradient id="glass" x1="0%" y1="0%" x2="80%" y2="100%"><stop stop-color="#edfaff" stop-opacity=".84"/><stop offset=".42" stop-color="#c6c1ff" stop-opacity=".72"/><stop offset=".7" stop-color="#887df2" stop-opacity=".61"/><stop offset="1" stop-color="#eef0ff" stop-opacity=".84"/></linearGradient>
+<radialGradient id="light" cx="30%" cy="12%" r="80%"><stop stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="shade" x="-35%" y="-35%" width="170%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#6350d5" flood-opacity=".23"/></filter>
+<filter id="blur"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<g filter="url(#shade)">
+<path d="M123 206C68 164 22 133 13 85-2 43 26 19 57 22c29 2 51 24 64 46 15-27 35-46 64-46 40 0 65 33 48 75-15 39-63 79-110 109Z" fill="url(#right)"/>
+<path d="M123 206C65 162 24 128 13 85-2 43 26 19 57 22c30 2 51 24 66 46l19 34c-20-14-37-27-60-23-29 5-39 31-29 50 15 29 47 47 70 77Z" fill="url(#left)"/>
+<path d="M123 206C68 164 22 133 13 85-2 43 26 19 57 22c29 2 51 24 64 46 15-27 35-46 64-46 40 0 65 33 48 75-15 39-63 79-110 109Z" fill="none" stroke="url(#rim)" stroke-width="4"/>
+<path d="M35 73C21 40 46 26 65 31c22 5 37 21 47 45C84 64 53 65 35 73Z" fill="url(#light)" opacity=".66"/>
+<path d="M137 62c24-30 63-37 83-14 16 17 8 38 3 47-2-37-34-45-58-31-13 7-24 16-28 21Z" fill="#fff" opacity=".32"/>
+<path d="M118 201c-34-29-58-53-58-79-1-20 13-35 31-35 16 0 26 10 31 21 9-15 21-23 37-22 29 1 40 26 31 49-11 28-42 49-72 66Z" fill="url(#glass)" stroke="#fff" stroke-opacity=".49" stroke-width="2.4"/>
+<path d="M87 97c18-9 31 5 36 20 10-17 28-27 43-16 5 4 8 10 10 15-21-10-32 9-53 22-19-19-31-22-47-18 0-10 4-18 11-23Z" fill="#fff" opacity=".31"/>
+</g>
+</svg>
