@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>PromoVie | Simulação do iPhone (prévia)</title>
+<style>
+:root{--navy:#081450;--violet:#7027ed;--line:#e6e9fc}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--navy);background:radial-gradient(circle at 78% 26%,rgba(169,130,255,.18),transparent 43%),linear-gradient(120deg,#fff,#f5f7ff);min-height:100dvh}
+a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid #1686ee;outline-offset:4px}
+.wrap{min-height:100dvh;width:min(100% - 46px,1140px);margin:auto;display:grid;grid-template-columns:minmax(0,1fr) 460px;align-items:center;gap:40px;padding:25px 0}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:30px}.brand img.logo{width:204px;max-height:74px;object-fit:contain}.brand img.heart{width:65px;height:65px}
+h1{font-size:clamp(2.5rem,5vw,4.5rem);letter-spacing:-.06em;line-height:1.06;margin:0 0 19px}.grad{background:linear-gradient(100deg,#8617f9,#097df7);background-clip:text;-webkit-background-clip:text;color:transparent}
+p{color:#586799;font-size:1.06rem;line-height:1.6;max-width:475px;margin:0 0 25px}
+.actions{display:flex;flex-wrap:wrap;gap:11px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:51px;padding:12px 19px;border-radius:14px;background:#fff;border:1px solid #cbd3ff;color:#38227f;font-weight:800;font-size:14px}.button.primary{background:linear-gradient(100deg,#9322f9,#088dfa);color:white;border:0}.eyebrow{letter-spacing:.15em;color:#7742d0;font-size:.7rem;font-weight:900;text-transform:uppercase;margin:0 0 17px}
+.deviceArea{display:grid;place-items:center;min-height:850px}.device{position:relative;width:408px;height:855px;border-radius:58px;background:linear-gradient(114deg,#15161e 3%,#c9cbd4 13%,#11131b 22%,#20222d 85%,#b7bac5 94%,#15161e 100%);padding:10px;box-shadow:0 31px 68px rgba(29,23,97,.22),0 0 0 3px #abb0bc,inset 0 0 0 2px #222531}
+.device:after{content:"";position:absolute;right:-5px;top:180px;height:89px;width:4px;border-radius:0 3px 3px 0;background:#b2b8c3}
+.screen{position:relative;width:100%;height:100%;overflow:hidden;border-radius:48px;background:#fff}
+.screen:after{content:"";position:absolute;top:11px;left:calc(50% - 62px);width:124px;height:29px;border-radius:30px;background:#0b0c13;pointer-events:none;z-index:30}
+iframe{border:0;height:100%;width:100%;display:block;background:#fff}
+.fakeBottom{position:absolute;bottom:11px;left:calc(50% - 55px);width:110px;height:5px;border-radius:5px;background:rgba(18,22,42,.28);pointer-events:none;z-index:30}
+@media(max-width:980px){.wrap{grid-template-columns:minmax(0,1fr) 390px;gap:22px}.device{transform:scale(.89)}.deviceArea{min-height:763px}.brand img.logo{width:170px}.brand img.heart{width:51px}}
+@media(max-width:720px){.wrap{display:block;padding-top:40px}.deviceArea{display:none}.actions{display:grid}.button{width:100%}}
+</style>
+<script>if(window.matchMedia&&window.matchMedia("(max-width:720px)").matches){window.location.replace("/app/previa-fiel-20261010/inicio/");}</script>
+</head>
+<body><main class="wrap">
+<div><div class="brand"><img class="logo" src="/preview-promovie-logo.webp" alt="PromoVie"><img class="heart" src="/app/previa-fiel-20261010/heart-brilho.svg" alt=""></div>
+<p class="eyebrow">Prévia responsiva</p><h1>PromoVie <span class="grad">no iPhone.</span></h1>
+<p>Esta é a mesma página HTML do aplicativo, apresentada dentro de uma simulação de celular para você avaliar o visual pelo notebook. No iPhone, ela abre diretamente em tamanho real.</p>
+<div class="actions"><a class="button primary" href="/app/previa-fiel-20261010/inicio/">Abrir aplicativo</a><a class="button" href="/app/previa-fiel-20261010/">Página de instalação</a></div></div>
+<div class="deviceArea"><div class="device"><div class="screen"><iframe src="/app/previa-fiel-20261010/inicio/" title="Interface interativa PromoVie em formato iPhone" loading="eager"></iframe><div class="fakeBottom"></div></div></div></div>
+</main></body></html>
