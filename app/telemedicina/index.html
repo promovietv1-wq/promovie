@@ -22,7 +22,7 @@
 <footer>PromoVie · Comunicação, liderança e saúde.</footer>
 <script src="/app/config.js"></script>
 <script>
-(function(){const cfg=window.PROMOVIE_APP_CONFIG||{};const url=typeof cfg.telemedicinaUrl==="string"&&/^https:\/\/[^\\s]+$/i.test(cfg.telemedicinaUrl)?cfg.telemedicinaUrl:"";if(url){const btn=document.getElementById("portalAction");btn.href=url;btn.textContent="Entrar na Telemedicina PromoVie";document.getElementById("state").textContent="Portal disponível";document.getElementById("state").classList.add("ready");document.getElementById("description").textContent="Acesse o portal de telemedicina por meio do ambiente oficial disponibilizado à PromoVie. O login e a realização do atendimento acontecem na plataforma de saúde.";}
+(function(){const cfg=window.PROMOVIE_APP_CONFIG||{};const url=typeof cfg.telemedicinaUrl==="string"&&/^https:\/\/\S+$/i.test(cfg.telemedicinaUrl)?cfg.telemedicinaUrl:"";if(url){const btn=document.getElementById("portalAction");btn.href=url;btn.textContent="Entrar na Telemedicina PromoVie";document.getElementById("state").textContent="Portal disponível";document.getElementById("state").classList.add("ready");document.getElementById("description").textContent="Acesse o portal de telemedicina por meio do ambiente oficial disponibilizado à PromoVie. O login e a realização do atendimento acontecem na plataforma de saúde.";}
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/app/sw.js",{scope:"/app/"}).catch(function(){});});}})();
 </script>
 </body></html>
