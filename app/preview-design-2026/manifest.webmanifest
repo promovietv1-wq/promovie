@@ -1,0 +1,26 @@
+{
+  "id": "/app/preview-design-2026/",
+  "name": "PromoVie (prévia de design)",
+  "short_name": "PromoVie Prévia",
+  "description": "Prévia do aplicativo de Telemedicina e Autocuidado PromoVie.",
+  "lang": "pt-BR",
+  "start_url": "/app/preview-design-2026/inicio/",
+  "scope": "/app/preview-design-2026/",
+  "display": "standalone",
+  "background_color": "#f9faff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/app/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
