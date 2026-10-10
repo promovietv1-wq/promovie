@@ -2,10 +2,10 @@
   "id": "/app/",
   "name": "PromoVie",
   "short_name": "PromoVie",
-  "description": "PromoVie no celular: telemedicina, cuidados e atendimento.",
+  "description": "Aplicativo PromoVie: Telemedicina, saúde e cuidado.",
   "lang": "pt-BR",
   "dir": "ltr",
-  "start_url": "/app/",
+  "start_url": "/app/inicio/",
   "scope": "/app/",
   "display": "standalone",
   "display_override": [
