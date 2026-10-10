@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 145" role="img" aria-label="Coração PromoVie em degradê azul e roxo">
+<defs>
+<linearGradient id="pvBlue" x1="0" x2="1" y1="1" y2="0"><stop stop-color="#057bf7"/><stop offset=".36" stop-color="#349aff"/><stop offset=".67" stop-color="#786af5"/><stop offset="1" stop-color="#aa75ff"/></linearGradient>
+<linearGradient id="pvPink" x1=".05" x2=".93" y1="1" y2=".02"><stop stop-color="#5247ea"/><stop offset=".37" stop-color="#8c36f8"/><stop offset=".73" stop-color="#bb3df4"/><stop offset="1" stop-color="#e68fff"/></linearGradient>
+<linearGradient id="pvGlass" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#eff7ff" stop-opacity=".88"/><stop offset=".53" stop-color="#b5a4ff" stop-opacity=".66"/><stop offset="1" stop-color="#6344e8" stop-opacity=".18"/></linearGradient>
+<linearGradient id="pvGleam" x1=".1" x2="1" y1="0" y2="1"><stop stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<filter id="pvShadow" x="-30%" y="-30%" width="160%" height="175%"><feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#625be1" flood-opacity=".17"/></filter>
+</defs>
+<g filter="url(#pvShadow)">
+<path d="M80 132C56 116 21 91 11 64-1 32 14 12 39 12c20 0 32 11 41 26 8-16 23-26 43-26 25 0 41 24 30 53-10 28-49 57-73 67Z" fill="url(#pvPink)"/>
+<path d="M80 132C50 113 17 88 11 64-1 32 14 12 39 12c20 0 32 11 41 26 3 5 5 10 7 15-11-9-22-18-37-16-18 3-24 20-15 36 8 15 25 25 45 37v22Z" fill="url(#pvBlue)"/>
+<path d="M80 132c-8-7-15-13-20-18-12-12-18-24-16-35 1-11 8-18 18-18 10 0 16 5 20 13 5-8 13-13 23-13 14 0 23 15 18 29-4 14-24 30-43 42Z" fill="url(#pvGlass)"/>
+<path d="M26 44c-2-14 7-24 17-26 13-3 25 4 33 17 5 8 8 14 10 21-16-14-25-18-37-14-10 3-18 11-21 24-2-7-2-14-2-22Z" fill="url(#pvGleam)" opacity=".87"/>
+<path d="M89 38c15-25 43-27 55-8 5 8 6 17 3 26-6 15-20 32-34 45 6-13 8-23 3-32-6-13-17-16-27-13Z" fill="url(#pvGleam)" opacity=".43"/>
+</g>
+</svg>
