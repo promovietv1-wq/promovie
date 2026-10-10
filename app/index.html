@@ -66,27 +66,118 @@ footer{border-top:1px solid var(--line);padding:24px 0 calc(28px + env(safe-area
 @media(max-width:460px){.page{width:calc(100% - 26px)}.brand img{width:108px}.brandText{font-size:20px}.top{gap:8px}.nav{gap:3px}.nav a{padding:8px 9px;font-size:.75rem}.hero{padding:30px 22px 26px}.hero h1{font-size:2.05rem}.eyebrow{font-size:.62rem}.heroArt{min-height:128px}.heroArt>svg{width:87px;height:87px}.heroArt:before{width:118px;height:118px}.heroArt .bubble{font-size:.65rem;right:3%}.mainCard{padding:23px}.side{grid-template-columns:1fr}.smallCard{display:flex;padding:18px}.smallCard .iconBox{margin:0}.serviceGrid{gap:9px}.serviceCard{padding:13px 11px;gap:9px;align-items:flex-start}.serviceCard span{font-size:.81rem;line-height:1.35}.serviceCard small{font-size:.7rem;line-height:1.3}.serviceCard .ico{width:31px;height:31px;border-radius:9px}.serviceCard svg{width:16px;height:16px}.installBox{padding:21px}footer{font-size:.71rem}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto !important;transition:none !important}}
 </style>
+<style id="promovie-app-native-shell-v2">
+/* Superfície de aplicativo: conteúdo próprio, navegação persistente e sem links institucionais. */
+body {overscroll-behavior-y:contain}
+.appTabBar{display:none}
+#servicesTitle{scroll-margin-top:86px}
+.appInstalled .installBox{display:none !important}
+@media(display-mode:standalone){.installBox{display:none !important}}
+header .top {height:70px}
+header .top .brand img{width:132px}
+header .top .nav{gap:0}
+header .top .nav .contact{display:inline-flex !important;align-items:center;justify-content:center;min-height:38px;background:#f0eafb;border:1px solid #e9dafb;border-radius:12px;color:#5925a0;padding:8px 15px;font-size:.81rem;letter-spacing:0}
+.hero{border-radius:25px}
+.hero .eyebrow{letter-spacing:.12em}
+.hero h1{max-width:460px}
+.mainCard .buttonPrimary{border-radius:15px}
+.serviceGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.serviceCard{flex-direction:column;align-items:flex-start;min-height:133px;justify-content:flex-start}
+.serviceCard small{line-height:1.35}
+.installBox{border-radius:19px}
+footer .foot{justify-content:center;text-align:center}
+@media(max-width:850px){
+ html{scroll-padding-top:74px}
+ body{background:#f5f7fc;padding-bottom:calc(85px + env(safe-area-inset-bottom))}
+ header{position:sticky;top:0;padding-top:env(safe-area-inset-top);box-shadow:0 1px 12px rgba(43,35,98,.05)}
+ header .top{height:60px !important}
+ header .top .brand img{width:118px !important;max-height:50px}
+ header .top .nav .contact{min-height:34px;padding:7px 12px !important}
+ main{padding-top:15px !important}
+ .page{width:calc(100% - 28px)}
+ .hero{min-height:0;grid-template-columns:1fr;border-radius:22px;padding:24px 24px 23px !important;gap:0;box-shadow:0 12px 26px rgba(75,12,143,.14)}
+ .hero .eyebrow{font-size:.61rem;margin-bottom:11px;letter-spacing:.11em}
+ .hero h1{font-size:clamp(1.88rem,7vw,2.55rem);line-height:1.13;letter-spacing:-.04em;margin:0 0 10px}
+ .hero p{font-size:.84rem;line-height:1.5;max-width:480px}
+ .heroArt{display:none}
+ .contentGrid{margin-top:14px !important;grid-template-columns:1fr;gap:13px}
+ .mainCard{padding:21px !important;border-radius:20px;box-shadow:0 8px 22px rgba(48,33,108,.055)}
+ .mainCard:before{width:4px}
+ .mainCard .panelHeader{gap:11px}
+ .mainCard .iconBox{height:42px;width:42px;border-radius:13px}
+ .mainCard h2{font-size:1.23rem;line-height:1.25}
+ .mainCard .overline{font-size:.63rem}
+ .mainCard .muted{font-size:.82rem;line-height:1.53;margin:13px 0 17px}
+ .mainCard .button{min-height:49px;padding:12px 14px;font-size:.86rem}
+ .mainCard .status{font-size:.72rem}
+ .side{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+ .smallCard{padding:15px;border-radius:18px;display:block}
+ .smallCard .iconBox{height:37px;width:37px;border-radius:11px;margin:0 0 10px}
+ .smallCard .iconBox svg{width:20px;height:20px}
+ .smallCard h3{font-size:.86rem;line-height:1.3;margin:0 0 5px}
+ .smallCard p{font-size:.75rem;line-height:1.45}
+ .smallCard a{font-size:.74rem;margin-top:8px}
+ .serviceSection{margin-top:25px}
+ .sectionTop{margin-bottom:12px}
+ .sectionTop h2{font-size:1.22rem}
+ .sectionTop p{font-size:.75rem;line-height:1.5}
+ .serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .serviceCard{min-height:121px;flex-direction:column;align-items:flex-start;padding:14px;border-radius:17px;gap:10px;box-shadow:0 3px 10px rgba(36,20,90,.02)}
+ .serviceCard .ico{width:36px;height:36px;border-radius:11px}
+ .serviceCard .ico svg{width:18px;height:18px}
+ .serviceCard span{font-size:.84rem}
+ .serviceCard small{font-size:.7rem}
+ .installBox{margin-top:21px;gap:12px;padding:20px;border-radius:18px}
+ .installBox h2{font-size:1.03rem}
+ .installBox p{font-size:.78rem}
+ .installBox .button{min-height:44px;font-size:.81rem}
+ footer{padding-top:21px;padding-bottom:12px;font-size:.7rem}
+ .appTabBar{
+ display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr));
+ position:fixed;z-index:80;bottom:0;left:0;right:0;
+ padding:7px max(10px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+ gap:2px;background:rgba(255,255,255,.97);
+ border-top:1px solid #e9e7f3;box-shadow:0 -9px 30px rgba(24,16,69,.08);
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+ }
+ .appTabBar .appTabItem{min-height:54px;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#81869a;font-size:.63rem;font-weight:760;letter-spacing:0;transition:background .18s ease,color .18s ease}
+ .appTabBar .appTabItem svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+ .appTabBar .appTabItem.is-active{color:#6330ad;background:#f4effc}
+ .appTabBar .appTabItem:active{background:#efebf8;color:#6330ad}
+ .appTabBar .appTabItem:focus-visible{outline:2px solid var(--cyan,#00bde8);outline-offset:-1px}
+ .guide{z-index:100;padding-bottom:calc(13px + env(safe-area-inset-bottom))}
+}
+@media(max-width:400px){
+ .hero{padding:22px 20px !important}
+ .hero h1{font-size:1.91rem}
+ .side{gap:9px}
+ .smallCard{padding:13px}
+ .serviceCard{padding:12px;min-height:119px}
+ .appTabBar .appTabItem{font-size:.61rem}
+}
+@media(prefers-reduced-motion:reduce){.appTabBar .appTabItem{transition:none}}
+</style>
 </head>
 <body>
 <header><div class="page top">
 <a class="brand" href="/app/" aria-label="PromoVie, início do aplicativo"><img src="/preview-promovie-logo.webp" alt="PromoVie" width="154" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="brandText" hidden>PromoVie</span></a>
-<nav class="nav" aria-label="Navegação"><a class="homeLink" href="/">Site PromoVie</a><a class="contact" href="https://wa.me/5527999417458" target="_blank" rel="noopener noreferrer">Fale conosco</a></nav>
+<nav class="nav" aria-label="Contato"><a class="contact" href="https://wa.me/5527999417458" target="_blank" rel="noopener noreferrer" aria-label="Ajuda via WhatsApp">Ajuda</a></nav>
 </div></header>
 <main class="page">
 <section class="hero" aria-labelledby="appTitle">
-<div><span class="eyebrow"><i></i>Saúde, cuidado e informação</span><h1 id="appTitle">Cuidar de você.<br><strong>Onde estiver.</strong></h1><p>Um acesso mais simples aos serviços de saúde e aos canais de acolhimento da PromoVie, direto do seu celular.</p></div>
+<div><span class="eyebrow"><i></i>Bem-vindo à PromoVie</span><h1 id="appTitle">Seu cuidado,<br><strong>mais perto.</strong></h1><p>Acesse atendimentos e informações de saúde com praticidade, em um só lugar.</p></div>
 <div class="heroArt" aria-hidden="true"><svg viewBox="0 0 180 180"><rect x="38" y="10" width="104" height="160" rx="19" fill="#fff" fill-opacity=".15" stroke="#fff" stroke-opacity=".7" stroke-width="3"/><rect x="45" y="20" width="90" height="132" rx="12" fill="#fff" fill-opacity=".95"/><circle cx="90" cy="162" r="4" fill="white"/><path d="M90 111s-35-20-35-43a20 20 0 0 1 35-13 20 20 0 0 1 35 13c0 23-35 43-35 43Z" fill="#7334d8"/><path d="M67 78h14l7-10 7 21 7-11h11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="bubble"><span></span>PromoVie no celular</div></div>
 </section>
 <div class="contentGrid">
 <section class="panel mainCard" aria-labelledby="teleTitle">
 <div class="panelHeader"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="3"/><path d="M8.5 10.5h7M12 7v7M9 22h6"/></svg></div><div><div class="overline">Acesso principal</div><h2 id="teleTitle">Telemedicina PromoVie</h2></div></div>
-<p class="muted">Seu ponto de entrada para os atendimentos pela plataforma de telemedicina da PromoVie, com integração prevista à Levita.</p>
-<a class="button buttonPrimary" id="accessTelemedicine" href="/app/telemedicina/" aria-label="Acessar Telemedicina PromoVie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5"/></svg>Telemedicina PromoVie</a>
+<p class="muted">Acesse o ambiente de atendimento e cuidado da PromoVie. A integração com a Levita está em preparação.</p>
+<a class="button buttonPrimary" id="accessTelemedicine" href="/app/telemedicina/" aria-label="Acessar Telemedicina PromoVie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5"/></svg>Acessar Telemedicina PromoVie</a>
 <div class="status" id="teleStatus"><span></span>Integração com a plataforma em preparação</div>
 </section>
 <div class="side">
 <section class="panel smallCard"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v12H7l-3 3V5Z"/><path d="M8 10h8M8 13h5"/></svg></div><div><h3>Atendimento e orientação</h3><p>Conheça os serviços disponíveis e esclareça dúvidas com a equipe.</p><a href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20TeleSa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer">Conversar no WhatsApp →</a></div></section>
-<section class="panel smallCard"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><h3>Cuidado e acolhimento</h3><p>Informações confiáveis, escuta e atenção às necessidades do dia a dia.</p><a href="/#teleconsultas">Conhecer a TeleSaúde →</a></div></section>
+<section class="panel smallCard"><div class="iconBox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.6-8-10.2a4.7 4.7 0 0 1 8-3.3 4.7 4.7 0 0 1 8 3.3C20 16.4 12 21 12 21Z"/></svg></div><div><h3>Cuidado e acolhimento</h3><p>Informações confiáveis, escuta e atenção às necessidades do dia a dia.</p><a href="#servicesTitle">Ver áreas de cuidado →</a></div></section>
 </div>
 </div>
 <section class="serviceSection" aria-labelledby="servicesTitle"><div class="sectionTop"><div><h2 id="servicesTitle">Áreas de cuidado</h2><p>Atendimentos profissionais e apoio informativo, conforme as condições de cada serviço.</p></div></div>
@@ -102,7 +193,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 calc(28px + env(safe-area
 </div></section>
 <section class="installBox" aria-labelledby="installTitle"><div><div class="overline">Acesso rápido</div><h2 id="installTitle">PromoVie na tela inicial do seu celular</h2><p>Instale gratuitamente pelo navegador. Sem precisar entrar na App Store ou na Google Play.</p></div><button class="button buttonSoft" id="installButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></svg>Como instalar</button></section>
 </main>
-<footer><div class="page foot"><span>© PromoVie · Comunicação, liderança e cuidado.</span><span><a href="/">Site institucional</a> · <a href="/experiencia/">Experiência Estratégica</a></span></div></footer>
+<footer><div class="page foot"><span>PromoVie · Saúde, comunicação e cuidado.</span></div></footer>
+<nav class="appTabBar" aria-label="Navegação do aplicativo"><a class="appTabItem is-active" href="/app/" aria-current="page" aria-label="Início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-6H9v6H3z"/></svg><span>Início</span></a><a class="appTabItem" href="/app/telemedicina/" aria-label="Telemedicina"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="2"/><path d="M9 11.5h6m-3-3v6M9 22h6"/></svg><span>Telemedicina</span></a><a class="appTabItem" href="/app/#servicesTitle" aria-label="Cuidados"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8.6-5.4-8.6-11.1a4.9 4.9 0 0 1 8.6-3.1 4.9 4.9 0 0 1 8.6 3.1C20.6 15.6 12 21 12 21z"/></svg><span>Cuidados</span></a><a class="appTabItem" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20TeleSa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Ajuda"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.2 0-2.3-.2-3.3-.6L4 21l1.6-5.2a8.5 8.5 0 1 1 15.4-4.3z"/><path d="M8.5 11.5h7"/></svg><span>Ajuda</span></a></nav>
 <div class="guide" id="guide" hidden role="dialog" aria-modal="true" aria-labelledby="guideTitle"><div class="guideContent"><button class="closeGuide" id="closeGuide" aria-label="Fechar instruções" type="button">✕</button><div class="overline">Instalação gratuita</div><h2 id="guideTitle">Adicione a PromoVie ao celular</h2><div id="guideSteps"></div><button class="button buttonPrimary" id="guideDone" style="width:100%" type="button">Entendi</button></div></div>
 <script src="/app/config.js"></script>
 <script>
@@ -115,6 +207,7 @@ if(portal){access.href=portal;access.rel="noopener noreferrer";status.classList.
 let deferredInstall=null;
 const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+document.documentElement.classList.toggle("appInstalled",standalone);
 const install=document.getElementById("installButton"),dialog=document.getElementById("guide"),steps=document.getElementById("guideSteps");
 if(standalone){install.textContent="Aplicativo instalado";install.disabled=true;install.setAttribute("aria-label","Aplicativo já está instalado");}
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferredInstall=e;if(!standalone)install.textContent="Instalar aplicativo";});
