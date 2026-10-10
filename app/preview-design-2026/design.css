@@ -46,3 +46,50 @@
 @media(max-width:700px){.appPage{padding-bottom:calc(80px + env(safe-area-inset-bottom))}.appSidebar{display:none}.appMain{margin-left:0;padding:15px 13px 24px}.appTop{margin-bottom:15px}.appTop h1{font-size:37px}.appTop p{font-size:13px;margin-top:4px}.appSearch{display:none}.avatar{height:35px;width:35px;font-size:12px}.appWelcome{padding:11px 15px;border-radius:16px;margin-bottom:12px}.appWelcome strong{font-size:13px}.appWelcome p{font-size:11px}.appWelcome .heartArt{width:76px;height:50px}.groupPanel{padding:15px 12px 13px;border-radius:20px;margin-bottom:13px}.groupHead{gap:10px;margin-bottom:12px}.groupIcon{height:41px;width:41px}.groupIcon svg{width:20px;height:20px}.groupHead h2{font-size:15px}.groupHead p{font-size:11px}.groupCards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.careMedia{height:112px}.careCopy{padding:9px}.careTitle h3{font-size:12px}.careCopy p{font-size:11px;margin-top:5px;line-height:1.3}.infoButton{height:23px;width:23px;flex-basis:23px}.groupCTA{margin-top:11px;min-height:49px;font-size:13px}.groupFooter{font-size:10px}.appBottom{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;z-index:70;bottom:0;left:0;right:0;gap:2px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid #e5e8ff;box-shadow:0 -7px 28px rgba(20,18,97,.065);backdrop-filter:blur(18px)}.appBottom a{display:grid;justify-items:center;gap:3px;align-content:center;color:#6272a0;font-size:10px;font-weight:750;border-radius:12px;min-height:48px}.appBottom a svg{height:21px;width:21px}.appBottom a.active{background:#f4efff;color:#7727ee}.sheetOverlay{padding:0}.infoSheet{border-radius:24px 24px 0 0;padding:25px 17px calc(20px + env(safe-area-inset-bottom))}.sheetTop img{width:89px;height:91px}.sheetTop h2{font-size:20px}.sheetPills span{font-size:10px}}
 @media(max-width:390px){.careMedia{height:96px}.appTop h1{font-size:33px}.careTitle h3{font-size:11px}.careCopy p{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Identidade fiel à referência: marca ORIGINAL e coração 3D em degradê ao lado */
+.brand .brandHeart{width:41px;height:41px;display:block;object-fit:contain;flex:none;margin-left:1px;filter:drop-shadow(0 3px 5px rgba(103,68,226,.13))}
+.installHeader .brand{gap:10px;min-width:0}
+.installHeader .brandLogo{width:155px;flex:none}
+.installHeader .brandHeart{width:42px;height:42px}
+.appSidebar .brand{gap:7px;justify-content:flex-start;flex-wrap:nowrap}
+.appSidebar .brandLogo{width:132px;max-height:62px}
+.appSidebar .brandHeart{width:35px;height:35px}
+.appMobileBrand{display:none}
+.appTop .approvedWelcome{font-size:12px;font-weight:850;color:#7340c2;letter-spacing:.08em;text-transform:uppercase;margin:0 0 7px}
+.groupText .approvedEyebrow{display:block;font-size:10px;letter-spacing:.10em;text-transform:uppercase;font-weight:850;color:#7d50db;margin-bottom:3px}
+.groupInfo .groupText .approvedEyebrow{color:#4a7cdd}
+.mockBrandReal{display:flex;align-items:center;gap:7px;min-height:32px;margin-bottom:8px}
+.mockBrandReal .mockOriginalLogo{width:112px;max-width:calc(100% - 39px);height:31px;object-fit:contain}
+.mockBrandReal .mockHeart{height:28px;width:28px;flex:none;display:inline-flex;align-items:center;justify-content:center}
+.mockBrandReal .mockHeart .heartArt{width:100%;height:100%;object-fit:contain}
+.mockBanner img.heartArt{height:55px;width:60px;object-fit:contain}
+.appWelcome img.heartArt{height:61px;width:108px;object-fit:contain}
+.installPage .mockItem img{height:41px}
+.installPage .mockItem span{font-size:7px;min-height:17px;padding:3px 4px}
+.installPage .mockCaption{margin:7px 0 5px}
+.installPage .phoneScreen{padding-top:29px}
+.installPage .mockGreeting{font-size:20px;line-height:1.12;margin-bottom:8px}
+.installPage .mockBanner{min-height:59px}
+.installPage .mockGrid{gap:6px}
+@media(max-width:700px){
+ .appMobileBrand{display:flex;align-items:center;justify-content:flex-start;padding:9px 17px;background:rgba(255,255,255,.97);border-bottom:1px solid #e8eaff;min-height:60px;position:relative;z-index:30}
+ .appMobileBrand .brand{gap:8px}
+ .appMobileBrand .brandLogo{width:130px;max-height:42px}
+ .appMobileBrand .brandHeart{height:35px;width:35px}
+ .appSidebar .brandHeart{width:34px;height:34px}
+ .appMain{padding-top:17px}
+ .appTop .approvedWelcome{font-size:10px;margin-bottom:5px}
+ .appTop h1{font-size:clamp(27px,7.2vw,38px);line-height:1.13}
+ .groupText .approvedEyebrow{font-size:9px}
+ .appWelcome img.heartArt{width:76px;height:50px}
+ .installHeader .brandLogo{width:126px}
+ .installHeader .brandHeart{width:33px;height:33px}
+}
+@media(max-width:375px){
+ .installHeader .brandLogo{width:112px}
+ .installHeader .brandHeart{width:29px;height:29px}
+ .appMobileBrand .brandLogo{width:120px}
+ .appMobileBrand .brandHeart{width:32px;height:32px}
+}
