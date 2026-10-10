@@ -4,9 +4,15 @@
 <meta name="robots" content="noindex,nofollow"><meta name="description" content="Prévia do aplicativo PromoVie: telemedicina e autocuidado no celular, com opção de instalar ou acessar no navegador.">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="PromoVie Prévia">
 <title>Prévia PromoVie | Instalação no iPhone e Android</title>
+<script>
+// O atalho instalado leva sempre ao interior do aplicativo, sem exibir a página de divulgação.
+if ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true) {
+  window.location.replace("/app/previa-fiel-20261010/inicio/");
+}
+</script>
 <link rel="manifest" href="/app/previa-fiel-20261010/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/app/icons/icon-192.png"><link rel="icon" href="/app/icons/icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/app/previa-fiel-20261010/style.css?v=coracao-da-imagem">
+<link rel="stylesheet" href="/app/previa-fiel-20261010/style.css?v=moldura-azul-2">
 <style>.mockItem img{height:48px}.mockItem span{font-size:7px;padding:4px 5px;min-height:19px}.mockCaption{margin:8px 0 5px}.mockGreeting{font-size:22px;margin-bottom:9px}.phoneScreen{padding-top:27px}</style></head>
 <body class="installPage">
 <header class="installHeader"><a class="brand" href="/app/previa-fiel-20261010/" aria-label="PromoVie"><img class="brandLogo" src="/preview-promovie-logo.webp" alt="PromoVie" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="brandFallback" hidden>Promo<span>Vie</span></span><img src="/app/previa-fiel-20261010/coracao-da-imagem.webp" alt="" aria-hidden="true" class="brandHeart"></a>
@@ -30,10 +36,10 @@
 <div class="installVisual" aria-label="Demonstração do aplicativo PromoVie em um celular">
 <div class="phoneShell"><span class="phoneNotch"></span><div class="phoneScreen">
 <div class="mockBrand mockBrandReal"><img src="/preview-promovie-logo.webp" alt="PromoVie" class="mockOriginalLogo"></div>
-<div class="mockGreeting">Seu cuidado, <span class="gradText">mais perto.</span></div>
+<div class="mockGreeting">Telemedicina <span class="gradText">e autocuidado.</span></div>
 <div class="mockBanner"><div><strong>Telemedicina PromoVie</strong><small>Quatro especialidades</small></div></div>
 <div class="mockCaption">Áreas de cuidado</div><div class="mockGrid"><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="" loading="lazy"><span>Clínico Geral 24h</span></div><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" alt="" loading="lazy"><span>Psicologia</span></div><div class="mockItem"><img src="https://images.pexels.com/photos/4266936/pexels-photo-4266936.jpeg?auto=compress&amp;dpr=1&amp;h=750&amp;w=1260" alt="" loading="lazy"><span>Médico da Família</span></div><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" alt="" loading="lazy"><span>Pediatra</span></div><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="" loading="lazy"><span>Nutrição</span></div><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg" alt="" loading="lazy"><span>Condicionamento Físico</span></div><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg" alt="" loading="lazy"><span>Saúde da Mulher</span></div><div class="mockItem"><img src="https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg" alt="" loading="lazy"><span>Cuidados Pet</span></div></div>
-<div class="mockNav"><span>Início</span><span>Consultas</span><span>Autocuidado</span></div>
+<div class="mockNav"><span>Início</span><span>Telemedicina</span><span>Acolhimento</span></div>
 </div></div>
 </div>
 </section>
