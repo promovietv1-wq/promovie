@@ -1546,3 +1546,367 @@ body.appPage::before{
   .appPage .pvTenderHero .pvAppIdentity .pvIntegratedHeart{filter:none}
 }
 
+
+
+/* pvExpansionAndInstall27 — identidade: a saúde se expande do coração central.
+   A arte fornecida permanece intacta; reduzimos apenas sua exibição em 1/3. */
+.appPage .appTop.pvTenderHero{
+  min-height:164px;
+  padding:8px 10px;
+  margin-bottom:12px;
+  background:radial-gradient(ellipse at 50% 52%,#fff 0 33%,#fcfbff 67%,#fff 100%);
+}
+.appPage .pvTenderHero .pvAppIdentity .pvIntegratedHeart{
+  width:124px;
+  max-width:42vw;
+  transform:none;
+  filter:drop-shadow(0 8px 13px rgba(87,45,157,.10));
+}
+.appPage .pvTenderHero .pvAppIdentity::before{
+  width:172px;
+  height:172px;
+  background:radial-gradient(circle,#fff 0 47%,rgba(255,255,255,.92) 60%,transparent 89%);
+}
+.appPage .pvHealthExpansion{
+  position:absolute;
+  z-index:2;
+  inset:0;
+  pointer-events:none;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.appPage .pvHealthExpansionRing{
+  display:block;
+  position:absolute;
+  left:50%;
+  top:50%;
+  border:1px solid rgba(124,75,205,.15);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.55),0 0 25px rgba(129,97,203,.025);
+}
+.appPage .pvHealthExpansionRing--one{
+  width:173px;height:173px;
+  border-color:rgba(129,88,213,.19);
+  background:radial-gradient(circle,rgba(255,255,255,0) 70%,rgba(169,137,229,.055) 98%,transparent);
+}
+.appPage .pvHealthExpansionRing--two{
+  width:228px;height:228px;
+  border-color:rgba(61,181,218,.17);
+  background:radial-gradient(circle,transparent 74%,rgba(86,189,224,.04) 99%,transparent);
+}
+.appPage .pvHealthExpansionRing--three{
+  width:306px;height:306px;
+  border-color:rgba(142,108,208,.095);
+  box-shadow:0 0 38px rgba(92,174,215,.035);
+}
+.appPage .pvHealthExpansionPoint{
+  position:absolute;
+  display:block;
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#b594ed;
+  box-shadow:0 0 0 5px rgba(178,149,237,.11),0 0 14px rgba(148,101,214,.19);
+}
+.appPage .pvHealthExpansionPoint--one{
+  left:calc(50% - 105px);
+  top:29%;
+  width:7px;height:7px;
+}
+.appPage .pvHealthExpansionPoint--two{
+  left:calc(50% + 116px);
+  top:42%;
+  background:#8ed7eb;
+  box-shadow:0 0 0 5px rgba(104,197,229,.12),0 0 12px rgba(104,197,229,.12);
+}
+.appPage .pvHealthExpansionPoint--three{
+  left:calc(50% - 25px);
+  bottom:7%;
+  width:5px;height:5px;
+  background:#caadef;
+}
+.appPage .pvTenderHero .pvTenderCluster{
+  opacity:.54;
+}
+.appPage .pvTenderHero .pvTenderHeart{opacity:.48}
+@media(min-width:701px) and (max-width:1100px){
+  .appPage .pvTenderHero .pvAppIdentity .pvIntegratedHeart{width:117px}
+}
+
+/* Na primeira tela mobile, inclusive aparelhos menores, o botão de
+   Telemedicina deve aparecer antes de a pessoa começar a rolar. */
+@media(max-width:700px){
+  .appPage .appMain{padding:8px 9px 23px}
+  .appPage .appTop.pvTenderHero{
+    min-height:108px;
+    height:108px;
+    padding:3px 7px;
+    margin:0 auto 8px;
+    border-radius:18px;
+  }
+  .appPage .pvTenderHero .pvAppIdentity .pvIntegratedHeart{
+    width:105px;
+    max-width:40vw;
+    transform:none;
+  }
+  .appPage .pvTenderHero .pvAppIdentity::before{width:143px;height:143px}
+  .appPage .pvHealthExpansionRing--one{width:139px;height:139px}
+  .appPage .pvHealthExpansionRing--two{width:174px;height:174px}
+  .appPage .pvHealthExpansionRing--three{width:230px;height:230px}
+  .appPage .pvHealthExpansionPoint--one{left:calc(50% - 82px);top:14%}
+  .appPage .pvHealthExpansionPoint--two{left:calc(50% + 83px);top:30%}
+  .appPage .pvHealthExpansionPoint--three{bottom:12%}
+  .appPage .pvTenderHero .pvTenderCluster{opacity:.50}
+  .appPage .pvTenderHero .pvTenderCluster--left .pvTenderHeart--major{font-size:19px;left:15px;top:17px}
+  .appPage .pvTenderHero .pvTenderCluster--right .pvTenderHeart--major{font-size:19px;right:15px;bottom:17px}
+  .appPage .pvTenderHero .pvTenderTwinkle{opacity:.65}
+  .appPage .groupPanel#consultas{
+    padding:9px 8px 10px;
+    margin-bottom:12px;
+    border-radius:18px;
+  }
+  .appPage #consultas .groupHead{
+    gap:8px;
+    margin-bottom:7px;
+    align-items:center;
+  }
+  .appPage #consultas .groupIcon{
+    width:32px;height:32px;flex:0 0 32px;border-radius:10px;
+  }
+  .appPage #consultas .groupIcon svg{width:19px;height:19px}
+  .appPage #consultas .groupHead h2.pvGradientHeading{
+    font-size:18px;line-height:1.14;
+  }
+  .appPage #consultas .groupHead p{
+    font-size:10px;
+    line-height:1.2;
+    margin:2px 0 0;
+  }
+  .appPage #consultas .pvAccessFrame{padding:3px 3px 0;border-radius:15px}
+  .appPage #consultas .pvAccessFrame > .groupCards{
+    padding:5px 5px 6px;
+    gap:6px;
+    border-radius:12px 12px 0 0;
+  }
+  .appPage #consultas .careCard{border-radius:10px;min-width:0}
+  .appPage #consultas .careMedia{margin:0}
+  .appPage #consultas .careCopy{padding:5px 6px 7px}
+  .appPage #consultas .careTitle h3{font-size:11.3px;line-height:1.13}
+  .appPage #consultas .careCopy p{font-size:9.6px;line-height:1.2;margin:2px 0 0}
+  .appPage #consultas .careTitle .infoButton{
+    width:27px;height:27px;min-width:27px;min-height:27px;
+    flex-basis:27px;margin:-3px -3px -3px 0;
+  }
+  .appPage #consultas .smallHeartBadge{width:23px;height:23px;top:5px;right:5px}
+  .appPage #consultas .smallHeartBadge svg{width:13px;height:13px}
+  .appPage #consultas .pvAccessFrame > .groupCTA{
+    min-height:43px;
+    padding:10px 8px;
+    font-size:11.7px;
+    margin:0 0 0 -3px!important;
+    width:calc(100% + 6px);
+    border-radius:0 0 15px 15px;
+  }
+}
+@media(max-width:389px){
+  .appPage .appTop.pvTenderHero{height:100px;min-height:100px}
+  .appPage .pvTenderHero .pvAppIdentity .pvIntegratedHeart{width:98px}
+  .appPage #consultas .careTitle h3{font-size:10.8px}
+  .appPage #consultas .careCopy p{font-size:9.2px}
+  .appPage #consultas .pvAccessFrame > .groupCards{padding:4px;gap:5px}
+  .appPage #consultas .pvAccessFrame > .groupCTA{font-size:10.7px}
+}
+
+/* Página de instalação: somente a marca integrada, mensagem, ações e celular;
+   as "bolas/elos" do fundo existente continuam preservadas. */
+.installPage .installHeader{
+  height:120px;
+  max-width:1140px;
+  padding:8px 25px;
+  gap:16px;
+}
+.installPage .installHeader .pvInstallBrand27{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:112px;height:112px;
+  flex:0 0 112px;
+}
+.installPage .pvInstallBrandHeart{
+  display:block;
+  width:91px;height:91px;
+  max-width:none;
+  object-fit:contain;
+  transform:rotate(45deg);
+  filter:drop-shadow(0 6px 14px rgba(85,43,169,.095));
+}
+.installPage .installHero{
+  max-width:1140px;
+  min-height:0;
+  padding:10px 25px 22px;
+  grid-template-columns:minmax(0,1fr) minmax(285px,.87fr);
+  gap:30px;
+  align-items:center;
+}
+.installPage .installCopy h1{
+  font-size:clamp(32px,3.7vw,56px);
+  text-transform:none;
+  letter-spacing:-.055em;
+  line-height:1.13;
+  font-weight:900;
+  margin:0 0 19px;
+  max-width:620px;
+}
+.installPage .installCopy h1 .gradText{display:block}
+.installPage .installCopy>p{
+  max-width:530px;
+  font-size:clamp(16px,1.45vw,19px);
+  line-height:1.55;
+  margin:0 0 25px;
+}
+.installPage .installActions{gap:12px}
+.installPage .installActions .installBtn,
+.installPage .installActions .previewBtn{
+  min-height:55px;
+}
+.installPage .installVisual{
+  z-index:1;
+  min-height:545px;
+  overflow:visible;
+  display:grid;
+  place-items:center;
+  margin:0;
+}
+.installPage .installVisual .phoneShell{
+  width:286px;
+  height:535px;
+  margin:0;
+  transform:rotate(2deg);
+  transform-origin:center;
+}
+.installPage .phoneScreen iframe.pvLiveAppFrame{
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:0;
+  margin:0;
+  border:0;
+  background:#fff;
+}
+.installPage .phoneScreen{
+  padding:0!important;
+}
+.installPage .pvInstallChoiceModal27 .pvChooseIntro{
+  margin:4px 0 16px;
+  color:#5b6795;
+}
+.installPage .pvInstallChoiceModal27 .pvDeviceChoices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+.installPage .pvInstallChoiceModal27 .pvDeviceChoice{
+  min-height:86px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid #e2d8fa;
+  border-radius:16px;
+  background:#fbfaff;
+  color:#4b268f;
+  font-size:14px;
+  font-weight:800;
+}
+.installPage .pvInstallChoiceModal27 .pvDeviceChoice svg{
+  width:25px;height:25px;
+}
+.installPage .pvInstallChoiceModal27 .pvDeviceChoice:hover,
+.installPage .pvInstallChoiceModal27 .pvDeviceChoice:focus-visible,
+.installPage .pvInstallChoiceModal27 .pvDeviceChoice.active{
+  background:#f2ebff;
+  border-color:#8f65d4;
+}
+.installPage .pvInstallChoiceModal27 .pvInstallSteps{
+  margin:14px 0 0;
+  padding:9px 14px;
+  border:1px solid #eee7fb;
+  border-radius:14px;
+  background:#fbfaff;
+}
+.installPage .pvInstallChoiceModal27 .pvInstallSteps p{margin:8px 0;font-size:13px}
+.installPage .pvInstallChoiceModal27 .pvInstallSteps ol{margin:6px 0 10px}
+@media(max-width:690px){
+  .installPage .installHeader{
+    height:93px;
+    padding:3px 15px;
+    gap:10px;
+  }
+  .installPage .installHeader .pvInstallBrand27{
+    width:81px;height:81px;
+    flex-basis:81px;
+  }
+  .installPage .pvInstallBrandHeart{width:71px;height:71px}
+  .installPage .privacyLabel{font-size:10px;max-width:190px}
+  .installPage .installHero{
+    padding:8px 17px 25px;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    align-items:center;
+  }
+  .installPage .installCopy{
+    width:100%;
+    text-align:center;
+  }
+  .installPage .installCopy h1{
+    font-size:clamp(30px,7.25vw,39px);
+    letter-spacing:-.047em;
+    line-height:1.12;
+    margin:0 auto 13px;
+    max-width:430px;
+  }
+  .installPage .installCopy>p{
+    font-size:14px;
+    line-height:1.45;
+    margin:0 auto 18px;
+    max-width:410px;
+  }
+  .installPage .installActions{
+    display:grid;
+    grid-template-columns:1fr;
+    max-width:420px;
+    width:100%;
+    gap:9px;
+    margin:0 auto;
+  }
+  .installPage .installActions .installBtn,
+  .installPage .installActions .previewBtn{min-height:52px}
+  .installPage .installVisual{
+    min-height:490px;
+    height:490px;
+    margin:7px auto 0;
+    width:100%;
+  }
+  .installPage .installVisual .phoneShell{
+    transform:scale(.86) rotate(1.5deg);
+    transform-origin:center center;
+    margin:0;
+  }
+  .installPage .installVisual:before{height:67%;right:-2%;bottom:9%;width:105%}
+}
+@media(max-width:389px){
+  .installPage .installCopy h1{font-size:30px}
+  .installPage .installVisual{
+    min-height:455px;
+    height:455px;
+    margin:4px auto 0;
+  }
+  .installPage .installVisual .phoneShell{
+    transform:scale(.79) rotate(1.5deg);
+    margin:0;
+  }
+}
