@@ -1228,7 +1228,7 @@ body.appPage::before{
 }
 .appPage .pvAppIdentity .pvCenteredLogo {
   display:block;
-  order:0;
+  order:1;
   width:156px;
   max-width:65%;
   height:auto;
@@ -1237,7 +1237,7 @@ body.appPage::before{
 }
 .appPage .pvAppIdentity .pvCenteredHeart {
   display:block;
-  order:1;
+  order:0;
   width:130px;
   height:101px;
   max-width:40%;
