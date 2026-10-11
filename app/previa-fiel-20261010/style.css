@@ -632,3 +632,231 @@ html,body{max-width:100%;overflow-x:clip}
  .appMobileBrand .brandHeart{width:38px;height:38px}
  .appTop .pvHeroHeading h1{font-size:clamp(27px,7.3vw,32px)}
 }
+
+
+/* pvAppPolish14 — refinamento de UX baseado no site PromoVie e diretrizes mobile.
+   Mantém fotos oficiais, contorno grosso integrado ao CTA, logo e coração aprovados. */
+:root{
+  --pv-purple:#4b0c8f;
+  --pv-violet:#7334d8;
+  --pv-cyan:#00bde8;
+  --pv-border:#e2e8f5;
+  --pv-muted:#59677f;
+}
+html{scroll-padding-top:92px}
+.appPage{
+  min-height:100dvh;
+  background:
+    radial-gradient(ellipse 45% 27% at 96% 4%,rgba(0,189,232,.065),transparent 85%),
+    radial-gradient(ellipse 54% 34% at 0% 34%,rgba(115,52,216,.055),transparent 85%),
+    #f8faff;
+  color:#192340;
+  font-feature-settings:"kern";
+}
+.appSidebar{
+  background:rgba(255,255,255,.97);
+  border-right:1px solid #e8e8f1;
+  box-shadow:5px 0 32px rgba(42,35,118,.04);
+  overflow-y:auto;
+}
+.sideNav{gap:7px}
+.sideNav a{
+  min-height:50px;
+  border-radius:14px;
+  transition:background-color .18s ease,color .18s ease,transform .18s ease;
+}
+.sideNav a.active{
+  background:linear-gradient(105deg,#f0e8ff,#f5f1ff 65%,#edfaff);
+  color:var(--pv-purple);
+  box-shadow:inset 3px 0 0 #8450e7;
+}
+.sideNav a:focus-visible{outline-color:var(--pv-violet)}
+.sideFine{font-size:11px;line-height:1.5}
+.appMain{width:auto}
+.appTop .pvHeroHeading h1{
+  color:#1a2351;
+  text-wrap:balance;
+}
+.groupPanel{
+  background:#fff;
+  border:1px solid var(--pv-border);
+  box-shadow:0 16px 39px rgba(26,28,91,.065);
+  scroll-margin-top:92px;
+}
+.groupHead{align-items:center}
+.groupHead h2{color:#222052;letter-spacing:-.037em}
+.groupHead p{color:var(--pv-muted);line-height:1.55;max-width:720px}
+.groupIcon{
+  background:linear-gradient(140deg,#f1eaff,#edf4ff);
+  border:1px solid rgba(115,52,216,.09);
+  border-radius:15px;
+  color:#7132c9;
+}
+.groupInfo .groupIcon{
+  background:linear-gradient(140deg,#ecfaff,#f4f0ff);
+  color:#3865bf;
+}
+.groupPanel .pvAccessFrame{
+  box-shadow:0 10px 27px rgba(75,12,143,.085);
+}
+.groupPanel .pvAccessFrame > .groupCards{
+  background:linear-gradient(150deg,#f7f6ff,#fff 36%,#f6fbff 100%);
+}
+.groupPanel .pvAccessFrame > .groupCTA{
+  color:#fff;
+  font-weight:825;
+  letter-spacing:-.012em;
+  transition:filter .2s ease;
+}
+.groupPanel .pvAccessFrame > .groupCTA:hover{filter:brightness(1.07)}
+.careCard{
+  background:#fff;
+  border:1px solid #e5e9f5;
+  border-radius:15px;
+  box-shadow:0 4px 12px rgba(26,39,100,.04);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  outline-offset:2px;
+}
+.careCard:hover,.careCard:focus-visible,.careCard:focus-within{
+  border-color:#bba8ee;
+  box-shadow:0 10px 22px rgba(79,51,164,.12);
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  .careCard:hover{transform:translateY(-2px)}
+}
+.careCard:focus-visible{outline:3px solid #7e58e6}
+.careMedia{background:#f0f4fa}
+.careMedia img{object-fit:cover;object-position:center;aspect-ratio:auto}
+.careCopy{display:flex;flex-direction:column;justify-content:flex-start;min-width:0}
+.careTitle{align-items:flex-start}
+.careTitle h3{
+  color:#29224f;
+  overflow-wrap:break-word;
+  hyphens:auto;
+  line-height:1.24;
+}
+.careCopy p{color:#606d80;line-height:1.45}
+.infoButton{
+  flex:0 0 28px;
+  width:28px;
+  height:28px;
+  min-width:28px;
+  position:relative;
+  background:#f0ebff;
+  color:#5e2bc1;
+  font-weight:850;
+  border-radius:50%;
+}
+.infoButton:after{content:"";position:absolute;inset:-8px}
+.infoButton:hover,.infoButton:focus-visible{
+  background:#e6dcff;
+  color:var(--pv-purple);
+}
+.appBottom a{min-height:51px;transition:background-color .16s ease}
+.appBottom a.active{color:var(--pv-purple);background:#f1eaff}
+.appBottom a:focus-visible{outline-offset:-3px}
+.sheetOverlay{
+  background:rgba(20,19,69,.54);
+  -webkit-backdrop-filter:blur(4px);
+  backdrop-filter:blur(4px);
+}
+.infoSheet{
+  overflow-y:auto;
+  max-height:min(89dvh,750px);
+  overscroll-behavior:contain;
+  box-shadow:0 20px 75px rgba(14,18,76,.2);
+}
+.infoSheet .closeSheet{
+  min-width:44px;
+  min-height:44px;
+  display:grid;
+  place-items:center;
+  z-index:3;
+}
+.sheetButton{min-height:50px}
+@media(min-width:701px) and (max-width:1099px){
+  .groupPanel .groupCards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .careMedia{height:clamp(126px,16vw,172px)}
+  .groupPanel{scroll-margin-top:24px}
+}
+@media(min-width:1100px){
+  .careMedia{height:clamp(120px,10.8vw,164px)}
+}
+@media(max-width:700px){
+  html{scroll-padding-top:84px}
+  .appPage{
+    padding-bottom:calc(96px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(150deg,#f9f8ff,#f6faff 55%,#fcfcff);
+  }
+  .appMobileBrand{
+    background:rgba(255,255,255,.985);
+    border-bottom:1px solid #e9eaf3;
+    box-shadow:0 6px 18px rgba(37,30,97,.035);
+  }
+  .appMain{padding:20px 14px 22px}
+  .appTop{margin-bottom:19px}
+  .appTop .pvHeroHeading h1{font-size:clamp(30px,7.5vw,42px);line-height:1.11}
+  .groupPanel{
+    padding:16px 12px 14px;
+    border-radius:21px;
+    margin-bottom:16px;
+    scroll-margin-top:83px;
+    box-shadow:0 10px 25px rgba(34,37,119,.055);
+  }
+  .groupHead{gap:11px;margin-bottom:15px}
+  .groupHead h2{font-size:19px;line-height:1.19}
+  .groupHead p{font-size:12px;line-height:1.46}
+  .groupIcon{width:44px;height:44px;flex:0 0 44px;border-radius:13px}
+  .groupPanel .pvAccessFrame > .groupCards{gap:9px}
+  .careCard{border-radius:12px}
+  .careMedia{height:clamp(102px,29vw,145px)}
+  .careCopy{padding:10px 9px 12px}
+  .careTitle h3{font-size:clamp(12px,3.25vw,14px);line-height:1.28}
+  .careCopy p{font-size:clamp(10px,2.85vw,12px);margin-top:6px}
+  .infoButton{width:27px;height:27px;min-width:27px;flex-basis:27px;font-size:13px}
+  .appBottom{
+    z-index:40;
+    border-top:1px solid #e8e7f5;
+    box-shadow:0 -8px 28px rgba(31,33,93,.085);
+    padding:7px 10px calc(8px + env(safe-area-inset-bottom,0px));
+    background:rgba(255,255,255,.975);
+    -webkit-backdrop-filter:blur(16px);
+    backdrop-filter:blur(16px);
+  }
+  .appBottom a{
+    font-size:11px;
+    font-weight:800;
+    min-height:51px;
+    border-radius:12px;
+  }
+  .appBottom a svg{width:22px;height:22px}
+  .infoSheet{
+    padding:24px 18px calc(23px + env(safe-area-inset-bottom,0px));
+    border-radius:23px 23px 0 0;
+    max-height:86dvh;
+  }
+}
+@media(max-width:370px){
+  .appMain{padding-inline:10px}
+  .groupPanel{padding:13px 9px}
+  .groupPanel .pvAccessFrame > .groupCards{gap:7px}
+  .careMedia{height:99px}
+  .careTitle h3{font-size:11px}
+  .careCopy{padding:8px 7px 10px}
+  .infoButton{width:26px;min-width:26px;flex-basis:26px;height:26px}
+}
+@media(display-mode:standalone){
+  .appPage{min-height:100dvh}
+  @media(max-width:700px){
+    .appMobileBrand{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .careCard,.groupCTA,.sideNav a,.appBottom a{transition:none!important}
+}
+@media(prefers-contrast:more){
+  .groupPanel,.careCard{border-color:#656788}
+  .infoButton{border:1px solid #6856a3}
+  .groupHead p,.careCopy p{color:#353e55}
+}
