@@ -546,23 +546,56 @@ html,body{max-width:100%;overflow-x:clip}
 }
 
 
-/* pvVectorHeartAboveTitle11: SVG real no canto superior direito; o título começa abaixo dele. */
+/* pvHeartAlignedWithWordmark13:
+   O coração pertence à assinatura visual PromoVie, centralizado na mesma linha
+   do logotipo, nunca flutuando sobre o título nem em um bloco separado. */
+.installHeader .brand,
+.appSidebar .brand,
+.appMobileBrand .brand{
+ display:inline-flex;
+ flex-flow:row nowrap;
+ align-items:center;
+ justify-content:flex-start;
+ gap:8px;
+ white-space:nowrap;
+}
+.installHeader .brandLogo,
+.appSidebar .brandLogo,
+.appMobileBrand .brandLogo{
+ display:block;
+ flex:0 1 auto;
+ object-fit:contain;
+}
+.installHeader .brandHeart,
+.appSidebar .brandHeart,
+.appMobileBrand .brandHeart{
+ display:block;
+ position:static;
+ flex:0 0 auto;
+ align-self:center;
+ margin:0;
+ object-fit:contain;
+ filter:drop-shadow(0 4px 7px rgba(103,68,226,.12));
+}
+.installHeader .brandHeart{width:62px;height:62px}
+.appSidebar .brandLogo{width:132px;max-height:68px}
+.appSidebar .brandHeart{width:44px;height:44px}
 .appTop{
  position:relative;
  display:flex;
- flex-direction:column;
- justify-content:flex-end;
- align-items:stretch;
+ flex-flow:row nowrap;
+ justify-content:flex-start;
+ align-items:center;
  gap:0;
- min-height:233px;
- padding:158px 0 0;
- margin-bottom:21px;
+ min-height:80px;
+ padding:0;
+ margin-bottom:20px;
  overflow:visible;
 }
 .appTop .pvHeroHeading{
- position:relative;
  display:block;
- z-index:2;
+ position:relative;
+ z-index:auto;
  width:100%;
  max-width:100%;
  min-width:0;
@@ -570,57 +603,32 @@ html,body{max-width:100%;overflow-x:clip}
  padding:0;
 }
 .appTop .pvHeroHeading h1{
- max-width:100%;
- font-size:clamp(34px,3.65vw,56px);
+ font-size:clamp(33px,3.65vw,56px);
  font-weight:900;
  line-height:1.08;
  letter-spacing:-.055em;
  margin:0;
+ max-width:100%;
 }
-.appTop img.pvHeroHeart{
- position:absolute;
- display:block;
- width:222px;
- height:150px;
- right:8px;
- top:0;
- transform:none;
- object-fit:contain;
- z-index:1;
- filter:drop-shadow(0 10px 19px rgba(80,59,205,.12));
- pointer-events:none;
-}
-@media (min-width:701px) and (max-width:1100px){
- .appTop{min-height:209px;padding-top:133px}
- .appTop img.pvHeroHeart{width:187px;height:125px;right:5px;top:0}
+@media(min-width:701px) and (max-width:1100px){
+ .appSidebar .brandLogo{width:112px}
+ .appSidebar .brandHeart{width:39px;height:39px}
+ .appTop{min-height:68px}
  .appTop .pvHeroHeading h1{font-size:clamp(31px,3.65vw,44px)}
 }
 @media(max-width:700px){
- .appTop{
-  display:flex;
-  align-items:stretch;
-  flex-direction:column;
-  justify-content:flex-end;
-  min-height:215px;
-  padding:127px 0 0;
-  margin-bottom:19px;
- }
- .appTop img.pvHeroHeart{
-  width:161px;
-  height:114px;
-  right:0;
-  top:0;
-  transform:none;
- }
- .appTop .pvHeroHeading h1{
-  font-size:clamp(30px,7.25vw,40px);
-  line-height:1.11;
-  letter-spacing:-.055em;
- }
+ .installHeader .brandHeart{width:41px;height:41px}
+ .appMobileBrand .brandLogo{width:133px;max-height:46px}
+ .appMobileBrand .brandHeart{width:42px;height:42px}
+ .appTop{min-height:0;padding:0;margin-bottom:20px}
+ .appTop .pvHeroHeading h1{font-size:clamp(30px,7.25vw,40px);line-height:1.11}
  .appTop .pvHeroHeading .gradText{display:block}
 }
 @media(max-width:389px){
- .appTop{min-height:196px;padding-top:113px;margin-bottom:15px}
- .appTop img.pvHeroHeart{width:144px;height:103px;right:0;top:0}
+ .installHeader .brandLogo{width:112px}
+ .installHeader .brandHeart{width:34px;height:34px}
+ .installHeader .brand{gap:7px}
+ .appMobileBrand .brandLogo{width:120px}
+ .appMobileBrand .brandHeart{width:38px;height:38px}
  .appTop .pvHeroHeading h1{font-size:clamp(27px,7.3vw,32px)}
 }
