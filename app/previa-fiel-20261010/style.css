@@ -927,3 +927,83 @@ html{scroll-padding-top:92px}
 @media(max-width:700px){
  .appPage .infoButton .pvThreeDots{width:17px;height:14px}
 }
+
+
+/* pvThreeDotsSiteExact16 — reprodução do indicador triangular dos cartões do site:
+   sem círculo branco envolvendo o símbolo; três pontos nas posições 50%/18%,
+   24%/80%, 76%/80%, nas cores oficiais violeta, roxo e ciano. */
+.appPage .careTitle .infoButton {
+  display:grid;
+  place-items:center;
+  flex:0 0 34px;
+  width:34px;
+  height:34px;
+  min-width:34px;
+  min-height:34px;
+  margin:-4px -5px -4px 0;
+  padding:0;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  box-shadow:none;
+  outline-offset:2px;
+  appearance:none;
+  -webkit-appearance:none;
+  line-height:0;
+}
+.appPage .careTitle .infoButton .pvThreeDots {
+  width:21px;
+  height:15px;
+  display:block;
+  margin:auto;
+  border:0;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(115,52,216,.98) 0 2.25px, transparent 2.7px),
+    radial-gradient(circle at 24% 80%, rgba(75,12,143,.92) 0 2.25px, transparent 2.7px),
+    radial-gradient(circle at 76% 80%, rgba(0,189,232,.92) 0 2.25px, transparent 2.7px);
+  background-repeat:no-repeat;
+  box-shadow:none;
+  pointer-events:none;
+}
+.appPage .careTitle .infoButton:hover,
+.appPage .careTitle .infoButton:focus-visible{
+  background:rgba(115,52,216,.065);
+  border:0;
+  box-shadow:none;
+}
+.appPage .careTitle .infoButton:focus-visible{outline:2px solid #7334d8}
+
+/* pvHorizontalPhotos16 — proporção fotográfica 16:9, como na galeria de
+   TeleSaúde do site oficial; mantém exatamente as oito fotografias existentes. */
+.appPage .groupPanel .careCard .careMedia {
+  position:relative;
+  width:100%;
+  height:auto !important;
+  aspect-ratio:16/9;
+  flex:0 0 auto;
+  overflow:hidden;
+  background:#f0f4fa;
+}
+.appPage .groupPanel .careCard .careMedia > img {
+  display:block;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+@media(max-width:700px){
+  .appPage .careTitle .infoButton{
+    width:32px;
+    min-width:32px;
+    height:32px;
+    min-height:32px;
+    flex-basis:32px;
+    margin:-5px -5px -5px 0;
+  }
+  .appPage .careTitle .infoButton .pvThreeDots{
+    width:21px;
+    height:15px;
+  }
+}
