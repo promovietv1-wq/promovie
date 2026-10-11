@@ -1485,3 +1485,155 @@ body.appPage::before{
   .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{filter:none}
 }
 
+
+
+/* pvHealthMotifs25 — ensaio de identidade: coração inclinado 45° para a
+   direita, fundo branco e referências aos sete serviços de saúde, sem pet. */
+.appPage .appTop.pvModernHero{
+  min-height:286px;
+  padding:21px 20px;
+  background:
+    radial-gradient(ellipse 28% 78% at 4% 48%,rgba(116,61,211,.065),transparent 95%),
+    radial-gradient(ellipse 26% 75% at 97% 51%,rgba(0,180,223,.072),transparent 95%),
+    linear-gradient(115deg,#ffffff 0%,#fcfbff 45%,#ffffff 100%);
+}
+.appPage .appTop.pvModernHero::before{
+  background:
+    radial-gradient(ellipse 25% 76% at -5% 17%,rgba(116,61,211,.065),transparent 82%),
+    radial-gradient(ellipse 26% 74% at 105% 83%,rgba(0,178,228,.065),transparent 84%);
+}
+.appPage .pvModernHero .pvAppIdentity{
+  z-index:3;
+}
+.appPage .pvModernHero .pvAppIdentity::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:248px;
+  height:248px;
+  max-width:76vw;
+  pointer-events:none;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff 0 47%,rgba(255,255,255,.97) 60%,rgba(255,255,255,.59) 78%,transparent 100%);
+}
+.appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{
+  width:182px;
+  max-width:51vw;
+  transform:rotate(45deg);
+  transform-origin:center center;
+  filter:drop-shadow(0 11px 16px rgba(69,35,145,.12));
+}
+.appPage .pvHealthMotifs25{
+  position:absolute;
+  z-index:2;
+  inset:0;
+  pointer-events:none;
+}
+.appPage .pvHealthGlyph{
+  position:absolute;
+  display:grid;
+  place-items:center;
+  width:43px;
+  height:43px;
+  border-radius:15px;
+  border:1px solid rgba(111,85,172,.16);
+  background:linear-gradient(140deg,rgba(255,255,255,.96),rgba(249,246,255,.83));
+  box-shadow:0 5px 15px rgba(65,47,131,.065),inset 0 1px rgba(255,255,255,.85);
+  color:#7b51bc;
+  opacity:.82;
+}
+.appPage .pvHealthGlyph svg{
+  display:block;
+  width:23px;
+  height:23px;
+}
+.appPage .pvHealthGlyph--telemedicina{
+  left:11%;top:17%;
+  color:#7545ba;
+}
+.appPage .pvHealthGlyph--psicologia{
+  left:21%;top:49%;
+  color:#9270c1;
+  width:37px;height:37px;
+  background:linear-gradient(140deg,#fff,#f9f5ff);
+}
+.appPage .pvHealthGlyph--psicologia svg{width:21px;height:21px}
+.appPage .pvHealthGlyph--nutricao{
+  left:9%;bottom:14%;
+  color:#368fa8;
+}
+.appPage .pvHealthGlyph--medicina{
+  right:11%;top:13%;
+  color:#438cb3;
+}
+.appPage .pvHealthGlyph--mulher{
+  right:21%;top:43%;
+  width:37px;height:37px;
+  color:#a270b8;
+}
+.appPage .pvHealthGlyph--mulher svg{width:21px;height:21px}
+.appPage .pvHealthGlyph--atividade{
+  right:9%;top:61%;
+  color:#4a95bc;
+}
+.appPage .pvHealthGlyph--familia{
+  right:20%;bottom:9%;
+  width:37px;height:37px;
+  color:#7d61b2;
+}
+.appPage .pvHealthGlyph--familia svg{width:21px;height:21px}
+@media (min-width:701px) and (max-width:1100px){
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{width:175px}
+  .appPage .pvModernHero .pvAppIdentity::before{width:235px;height:235px}
+}
+@media (max-width:700px){
+  .appPage .appTop.pvModernHero{
+    min-height:262px;
+    margin:0 auto 14px;
+    padding:15px 9px;
+    border-radius:21px;
+    background:
+      radial-gradient(ellipse 36% 67% at 0% 45%,rgba(116,61,211,.064),transparent 90%),
+      radial-gradient(ellipse 36% 67% at 100% 55%,rgba(0,180,223,.071),transparent 90%),
+      #fff;
+  }
+  .appPage .pvModernHero .pvAppIdentity::before{
+    width:193px;height:193px;max-width:63vw;
+  }
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{
+    width:154px;max-width:46vw;
+    transform:rotate(45deg);
+  }
+  .appPage .pvHealthGlyph{
+    width:31px;height:31px;
+    border-radius:11px;
+    opacity:.67;
+    box-shadow:0 3px 12px rgba(65,47,131,.046),inset 0 1px rgba(255,255,255,.9);
+  }
+  .appPage .pvHealthGlyph svg,
+  .appPage .pvHealthGlyph--psicologia svg,
+  .appPage .pvHealthGlyph--mulher svg,
+  .appPage .pvHealthGlyph--familia svg{width:18px;height:18px}
+  .appPage .pvHealthGlyph--telemedicina{left:5%;top:15%}
+  .appPage .pvHealthGlyph--psicologia{left:7%;top:43%;width:29px;height:29px}
+  .appPage .pvHealthGlyph--nutricao{left:5%;bottom:13%}
+  .appPage .pvHealthGlyph--medicina{right:5%;top:12%}
+  .appPage .pvHealthGlyph--mulher{right:6%;top:36%;width:29px;height:29px}
+  .appPage .pvHealthGlyph--atividade{right:5%;top:61%}
+  .appPage .pvHealthGlyph--familia{right:7%;bottom:9%;width:29px;height:29px}
+}
+@media (max-width:389px){
+  .appPage .appTop.pvModernHero{min-height:247px}
+  .appPage .pvModernHero .pvAppIdentity::before{width:182px;height:182px}
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{
+    width:144px;max-width:45vw;
+    transform:rotate(45deg);
+  }
+  .appPage .pvHealthGlyph{width:28px;height:28px}
+  .appPage .pvHealthGlyph--psicologia,
+  .appPage .pvHealthGlyph--mulher,
+  .appPage .pvHealthGlyph--familia{width:27px;height:27px}
+}
+@media (prefers-contrast:more){
+  .appPage .pvHealthGlyph{opacity:1;border-color:#835fae}
+}
