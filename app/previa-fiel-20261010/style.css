@@ -2217,3 +2217,260 @@ body.appPage::before{
     transform:scale(.80);
   }
 }
+
+
+/* pvWellnessCircle29 — identidade afetiva: círculo completo de saúde em
+   expansão ao redor do coração PromoVie. Somente o topo do aplicativo. */
+.appPage .appTop.pvTenderHero.pvWellnessHero29{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  max-width:960px;
+  height:365px;
+  min-height:365px;
+  padding:0 18px;
+  margin:0 auto 18px;
+  border:1px solid rgba(138,111,209,.19);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 50% 49%,#fff 0 25%,rgba(255,255,255,.98) 39%,rgba(251,247,255,.86) 69%,#fff 100%),
+    #fff;
+  box-shadow:0 14px 38px rgba(54,36,130,.075),inset 0 1px 0 #fff;
+}
+.appPage .appTop.pvTenderHero.pvWellnessHero29::before{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  content:"";
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 31% 42% at 11% 16%,rgba(172,112,241,.16),transparent 98%),
+    radial-gradient(ellipse 32% 42% at 89% 83%,rgba(71,195,235,.17),transparent 98%),
+    radial-gradient(circle at 50% 50%,rgba(216,202,255,.085),transparent 69%);
+}
+.appPage .appTop.pvTenderHero.pvWellnessHero29::after{
+  top:0;
+  left:30%;
+  right:30%;
+  height:2px;
+  content:"";
+  opacity:.63;
+  background:linear-gradient(90deg,transparent,#a779e5 34%,#56c6e9 72%,transparent);
+}
+.appPage .pvWellnessHero29 .pvWellnessOrbit29{
+  position:absolute;
+  z-index:1;
+  left:50%;
+  top:0;
+  width:min(100%,440px);
+  height:100%;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.appPage .pvWellnessHero29 .pvWellnessRing29{
+  box-sizing:border-box;
+  position:absolute;
+  display:block;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  aspect-ratio:1 / 1;
+  transform:translate(-50%,-50%);
+}
+.appPage .pvWellnessHero29 .pvWellnessRing29--inner{
+  width:39%;
+  border:2px solid rgba(138,91,215,.25);
+  background:radial-gradient(circle,rgba(255,255,255,.95) 40%,rgba(183,155,237,.09) 86%,rgba(255,255,255,0) 100%);
+  box-shadow:0 0 0 12px rgba(184,156,236,.055),0 0 28px rgba(121,87,199,.10);
+}
+.appPage .pvWellnessHero29 .pvWellnessRing29--middle{
+  width:64%;
+  border:2px solid rgba(105,161,226,.20);
+  box-shadow:0 0 0 14px rgba(76,186,237,.035),0 0 20px rgba(111,148,226,.035);
+}
+.appPage .pvWellnessHero29 .pvWellnessRing29--outer{
+  width:83%;
+  border:2px solid rgba(159,113,215,.27);
+  box-shadow:0 0 0 5px rgba(184,142,229,.027);
+  animation:pvWellnessBreath29 7s ease-in-out infinite alternate;
+}
+@keyframes pvWellnessBreath29{
+  from{opacity:.69;transform:translate(-50%,-50%) scale(.982)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1.025)}
+}
+.appPage .pvWellnessHero29 .pvWellnessGlow29{
+  position:absolute;
+  display:block;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#eee1ff;
+  box-shadow:0 0 0 7px rgba(206,171,243,.14),0 0 17px rgba(192,145,238,.18);
+  opacity:.66;
+}
+.appPage .pvWellnessHero29 .pvWellnessGlow29--one{
+  top:7%;left:47%;
+}
+.appPage .pvWellnessHero29 .pvWellnessGlow29--two{
+  width:9px;height:9px;
+  right:16%;bottom:14%;
+  background:#c2eef8;
+  box-shadow:0 0 0 7px rgba(126,207,240,.12),0 0 13px rgba(104,187,225,.18);
+}
+.appPage .pvWellnessHero29 .pvWellnessChip29{
+  box-sizing:border-box;
+  position:absolute;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:6px;
+  min-width:104px;
+  height:43px;
+  padding:5px 9px 5px 5px;
+  border:1px solid rgba(140,109,212,.17);
+  border-radius:999px;
+  color:#6540a3;
+  background:linear-gradient(145deg,rgba(255,255,255,.99),rgba(249,244,255,.97));
+  box-shadow:0 7px 17px rgba(91,60,161,.082),inset 0 1px 0 #fff;
+  white-space:nowrap;
+  font-size:11px;
+  font-weight:750;
+  letter-spacing:-.01em;
+}
+.appPage .pvWellnessHero29 .pvWellnessIcon29{
+  display:grid;
+  place-items:center;
+  flex:0 0 31px;
+  width:31px;
+  height:31px;
+  border-radius:50%;
+  color:#8254d9;
+  background:linear-gradient(145deg,#f3e8ff,#e6dbff);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.93);
+}
+.appPage .pvWellnessHero29 .pvWellnessIcon29 svg{
+  display:block;
+  width:17px;height:17px;
+}
+.appPage .pvWellnessHero29 .pvWellnessChip29--saude{left:9%;top:11%}
+.appPage .pvWellnessHero29 .pvWellnessChip29--bemestar{right:7%;top:11%}
+.appPage .pvWellnessHero29 .pvWellnessChip29--cuidado{left:0;top:43%}
+.appPage .pvWellnessHero29 .pvWellnessChip29--prevencao{right:0;top:43%}
+.appPage .pvWellnessHero29 .pvWellnessChip29--acolhimento{left:9%;bottom:10%}
+.appPage .pvWellnessHero29 .pvWellnessChip29--orientacao{right:7%;bottom:10%}
+.appPage .pvWellnessHero29 .pvWellnessChip29--bemestar,
+.appPage .pvWellnessHero29 .pvWellnessChip29--prevencao,
+.appPage .pvWellnessHero29 .pvWellnessChip29--orientacao{
+  color:#317fa5;
+  border-color:rgba(67,167,210,.17);
+  background:linear-gradient(145deg,#fff,#f1fbff);
+}
+.appPage .pvWellnessHero29 .pvWellnessChip29--bemestar .pvWellnessIcon29,
+.appPage .pvWellnessHero29 .pvWellnessChip29--prevencao .pvWellnessIcon29,
+.appPage .pvWellnessHero29 .pvWellnessChip29--orientacao .pvWellnessIcon29{
+  color:#318eb6;
+  background:linear-gradient(145deg,#ebfbff,#d8f4ff);
+}
+.appPage .pvWellnessHero29 .pvAppIdentity{
+  position:relative;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  padding:0;
+  margin:0;
+  pointer-events:none;
+}
+.appPage .pvWellnessHero29 .pvAppIdentity::before{
+  position:absolute;
+  z-index:-1;
+  content:"";
+  top:50%;left:50%;
+  width:178px;height:178px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,255,255,.99) 0 41%,rgba(255,255,255,.72) 67%,transparent 89%);
+  pointer-events:none;
+}
+.appPage .pvWellnessHero29 .pvAppIdentity .pvIntegratedHeart{
+  display:block;
+  width:124px;
+  max-width:40vw;
+  height:auto;
+  transform:none;
+  filter:drop-shadow(0 8px 13px rgba(87,45,157,.085));
+}
+@media(max-width:700px){
+  .appPage .appTop.pvTenderHero.pvWellnessHero29{
+    box-sizing:border-box;
+    width:100%;
+    height:clamp(310px,93vw,425px);
+    min-height:310px;
+    max-height:425px;
+    padding:0;
+    margin:0 auto 14px;
+    border-radius:25px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessOrbit29{
+    width:100%;
+    max-width:425px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessRing29--inner{width:44%}
+  .appPage .pvWellnessHero29 .pvWellnessRing29--middle{width:67%}
+  .appPage .pvWellnessHero29 .pvWellnessRing29--outer{width:82%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29{
+    min-width:0;
+    height:42px;
+    padding:5px 7px 5px 5px;
+    gap:5px;
+    font-size:10.4px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessIcon29{
+    flex-basis:29px;
+    width:29px;height:29px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessIcon29 svg{width:16px;height:16px}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--saude{left:7%;top:12%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--bemestar{right:6%;top:12%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--cuidado{left:1%;top:44%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--prevencao{right:1%;top:44%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--acolhimento{left:6%;bottom:11%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--orientacao{right:6%;bottom:11%}
+  .appPage .pvWellnessHero29 .pvAppIdentity::before{width:157px;height:157px}
+  .appPage .pvWellnessHero29 .pvAppIdentity .pvIntegratedHeart{
+    width:105px;
+    max-width:38vw;
+    transform:none;
+  }
+}
+@media(max-width:389px){
+  .appPage .appTop.pvTenderHero.pvWellnessHero29{
+    height:clamp(305px,96vw,365px);
+    min-height:305px;
+    margin-bottom:12px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessChip29{
+    height:39px;
+    padding:4px 6px 4px 4px;
+    gap:4px;
+    font-size:9.4px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessIcon29{
+    flex-basis:27px;
+    width:27px;height:27px;
+  }
+  .appPage .pvWellnessHero29 .pvWellnessIcon29 svg{width:15px;height:15px}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--saude{left:5%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--bemestar{right:4%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--acolhimento{left:4%}
+  .appPage .pvWellnessHero29 .pvWellnessChip29--orientacao{right:4%}
+  .appPage .pvWellnessHero29 .pvAppIdentity .pvIntegratedHeart{width:98px;transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .appPage .pvWellnessHero29 .pvWellnessRing29--outer{animation:none}
+}
