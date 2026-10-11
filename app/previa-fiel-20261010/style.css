@@ -1007,3 +1007,200 @@ html{scroll-padding-top:92px}
     height:15px;
   }
 }
+
+
+
+/* pvCenteredExperience17 — nova prévia: identidade vertical, títulos em degradê
+   e interface com duas entradas, preservando as imagens e as oito informações. */
+body.appPage{
+  background:
+    radial-gradient(ellipse 42% 30% at 96% 6%,rgba(0,189,232,.115),transparent 85%),
+    radial-gradient(ellipse 50% 32% at 5% 44%,rgba(115,52,216,.09),transparent 86%),
+    radial-gradient(ellipse 50% 31% at 94% 91%,rgba(89,137,255,.12),transparent 90%),
+    linear-gradient(158deg,#fcfbff 3%,#f7f8ff 42%,#f4f9ff 75%,#fcfbff 100%);
+  overflow-x:hidden;
+}
+body.appPage::before{
+  content:"";
+  pointer-events:none;
+  position:fixed;
+  inset:0;
+  z-index:0;
+  opacity:.58;
+  background:
+    radial-gradient(ellipse 31% 25% at 98% 26%,transparent 69%,rgba(124,108,221,.095) 70%,transparent 71%),
+    radial-gradient(ellipse 45% 32% at -6% 77%,transparent 67%,rgba(30,172,231,.085) 68%,transparent 69%),
+    radial-gradient(ellipse 38% 26% at 102% 87%,transparent 74%,rgba(135,92,208,.08) 75%,transparent 76%);
+}
+.appPage .appMain{position:relative;z-index:1}
+.appPage .appSidebar{z-index:20}
+.appPage .sideNav{margin-top:10px;gap:9px}
+.appPage .sideNav a{font-size:14px;font-weight:800;padding:14px 15px}
+.appPage .sideNav .pvNavHeart{width:22px;height:22px;flex:0 0 22px}
+.appPage .pvNavHeart--filled{fill:#7334d8;stroke:none;color:#7334d8}
+.appPage .pvNavHeart--outline{fill:none;stroke:#7334d8;color:#7334d8;stroke-width:1.9}
+.appPage .groupIcon--filled .pvNavHeart{fill:#7334d8;stroke:none}
+.appPage .groupIcon--outline .pvNavHeart{fill:none;stroke:#7334d8;stroke-width:1.9}
+.appPage .pvAppIdentity{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:3px;
+  width:100%;
+  margin:0 auto 13px;
+}
+.appPage .pvAppIdentity .pvCenteredHeart{
+  display:block;
+  width:144px;
+  height:114px;
+  max-width:40vw;
+  object-fit:contain;
+  filter:drop-shadow(0 11px 21px rgba(98,63,182,.14));
+}
+.appPage .pvAppIdentity .pvCenteredLogo{
+  display:block;
+  width:204px;
+  max-width:70%;
+  height:auto;
+  max-height:66px;
+  object-fit:contain;
+}
+.appPage .appTop{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  min-height:0;
+  padding:12px 0 5px;
+  margin:0 0 22px;
+  text-align:center;
+}
+.appPage .appTop .pvHeroHeading{
+  width:100%;
+  max-width:860px;
+  display:block;
+  text-align:center;
+  margin:0 auto;
+}
+.appPage .appTop .pvHeroHeading h1{
+  font-size:clamp(28px,3.4vw,47px);
+  font-weight:880;
+  line-height:1.13;
+  letter-spacing:-.045em;
+  margin:0;
+  text-wrap:balance;
+}
+.appPage .pvGradientHeading,
+.appPage .groupHead h2.pvGradientHeading,
+.appPage .appTop .pvHeroHeading h1.pvGradientHeading,
+.appPage .careCard .careTitle h3{
+  background:linear-gradient(103deg,#4b0c8f 1%,#7334d8 52%,#038cbf 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+}
+.appPage .groupHead h2.pvGradientHeading{font-weight:865;letter-spacing:-.037em}
+.appPage .careCard .careTitle h3{font-weight:840}
+.appPage .groupPanel{
+  position:relative;
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(196,200,231,.49);
+  box-shadow:0 16px 46px rgba(64,58,149,.064);
+}
+.appPage .groupHead{align-items:center}
+.appPage .groupIcon{
+  border-radius:16px;
+  background:linear-gradient(137deg,#f0eaff,#edf4ff);
+}
+.appPage .groupInfo .groupIcon{
+  background:linear-gradient(137deg,#f5edff,#eaf6ff);
+}
+.appPage .groupHead p{
+  font-size:13px;
+  color:#67728a;
+  line-height:1.5;
+}
+.appPage .groupPanel .pvAccessFrame{
+  padding:4px 4px 0;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(64,56,175,.09);
+}
+.appPage .groupPanel .pvAccessFrame > .groupCards{
+  border-radius:14px 14px 0 0;
+  background:linear-gradient(150deg,#f7f8ff 0%,#fff 49%,#f8fbff 100%);
+}
+.appPage .groupPanel .pvAccessFrame > .groupCTA{
+  margin:0 0 0 -4px!important;
+  width:calc(100% + 8px);
+  border-radius:0 0 18px 18px;
+}
+.appPage .pvInformativeMark{color:#7334d8;border-color:rgba(115,52,216,.22)}
+.appPage .pvInformativeMark svg{fill:none;stroke:currentColor;stroke-width:1.9}
+.appPage .appBottom{grid-template-columns:repeat(2,minmax(0,1fr))}
+.appPage .appBottom a{font-weight:815}
+.appPage .appBottom .pvNavHeart{height:24px;width:24px}
+.appPage .appBottom a.active{color:#4b0c8f}
+@media(min-width:701px) and (max-width:1100px){
+  .appPage .pvAppIdentity .pvCenteredHeart{width:124px;height:104px}
+  .appPage .pvAppIdentity .pvCenteredLogo{width:174px}
+  .appPage .appTop .pvHeroHeading h1{font-size:clamp(27px,3.3vw,39px)}
+}
+@media(max-width:700px){
+  /* O topo é a marca central, sem barra própria de identidade e sem URL textual. */
+  .appPage .appMobileBrand{display:none!important}
+  .appPage .appMain{padding:18px 13px 22px}
+  .appPage .appTop{
+    padding:4px 0 5px;
+    margin-bottom:18px;
+    gap:0;
+  }
+  .appPage .pvAppIdentity{margin-bottom:9px;gap:0}
+  .appPage .pvAppIdentity .pvCenteredHeart{
+    width:121px;
+    height:104px;
+    max-width:45%;
+  }
+  .appPage .pvAppIdentity .pvCenteredLogo{
+    width:176px;
+    max-height:58px;
+  }
+  .appPage .appTop .pvHeroHeading h1{
+    font-size:clamp(25px,6.9vw,36px);
+    font-weight:865;
+    letter-spacing:-.037em;
+    line-height:1.15;
+  }
+  .appPage .groupHead h2.pvGradientHeading{
+    font-size:clamp(18px,4.8vw,21px);
+    line-height:1.22;
+  }
+  .appPage .groupPanel{
+    border-radius:21px;
+    padding:15px 12px 14px;
+    scroll-margin-top:20px;
+  }
+  .appPage .groupHead p{font-size:11.5px;margin-top:5px}
+  .appPage .groupPanel .pvAccessFrame{padding:3.5px 3.5px 0;border-radius:17px}
+  .appPage .groupPanel .pvAccessFrame > .groupCards{
+    border-radius:13.5px 13.5px 0 0;
+  }
+  .appPage .groupPanel .pvAccessFrame > .groupCTA{
+    margin:0 0 0 -3.5px!important;
+    width:calc(100% + 7px);
+    border-radius:0 0 17px 17px;
+  }
+  .appPage .appBottom{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .appPage .appBottom a{font-size:12px;min-height:51px}
+  .appPage .appBottom .pvNavHeart{width:23px;height:23px}
+}
+@media(max-width:389px){
+  .appPage .pvAppIdentity .pvCenteredHeart{width:109px;height:95px}
+  .appPage .pvAppIdentity .pvCenteredLogo{width:160px}
+  .appPage .appTop .pvHeroHeading h1{font-size:clamp(24px,6.7vw,30px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .appPage .pvCenteredHeart{filter:none}
+}
