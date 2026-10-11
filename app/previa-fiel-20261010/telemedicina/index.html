@@ -61,7 +61,19 @@ body{overscroll-behavior-y:contain}
 .brand{display:flex;align-items:center;gap:8px}
 .brand img.portalHeart{width:37px;height:37px;object-fit:contain}
 @media(max-width:480px){.brand img.portalHeart{width:30px;height:30px}}
-</style></head>
+</style><style>
+/* Portal mantém o mesmo acabamento do aplicativo PromoVie, sem prometer serviço ainda não integrado. */
+body{background:linear-gradient(150deg,#f9f8ff,#f5faff 55%,#fcfcff);color:#1b2352}
+header{border-bottom-color:#e9eaf5;box-shadow:0 5px 19px rgba(36,30,94,.035)}
+.brand{display:inline-flex;align-items:center;gap:8px}
+.brand img.portalHeart{width:39px;height:39px;object-fit:contain;flex:none}
+.card{border:1px solid #e5e9f5;box-shadow:0 16px 39px rgba(26,28,91,.075)}
+.state{border-radius:999px}
+#portalAction{background:linear-gradient(104deg,#9620fc 2%,#563af3 52%,#008ffa 100%);border-radius:14px;min-height:52px}
+a:focus-visible,button:focus-visible{outline-color:#7334d8}
+@media(max-width:700px){.brand img.portalHeart{width:34px;height:34px}.card{border-radius:22px}}
+</style>
+</head>
 <body>
 <header><div class="wrap head"><a href="/app/previa-fiel-20261010/inicio/" class="brand" aria-label="Voltar para o aplicativo PromoVie"><img alt="PromoVie" src="/preview-promovie-logo.webp"><img src="/app/previa-fiel-20261010/coracao-promovie-original-20261010.avif" alt="" aria-hidden="true" class="portalHeart"></a><a href="/app/previa-fiel-20261010/inicio/">← Voltar</a></div></header>
 <main class="wrap body"><article class="card"><div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="3"/><path d="M9 10h6M12 7v6M9 22h6"/></svg></div><span class="overline">Cuidado a um toque</span><h1>Tele-saúde PromoVie</h1><div class="state" id="state">Integração Levita em preparação</div><p id="description">Estamos preparando o acesso à plataforma de teleatendimento da PromoVie. Enquanto a integração não estiver disponível, nossa equipe pode orientar você pelos canais oficiais.</p><a class="button" id="portalAction" href="https://wa.me/5527988423077?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20a%20Tele-saúde%20PromoVie." target="_blank" rel="noopener noreferrer">Falar com a PromoVie</a><a class="secondary" href="/app/previa-fiel-20261010/inicio/">Voltar ao início</a><div class="tiny">Para urgências e emergências, procure atendimento presencial ou serviço de emergência. Este portal não realiza triagem médica.</div></article></main>
