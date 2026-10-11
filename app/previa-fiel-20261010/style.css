@@ -891,3 +891,18 @@ html{scroll-padding-top:92px}
 @media(max-width:700px) and (display-mode:standalone){
  .appMobileBrand{padding-top:calc(8px + env(safe-area-inset-top,0px))}
 }
+
+
+/* A moldura de demonstração reserva a área da câmera antes do cabeçalho real. */
+.installVisual .phoneScreen iframe.pvLiveAppFrame{
+  box-sizing:border-box;
+  margin-top:27px;
+  height:calc(100% - 27px);
+  min-height:0;
+}
+/* As oito miniaturas devem permanecer legíveis sem encostar o título no botão 'i'. */
+.careTitle{gap:5px}
+.infoButton{align-self:flex-start}
+@media(max-width:700px){
+ .careTitle{gap:3px}
+}
