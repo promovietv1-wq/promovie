@@ -1256,3 +1256,29 @@ body.appPage::before{
   .appPage .pvAppIdentity .pvCenteredLogo{width:126px;max-height:42px}
   .appPage .pvAppIdentity .pvCenteredHeart{width:106px;height:82px}
 }
+
+
+/* pvHeartWithLogo21 — coração com a palavra PromoVie integrada.
+   A imagem fornecida substitui ambas as peças antigas, sem duplicação. */
+.appPage .pvAppIdentity .pvIntegratedHeart{
+  display:block;
+  width:186px;
+  height:auto;
+  max-width:54vw;
+  aspect-ratio:1 / 1;
+  object-fit:contain;
+  margin:0 auto;
+  filter:drop-shadow(0 8px 18px rgba(90,54,176,.11));
+}
+@media(min-width:701px) and (max-width:1100px){
+  .appPage .pvAppIdentity .pvIntegratedHeart{width:176px;max-width:46vw}
+}
+@media(max-width:700px){
+  .appPage .pvAppIdentity .pvIntegratedHeart{width:166px;max-width:54vw}
+}
+@media(max-width:389px){
+  .appPage .pvAppIdentity .pvIntegratedHeart{width:151px;max-width:54vw}
+}
+@media(prefers-reduced-motion:reduce){
+  .appPage .pvAppIdentity .pvIntegratedHeart{filter:none}
+}
