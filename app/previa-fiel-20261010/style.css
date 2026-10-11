@@ -1282,3 +1282,160 @@ body.appPage::before{
 @media(prefers-reduced-motion:reduce){
   .appPage .pvAppIdentity .pvIntegratedHeart{filter:none}
 }
+
+
+/* pvWhiteHero22 — identidade integrada sobre branco puro, com decoração orbital
+   discreta nas laterais. Tele-saúde é o conceito guarda-chuva das duas áreas. */
+.appPage .appTop.pvWhiteHero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  width:100%;
+  max-width:960px;
+  margin:0 auto 19px;
+  padding:11px 32px 15px;
+  min-height:0;
+  border:1px solid rgba(132,122,206,.21);
+  border-radius:26px;
+  background:#fff;
+  box-shadow:0 12px 38px rgba(60,45,143,.072),inset 0 1px 0 rgba(255,255,255,.96);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.appPage .appTop.pvWhiteHero::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  top:0;
+  left:19%;
+  right:19%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#7334d8 26%,#4b0c8f 50%,#00bde8 75%,transparent);
+  opacity:.7;
+}
+.appPage .appTop.pvWhiteHero::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  bottom:0;
+  left:24%;
+  right:24%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(115,52,216,.24),rgba(0,189,232,.35),transparent);
+}
+.appPage .pvWhiteHero .pvAppIdentity{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  margin:0;
+  padding:0;
+}
+.appPage .pvWhiteHero .pvAppIdentity .pvIntegratedHeart{
+  display:block;
+  width:186px;
+  height:auto;
+  max-width:54vw;
+  object-fit:contain;
+  filter:drop-shadow(0 7px 15px rgba(91,55,168,.08));
+}
+.appPage .pvWhiteHero .pvHeroDecor{
+  position:absolute;
+  z-index:0;
+  top:50%;
+  width:195px;
+  height:195px;
+  pointer-events:none;
+  border-radius:50%;
+  opacity:.78;
+}
+.appPage .pvWhiteHero .pvHeroDecor--left{
+  left:-57px;
+  transform:translateY(-50%) rotate(-22deg);
+  border:1px solid rgba(115,52,216,.22);
+  background:radial-gradient(circle at 56% 48%,transparent 0 56%,rgba(115,52,216,.055) 57% 60%,transparent 61%);
+  box-shadow:0 0 0 23px rgba(115,52,216,.028),0 0 0 47px rgba(115,52,216,.017);
+}
+.appPage .pvWhiteHero .pvHeroDecor--right{
+  right:-57px;
+  transform:translateY(-50%) rotate(22deg);
+  border:1px solid rgba(0,166,224,.27);
+  background:radial-gradient(circle at 45% 45%,transparent 0 56%,rgba(0,189,232,.065) 57% 60%,transparent 61%);
+  box-shadow:0 0 0 23px rgba(0,189,232,.035),0 0 0 47px rgba(0,189,232,.016);
+}
+.appPage .pvWhiteHero .pvHeroDecor::before{
+  content:"";
+  position:absolute;
+  inset:21px;
+  border-radius:50%;
+  border:1px solid rgba(115,52,216,.12);
+}
+.appPage .pvWhiteHero .pvHeroDecor--right::before{border-color:rgba(0,189,232,.17)}
+.appPage .pvWhiteHero .pvHeroDecor::after{
+  content:"";
+  position:absolute;
+  top:12%;
+  right:15%;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#7334d8;
+  box-shadow:0 0 0 5px rgba(115,52,216,.09);
+}
+.appPage .pvWhiteHero .pvHeroDecor--right::after{
+  background:#00bde8;
+  box-shadow:0 0 0 5px rgba(0,189,232,.09);
+}
+.appPage .pvWhiteHero .pvHeroConcept{
+  position:relative;
+  z-index:2;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  width:max-content;
+  max-width:100%;
+  margin:-1px 0 0;
+  padding:5px 15px;
+  border-radius:99px;
+  border:1px solid rgba(115,52,216,.16);
+  background:linear-gradient(105deg,#f9f4ff,#f3faff);
+  color:#5b269e;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.13em;
+  line-height:1.45;
+  text-transform:uppercase;
+}
+.appPage .groupHead h2.pvGradientHeading{
+  font-size:clamp(21px,2.1vw,27px);
+}
+@media(max-width:700px){
+  .appPage .appTop.pvWhiteHero{
+    margin:0 auto 14px;
+    padding:9px 13px 13px;
+    border-radius:21px;
+  }
+  .appPage .pvWhiteHero .pvAppIdentity .pvIntegratedHeart{width:166px;max-width:54vw}
+  .appPage .pvWhiteHero .pvHeroDecor{width:134px;height:134px}
+  .appPage .pvWhiteHero .pvHeroDecor--left{left:-52px}
+  .appPage .pvWhiteHero .pvHeroDecor--right{right:-52px}
+  .appPage .pvWhiteHero .pvHeroDecor::before{inset:14px}
+  .appPage .pvWhiteHero .pvHeroDecor::after{width:6px;height:6px}
+  .appPage .pvWhiteHero .pvHeroConcept{font-size:9px;padding:4px 12px}
+  .appPage .groupHead h2.pvGradientHeading{font-size:clamp(19px,5vw,22px)}
+}
+@media(max-width:389px){
+  .appPage .appTop.pvWhiteHero{padding:8px 9px 12px}
+  .appPage .pvWhiteHero .pvAppIdentity .pvIntegratedHeart{width:151px}
+  .appPage .pvWhiteHero .pvHeroDecor{width:119px;height:119px}
+  .appPage .pvWhiteHero .pvHeroDecor--left{left:-48px}
+  .appPage .pvWhiteHero .pvHeroDecor--right{right:-48px}
+}
+@media(prefers-contrast:more){
+  .appPage .appTop.pvWhiteHero{border-color:#7f6ba8}
+  .appPage .pvWhiteHero .pvHeroConcept{color:#4b0c8f;border-color:#6e41ad;background:#fff}
+}
