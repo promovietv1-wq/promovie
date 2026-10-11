@@ -1204,3 +1204,55 @@ body.appPage::before{
 @media(prefers-reduced-motion:reduce){
   .appPage .pvCenteredHeart{filter:none}
 }
+
+
+/* pvLogoAboveHeart18 — logomarca em cima, coração original centralizado embaixo.
+   Remoção do título introdutório: o conteúdo começa imediatamente em Tele-saúde. */
+.appPage .appTop {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:0;
+  margin:0 0 11px;
+  padding:1px 0 0;
+}
+.appPage .pvAppIdentity {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  gap:0;
+  margin:0;
+}
+.appPage .pvAppIdentity .pvCenteredLogo {
+  display:block;
+  order:0;
+  width:195px;
+  max-width:65%;
+  height:auto;
+  max-height:61px;
+  object-fit:contain;
+}
+.appPage .pvAppIdentity .pvCenteredHeart {
+  display:block;
+  order:1;
+  width:130px;
+  height:101px;
+  max-width:40%;
+  object-fit:contain;
+}
+@media (min-width:701px) and (max-width:1100px){
+  .appPage .pvAppIdentity .pvCenteredLogo{width:175px;max-height:58px}
+  .appPage .pvAppIdentity .pvCenteredHeart{width:117px;height:93px}
+}
+@media (max-width:700px){
+  .appPage .appTop{margin:0 0 10px;padding:0}
+  .appPage .pvAppIdentity .pvCenteredLogo{width:171px;max-width:68%;max-height:55px}
+  .appPage .pvAppIdentity .pvCenteredHeart{width:112px;height:87px;max-width:42%}
+}
+@media (max-width:389px){
+  .appPage .pvAppIdentity .pvCenteredLogo{width:157px;max-height:52px}
+  .appPage .pvAppIdentity .pvCenteredHeart{width:106px;height:82px}
+}
