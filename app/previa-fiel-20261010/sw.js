@@ -1,6 +1,6 @@
-const CACHE="promovie-preview-fiel-2026-v20";
+const CACHE="promovie-preview-fiel-2026-v21";
 const BASE="/app/previa-fiel-20261010/";
-const CORE=[BASE,BASE+"inicio/",BASE+"telemedicina/",BASE+"style.css",BASE+"manifest.webmanifest",BASE+"coracao-promovie-original-20261010.avif","/app/icons/icon-192.png","/app/icons/icon-512.png"];
+const CORE=[BASE,BASE+"inicio/",BASE+"telemedicina/",BASE+"style.css",BASE+"manifest.webmanifest",BASE+"coracao-promovie-original-20261010.avif",BASE+"coracao-promovie-com-logo-20261011.webp","/app/icons/icon-192.png","/app/icons/icon-512.png"];
 self.addEventListener("install",event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });
