@@ -906,3 +906,24 @@ html{scroll-padding-top:92px}
 @media(max-width:700px){
  .careTitle{gap:3px}
 }
+
+
+/* pvThreeDots15: três pontos triangulares, mesma disposição e cores do site PromoVie */
+.appPage .infoButton{
+ display:grid;place-items:center;padding:0;font-size:0;
+ background:#fff;border:1px solid rgba(115,52,216,.23);
+ box-shadow:0 2px 7px rgba(39,28,112,.07);
+}
+.appPage .infoButton .pvThreeDots{
+ display:block;flex:none;width:18px;height:15px;pointer-events:none;
+ background:
+ radial-gradient(circle at 50% 18%,#7334d8 0 2.25px,transparent 2.65px),
+ radial-gradient(circle at 24% 80%,#4b0c8f 0 2.25px,transparent 2.65px),
+ radial-gradient(circle at 76% 80%,#00bde8 0 2.25px,transparent 2.65px);
+}
+.appPage .infoButton:hover,.appPage .infoButton:focus-visible{
+ background:#f7f2ff;border-color:#9362e4;
+}
+@media(max-width:700px){
+ .appPage .infoButton .pvThreeDots{width:17px;height:14px}
+}
