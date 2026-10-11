@@ -860,3 +860,34 @@ html{scroll-padding-top:92px}
   .infoButton{border:1px solid #6856a3}
   .groupHead p,.careCopy p{color:#353e55}
 }
+
+/* pvSiteIconFidelity14: mesma marca do coração das miniaturas do site oficial. */
+.appPage .smallHeartBadge{
+  position:absolute;
+  top:8px;
+  right:8px;
+  left:auto;
+  bottom:auto;
+  width:31px;
+  height:31px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  border:1px solid rgba(115,52,216,.23);
+  box-shadow:0 3px 12px rgba(22,24,77,.13);
+  pointer-events:none;
+}
+.appPage .smallHeartBadge svg{width:17px;height:17px}
+.appPage .pvProfessionalMark{color:#7334d8}
+.appPage .pvProfessionalMark svg{fill:currentColor;stroke:none}
+.appPage .pvInformativeMark{color:#257f9c;border-color:rgba(0,174,213,.28)}
+.appPage .pvInformativeMark svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:700px){
+ .appPage .smallHeartBadge{width:27px;height:27px;top:7px;right:7px}
+ .appPage .smallHeartBadge svg{width:15px;height:15px}
+}
+/* Ao abrir pelo ícone instalado, a interface respeita as áreas seguras da tela. */
+@media(max-width:700px) and (display-mode:standalone){
+ .appMobileBrand{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+}
