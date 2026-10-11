@@ -1284,122 +1284,204 @@ body.appPage::before{
 }
 
 
-/* pvPremiumStudioHero23: composição exclusiva PromoVie, limpa no centro, com
-   faixas coloridas fluidas e detalhes gráficos no entorno da marca original. */
-.appPage .appTop.pvStudioHero {
+/* pvModernHero24 — estética editorial da PromoVie:
+   branco puro, painéis geométricos de vidro, detalhes de precisão e luz difusa.
+   Sem ondas, curvas decorativas ou círculos orbitais. */
+.appPage .appTop.pvModernHero{
+  box-sizing:border-box;
   position:relative;
-  isolation:isolate;
-  overflow:hidden;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  flex-direction:column;
-  box-sizing:border-box;
+  isolation:isolate;
+  overflow:hidden;
   width:100%;
   max-width:960px;
   min-height:0;
   margin:0 auto 18px;
-  padding:14px 20px 16px;
-  border:1px solid rgba(141,105,223,.21);
-  border-radius:26px;
-  background:
-    radial-gradient(ellipse 42% 115% at -2% 35%,rgba(156,85,229,.13),transparent 83%),
-    radial-gradient(ellipse 40% 105% at 102% 70%,rgba(0,189,232,.14),transparent 85%),
-    #fff;
-  box-shadow:
-    0 16px 40px rgba(48,29,123,.082),
-    0 3px 9px rgba(57,39,131,.032),
-    inset 0 1px rgba(255,255,255,.98);
+  padding:13px 18px 15px;
+  border:1px solid rgba(113,99,171,.17);
+  border-radius:25px;
+  background:#fff;
+  box-shadow:0 14px 39px rgba(34,23,103,.073),0 2px 8px rgba(45,36,106,.028);
 }
-.appPage .appTop.pvStudioHero::before{
+.appPage .appTop.pvModernHero::before{
   content:"";
   position:absolute;
-  top:0;left:12%;right:12%;
-  height:2px;
-  background:linear-gradient(90deg,transparent 1%,rgba(75,12,143,.62) 30%,rgba(230,0,180,.69) 47%,rgba(0,189,232,.66) 71%,transparent 99%);
-  pointer-events:none;
-  z-index:1;
-}
-.appPage .appTop.pvStudioHero::after {
-  content:"";
-  position:absolute;
-  left:25%;right:25%;bottom:0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(115,52,216,.23),rgba(0,189,232,.32),transparent);
-  pointer-events:none;
-}
-.appPage .pvStudioHero .pvHeroArtwork{
-  position:absolute;
-  inset:0;
-  display:block;
-  width:100%;
-  height:100%;
-  overflow:hidden;
   z-index:0;
+  inset:0;
+  background:
+    radial-gradient(ellipse 26% 105% at -5% 13%,rgba(112,51,211,.075),transparent 84%),
+    radial-gradient(ellipse 30% 103% at 104% 90%,rgba(0,175,235,.085),transparent 87%);
   pointer-events:none;
 }
-.appPage .pvStudioHero .pvAppIdentity{
-  position:relative;
-  z-index:2;
-  width:100%;
+.appPage .appTop.pvModernHero::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  height:2px;
+  top:0;
+  left:34%;
+  right:34%;
+  background:linear-gradient(90deg,transparent,#7334d8 24%,#00bde8 75%,transparent);
+  opacity:.82;
+}
+.appPage .pvModernHero .pvHeroSide{
+  pointer-events:none;
+  position:absolute;
+  z-index:0;
+  top:0;
+  bottom:0;
+  width:32%;
+  max-width:290px;
+  min-width:112px;
+  overflow:visible;
+}
+.appPage .pvModernHero .pvHeroSide--left{
+  left:0;
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 57%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0%,#000 57%,transparent 100%);
+}
+.appPage .pvModernHero .pvHeroSide--right{
+  right:0;
+  -webkit-mask-image:linear-gradient(270deg,#000 0%,#000 57%,transparent 100%);
+  mask-image:linear-gradient(270deg,#000 0%,#000 57%,transparent 100%);
+}
+.appPage .pvModernHero .pvHeroGlass{
+  position:absolute;
+  display:block;
+  border-radius:26px;
+  pointer-events:none;
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.appPage .pvModernHero .pvHeroSide--left .pvHeroGlass--back{
+  width:166px;
+  height:165px;
+  top:-57px;
+  left:-63px;
+  transform:rotate(-19deg);
+  background:linear-gradient(145deg,rgba(115,52,216,.16),rgba(174,119,244,.045) 67%,rgba(255,255,255,.64));
+  border:1px solid rgba(115,52,216,.21);
+  box-shadow:11px 17px 29px rgba(90,55,167,.042);
+}
+.appPage .pvModernHero .pvHeroSide--left .pvHeroGlass--front{
+  width:118px;
+  height:137px;
+  top:104px;
+  left:35px;
+  transform:rotate(13deg);
+  background:linear-gradient(145deg,rgba(115,52,216,.09),rgba(255,255,255,.81));
+  border:1px solid rgba(115,52,216,.18);
+  box-shadow:0 15px 31px rgba(78,34,155,.04);
+}
+.appPage .pvModernHero .pvHeroSide--right .pvHeroGlass--back{
+  width:182px;
+  height:177px;
+  right:-73px;
+  bottom:-61px;
+  transform:rotate(18deg);
+  background:linear-gradient(145deg,rgba(0,189,232,.17),rgba(158,223,255,.045) 65%,rgba(255,255,255,.74));
+  border:1px solid rgba(0,174,213,.24);
+  box-shadow:-12px -12px 30px rgba(1,143,204,.043);
+}
+.appPage .pvModernHero .pvHeroSide--right .pvHeroGlass--front{
+  width:119px;
+  height:128px;
+  right:39px;
+  top:-60px;
+  transform:rotate(-13deg);
+  background:linear-gradient(155deg,rgba(128,94,226,.095),rgba(255,255,255,.77));
+  border:1px solid rgba(102,84,204,.15);
+  box-shadow:0 14px 29px rgba(77,51,163,.04);
+}
+.appPage .pvModernHero .pvHeroDots{
+  position:absolute;
+  display:block;
+  width:84px;
+  height:76px;
+  background-image:radial-gradient(circle,rgba(115,52,216,.35) 1.2px,transparent 1.5px);
+  background-size:12px 12px;
+  opacity:.64;
+}
+.appPage .pvModernHero .pvHeroSide--left .pvHeroDots{left:137px;top:18px}
+.appPage .pvModernHero .pvHeroSide--right .pvHeroDots{
+  right:147px;
+  bottom:20px;
+  background-image:radial-gradient(circle,rgba(0,145,210,.39) 1.2px,transparent 1.5px);
+}
+.appPage .pvModernHero .pvHeroAccentLine{
+  position:absolute;
+  display:block;
+  height:3px;
+  width:70px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#7334d8,rgba(115,52,216,0));
+  opacity:.52;
+}
+.appPage .pvModernHero .pvHeroSide--left .pvHeroAccentLine{left:26px;bottom:27px}
+.appPage .pvModernHero .pvHeroSide--right .pvHeroAccentLine{
+  right:19px;
+  top:24px;
+  transform:rotate(180deg);
+  background:linear-gradient(90deg,#00bde8,rgba(0,189,232,0));
+}
+.appPage .pvModernHero .pvAppIdentity{
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+  z-index:2;
+  position:relative;
   margin:0;
+  width:100%;
   padding:0;
-  gap:0;
-  background:transparent;
 }
-.appPage .pvStudioHero .pvAppIdentity::before{
-  content:"";
-  position:absolute;
-  z-index:-1;
-  top:50%;left:50%;
-  width:245px;
-  height:215px;
-  max-width:82vw;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:radial-gradient(ellipse at center,#fff 33%,rgba(255,255,255,.98) 53%,rgba(255,255,255,.58) 73%,transparent 100%);
-  pointer-events:none;
-}
-.appPage .pvStudioHero .pvAppIdentity .pvIntegratedHeart{
+.appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{
   display:block;
   width:186px;
   max-width:54vw;
   height:auto;
   aspect-ratio:1/1;
   object-fit:contain;
-  margin:0 auto;
-  filter:drop-shadow(0 9px 14px rgba(75,34,151,.09));
+  margin:0;
+  filter:drop-shadow(0 9px 15px rgba(63,31,135,.105));
 }
 @media(min-width:701px) and (max-width:1100px){
-  .appPage .pvStudioHero .pvAppIdentity .pvIntegratedHeart{width:176px;max-width:46vw}
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{width:176px;max-width:46vw}
 }
 @media(max-width:700px){
-  .appPage .appTop.pvStudioHero{
-    margin:0 auto 14px;
-    padding:11px 11px 13px;
-    border-radius:22px;
-    background:
-      radial-gradient(ellipse 47% 90% at -5% 25%,rgba(156,85,229,.16),transparent 80%),
-      radial-gradient(ellipse 48% 92% at 105% 80%,rgba(0,189,232,.14),transparent 80%),
-      #fff;
+  .appPage .appTop.pvModernHero{padding:11px 12px 13px;margin:0 auto 14px;border-radius:21px}
+  .appPage .pvModernHero .pvHeroSide{width:36%;min-width:102px}
+  .appPage .pvModernHero .pvHeroSide--left .pvHeroGlass--back{
+    width:115px;height:120px;top:-46px;left:-69px;border-radius:21px;
   }
-  .appPage .pvStudioHero .pvHeroArtwork{opacity:.94}
-  .appPage .pvStudioHero .pvAppIdentity::before{width:205px;height:194px}
-  .appPage .pvStudioHero .pvAppIdentity .pvIntegratedHeart{width:166px;max-width:54vw}
+  .appPage .pvModernHero .pvHeroSide--left .pvHeroGlass--front{
+    width:84px;height:105px;top:114px;left:-38px;border-radius:19px;
+  }
+  .appPage .pvModernHero .pvHeroSide--right .pvHeroGlass--back{
+    width:125px;height:130px;right:-76px;bottom:-44px;border-radius:23px;
+  }
+  .appPage .pvModernHero .pvHeroSide--right .pvHeroGlass--front{
+    width:78px;height:104px;right:-37px;top:-53px;border-radius:19px;
+  }
+  .appPage .pvModernHero .pvHeroDots{width:56px;height:56px;background-size:11px 11px}
+  .appPage .pvModernHero .pvHeroSide--left .pvHeroDots{left:30px;top:14px}
+  .appPage .pvModernHero .pvHeroSide--right .pvHeroDots{right:30px;bottom:11px}
+  .appPage .pvModernHero .pvHeroAccentLine{width:40px;height:2px}
+  .appPage .pvModernHero .pvHeroSide--left .pvHeroAccentLine{left:14px;bottom:13px}
+  .appPage .pvModernHero .pvHeroSide--right .pvHeroAccentLine{right:11px;top:14px}
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{width:166px;max-width:54vw}
 }
 @media(max-width:389px){
-  .appPage .appTop.pvStudioHero{padding:8px 8px 11px}
-  .appPage .pvStudioHero .pvAppIdentity::before{width:189px;height:174px}
-  .appPage .pvStudioHero .pvAppIdentity .pvIntegratedHeart{width:151px;max-width:54vw}
+  .appPage .appTop.pvModernHero{padding:9px 10px 11px}
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{width:151px}
 }
 @media(prefers-contrast:more){
-  .appPage .appTop.pvStudioHero{border-color:#704a9e;background:#fff}
-  .appPage .pvStudioHero .pvHeroArtwork{opacity:.55}
+  .appPage .appTop.pvModernHero{border-color:#7e65ac;background:#fff}
 }
 @media(prefers-reduced-motion:reduce){
-  .appPage .pvStudioHero .pvAppIdentity .pvIntegratedHeart{filter:none}
+  .appPage .pvModernHero .pvAppIdentity .pvIntegratedHeart{filter:none}
 }
+
