@@ -1229,10 +1229,10 @@ body.appPage::before{
 .appPage .pvAppIdentity .pvCenteredLogo {
   display:block;
   order:0;
-  width:195px;
+  width:156px;
   max-width:65%;
   height:auto;
-  max-height:61px;
+  max-height:49px;
   object-fit:contain;
 }
 .appPage .pvAppIdentity .pvCenteredHeart {
@@ -1244,15 +1244,15 @@ body.appPage::before{
   object-fit:contain;
 }
 @media (min-width:701px) and (max-width:1100px){
-  .appPage .pvAppIdentity .pvCenteredLogo{width:175px;max-height:58px}
+  .appPage .pvAppIdentity .pvCenteredLogo{width:140px;max-height:46px}
   .appPage .pvAppIdentity .pvCenteredHeart{width:117px;height:93px}
 }
 @media (max-width:700px){
   .appPage .appTop{margin:0 0 10px;padding:0}
-  .appPage .pvAppIdentity .pvCenteredLogo{width:171px;max-width:68%;max-height:55px}
+  .appPage .pvAppIdentity .pvCenteredLogo{width:137px;max-width:68%;max-height:44px}
   .appPage .pvAppIdentity .pvCenteredHeart{width:112px;height:87px;max-width:42%}
 }
 @media (max-width:389px){
-  .appPage .pvAppIdentity .pvCenteredLogo{width:157px;max-height:52px}
+  .appPage .pvAppIdentity .pvCenteredLogo{width:126px;max-height:42px}
   .appPage .pvAppIdentity .pvCenteredHeart{width:106px;height:82px}
 }
