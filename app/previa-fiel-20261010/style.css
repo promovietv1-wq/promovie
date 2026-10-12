@@ -2537,3 +2537,183 @@ body.appPage::before{
     transform:none;
   }
 }
+
+
+/* pvReflectiveHeroAndRealPhone37
+   Apenas o texto e o coração mais próximos das bordas, com luz emitida
+   da direita para o centro. Mesma faixa fina e dimensões aprovadas. */
+.appPage .appTop.pvSimpleHero31.pvGlowHero37{
+  isolation:isolate;
+  position:relative;
+}
+.appPage .appTop.pvSimpleHero31.pvGlowHero37::before{
+  content:"";
+  display:block!important;
+  pointer-events:none;
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 31% 89% at 94% 50%,rgba(33,162,239,.20),transparent 91%),
+    radial-gradient(ellipse 55% 114% at 79% 51%,rgba(152,113,241,.14),transparent 82%),
+    linear-gradient(109deg,transparent 51%,rgba(255,255,255,.30) 78%,transparent 97%);
+}
+.appPage .appTop.pvSimpleHero31.pvGlowHero37::after{
+  content:"";
+  display:block!important;
+  pointer-events:none;
+  position:absolute;
+  top:5%;
+  right:2%;
+  bottom:5%;
+  width:72%;
+  z-index:0;
+  opacity:.52;
+  background:
+    linear-gradient(163deg,transparent 45%,rgba(255,255,255,.65) 48%,transparent 51%),
+    linear-gradient(173deg,transparent 41%,rgba(113,180,255,.20) 43%,transparent 48%),
+    linear-gradient(188deg,transparent 44%,rgba(255,255,255,.46) 46%,transparent 49%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 37%,#000 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 37%,#000 100%);
+  animation:pvHeartLight37 7s ease-in-out infinite alternate;
+}
+@keyframes pvHeartLight37{
+  from{opacity:.31;transform:translateX(2%)}
+  to{opacity:.58;transform:translateX(-3%)}
+}
+.appPage .appTop.pvSimpleHero31.pvGlowHero37 .pvHello31{
+  position:relative;
+  z-index:1;
+  justify-content:flex-start;
+  text-align:left;
+  padding-left:clamp(8px,2.3vw,23px);
+  padding-right:0;
+}
+.appPage .appTop.pvSimpleHero31.pvGlowHero37 .pvHello31 h1{
+  text-align:left;
+}
+.appPage .appTop.pvSimpleHero31.pvGlowHero37 .pvSimpleBrand31{
+  position:relative;
+  z-index:1;
+  justify-content:flex-end;
+  padding-right:clamp(8px,2.3vw,23px);
+}
+@media(max-width:700px){
+  .appPage .appTop.pvSimpleHero31.pvGlowHero37 .pvHello31{
+    justify-content:flex-start;
+    padding-left:clamp(3px,1.5vw,9px);
+  }
+  .appPage .appTop.pvSimpleHero31.pvGlowHero37 .pvSimpleBrand31{
+    justify-content:flex-end;
+    padding-right:clamp(3px,1.5vw,9px);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .appPage .appTop.pvSimpleHero31.pvGlowHero37::after{animation:none}
+}
+
+/* A maquete da instalação mantém um viewport de 390px dentro do iframe.
+   Um sincronizador calcula a escala visual pela largura REAL da tela do
+   telefone. Assim, as quebras de texto e o grid 2x2 do app continuam
+   com as proporções de um smartphone, mesmo na maquete inclinada. */
+.installPage .installHero{
+  overflow:visible;
+}
+.installPage .installVisual{
+  box-sizing:border-box;
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  max-width:610px;
+  width:100%;
+  height:auto;
+  min-height:0;
+  padding:41px 0 42px;
+  margin:13px auto 0;
+  overflow:visible;
+}
+.installPage .installVisual .phoneShell{
+  box-sizing:border-box;
+  position:relative;
+  z-index:2;
+  flex:0 0 auto;
+  display:block;
+  width:312px;
+  height:584px;
+  max-width:none;
+  margin:0 auto;
+  padding:9px;
+  transform:rotate(17deg);
+  transform-origin:50% 50%;
+}
+.installPage .installVisual .phoneScreen{
+  position:relative;
+  box-sizing:border-box;
+  width:100%;
+  height:100%;
+  padding:0!important;
+  overflow:hidden;
+  background:linear-gradient(122deg,#f5f5ff,#fbfdff 48%,#f4f6ff)!important;
+}
+.installPage .installVisual .phoneScreen iframe.pvLiveAppFrame{
+  box-sizing:border-box;
+  position:absolute;
+  display:block;
+  left:0;
+  top:27px;
+  margin:0;
+  padding:0;
+  width:390px;
+  max-width:none;
+  height:720px;
+  min-height:0;
+  border:0;
+  border-radius:0;
+  background:#f9faff;
+  transform:scale(.72);
+  transform-origin:top left;
+  overflow:auto;
+}
+.installPage .installVisual::before{
+  pointer-events:none;
+  left:50%;
+  right:auto;
+  width:min(94%,540px);
+  transform:translateX(-50%) rotate(-27deg);
+}
+@media(max-width:690px){
+  .installPage .installVisual{
+    width:100%;
+    max-width:100%;
+    min-height:0;
+    height:auto;
+    padding:31px 0 37px;
+    margin:15px auto 0;
+    overflow:visible;
+  }
+  .installPage .installVisual .phoneShell{
+    width:274px;
+    height:513px;
+    max-width:none;
+    margin:0 auto;
+    padding:8px;
+    transform:scale(.87) rotate(14deg);
+    transform-origin:50% 50%;
+  }
+}
+@media(max-width:389px){
+  .installPage .installVisual{
+    padding:25px 0 33px;
+    margin:11px auto 0;
+  }
+  .installPage .installVisual .phoneShell{
+    width:248px;
+    height:464px;
+    max-width:none;
+    margin:0 auto;
+    padding:8px;
+    transform:scale(.78) rotate(12deg);
+    transform-origin:50% 50%;
+  }
+}
