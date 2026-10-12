@@ -12,7 +12,7 @@ if ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matche
 </script>
 <link rel="manifest" href="/app/previa-fiel-20261010/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/app/icons/icon-192.png"><link rel="icon" href="/app/icons/icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/app/previa-fiel-20261010/style.css?v=centralizado-36">
+<link rel="stylesheet" href="/app/previa-fiel-20261010/style.css?v=reflexos-37">
 <style>.mockItem img{height:48px}.mockItem span{font-size:7px;padding:4px 5px;min-height:19px}.mockCaption{margin:8px 0 5px}.mockGreeting{font-size:22px;margin-bottom:9px}.phoneScreen{padding-top:27px}</style></head>
 <body class="installPage">
 <header class="installHeader"><a class="brand pvInstallBrand27" href="/app/previa-fiel-20261010/" aria-label="PromoVie — aplicativo"><img class="pvInstallBrandHeart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" width="240" height="240" decoding="async" alt="PromoVie"></a>
@@ -30,7 +30,7 @@ if ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matche
 <div class="installVisual" aria-label="Demonstração do aplicativo PromoVie em um celular">
 <div class="phoneShell"><span class="phoneNotch"></span>
 <div class="phoneScreen">
-<iframe class="pvLiveAppFrame" src="/app/previa-fiel-20261010/inicio/" title="Aplicativo PromoVie: Telemedicina e Orientação e Autocuidado" loading="eager" scrolling="yes"></iframe>
+<iframe class="pvLiveAppFrame" src="/app/previa-fiel-20261010/inicio/?v=37" title="Aplicativo PromoVie: Telemedicina e Orientação e Autocuidado" loading="eager" scrolling="yes"></iframe>
 </div></div>
 </div>
 </section>
@@ -96,5 +96,35 @@ document.getElementById("closeModal").addEventListener("click",close);
 document.getElementById("modalDone").addEventListener("click",close);
 modal.addEventListener("click",function(e){if(e.target===modal)close();});
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/app/previa-fiel-20261010/sw.js",{scope:"/app/previa-fiel-20261010/"}).catch(function(){});});}
+})();
+</script>
+<script>
+/* Ajusta a maquete para o layout responsivo REAL do aplicativo (390px).
+   O iframe exibe a mesma página do app, reduzida de forma proporcional. */
+(function(){
+  "use strict";
+  var frame=document.querySelector(".installPage .pvLiveAppFrame");
+  var screen=document.querySelector(".installPage .installVisual .phoneScreen");
+  if(!frame||!screen)return;
+  var deviceWidth=390;
+  function syncPhone(){
+    var w=screen.clientWidth, h=screen.clientHeight;
+    if(!w||!h)return;
+    var scale=w/deviceWidth;
+    frame.style.width=deviceWidth+"px";
+    frame.style.height=Math.ceil(Math.max(100,h-27)/scale)+"px";
+    frame.style.left="0";
+    frame.style.top="27px";
+    frame.style.margin="0";
+    frame.style.transformOrigin="left top";
+    frame.style.transform="scale("+scale+")";
+  }
+  syncPhone();
+  window.addEventListener("load",syncPhone);
+  window.addEventListener("resize",syncPhone,{passive:true});
+  if("ResizeObserver" in window){
+    var observer=new ResizeObserver(syncPhone);
+    observer.observe(screen);
+  }
 })();
 </script></body></html>
