@@ -2539,7 +2539,7 @@ body.appPage::before{
 }
 
 
-/* pvReflectiveHeroAndRealPhone37
+/* pvVisualScroll38 — brilho estendido até a saudação, telefone mais perto. (pvReflectiveHeroAndRealPhone37)
    Apenas o texto e o coração mais próximos das bordas, com luz emitida
    da direita para o centro. Mesma faixa fina e dimensões aprovadas. */
 .appPage .appTop.pvSimpleHero31.pvGlowHero37{
@@ -2554,9 +2554,9 @@ body.appPage::before{
   inset:0;
   z-index:0;
   background:
-    radial-gradient(ellipse 31% 89% at 94% 50%,rgba(33,162,239,.20),transparent 91%),
-    radial-gradient(ellipse 55% 114% at 79% 51%,rgba(152,113,241,.14),transparent 82%),
-    linear-gradient(109deg,transparent 51%,rgba(255,255,255,.30) 78%,transparent 97%);
+    radial-gradient(ellipse 48% 110% at 96% 50%,rgba(33,162,239,.23),transparent 96%),
+    radial-gradient(ellipse 76% 124% at 84% 51%,rgba(152,113,241,.18),transparent 89%),
+    linear-gradient(109deg,transparent 26%,rgba(255,255,255,.38) 73%,transparent 98%);
 }
 .appPage .appTop.pvSimpleHero31.pvGlowHero37::after{
   content:"";
@@ -2564,22 +2564,22 @@ body.appPage::before{
   pointer-events:none;
   position:absolute;
   top:5%;
-  right:2%;
+  right:0;
   bottom:5%;
-  width:72%;
+  width:100%;
   z-index:0;
-  opacity:.52;
+  opacity:.63;
   background:
-    linear-gradient(163deg,transparent 45%,rgba(255,255,255,.65) 48%,transparent 51%),
-    linear-gradient(173deg,transparent 41%,rgba(113,180,255,.20) 43%,transparent 48%),
-    linear-gradient(188deg,transparent 44%,rgba(255,255,255,.46) 46%,transparent 49%);
-  mask-image:linear-gradient(90deg,transparent 0%,#000 37%,#000 100%);
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 37%,#000 100%);
+    linear-gradient(163deg,transparent 45%,rgba(255,255,255,.73) 48%,transparent 51%),
+    linear-gradient(173deg,transparent 41%,rgba(113,180,255,.28) 43%,transparent 48%),
+    linear-gradient(188deg,transparent 44%,rgba(255,255,255,.54) 46%,transparent 49%);
+  mask-image:linear-gradient(90deg,rgba(0,0,0,.51) 0%,#000 42%,#000 100%);
+  -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.51) 0%,#000 42%,#000 100%);
   animation:pvHeartLight37 7s ease-in-out infinite alternate;
 }
 @keyframes pvHeartLight37{
-  from{opacity:.31;transform:translateX(2%)}
-  to{opacity:.58;transform:translateX(-3%)}
+  from{opacity:.44;transform:translateX(2%)}
+  to{opacity:.69;transform:translateX(-4%)}
 }
 .appPage .appTop.pvSimpleHero31.pvGlowHero37 .pvHello31{
   position:relative;
@@ -2629,8 +2629,8 @@ body.appPage::before{
   width:100%;
   height:auto;
   min-height:0;
-  padding:41px 0 42px;
-  margin:13px auto 0;
+  padding:20px 0 42px;
+  margin:7px auto 0;
   overflow:visible;
 }
 .installPage .installVisual .phoneShell{
@@ -2688,8 +2688,8 @@ body.appPage::before{
     max-width:100%;
     min-height:0;
     height:auto;
-    padding:31px 0 37px;
-    margin:15px auto 0;
+    padding:15px 0 37px;
+    margin:7px auto 0;
     overflow:visible;
   }
   .installPage .installVisual .phoneShell{
@@ -2704,8 +2704,8 @@ body.appPage::before{
 }
 @media(max-width:389px){
   .installPage .installVisual{
-    padding:25px 0 33px;
-    margin:11px auto 0;
+    padding:12px 0 33px;
+    margin:5px auto 0;
   }
   .installPage .installVisual .phoneShell{
     width:248px;
