@@ -12,7 +12,7 @@ if ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matche
 </script>
 <link rel="manifest" href="/app/previa-fiel-20261010/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/app/icons/icon-192.png"><link rel="icon" href="/app/icons/icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/app/previa-fiel-20261010/style.css?v=reflexos-37">
+<link rel="stylesheet" href="/app/previa-fiel-20261010/style.css?v=rolagem-38">
 <style>.mockItem img{height:48px}.mockItem span{font-size:7px;padding:4px 5px;min-height:19px}.mockCaption{margin:8px 0 5px}.mockGreeting{font-size:22px;margin-bottom:9px}.phoneScreen{padding-top:27px}</style></head>
 <body class="installPage">
 <header class="installHeader"><a class="brand pvInstallBrand27" href="/app/previa-fiel-20261010/" aria-label="PromoVie — aplicativo"><img class="pvInstallBrandHeart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" width="240" height="240" decoding="async" alt="PromoVie"></a>
@@ -30,7 +30,7 @@ if ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matche
 <div class="installVisual" aria-label="Demonstração do aplicativo PromoVie em um celular">
 <div class="phoneShell"><span class="phoneNotch"></span>
 <div class="phoneScreen">
-<iframe class="pvLiveAppFrame" src="/app/previa-fiel-20261010/inicio/?v=37" title="Aplicativo PromoVie: Telemedicina e Orientação e Autocuidado" loading="eager" scrolling="yes"></iframe>
+<iframe class="pvLiveAppFrame" src="/app/previa-fiel-20261010/inicio/?v=38" title="Aplicativo PromoVie: Telemedicina e Orientação e Autocuidado" loading="eager" scrolling="yes"></iframe>
 </div></div>
 </div>
 </section>
@@ -107,6 +107,32 @@ if("serviceWorker" in navigator){window.addEventListener("load",function(){navig
   var screen=document.querySelector(".installPage .installVisual .phoneScreen");
   if(!frame||!screen)return;
   var deviceWidth=390;
+  // A maquete é somente demonstrativa: permite rolar, mas nenhum clique
+  // deve abrir janelas, mudar de seção ou sair da página de instalação.
+  function makeVisualOnly(){
+    var doc;
+    try{doc=frame.contentDocument;}catch(e){return;}
+    if(!doc||doc.__pvVisualOnly38)return;
+    doc.__pvVisualOnly38=true;
+    doc.addEventListener("click",function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    },true);
+    doc.addEventListener("submit",function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    },true);
+    doc.addEventListener("keydown",function(event){
+      if((event.key==="Enter"||event.key===" ") &&
+         event.target.closest &&
+         event.target.closest("a,button,.careCard")){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    },true);
+  }
+  frame.addEventListener("load",makeVisualOnly);
+  makeVisualOnly();
   function syncPhone(){
     var w=screen.clientWidth, h=screen.clientHeight;
     if(!w||!h)return;
