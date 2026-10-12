@@ -2717,3 +2717,30 @@ body.appPage::before{
     transform-origin:50% 50%;
   }
 }
+
+
+/* pvTitlesGradient40: na instalação, títulos sempre em degradê,
+   tanto no convite quanto na janela de instruções. */
+.installPage .installCopy h1#title,
+.installPage .pvInstallChoiceModal27 h2#modalTitle{
+  color:transparent;
+  background:linear-gradient(105deg,#7415df 0%,#8940e9 35%,#5064ed 67%,#078dde 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-weight:900;
+}
+.installPage .installCopy h1#title{
+  width:max-content;
+  max-width:100%;
+  margin-left:auto;
+  margin-right:auto;
+}
+.installPage .installCopy h1#title .gradText{
+  display:inline;
+  background:none;
+  color:inherit;
+  -webkit-background-clip:initial;
+  background-clip:initial;
+  -webkit-text-fill-color:inherit;
+}
