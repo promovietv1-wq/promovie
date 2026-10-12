@@ -2389,3 +2389,151 @@ body.appPage::before{
     line-height:1.22;
   }
 }
+
+
+/* pvCenteredBalance36: texto à esquerda, mas no centro da sua metade,
+   simétrico ao coração que ocupa o centro da metade direita. */
+.appPage .appTop.pvSimpleHero31 .pvHello31{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-width:0;
+  padding-left:0;
+  padding-right:0;
+  text-align:left;
+}
+.appPage .appTop.pvSimpleHero31 .pvHello31 h1{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  margin:0;
+  text-align:left;
+}
+@media(max-width:700px){
+  .appPage .appTop.pvSimpleHero31 .pvHello31{
+    padding-left:0;
+    padding-right:0;
+    justify-content:center;
+  }
+}
+@media(max-width:389px){
+  .appPage .appTop.pvSimpleHero31 .pvHello31{
+    padding-left:0;
+    justify-content:center;
+  }
+}
+
+/* Página de instalação: o celular ocupa um bloco próprio e fica
+   centralizado ABAIXO dos botões, sem translate, escala ou inclinação
+   que possam deslocá-lo para fora da tela em larguras pequenas. */
+.installPage .installHero{
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  width:100%;
+  max-width:1100px;
+  min-width:0;
+  margin-left:auto;
+  margin-right:auto;
+}
+.installPage .installCopy{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  margin-left:auto;
+  margin-right:auto;
+}
+.installPage .installVisual{
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:row;
+  align-items:flex-start;
+  justify-content:center;
+  width:100%;
+  max-width:610px;
+  height:auto;
+  min-height:0;
+  margin:17px auto 0;
+  padding:0;
+  position:relative;
+  left:auto;
+  right:auto;
+  overflow:visible;
+}
+.installPage .installVisual .phoneShell{
+  box-sizing:border-box;
+  position:relative;
+  display:block;
+  flex:0 0 auto;
+  align-self:flex-start;
+  width:286px;
+  height:535px;
+  max-width:100%;
+  margin:0 auto;
+  padding:9px;
+  top:auto;
+  bottom:auto;
+  left:auto;
+  right:auto;
+  transform:none;
+  transform-origin:center center;
+}
+.installPage .installVisual::before{
+  left:50%;
+  right:auto;
+  transform:translateX(-50%) rotate(-27deg);
+  width:min(96%,540px);
+}
+@media(max-width:690px){
+  .installPage .installHero{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    min-width:0;
+    margin:0 auto;
+    padding-left:15px;
+    padding-right:15px;
+  }
+  .installPage .installVisual{
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:flex-start;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    min-height:0;
+    margin:13px auto 0;
+  }
+  .installPage .installVisual .phoneShell{
+    box-sizing:border-box;
+    flex:0 0 auto;
+    width:min(248px,100%);
+    height:auto;
+    aspect-ratio:286/535;
+    max-width:100%;
+    margin:0 auto;
+    padding:8px;
+    transform:none;
+    left:auto;
+    right:auto;
+  }
+}
+@media(max-width:389px){
+  .installPage .installVisual{
+    height:auto;
+    min-height:0;
+    margin:11px auto 0;
+  }
+  .installPage .installVisual .phoneShell{
+    width:min(227px,100%);
+    height:auto;
+    aspect-ratio:286/535;
+    margin:0 auto;
+    transform:none;
+  }
+}
