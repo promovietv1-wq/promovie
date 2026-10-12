@@ -2219,7 +2219,7 @@ body.appPage::before{
 }
 
 
-/* pvSimpleHero33: faixa horizontal enxuta, apenas Olá, Vida. e coração. */
+/* pvSimpleHero34: Olá, Vida! e coração um terço menor; faixa e degradê preservados. */
 .appPage .appTop.pvSimpleHero31{
   box-sizing:border-box;
   position:relative;
@@ -2276,7 +2276,7 @@ body.appPage::before{
 }
 .appPage .pvSimpleHero31 .pvSimpleBrand31 img{
   display:block;
-  width:clamp(120px,13.2vw,133px);
+  width:clamp(80px,8.8vw,89px);
   max-width:100%;
   height:auto;
   aspect-ratio:1;
@@ -2298,7 +2298,7 @@ body.appPage::before{
   }
   .appPage .pvSimpleHero31 .pvHello31 h1 span{display:block}
   .appPage .pvSimpleHero31 .pvSimpleBrand31 img{
-    width:clamp(104px,31vw,123px);
+    width:clamp(69px,20.67vw,82px);
     max-width:100%;
   }
 }
@@ -2309,5 +2309,5 @@ body.appPage::before{
     padding:4px 8px;
   }
   .appPage .pvSimpleHero31 .pvHello31 h1{font-size:clamp(27px,8vw,31px)}
-  .appPage .pvSimpleHero31 .pvSimpleBrand31 img{width:clamp(97px,30vw,111px)}
+  .appPage .pvSimpleHero31 .pvSimpleBrand31 img{width:clamp(65px,20vw,74px)}
 }
