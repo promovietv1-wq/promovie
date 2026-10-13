@@ -49,7 +49,7 @@ h1{font-size:clamp(2.4rem,5vw,3.55rem);line-height:1.07;letter-spacing:-.055em;m
 .mockBanner span{font-size:.57rem;letter-spacing:.11em;text-transform:uppercase;opacity:.84;font-weight:700}.mockBanner strong{font-size:.92rem;line-height:1.2}.mockBanner small{font-size:.55rem;color:#cceefa}
 .mockMini{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.mockMini>div{height:75px;background:#fff;border:1px solid #eceaf7;border-radius:12px;padding:10px;display:flex;flex-direction:column;justify-content:space-between}.mockMini .emoji{font-size:1rem}.mockMini strong{font-size:.57rem;color:#404764}
 .mockTab{position:absolute;bottom:4px;left:5px;right:5px;display:flex;justify-content:space-around;padding:7px 5px 9px;border-top:1px solid #ececf3;background:#fff;border-radius:0 0 27px 27px}.mockTab span{font-size:.47rem;color:#867f9e}.mockTab span:first-child{color:var(--v);font-weight:800}
-.floatIcon{position:absolute;right:-2px;top:34px;width:63px;height:63px;border-radius:20px;background:linear-gradient(125deg,#4b0c8f,#7334d8);box-shadow:0 17px 25px rgba(21,10,58,.3);display:grid;place-items:center;border:3px solid rgba(255,255,255,.87);transform:rotate(-8deg)}.floatIcon svg{width:42px;height:42px}
+.floatIcon{position:absolute;right:-2px;top:34px;width:63px;height:63px;border-radius:20px;background:#fff;box-shadow:0 17px 25px rgba(21,10,58,.16);display:grid;place-items:center;border:3px solid rgba(255,255,255,.87);transform:rotate(-8deg);overflow:hidden}.floatIcon img{display:block;width:100%;height:100%;object-fit:contain;border-radius:16px}
 .floatText{position:absolute;left:-25px;bottom:48px;border-radius:50px;background:#fff;color:#4b0c8f;padding:11px 14px;box-shadow:0 15px 25px rgba(32,10,85,.22);font-size:.72rem;font-weight:850;transform:rotate(-5deg)}
 .features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin:26px 0 30px}
 .feature{border:1px solid var(--line);background:#fff;border-radius:19px;padding:21px;display:flex;gap:15px;align-items:flex-start}.featureIcon{flex:none;width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:#f3edff;color:#6d3ac0}.featureIcon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -91,9 +91,9 @@ footer{border-top:1px solid var(--line);color:#82899b;font-size:.75rem;padding:2
 <div class="phoneTitle">Seu cuidado,<br><b>mais perto.</b></div>
 <div class="mockBanner"><span>Acesso principal</span><strong>Telemedicina<br>PromoVie</strong><small>Toque para acessar</small></div>
 <div class="mockMini"><div><span class="emoji">♡</span><strong>Cuidados</strong></div><div><span class="emoji">✧</span><strong>Orientação</strong></div></div>
-<div class="mockTab"><span>Início</span><span>Telemedicina</span><span>Cuidados</span><span>Ajuda</span></div>
+<div class="mockTab"><span>Telemedicina</span><span>Telepsicologia</span><span>Autocuidado</span></div>
 </div></div>
-<div class="floatIcon"><svg viewBox="0 0 24 24"><path fill="#fff" d="M6 4h7c4.5 0 7.5 2.7 7.5 6.4 0 4.3-3 6.5-7.5 6.5h-1.8V21H6zm5.2 4v5.1H13c1.7 0 2.7-.9 2.7-2.6S14.7 8 13 8Z"/></svg></div><div class="floatText">Sempre à mão</div>
+<div class="floatIcon"><img src="/app/icons/heart-192.png" width="192" height="192" alt=""></div><div class="floatText">Sempre à mão</div>
 </div></section>
 <section class="features" aria-label="Benefícios do aplicativo">
 <article class="feature"><div class="featureIcon"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div><div><h2>Ícone na tela inicial</h2><p>Abra a PromoVie pela tela inicial, sem a barra de endereço do navegador.</p></div></article>
