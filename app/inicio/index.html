@@ -210,6 +210,30 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
   .tile p{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.tile{transition:none}.tile:hover{transform:none}}
+
+/* Degradê de títulos PromoVie como na Experiência Estratégica. */
+:root{--promovie-title-gradient:linear-gradient(112deg,#4b0c8f 0%,#7334d8 58%,#00bde8 100%)}
+.start-top h1,.tile h2,.inner-top h1,.title-row h2,.care-about h2,.service-detail strong{
+ background:var(--promovie-title-gradient);
+ -webkit-background-clip:text;
+ background-clip:text;
+ -webkit-text-fill-color:transparent;
+ color:#4b0c8f;
+ text-decoration:none;
+}
+.slogan{
+ background:linear-gradient(105deg,#5e279f 0%,#7952c5 55%,#338eb6 100%);
+ -webkit-background-clip:text;
+ background-clip:text;
+ -webkit-text-fill-color:transparent;
+ color:#60399e;
+}
+@media(forced-colors:active){
+ .start-top h1,.tile h2,.inner-top h1,.title-row h2,.care-about h2,.service-detail strong,.slogan{
+ background:none;-webkit-text-fill-color:CanvasText;color:CanvasText
+ }
+}
+
 </style>
 </head>
 <body>
