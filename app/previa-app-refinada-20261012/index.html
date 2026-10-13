@@ -102,7 +102,8 @@ svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.85;strok
 .careDetailHeader{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
 .careDetailSymbol{width:43px;height:43px;flex:0 0 43px;border-radius:13px;display:grid;place-items:center;color:#6b33b4;background:#f1eafb}
 .careDetailDialog[data-kind="informational"] .careDetailSymbol{background:#e8f7fa;color:#008da4}
-.careDetailSymbol svg{width:23px;height:23px}
+.careDetailDialog[data-kind="informational"] .careDetailSymbol svg{fill:none;stroke:currentColor;stroke-width:1.85}
+.careDetailSymbol svg{width:23px;height:23px;fill:currentColor;stroke:none}
 .careDetailHeader>div{flex:1;min-width:0}
 .careDetailGroup{font-size:11px;letter-spacing:.085em;text-transform:uppercase;font-weight:840;color:#794ba9;margin:0 0 5px}
 .careDetailHeader h2{margin:0;line-height:1.2;letter-spacing:-.03em;font-size:24px;font-weight:850;color:#42245f}
@@ -257,11 +258,11 @@ svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.85;strok
 <nav class="appTabBar" aria-label="Navegação principal">
 <a class="appTabItem is-active" href="#inicio" data-section="inicio" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.8 10.5 8.2-6.9 8.2 6.9v9H5.5v-9"/><path d="M9.5 19.5v-6.4h5v6.4"/></svg><span>Início</span></a>
 <a class="appTabItem" href="#consultas" data-section="consultas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg><span>Telemedicina</span></a>
-<a class="appTabItem" href="#acolhimento" data-section="acolhimento"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg><span>Autocuidado</span></a>
+<a class="appTabItem" href="#acolhimento" data-section="acolhimento"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg><span>Autocuidado</span></a>
 </nav>
 <dialog class="careDetailDialog" id="careDetailDialog" aria-labelledby="careDetailTitle" aria-describedby="careDetailBody">
   <div class="careDetailSurface">
-    <div class="careDetailHeader"><span class="careDetailSymbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-8.5-5.1-8.5-10.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1C20.5 15.9 12 21 12 21Z"/></svg></span>
+    <div class="careDetailHeader"><span class="careDetailSymbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
       <div><p class="careDetailGroup" id="careDetailGroup"></p><h2 id="careDetailTitle"></h2></div>
       <button class="careDetailClose" type="button" id="careDetailClose" aria-label="Fechar detalhes">×</button>
     </div>
