@@ -2746,7 +2746,8 @@ body.appPage::before{
 }
 
 
-/* pvWideServiceCards41: um cartão por linha, quatro serviços e seu CTA,
+/* pvServiceCardsThreeFifths43: fotos em 3/5, textos em 2/5. 
+   Um cartão por linha, quatro serviços e seu CTA,
    seguidos dos quatro serviços seguintes e respectivo CTA.
    Fotografia focada à esquerda, tipografia ampla e contraste acessível. */
 .appPage #consultas .pvAccessFrame > .groupCards,
@@ -2759,7 +2760,7 @@ body.appPage::before{
 .appPage #consultas .groupCards > .careCard,
 .appPage #acolhimento .groupCards > .careCard{
   display:grid;
-  grid-template-columns:minmax(150px,29%) minmax(0,1fr);
+  grid-template-columns:minmax(0,3fr) minmax(0,2fr);
   align-items:stretch;
   min-width:0;
   min-height:135px;
@@ -2872,13 +2873,13 @@ body.appPage::before{
   }
   .appPage #consultas .groupCards > .careCard,
   .appPage #acolhimento .groupCards > .careCard{
-    grid-template-columns:minmax(0,35%) minmax(0,1fr);
-    min-height:111px;
+    grid-template-columns:minmax(0,3fr) minmax(0,2fr);
+    min-height:146px;
     border-radius:12px;
   }
   .appPage #consultas .careCard .careMedia,
   .appPage #acolhimento .careCard .careMedia{
-    min-height:111px;
+    min-height:146px;
     height:auto;
     margin:0;
   }
@@ -2926,11 +2927,11 @@ body.appPage::before{
 @media(max-width:389px){
   .appPage #consultas .groupCards > .careCard,
   .appPage #acolhimento .groupCards > .careCard{
-    grid-template-columns:minmax(0,34%) minmax(0,1fr);
-    min-height:108px;
+    grid-template-columns:minmax(0,3fr) minmax(0,2fr);
+    min-height:142px;
   }
   .appPage #consultas .careCard .careMedia,
-  .appPage #acolhimento .careCard .careMedia{min-height:108px}
+  .appPage #acolhimento .careCard .careMedia{min-height:142px}
   .appPage #consultas .careCard .careCopy,
   .appPage #acolhimento .careCard .careCopy{padding:10px 9px}
   .appPage #consultas .careCard .careTitle h3,
