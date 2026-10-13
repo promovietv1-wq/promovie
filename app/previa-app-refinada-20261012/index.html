@@ -9,6 +9,9 @@
 <title>PromoVie Vida | Conceito do aplicativo</title>
 <link rel="icon" type="image/svg+xml" href="/app/icons/icon.svg">
 <link rel="preconnect" href="https://static.wixstatic.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 :root{
   --purple:#4e118c;
@@ -186,6 +189,332 @@ svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-width:1.85;strok
  .hero-heart{width:113px;top:62px;right:0}
  .hero p:last-of-type{font-size:14px;max-width:180px}
  .feature-copy{width:65%;padding-left:15px}
+/* Alinhamento visual com /experiencia: Inter para leitura, Sora para títulos. */
+:root{
+ --purple:#4b0c8f;
+ --violet:#7334d8;
+ --cyan:#00bde8;
+ --dark:#17213a;
+ --text:#526077;
+ --muted:#748094;
+ --line:#e8edf5;
+ --bg:#fbfcff;
+ --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+ --font-display:'Sora','Inter',sans-serif;
+ --gradient:linear-gradient(135deg,#4b0c8f 0%,#7334d8 55%,#00bde8 100%);
+}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+ background:#f7f9fd;
+ color:var(--dark);
+ font-family:var(--font-body);
+ font-weight:400;
+ font-size:16px;
+ line-height:1.55;
+ text-rendering:optimizeLegibility;
+}
+.shell{background:linear-gradient(180deg,#ffffff 0%,#fbfcff 45%,#f8fbfe 100%);box-shadow:0 0 60px rgba(47,39,100,.035)}
+.header{
+ background:rgba(255,255,255,.97);
+ border-color:#e9eef7;
+ box-shadow:0 3px 15px rgba(26,36,74,.022);
+}
+.brand-copy strong{
+ font-family:var(--font-display);
+ font-size:18px;
+ font-weight:700;
+ letter-spacing:-.045em;
+ color:#4b0c8f;
+}
+.brand-copy small{font-family:var(--font-body);font-weight:500;letter-spacing:.12em;color:#8d8ba4}
+.header-chip{background:#f5f3fa;color:#76648f;font-family:var(--font-body);font-weight:600;letter-spacing:0}
+.eyebrow,.hero-kicker,.feature-kicker,.sheet-kicker{
+ font-family:var(--font-body);
+ font-weight:650;
+ letter-spacing:.07em;
+}
+.page-title,.section-title,.list-title,.feature h3,.service-row strong,.sheet-title,.hero h1{
+ font-family:var(--font-display);
+ font-weight:700;
+ letter-spacing:-.045em;
+}
+.lead,.feature p,.care-claim p,.service-row small,.sheet-body,.help-row p,.status,.footer-note{font-family:var(--font-body);font-weight:400;line-height:1.62}
+.grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.main{padding-bottom:calc(115px + env(safe-area-inset-bottom))}
+.hero{
+ margin:0 -25px 0;
+ min-height:280px;
+ padding:44px 30px 34px;
+ border:0;
+ border-radius:0;
+ background:
+  radial-gradient(ellipse 195px 155px at 83% 40%,rgba(0,189,232,.15),transparent 73%),
+  radial-gradient(ellipse 220px 200px at 78% 80%,rgba(115,52,216,.10),transparent 76%),
+  linear-gradient(110deg,#fff 0%,#fafaff 51%,#f5faff 100%);
+ box-shadow:none;
+ color:var(--dark);
+ overflow:hidden;
+}
+.hero::before{
+ width:280px;height:280px;
+ top:-96px;right:-130px;
+ border:1px solid rgba(115,52,216,.07);
+ box-shadow:0 0 0 37px rgba(115,52,216,.018),0 0 0 77px rgba(0,189,232,.025);
+}
+.hero::after{
+ z-index:-1;
+ left:auto;right:14px;bottom:4px;
+ width:200px;height:160px;
+ background:radial-gradient(ellipse,rgba(115,52,216,.07),transparent 72%);
+}
+.hero-kicker{
+ color:#7b5aaf;
+ opacity:1;
+ margin:0 0 18px;
+ font-size:11px;
+ line-height:1.5;
+ letter-spacing:.11em;
+ max-width:225px;
+}
+.hero h1{
+ margin:0 0 13px;
+ color:#17213a;
+ font-size:clamp(38px,6.8vw,49px);
+ font-weight:700;
+ line-height:1.12;
+ letter-spacing:-.055em;
+ max-width:270px;
+}
+.hero h1 em{
+ background:var(--gradient);
+ -webkit-background-clip:text;
+ background-clip:text;
+ -webkit-text-fill-color:transparent;
+ color:#6a29be;
+}
+.hero p:last-of-type{
+ font-family:var(--font-body);
+ color:#627189;
+ font-size:15px;
+ font-weight:400;
+ line-height:1.63;
+ max-width:245px;
+ margin:0;
+}
+.hero-heart{
+ top:43px;
+ right:22px;
+ width:clamp(116px,22vw,168px);
+ filter:drop-shadow(0 14px 22px rgba(85,57,160,.09));
+ animation:floatMark 8s ease-in-out infinite;
+}
+.hero-foot{margin-top:25px}
+.hero-link{
+ color:#642ba5;
+ border:1px solid #e3daf3;
+ border-radius:100px;
+ display:inline-flex;
+ align-items:center;
+ gap:10px;
+ font-weight:600;
+ font-size:13px;
+ padding:11px 14px;
+ background:rgba(255,255,255,.86);
+ box-shadow:0 6px 18px rgba(88,51,157,.035);
+}
+.hero-link:hover{background:#f6f1fc;border-color:#d5c2eb}
+.section-title{
+ font-size:clamp(20px,3.6vw,24px);
+ font-weight:650;
+ line-height:1.3;
+ color:#263650;
+}
+.quick-title{margin:20px 0 16px}
+.between .microcopy{font-size:12px;font-weight:500;color:#83899b}
+.feature-stack{gap:13px}
+.feature{
+ border:1px solid #e8edf5;
+ box-shadow:0 8px 22px rgba(29,44,86,.032);
+ border-radius:24px;
+ min-height:204px;
+ background:#fff;
+}
+.feature.med{background:#fff}
+.feature.med .feature-photo::before{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(255,255,255,0) 47%)}
+.feature.wellness{
+ background:linear-gradient(125deg,#f3fcff,#fafdff 84%);
+ border-color:#dfedf4;
+}
+.feature.wellness .feature-photo::before{background:linear-gradient(90deg,rgba(246,253,255,.88),transparent 50%)}
+.feature-kicker{
+ font-size:10.5px;
+ color:#876fa8;
+ margin-bottom:11px;
+}
+.feature h3{
+ font-size:23px;
+ line-height:1.22;
+ font-weight:700;
+ color:#42305f;
+ margin-bottom:9px;
+}
+.feature.wellness h3{color:#245269}
+.feature p{
+ font-size:14px;
+ line-height:1.54;
+ color:#606d80;
+ margin-bottom:16px;
+}
+.feature-link{
+ font-family:var(--font-body);
+ font-weight:650;
+ font-size:13px;
+ color:#6438a1;
+}
+.feature.wellness .feature-link{color:#087a98}
+.help-row{
+ border-color:#ebedf6;
+ box-shadow:0 7px 18px rgba(46,40,88,.025);
+ background:#fff;
+ margin-top:21px;
+}
+.help-row strong{
+ font-family:var(--font-display);
+ font-weight:600;
+ font-size:14px;
+ letter-spacing:-.027em;
+ line-height:1.46;
+ color:#30405a;
+}
+.help-row p{font-size:13px;color:#768092;margin-top:5px}
+.help-mark{background:#f4effb;color:#6936a9}
+.footer-note{color:#8a93a2;font-size:12px}
+.screen-intro{padding-top:32px}
+.eyebrow{font-size:11px;letter-spacing:.09em;font-weight:650;color:#7c579e}
+.page-title{
+ font-size:clamp(30px,5.8vw,40px);
+ line-height:1.19;
+ font-weight:700;
+}
+.lead{font-size:16px;color:#637188;line-height:1.7}
+.portrait{border-radius:23px}
+.portrait:after{background:linear-gradient(0deg,rgba(29,30,71,.50),transparent 67%)}
+.portrait-label{
+ font-family:var(--font-display);
+ font-size:16px;
+ font-weight:600;
+ letter-spacing:-.03em;
+ line-height:1.45;
+}
+.action{
+ font-family:var(--font-body);
+ font-size:15px;
+ font-weight:650;
+ letter-spacing:0;
+ border-radius:15px;
+ min-height:56px;
+}
+.action.purple{background:linear-gradient(115deg,#4b0c8f,#7334d8);box-shadow:0 10px 25px rgba(75,12,143,.105)}
+.action.aqua{background:linear-gradient(110deg,#077e9e,#12a7bd);box-shadow:0 10px 25px rgba(9,129,155,.11)}
+.status{
+ background:#f7f8fc;
+ border-color:#e8ebf3;
+ font-size:13px;
+ line-height:1.55;
+ color:#70798a;
+}
+.list-title{font-size:22px;line-height:1.3;font-weight:650;color:#2d3a50}
+.list-intro{color:#798397;font-size:14px;font-weight:400}
+.service-row{
+ background:#fff;
+ border:1px solid #e9edf5;
+ border-radius:18px;
+ min-height:81px;
+ padding:13px 15px;
+ box-shadow:0 2px 10px rgba(48,53,91,.017);
+}
+.row-leading{
+ background:linear-gradient(145deg,#f3effa,#f6f3fc);
+ color:#8551b2;
+}
+.row-leading.care{background:linear-gradient(145deg,#eafaff,#f1fbff);color:#15839d}
+.row-leading span{font-family:var(--font-body);font-size:13px;font-weight:650;letter-spacing:0}
+.row-copy strong{
+ font-size:15px;
+ font-weight:650;
+ letter-spacing:-.028em;
+ color:#29344e;
+ line-height:1.42;
+}
+.row-copy small{
+ font-size:13px;
+ line-height:1.48;
+ color:#7b8798;
+}
+.row-arrow{color:#9175b0}
+.care-claim{background:#f2fcff;border-color:#e5f2f7;border-radius:19px}
+.care-claim .claimhead{font-family:var(--font-display);font-weight:600;font-size:14px;color:#1b6177}
+.care-claim p{font-size:14px;color:#627d89}
+.contact-bottom p{color:#738196;font-size:14px}
+.bottom-nav{background:rgba(255,255,255,.975);border-color:#e8ecf4;box-shadow:0 -7px 24px rgba(30,33,72,.045)}
+.nav-tab{font-family:var(--font-body);font-size:12px;font-weight:600;color:#81899a}
+.nav-tab[aria-current="page"]{background:#f5f0fc;color:#6b32a3}
+.nav-tab:focus-visible{outline-offset:-2px}
+.detail-sheet{color:var(--dark)}
+.sheet-kicker{font-size:11px}
+.sheet-title{font-size:23px;font-weight:700;line-height:1.3;color:#29344e}
+.sheet-lead{font-family:var(--font-body);font-size:16px;font-weight:600;color:#6638a0}
+.sheet-body{font-size:16px;line-height:1.68;color:#607087}
+@media(min-width:761px){
+ .hero{margin:0 -37px;padding:50px 42px 40px;min-height:285px}
+ .hero-heart{width:186px;right:65px;top:37px}
+ .hero h1{max-width:360px}
+ .feature{min-height:219px}
+}
+@media(max-width:480px){
+ .hero{
+  margin:0 -14px;
+  padding:36px 22px 29px;
+  min-height:273px;
+  border-radius:0;
+ }
+ .hero-heart{
+  right:5px;
+  top:46px;
+  width:clamp(116px,33vw,147px);
+ }
+ .hero h1{
+  font-size:clamp(36px,9.4vw,43px);
+  max-width:210px;
+ }
+ .hero-kicker{max-width:200px;margin-bottom:18px}
+ .hero p:last-of-type{max-width:207px;font-size:14px;line-height:1.58}
+ .hero-foot{margin-top:22px}
+ .hero-link{font-size:12px;padding:10px 13px}
+ .quick-title{margin:15px 0}
+ .section-title{font-size:20px}
+ .feature{min-height:206px}
+ .feature-copy{padding:20px 9px 20px 18px}
+ .feature h3{font-size:21px;line-height:1.22}
+ .feature p{font-size:13.5px;line-height:1.53}
+ .feature-link{font-size:12.5px}
+ .help-row{margin-top:19px}
+ .page-title{font-size:clamp(29px,8vw,37px)}
+ .lead{font-size:15px}
+ .row-copy strong{font-size:15px}
+}
+@media(max-width:365px){
+ .hero{min-height:278px;padding-left:17px}
+ .hero-heart{right:-2px;top:57px;width:113px}
+ .hero h1{max-width:183px;font-size:35px}
+ .hero p:last-of-type{max-width:190px;font-size:13.5px}
+ .feature h3{font-size:20px}
+ .feature p{font-size:13px}
+ .hero-link{font-size:11px;padding:10px 11px}
+}
+@media(prefers-reduced-motion:reduce){.hero-heart{animation:none}}
+
+
  .feature-photo{width:35%}
  .feature h3{font-size:21px}
  .feature p{font-size:13px}
@@ -207,45 +536,45 @@ svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-width:1.85;strok
 <main class="main" id="main">
  <section id="inicio" class="screen" data-screen="inicio" aria-label="Início">
   <div class="hero">
-   <p class="hero-kicker">Seu cuidado, mais perto</p>
+   <p class="hero-kicker">Cuidado que acompanha você</p>
    <h1>Olá,<br><em>Vida!</em></h1>
-   <p>Saúde, acolhimento e orientação no seu tempo.</p>
+   <p>Telemedicina e autocuidado com a proximidade que faz bem.</p>
    <img class="hero-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="Coração oficial PromoVie com a logomarca" width="240" height="240" decoding="async" fetchpriority="high">
-   <div class="hero-foot"><a class="hero-link" href="#telemedicina">Conhecer os atendimentos <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></a></div>
+   <div class="hero-foot"><a class="hero-link" href="#telemedicina">Conhecer os serviços <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></a></div>
   </div>
-  <div class="between quick-title"><h2 class="section-title">Como podemos ajudar?</h2><span class="microcopy">Escolha seu caminho</span></div>
+  <div class="between quick-title"><h2 class="section-title">Seu cuidado começa aqui</h2></div>
   <div class="feature-stack">
     <a class="feature med" href="#telemedicina" aria-label="Explorar Telemedicina">
-      <div class="feature-copy"><span class="feature-kicker">Atendimento profissional</span><h3>Telemedicina</h3><p>Um acesso para cuidar da sua saúde.</p><span class="feature-link">Conhecer <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></span></span></div>
+      <div class="feature-copy"><span class="feature-kicker">Atendimento profissional</span><h3>Telemedicina</h3><p>Atendimento e orientação em um só lugar.</p><span class="feature-link">Conhecer <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></span></span></div>
       <div class="feature-photo"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="" loading="eager" decoding="async" width="480" height="288"></div>
     </a>
     <a class="feature wellness" href="#autocuidado" aria-label="Explorar Orientação e Autocuidado">
-      <div class="feature-copy"><span class="feature-kicker">Acolhimento e orientação</span><h3>Autocuidado</h3><p>Pequenos passos para viver melhor.</p><span class="feature-link">Explorar <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></span></span></div>
+      <div class="feature-copy"><span class="feature-kicker">Acolhimento e orientação</span><h3>Autocuidado</h3><p>Mais atenção ao que faz bem a você.</p><span class="feature-link">Explorar <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></span></span></div>
       <div class="feature-photo"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="" loading="lazy" decoding="async" width="480" height="288"></div>
     </a>
   </div>
   <div class="help-row">
     <div class="help-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v12H8l-4 3V6a1 1 0 0 1 1-1Z"/><path d="M8 9h8M8 13h6"/></svg></div>
-    <div><strong>Precisa falar com a PromoVie?</strong><p>Estamos à disposição para orientar você.</p></div>
+    <div><strong>Vamos conversar?</strong><p>A PromoVie está aqui para orientar você.</p></div>
     <a href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20orienta%C3%A7%C3%B5es%20pela%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Conversar com a PromoVie pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
   </div>
-  <p class="footer-note">A PromoVie aproxima você de informações e serviços de cuidado. Em emergências, procure atendimento imediato.</p>
+  <p class="footer-note">Em situações de urgência ou emergência, procure atendimento presencial imediato.</p>
  </section>
 
  <section id="telemedicina" class="screen" data-screen="telemedicina" aria-label="Telemedicina" hidden>
    <div class="screen-intro">
      <p class="eyebrow with-mark"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""> Saúde e atendimento profissional</p>
      <h1 class="page-title grad">Telemedicina</h1>
-     <p class="lead">Atenção à sua saúde, com acesso às especialidades em um só lugar.</p>
+     <p class="lead">Conheça os atendimentos e encontre o cuidado que você procura.</p>
    </div>
    <div class="portrait">
      <img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="Ilustração fotográfica da área de atendimento médico" loading="lazy" decoding="async" width="480" height="288">
-     <div class="portrait-label">Cuidar de você é nossa prioridade.</div>
+     <div class="portrait-label">Cuidado com atenção e proximidade.</div>
    </div>
    <a class="action purple" href="/app/telemedicina/" aria-label="Abrir acesso à Telemedicina PromoVie"><span>Acessar Telemedicina PromoVie</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></a>
    <div class="status"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></svg><span>O portal de atendimento está em preparação. Você pode falar com a PromoVie para receber orientações.</span></div>
    <h2 class="list-title">Especialidades</h2>
-   <p class="list-intro">Selecione uma área para conhecer melhor.</p>
+   <p class="list-intro">Toque em uma especialidade para saber mais.</p>
    <div class="service-list" aria-label="Atendimentos profissionais"><button type="button" class="service-row" data-detail="0" aria-label="Saiba mais sobre Clínico Geral 24h"><span class="row-leading tele"><span>01</span></span><span class="row-copy"><strong>Clínico Geral 24h</strong><small>Clínico geral disponível 24h</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
 <button type="button" class="service-row" data-detail="1" aria-label="Saiba mais sobre Psicologia"><span class="row-leading tele"><span>02</span></span><span class="row-copy"><strong>Psicologia</strong><small>Acolhimento e saúde emocional</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
 <button type="button" class="service-row" data-detail="2" aria-label="Saiba mais sobre Médico da Família"><span class="row-leading tele"><span>03</span></span><span class="row-copy"><strong>Médico da Família</strong><small>Cuidado da pessoa e da família</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
@@ -257,20 +586,20 @@ svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-width:1.85;strok
    <div class="screen-intro">
      <p class="eyebrow with-mark"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""> Um espaço de acolhimento</p>
      <h1 class="page-title grad">Orientação e Autocuidado</h1>
-     <p class="lead">Cuidar de si também é prestar atenção às pequenas escolhas do dia a dia.</p>
+     <p class="lead">Orientação e acolhimento para o seu dia a dia.</p>
    </div>
    <div class="portrait care-portrait">
      <img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="Ilustração fotográfica de alimentação e autocuidado" loading="lazy" decoding="async" width="480" height="288">
-     <div class="portrait-label">Bem-estar se constrói a cada dia.</div>
+     <div class="portrait-label">Cuidar de si faz parte da vida.</div>
    </div>
-   <div class="care-claim"><div class="claimhead"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 8.8c0 5.2-8.5 10.3-8.5 10.3S3.5 14 3.5 8.8a4.8 4.8 0 0 1 8.5-3 4.8 4.8 0 0 1 8.5 3Z"/></svg><span>Um olhar humano para o seu bem-estar.</span></div><p>Escuta, informação e orientações que ajudam você a encontrar o próximo passo.</p></div>
+   <div class="care-claim"><div class="claimhead"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 8.8c0 5.2-8.5 10.3-8.5 10.3S3.5 14 3.5 8.8a4.8 4.8 0 0 1 8.5-3 4.8 4.8 0 0 1 8.5 3Z"/></svg><span>Bem-estar começa com atenção a você.</span></div><p>Escuta e informação para apoiar suas escolhas.</p></div>
    <h2 class="list-title">Como podemos orientar?</h2>
-   <p class="list-intro">Conheça as áreas de cuidado.</p>
+   <p class="list-intro">Toque em uma área para saber mais.</p>
    <div class="service-list" aria-label="Orientação e Autocuidado"><button type="button" class="service-row" data-detail="4" aria-label="Saiba mais sobre Nutrição"><span class="row-leading care"><span>05</span></span><span class="row-copy"><strong>Nutrição</strong><small>Alimentação e hábitos</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
 <button type="button" class="service-row" data-detail="5" aria-label="Saiba mais sobre Condicionamento Físico"><span class="row-leading care"><span>06</span></span><span class="row-copy"><strong>Condicionamento Físico</strong><small>Movimento e bem-estar</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
 <button type="button" class="service-row" data-detail="6" aria-label="Saiba mais sobre Saúde da Mulher"><span class="row-leading care"><span>07</span></span><span class="row-copy"><strong>Saúde da Mulher</strong><small>Autocuidado e prevenção</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
 <button type="button" class="service-row" data-detail="7" aria-label="Saiba mais sobre Cuidados Pet"><span class="row-leading care"><span>08</span></span><span class="row-copy"><strong>Cuidados Pet</strong><small>Bem-estar dos animais</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button></div>
-   <div class="contact-bottom"><p>Para conversar sobre acolhimento e orientação:</p>
+   <div class="contact-bottom"><p>Precisa de orientação?</p>
      <a href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20orienta%C3%A7%C3%B5es%20pela%20PromoVie." target="_blank" rel="noopener noreferrer" class="action aqua"><span>Conversar com a PromoVie</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
    </div>
    <p class="footer-note">Estas orientações não substituem avaliação médica presencial quando necessária.</p>
