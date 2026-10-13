@@ -242,49 +242,86 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 }
 
 
-/* Botão independente de autocuidado: cápsula discreta, não terceiro cartão. */
-.care-launch{display:flex;justify-content:center;margin:20px auto 10px;padding:0 7px}
+
+/* Mosaico editorial PromoVie, três fotografias distintas sem cortar a interface em telas menores. */
+.photo-mosaic{
+ display:grid;grid-template-columns:minmax(0,1.42fr) minmax(0,1fr);
+ gap:10px;height:clamp(225px,59vw,310px);
+ margin:0 0 17px;align-items:stretch;
+}
+.photo-mosaic figure{margin:0;position:relative;min-width:0;min-height:0;overflow:hidden;background:#f3f4fa}
+.photo-mosaic-main{height:100%;border-radius:24px 12px 12px 24px;
+ box-shadow:0 8px 22px rgba(47,37,85,.045)}
+.photo-mosaic-side{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:10px;min-width:0;min-height:0}
+.photo-mosaic-small{border-radius:12px 22px 22px 12px}
+.photo-mosaic-main img,.photo-mosaic-small img{
+ display:block;width:100%;height:100%;object-fit:cover;object-position:center;
+}
+.photo-mosaic-main>img{object-position:50% 44%}
+.photo-mosaic-side .photo-mosaic-small:first-child img{object-position:51% 45%}
+.photo-mosaic-side .photo-mosaic-small:last-child img{object-position:50% 46%}
+.photo-mosaic figure::after{
+ content:"";pointer-events:none;position:absolute;inset:0;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.17);
+ border-radius:inherit;
+}
+.photo-mosaic .photo-wave{right:-4px;bottom:-3px;width:115px;height:64px;opacity:.7}
+@media(max-width:430px){
+ .photo-mosaic{grid-template-columns:minmax(0,1.46fr) minmax(0,1fr);height:clamp(220px,66vw,270px);gap:8px;margin-bottom:15px}
+ .photo-mosaic-side{gap:8px}
+ .photo-mosaic-main{border-radius:20px 9px 9px 20px}
+ .photo-mosaic-small{border-radius:9px 18px 18px 9px}
+}
+@media(max-width:345px){
+ .photo-mosaic{gap:6px;height:213px}
+ .photo-mosaic-side{gap:6px}
+ .photo-mosaic-main{border-radius:16px 7px 7px 16px}
+ .photo-mosaic-small{border-radius:7px 15px 15px 7px}
+}
+
+/* Botão Autocuidado: acabamento escuro, texto centralizado e coração PromoVie. */
+.care-launch{display:flex;justify-content:center;margin:19px auto 11px;padding:0 6px}
 .care-launch-button{
  position:relative;display:flex;align-items:center;justify-content:center;
- width:min(100%,350px);min-height:78px;padding:13px 57px;
- border:1.5px solid transparent;border-radius:999px;
- background:linear-gradient(#fff,#fff) padding-box,
-            linear-gradient(112deg,rgba(133,73,213,.62),rgba(0,179,225,.68)) border-box;
- box-shadow:0 8px 22px rgba(67,45,140,.075),inset 0 1px 0 rgba(255,255,255,.86);
- transition:transform .2s ease,box-shadow .2s ease;
+ width:min(100%,358px);min-height:80px;padding:13px 58px;
+ border:1px solid rgba(190,166,242,.27);border-radius:999px;
+ background:linear-gradient(118deg,#281448 0%,#3d1a68 49%,#153c64 100%);
+ box-shadow:0 12px 26px rgba(34,20,78,.20),inset 0 1px 0 rgba(255,255,255,.12);
+ color:#fff;transition:transform .2s ease,box-shadow .2s ease;
 }
-.care-launch-button:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(67,45,140,.12)}
+.care-launch-button:hover{transform:translateY(-2px);box-shadow:0 16px 28px rgba(34,20,78,.26)}
 .care-launch-button:active{transform:translateY(0)}
 .care-launch-symbol{
- position:absolute;left:12px;top:50%;transform:translateY(-50%);
- width:45px;height:45px;display:grid;place-items:center;border-radius:50%;
- background:linear-gradient(140deg,#f6f0ff,#ecfaff);
+ position:absolute;left:11px;top:50%;transform:translateY(-50%);
+ width:49px;height:49px;display:grid;place-items:center;border-radius:50%;
+ background:rgba(255,255,255,.105);border:1px solid rgba(255,255,255,.11)
 }
-.care-launch-symbol img{display:block;width:39px;height:39px;object-fit:contain}
-.care-launch-label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:100%;text-align:center}
+.care-launch-symbol img{display:block;width:42px;height:42px;object-fit:contain;
+ filter:drop-shadow(0 1px 4px rgba(0,0,0,.12))}
+.care-launch-label{display:flex;flex-direction:column;align-items:center;
+ justify-content:center;gap:2px;width:100%;text-align:center}
 .care-launch-label strong{
- display:block;font-family:var(--font-display);font-size:17px;line-height:1.35;font-weight:700;
- letter-spacing:-.045em;text-align:center;background:linear-gradient(112deg,#4b0c8f 5%,#7334d8 60%,#00a5cc 100%);
- background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+ font-family:var(--font-display);font-size:18px;font-weight:700;
+ line-height:1.35;letter-spacing:-.045em;text-align:center;
+ background:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
 }
-.care-launch-label small{display:block;white-space:nowrap;font-size:11px;color:#79819b;line-height:1.4}
-.care-launch-next{
- position:absolute;right:15px;top:50%;transform:translateY(-50%);
- display:grid;place-items:center;color:#14a7cc;
-}
+.care-launch-label small{display:block;white-space:nowrap;
+ font-size:11px;font-weight:400;line-height:1.4;color:rgba(235,239,255,.83)}
+.care-launch-next{position:absolute;right:15px;top:50%;transform:translateY(-50%);
+ display:grid;place-items:center;color:#bcecff}
 .care-launch-next svg{width:18px;height:18px;stroke-width:2}
 @media(max-width:380px){
  .care-launch{margin-top:16px}
- .care-launch-button{width:min(100%,315px);min-height:76px;padding-inline:54px}
- .care-launch-symbol{left:9px;width:42px;height:42px}
- .care-launch-symbol img{width:37px;height:37px}
- .care-launch-label strong{font-size:16px}
+ .care-launch-button{width:min(100%,328px);min-height:77px;padding-inline:55px}
+ .care-launch-symbol{left:9px;width:44px;height:44px}
+ .care-launch-symbol img{width:39px;height:39px}
+ .care-launch-label strong{font-size:17px}
  .care-launch-label small{font-size:10.5px}
  .care-launch-next{right:11px}
 }
-@media(forced-colors:active){.care-launch-label strong{background:none;-webkit-text-fill-color:CanvasText}}
+@media(forced-colors:active){.care-launch-button{background:Canvas;color:CanvasText;border:1px solid CanvasText}
+ .care-launch-label strong{color:CanvasText!important;-webkit-text-fill-color:CanvasText!important}}
 @media(prefers-reduced-motion:reduce){.care-launch-button{transition:none}.care-launch-button:hover{transform:none}}
-
 </style>
 </head>
 <body>
@@ -297,9 +334,27 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
     <h1>Olá, Vida.</h1>
     <p class="slogan">Saúde biopsicossocial</p>
   </div>
-  <div class="family">
-    <img src="/app/familias-amigos-promovie-2x.jpg" alt="Grupo de amigos e familiares de diferentes gerações, com duas crianças, sorrindo juntos" width="1322" height="956" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://images.pexels.com/photos/8317783/pexels-photo-8317783.jpeg?auto=compress&amp;fit=crop&amp;w=1200&amp;q=80'">
-    <svg class="photo-wave" viewBox="0 0 142 76" aria-hidden="true"><defs><linearGradient id="pv-photo-grad" x1="0" x2="1"><stop stop-color="#ad7df0"/><stop offset="1" stop-color="#56d0f3"/></linearGradient></defs><path d="M-10 70C10 10 33 8 60 40s48 35 92-17"/></svg>
+  <div class="photo-mosaic" role="group" aria-label="Família, amigos e momentos de bem-estar">
+    <figure class="photo-mosaic-main">
+      <img src="/app/familias-amigos-promovie-2x.jpg"
+           alt="Famílias, crianças e amigos de diferentes gerações sorrindo juntos"
+           width="1322" height="956" decoding="async" fetchpriority="high">
+      <svg class="photo-wave" viewBox="0 0 142 76" aria-hidden="true"><defs><linearGradient id="pv-photo-grad" x1="0" x2="1"><stop stop-color="#ad7df0"/><stop offset="1" stop-color="#56d0f3"/></linearGradient></defs><path d="M-10 70C10 10 33 8 60 40s48 35 92-17"/></svg>
+    </figure>
+    <div class="photo-mosaic-side">
+      <figure class="photo-mosaic-small">
+        <img src="https://images.pexels.com/photos/4173081/pexels-photo-4173081.jpeg?auto=compress&amp;fit=crop&amp;w=720&amp;h=640&amp;q=83"
+             alt="Avó, mãe e criança caminhando juntas ao ar livre"
+             width="720" height="640" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='/app/familias-amigos-promovie-2x.jpg'">
+      </figure>
+      <figure class="photo-mosaic-small">
+        <img src="https://images.pexels.com/photos/30660784/pexels-photo-30660784.jpeg?auto=compress&amp;fit=crop&amp;w=720&amp;h=640&amp;q=83"
+             alt="Pais e criança aproveitando momentos felizes juntos"
+             width="720" height="640" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='/app/familias-amigos-promovie-2x.jpg'">
+      </figure>
+    </div>
   </div>
   <div class="tiles" aria-label="Serviços PromoVie">
     <a class="tile" href="#consultas" aria-label="Abrir Telemedicina">
