@@ -1,325 +1,348 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#ffffff"/>
-<meta name="robots" content="noindex,nofollow"/>
-<meta name="description" content="PromoVie: acesse telemedicina, escuta, acolhimento e informações sobre saúde pelo aplicativo."/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-<meta name="apple-mobile-web-app-title" content="PromoVie"/>
-<meta name="application-name" content="PromoVie"/>
-
-
-<link rel="icon" href="/app/icons/icon.svg" type="image/svg+xml"/>
-<link rel="apple-touch-icon" href="/app/icons/icon-192.png"/>
-<title>PromoVie | Prévia do aplicativo</title>
-<style id="promovie-app-identity-20261012">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f6f5fa">
+<meta name="description" content="Prévia de conceito do aplicativo PromoVie Vida, com Telemedicina e Autocuidado.">
+<title>PromoVie Vida | Conceito do aplicativo</title>
+<link rel="icon" type="image/svg+xml" href="/app/icons/icon.svg">
+<link rel="preconnect" href="https://static.wixstatic.com">
+<style>
 :root{
-  --purple:#4b0c8f;
-  --violet:#7435c6;
-  --blue:#0c99c7;
-  --ink:#24243c;
-  --text:#454760;
-  --muted:#656778;
-  --bg:#f8f8fc;
-  --edge:#e8e6ef;
+  --purple:#4e118c;
+  --violet:#8140dc;
+  --cyan:#0aa7c8;
+  --dark:#232239;
+  --text:#55536a;
+  --muted:#7a768c;
+  --line:#eae7f1;
+  --bg:#f6f5fa;
   --white:#fff;
-  --gradient:linear-gradient(112deg,#4b0c8f 5%,#7940cb 65%,#169ac6 100%);
+  --gradient:linear-gradient(118deg,#58139c 3%,#7540cf 65%,#069dc6);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:91px}
-body{margin:0;min-height:100dvh;padding-bottom:calc(92px + env(safe-area-inset-bottom));background:var(--bg);color:var(--ink);font:400 16px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain}
-a{color:inherit;text-decoration:none}button{font:inherit}a,button{-webkit-tap-highlight-color:transparent}
-a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
-svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.appLayout{width:min(100% - 32px,960px);margin:0 auto}
-.appHeader{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.965);border-bottom:1px solid #eeeaf4;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding-top:env(safe-area-inset-top)}
-.appHeaderInner{min-height:69px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.appLogo{display:flex;align-items:center;min-width:0}
-.appLogo img{display:block;width:122px;max-height:51px;height:auto;object-fit:contain}
-.appLogoText{color:var(--purple);font-size:23px;font-weight:850;letter-spacing:-.05em}
-.headerTag{font-size:12px;line-height:1.3;font-weight:730;color:#715593;white-space:nowrap}
-.headerTag .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#52b8d2;margin-right:7px}
-.pageMain{padding:23px 0 27px}
-.welcome{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:174px;padding:23px 28px 23px 30px;border:1px solid #e9e4f2;border-radius:24px;background:linear-gradient(112deg,#fff 10%,#faf8fe 63%,#f0f8fc);box-shadow:0 5px 21px rgba(45,20,91,.042);overflow:hidden;margin-bottom:22px}
-.welcomeText{min-width:0;flex:1}
-.hello{margin:0 0 9px;font-size:12px;font-weight:800;letter-spacing:.075em;text-transform:uppercase;color:#7943b3}
-.welcome h1{margin:0;font-size:clamp(32px,5vw,44px);font-weight:860;letter-spacing:-.048em;line-height:1.14}
-.welcome h1 span{background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.welcomeSub{font-size:16px;line-height:1.45;color:#55576c;margin:11px 0 0}
-.welcomeBrand{width:clamp(115px,16vw,154px);flex:0 0 clamp(115px,16vw,154px);height:auto;display:flex;align-items:center;justify-content:center}
-.welcomeBrand img{width:100%;aspect-ratio:1;object-fit:contain;display:block;filter:drop-shadow(0 6px 13px rgba(65,27,128,.07))}
-.group{scroll-margin-top:89px;margin:0 0 18px;padding:25px 25px 23px;border-radius:23px;background:#fff;border:1px solid var(--edge);box-shadow:0 5px 18px rgba(37,25,77,.034)}
-.groupTop{display:flex;align-items:center;gap:13px}
-.groupSymbol{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;background:#f1e9fb;border-radius:14px;color:#7036bc}
-.groupSymbol svg{width:25px;height:25px;stroke:none;fill:currentColor}
-.group.infoGroup .groupSymbol{background:#ebfaff;color:#078fa8}
-.group.infoGroup .groupSymbol svg{fill:none;stroke:currentColor;stroke-width:1.85}
-.headingMeta{font-size:11.5px;line-height:1.35;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#7a589e;margin:0 0 3px}
-.group.infoGroup .headingMeta{color:#08869c}
-.group h2{font-size:clamp(25px,3.7vw,31px);font-weight:860;letter-spacing:-.045em;line-height:1.15;margin:0;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.groupDesc{margin:13px 0 20px;font-size:15.5px;line-height:1.53;color:var(--text)}
-.careTiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.careTile{min-width:0;border:1px solid #ebe9f0;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 9px rgba(40,22,86,.025);transition:box-shadow .2s ease,border-color .2s ease}
-.careTileInteractive{position:relative;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);grid-template-rows:minmax(0,1fr) auto;min-height:193px;height:100%;border-radius:17px;overflow:hidden}
-.careTileImage{grid-column:1;grid-row:1/span 2;min-height:193px;position:relative;overflow:hidden;background:#eee8f6}
-.careTile.informational .careTileImage{background:#e8f4fa}
-.careTileImage img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center}
-.careTileImage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(25,12,65,.16),transparent 40%)}
-.careBadge{position:absolute;left:12px;bottom:12px;z-index:1;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;color:#6c2eb1;background:#fff;border:1px solid rgba(255,255,255,.5);box-shadow:0 5px 13px rgba(25,13,60,.16)}
-.careBadge svg{width:19px;height:19px;fill:currentColor;stroke:none}
-.informational .careBadge{color:#048da4}
-.informational .careBadge svg{fill:none;stroke:currentColor;stroke-width:1.8}
-.careTileText{grid-column:2;grid-row:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:18px 12px 4px 14px;overflow-wrap:break-word}
-.careTileText h3{font-size:17px;font-weight:820;letter-spacing:-.028em;line-height:1.25;margin:0 0 8px;background:linear-gradient(110deg,#4b0c8f,#7435c6 84%,#188eb8);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;hyphens:auto}
-.careTileText p{font-size:14px;line-height:1.44;color:#626174;margin:0}
-.careLearnMore{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:space-between;gap:4px;padding:5px 12px 15px 14px;font-size:12.5px;line-height:1.32;font-weight:800;color:#7137ac;pointer-events:none}
-.informational .careLearnMore{color:#078aa1}
-.careLearnMore span{font-size:15px}
-.careTileTap{position:absolute;z-index:3;inset:0;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation}
-.careTile:hover{border-color:#d8c4ed;box-shadow:0 7px 20px rgba(56,28,106,.075)}
-.careTile:focus-within{outline:3px solid #0c99c7;outline-offset:2px}
-.groupCTA{margin-top:19px}
-.action{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:15px;min-height:56px;width:100%;padding:14px 17px;font-size:16px;font-weight:800;text-align:center;line-height:1.35;transition:filter .15s ease}
-.action svg{width:19px;height:19px}
-.actionTele{background:linear-gradient(105deg,#4b0c8f,#7736cb);color:#fff;box-shadow:0 9px 18px rgba(75,12,143,.12)}
-.actionInfo{background:#e5f6fb;color:#006e86;border:1px solid #caebf3}
-.action:hover{filter:brightness(1.035)}
-.groupNotice{display:flex;align-items:flex-start;gap:7px;color:#697081;line-height:1.52;font-size:12.5px;margin:12px 3px 0}
-.groupNotice svg{width:16px;height:16px;margin-top:1px;color:#8471aa}
-.infoGroup .groupNotice svg{color:#1494ab}
-.moreInfo{display:flex;align-items:flex-start;gap:10px;color:#707484;font-size:12.5px;line-height:1.5;margin:19px 4px}
-.moreInfo svg{width:17px;height:17px;color:#8059b3;margin-top:2px}
-.appTabBar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;position:fixed;bottom:0;left:0;right:0;z-index:50;border-top:1px solid #ebe8f1;background:rgba(255,255,255,.965);padding:8px max(14px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));box-shadow:0 -5px 20px rgba(20,11,59,.06);backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px)}
-.appTabItem{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;border-radius:13px;min-height:56px;font-size:12.5px;font-weight:750;white-space:nowrap;color:#646678}
-.appTabItem svg{width:23px;height:23px}
-.appTabItem.is-active{background:#f0eafa;color:#642caa}
-.careDetailDialog{box-sizing:border-box;max-height:min(87dvh,690px);width:min(100% - 26px,465px);border:1px solid #e9e5f1;border-radius:24px;background:#fff;color:var(--ink);box-shadow:0 22px 65px rgba(24,13,59,.25);padding:0;overflow:auto;overscroll-behavior:contain}
-.careDetailDialog::backdrop{background:rgba(24,14,56,.56);backdrop-filter:blur(3px)}
-.careDetailSurface{padding:26px}
-.careDetailHeader{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.careDetailSymbol{width:43px;height:43px;flex:0 0 43px;border-radius:13px;display:grid;place-items:center;color:#6b33b4;background:#f1eafb}
-.careDetailDialog[data-kind="informational"] .careDetailSymbol{background:#e8f7fa;color:#008da4}
-.careDetailDialog[data-kind="informational"] .careDetailSymbol svg{fill:none;stroke:currentColor;stroke-width:1.85}
-.careDetailSymbol svg{width:23px;height:23px;fill:currentColor;stroke:none}
-.careDetailHeader>div{flex:1;min-width:0}
-.careDetailGroup{font-size:11px;letter-spacing:.085em;text-transform:uppercase;font-weight:840;color:#794ba9;margin:0 0 5px}
-.careDetailHeader h2{margin:0;line-height:1.2;letter-spacing:-.03em;font-size:24px;font-weight:850;color:#42245f}
-.careDetailLead{font-size:16px;line-height:1.5;font-weight:760;color:#5f299f;margin:0 0 12px}
-.careDetailDialog[data-kind="informational"] .careDetailLead{color:#087f95}
-.careDetailBody{font-size:16px;line-height:1.65;color:#50556b;margin:0 0 24px}
-.careDetailClose{border:0;border-radius:50%;height:36px;width:36px;display:grid;place-items:center;flex:0 0 36px;font-size:23px;line-height:1;background:#f1eef6;color:#633b90;cursor:pointer}
-.careDetailDone{display:block;min-height:52px;width:100%;border:0;border-radius:14px;background:linear-gradient(105deg,#4b0c8f,#7435c6);color:#fff;font-size:16px;font-weight:800;cursor:pointer}
-.careDetailDialog[data-kind="informational"] .careDetailDone{background:#07859b}
-@media(min-width:860px){
- .pageMain{padding-top:28px;padding-bottom:106px}
- .appTabBar{width:min(100% - 32px,960px);left:50%;right:auto;transform:translateX(-50%);bottom:14px;border:1px solid #ebe8f1;border-radius:18px;box-shadow:0 10px 26px rgba(24,13,59,.12)}
- .careTileInteractive,.careTileImage{min-height:203px}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;background:#f2f0f6;color:var(--dark);font:400 16px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid #00a5c7;outline-offset:3px}
+svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round;flex:none}
+[hidden]{display:none!important}
+.shell{min-height:100dvh;width:100%;max-width:760px;margin:auto;background:var(--bg);position:relative;box-shadow:0 0 70px rgba(26,14,59,.07)}
+.header{height:calc(70px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 25px 0;position:sticky;top:0;z-index:30;background:rgba(250,249,252,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(225,220,235,.65)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand-logo{width:40px;height:40px;object-fit:contain;display:block}
+.brand-copy{display:flex;flex-direction:column;gap:0;line-height:1.22}
+.brand-copy strong{font-size:19px;letter-spacing:-.04em;font-weight:850;color:#432071}
+.brand-copy small{color:#81758e;font-size:11px;font-weight:600;letter-spacing:.035em}
+.header-chip{padding:9px 13px;border-radius:100px;background:#f0eafa;color:#713bad;font-size:12px;font-weight:750;white-space:nowrap}
+.main{padding:0 25px calc(115px + env(safe-area-inset-bottom))}
+.screen{animation:enter .2s ease-out}
+@keyframes enter{from{opacity:.7;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px}
+.eyebrow{margin:0 0 9px;font-size:12px;font-weight:850;letter-spacing:.13em;color:#8244ae;text-transform:uppercase}
+.page-title{font-size:clamp(30px,6vw,40px);line-height:1.13;font-weight:870;letter-spacing:-.045em;margin:0}
+.grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lead{font-size:16px;line-height:1.58;color:var(--text);margin:12px 0 0;max-width:550px}
+.hero{position:relative;isolation:isolate;border-radius:29px;margin-top:22px;padding:27px 25px 29px;min-height:245px;overflow:hidden;background:linear-gradient(127deg,#491183 0%,#6a28ba 58%,#5448ba 100%);color:#fff}
+.hero:before{content:"";position:absolute;width:320px;height:320px;right:-135px;top:-180px;border-radius:50%;border:1px solid rgba(255,255,255,.16);box-shadow:0 0 0 39px rgba(255,255,255,.026),0 0 0 87px rgba(255,255,255,.02)}
+.hero:after{content:"";position:absolute;inset:auto -55px -220px auto;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(4,200,232,.28),transparent 73%);z-index:-1}
+.hero-kicker{font-size:12px;line-height:1.4;font-weight:750;letter-spacing:.105em;opacity:.85;margin:0 0 18px;text-transform:uppercase;max-width:230px}
+.hero h1{font-size:clamp(37px,7vw,49px);line-height:1.08;font-weight:900;letter-spacing:-.055em;margin:0 0 12px;position:relative;z-index:2;max-width:360px}
+.hero h1 em{font-style:normal;color:#a5ecff}
+.hero p:last-of-type{font-size:16px;line-height:1.45;color:#f1e7fa;max-width:250px;margin:0;position:relative;z-index:2}
+.hero-heart{position:absolute;right:17px;top:43px;width:clamp(112px,23vw,178px);height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(30,8,80,.22));animation:floatMark 6s ease-in-out infinite;z-index:1}
+@keyframes floatMark{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hero-foot{margin-top:22px;position:relative;z-index:3}
+.hero-link{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:800;color:#fff;border-bottom:1px solid rgba(255,255,255,.65);padding-bottom:4px}
+.hero-link svg{height:18px;width:18px}
+.section-title{font-size:23px;font-weight:850;letter-spacing:-.035em;line-height:1.22;margin:0}
+.between{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.between .microcopy{font-size:12px;color:#867c98;font-weight:650}
+.quick-title{margin:29px 0 16px}
+.feature-stack{display:grid;gap:15px}
+.feature{position:relative;overflow:hidden;border-radius:25px;min-height:206px;display:flex;align-items:stretch;background:#fff;border:1px solid var(--line);box-shadow:0 5px 17px rgba(46,26,84,.035)}
+.feature.med{background:linear-gradient(108deg,#fff,#fbf9ff)}
+.feature-copy{width:61%;position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:23px 12px 24px 23px}
+.feature-kicker{font-size:11px;font-weight:850;letter-spacing:.105em;text-transform:uppercase;color:#8350ae;margin-bottom:10px}
+.feature h3{font-size:25px;line-height:1.11;letter-spacing:-.043em;font-weight:850;margin:0 0 10px;color:#3e2463}
+.feature p{font-size:14px;color:#5d5a6d;line-height:1.45;margin:0 0 17px;max-width:235px}
+.feature-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:850;color:#682ca8;white-space:nowrap}
+.feature-link svg{height:17px;width:17px}
+.feature-photo{width:39%;position:relative;overflow:hidden;background:#eee9f8}
+.feature-photo img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+.feature.med .feature-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,0) 38%);z-index:1}
+.feature.wellness{background:linear-gradient(118deg,#ecfaff,#f7fbff);border-color:#def0f4}
+.feature.wellness .feature-kicker,.feature.wellness .feature-link{color:#007f9d}
+.feature.wellness h3{color:#16455c}
+.feature.wellness .feature-photo{background:#d1f5f9}
+.feature.wellness .feature-photo:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#effaff 0%,transparent 47%);z-index:1}
+.feature.wellness .feature-photo img{object-position:center}
+.help-row{margin-top:24px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:17px 19px;display:flex;align-items:center;gap:15px}
+.help-mark{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;border-radius:14px;background:#f2eafb;color:#7942bb}
+.help-row strong{display:block;font-size:15px;font-weight:800;line-height:1.3}
+.help-row p{font-size:13px;color:#797484;line-height:1.4;margin:4px 0 0}
+.help-row a{flex:none;color:#753db0;display:grid;place-items:center;margin-left:auto;width:34px;height:34px;border-radius:50%;background:#f7f2fc}
+.help-row a svg{width:19px;height:19px}
+.footer-note{font-size:12px;color:#8a8394;line-height:1.55;margin:22px 3px 0}
+.screen-intro{padding:27px 3px 23px}
+.eyebrow.with-mark{display:flex;align-items:center;gap:9px}
+.eyebrow.with-mark img{width:25px;height:25px;object-fit:contain}
+.portrait{position:relative;height:242px;overflow:hidden;border-radius:25px;background:#e3daf3;margin:0 0 20px}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:center 38%;display:block}
+.portrait:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(44,13,98,.56),transparent 60%)}
+.portrait-label{position:absolute;left:19px;bottom:17px;color:#fff;z-index:1;font-weight:800;font-size:17px;max-width:70%;line-height:1.27}
+.action{width:100%;min-height:57px;display:flex;align-items:center;justify-content:space-between;gap:13px;border-radius:16px;padding:15px 19px;font-size:16px;font-weight:830;line-height:1.3}
+.action.purple{color:#fff;background:linear-gradient(105deg,#4f118f,#7b40cd);box-shadow:0 8px 19px rgba(68,18,125,.13)}
+.action.aqua{color:#fff;background:linear-gradient(104deg,#0a7b99,#0aacca);box-shadow:0 8px 19px rgba(8,133,159,.13)}
+.action svg{width:21px;height:21px}
+.status{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;line-height:1.5;color:#777185;background:#f4f1f9;border:1px solid #eae6f2;border-radius:14px;margin:13px 0 27px;padding:13px 14px}
+.status svg{height:19px;width:19px;flex:none;color:#7d50b4;margin-top:1px}
+.list-title{font-size:22px;letter-spacing:-.035em;font-weight:850;margin:0 0 7px}
+.list-intro{color:#767083;font-size:14px;margin:0 0 14px}
+.service-list{display:grid;gap:10px}
+.service-row{min-height:79px;display:flex;align-items:center;width:100%;text-align:left;gap:14px;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid var(--line);color:var(--dark)}
+.service-row:hover{border-color:#d8c7eb;box-shadow:0 6px 16px rgba(60,30,99,.055)}
+.row-leading{width:46px;height:46px;flex:0 0 46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(125deg,#f1eafb,#f4f1fa);color:#7243af}
+.row-leading.care{color:#047b97;background:linear-gradient(125deg,#e2f8fb,#ebf9ff)}
+.row-leading span{font-size:14px;font-weight:870;letter-spacing:-.03em}
+.row-copy{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.row-copy strong{font-size:16px;font-weight:780;letter-spacing:-.023em;line-height:1.2;color:#34254d}
+.row-copy small{font-size:13px;color:#777286;line-height:1.35}
+.row-arrow{display:grid;place-items:center;color:#956bba;flex:none}
+.row-arrow svg{width:18px;height:18px}
+.portrait.care-portrait{background:#d8f3f7}
+.portrait.care-portrait:after{background:linear-gradient(0deg,rgba(8,76,96,.62),transparent 65%)}
+.care-claim{background:linear-gradient(116deg,#e9faff,#f7ffff);border:1px solid #dff1f6;border-radius:20px;padding:17px 19px;margin:18px 0 22px}
+.care-claim .claimhead{font-size:15px;font-weight:850;color:#125773;display:flex;align-items:center;gap:10px}
+.care-claim .claimhead svg{width:20px;height:20px}
+.care-claim p{font-size:14px;line-height:1.5;color:#547282;margin:7px 0 0}
+.contact-bottom{margin-top:23px}
+.contact-bottom p{color:#6d7080;font-size:14px;margin:0 0 12px}
+.bottom-nav{position:fixed;z-index:50;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:760px;padding:8px 15px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid #e9e5f0;box-shadow:0 -7px 25px rgba(47,18,96,.055);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.nav-tab{min-height:60px;padding:6px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:14px;background:transparent;color:#858093;font-weight:760;font-size:12px}
+.nav-tab svg{width:23px;height:23px}
+.nav-tab[aria-current="page"]{background:#f2eaf9;color:#65309e}
+.nav-brand{width:24px;height:24px;object-fit:contain}
+.nav-tab[aria-current="page"] .nav-brand{filter:drop-shadow(0 2px 4px rgba(79,18,144,.2))}
+.detail-sheet{border:0;border-radius:26px 26px 0 0;padding:0;width:100%;max-width:760px;max-height:84dvh;position:fixed;bottom:0;top:auto;left:50%;transform:translateX(-50%);margin:0;color:var(--dark);box-shadow:0 -15px 65px rgba(28,11,66,.25);overflow:auto}
+.detail-sheet::backdrop{background:rgba(24,14,50,.58);backdrop-filter:blur(3px)}
+.sheet-inner{padding:12px 25px calc(28px + env(safe-area-inset-bottom))}
+.sheet-handle{width:41px;height:4px;border-radius:4px;background:#e3ddeb;margin:0 auto 23px}
+.sheet-top{display:flex;align-items:flex-start;gap:15px;justify-content:space-between}
+.sheet-symbol{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:#f2ebfa;color:#7138b2;flex:none}
+.sheet-symbol img{width:36px;height:36px;object-fit:contain}
+.sheet-copy{flex:1}
+.sheet-kicker{font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase;color:#8c5cb0;margin:3px 0 7px}
+.sheet-title{margin:0;font-size:25px;line-height:1.14;font-weight:850;letter-spacing:-.035em}
+.sheet-close{border:0;background:#f3f0f7;border-radius:100px;width:38px;height:38px;display:grid;place-items:center;color:#694587;flex:none}
+.sheet-close svg{height:20px;width:20px}
+.sheet-lead{margin:21px 0 8px;font-size:17px;line-height:1.5;color:#5c3491;font-weight:800}
+.sheet-body{margin:0;color:#5c5c72;font-size:16px;line-height:1.66}
+.sheet-cta{margin-top:26px}
+@media(min-width:761px){
+ .shell{border-inline:1px solid #e8e4ef}
+ .main{padding-inline:37px}
+ .header{padding-inline:37px}
+ .hero{min-height:265px}
+ .feature{min-height:226px}
+ .hero-heart{right:42px;width:190px;top:30px}
+ .portrait{height:278px}
 }
-@media(max-width:700px){
- .careTiles{grid-template-columns:1fr}
- .appLayout{width:calc(100% - 26px)}
- .appHeaderInner{min-height:64px}
- .appLogo img{width:112px}
- .headerTag{font-size:11.5px}
- .pageMain{padding-top:16px}
- .welcome{padding:21px 19px;min-height:153px;border-radius:21px;margin-bottom:16px}
- .welcome h1{font-size:clamp(31px,8.7vw,39px)}
- .welcomeBrand{width:clamp(107px,31vw,130px);flex-basis:clamp(107px,31vw,130px)}
- .welcomeSub{font-size:15px;margin-top:9px}
- .hello{font-size:11px;letter-spacing:.045em}
- .group{padding:21px 15px 19px;margin-bottom:15px;border-radius:20px}
- .group h2{font-size:clamp(25px,7vw,29px)}
- .groupDesc{font-size:15px;margin:13px 0 18px}
- .careTiles{gap:13px}
- .careTileInteractive,.careTileImage{min-height:188px}
- .careTileText h3{font-size:16.5px}
- .careTileText p{font-size:14px}
- .careLearnMore{font-size:12px}
+@media(max-width:480px){
+ .header{padding-inline:17px;height:calc(64px + env(safe-area-inset-top))}
+ .brand-logo{width:37px;height:37px}
+ .brand-copy strong{font-size:18px}
+ .header-chip{font-size:11px;padding:8px 10px}
+ .main{padding-inline:14px}
+ .hero{padding:25px 21px 26px;margin-top:15px;min-height:237px;border-radius:25px}
+ .hero h1{font-size:clamp(35px,9vw,42px);max-width:240px}
+ .hero-heart{width:clamp(111px,32vw,155px);right:4px;top:52px}
+ .hero p:last-of-type{max-width:225px;font-size:15px}
+ .hero-kicker{margin-bottom:18px;font-size:11px}
+ .hero-foot{margin-top:24px}
+ .quick-title{margin-top:26px}
+ .feature{min-height:204px;border-radius:22px}
+ .feature-copy{width:63%;padding:20px 9px 20px 18px}
+ .feature-photo{width:37%}
+ .feature h3{font-size:24px}
+ .feature p{font-size:13.5px}
+ .feature-link{font-size:12.5px}
+ .feature-kicker{font-size:10.5px}
+ .help-row{padding:15px}
+ .screen-intro{padding:23px 3px 21px}
+ .page-title{font-size:clamp(30px,8vw,37px)}
+ .lead{font-size:15.5px}
+ .portrait{height:208px}
+ .portrait-label{font-size:16px}
+ .row-copy strong{font-size:15.5px}
+ .detail-sheet{border-radius:23px 23px 0 0}
+ .sheet-inner{padding-inline:20px}
 }
 @media(max-width:365px){
- .appLayout{width:calc(100% - 18px)}
- .welcome{gap:4px;padding:17px 12px 17px 16px}
- .welcomeBrand{width:101px;flex-basis:101px}
- .welcome h1{font-size:31px}
- .welcomeSub{font-size:13.5px}
- .hello{font-size:10.5px}
- .group{padding-inline:11px}
- .careTileInteractive,.careTileImage{min-height:192px}
- .careTileText{padding-left:11px;padding-right:9px}
- .careTileText h3{font-size:15.5px}
- .careTileText p{font-size:13.5px}
- .careLearnMore{padding-left:11px;padding-right:9px}
+ .hero h1{font-size:35px}
+ .hero-heart{width:113px;top:62px;right:0}
+ .hero p:last-of-type{font-size:14px;max-width:180px}
+ .feature-copy{width:65%;padding-left:15px}
+ .feature-photo{width:35%}
+ .feature h3{font-size:21px}
+ .feature p{font-size:13px}
+ .row-copy strong{font-size:15px}
+ .header-chip{display:none}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-<body id="inicio">
-<header class="appHeader">
-<div class="appLayout appHeaderInner">
-<a class="appLogo" href="#inicio" aria-label="PromoVie, tela inicial"><img src="/preview-promovie-logo.webp" alt="PromoVie" onerror="this.hidden=true;this.nextElementSibling.hidden=false"/><span class="appLogoText" hidden>PromoVie</span></a>
-<span class="headerTag"><span class="dot"></span>Saúde e bem-estar</span>
-</div>
+<body>
+<div class="shell">
+<header class="header">
+ <a class="brand" href="#inicio" aria-label="PromoVie Vida, ir para início">
+   <img class="brand-logo" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="">
+   <span class="brand-copy"><strong>PromoVie</strong><small>VIDA</small></span>
+ </a>
+ <span class="header-chip">Saúde e bem-estar</span>
 </header>
-<main class="appLayout pageMain">
-<section class="welcome" aria-labelledby="welcomeTitle"><div class="welcomeText"><p class="hello">PROMOVIE · SAÚDE E BEM-ESTAR</p><h1 id="welcomeTitle">Olá, <span>Vida!</span></h1><p class="welcomeSub">Telemedicina e Autocuidado</p></div><div class="welcomeBrand"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="Coração oficial PromoVie com logomarca" width="240" height="240" decoding="async" fetchpriority="high"></div></section>
-<section class="group professionalGroup" id="consultas" aria-labelledby="titleConsultas">
-<div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span><div><p class="headingMeta">Atendimentos profissionais</p><h2 id="titleConsultas">Telemedicina</h2></div></div>
-<p class="groupDesc">Conheça os atendimentos e toque nos cartões para saber mais.</p>
-<div class="careTiles" role="list" aria-label="Especialidades de telemedicina">
-<article class="careTile professional" role="listitem" aria-label="Clínico Geral 24h"><div class="careTileInteractive">
-
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="" loading="eager" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
+<main class="main" id="main">
+ <section id="inicio" class="screen" data-screen="inicio" aria-label="Início">
+  <div class="hero">
+   <p class="hero-kicker">Seu cuidado, mais perto</p>
+   <h1>Olá,<br><em>Vida!</em></h1>
+   <p>Saúde, acolhimento e orientação no seu tempo.</p>
+   <img class="hero-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="Coração oficial PromoVie com a logomarca" width="240" height="240" decoding="async" fetchpriority="high">
+   <div class="hero-foot"><a class="hero-link" href="#telemedicina">Conhecer os atendimentos <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></a></div>
   </div>
-  <div class="careTileText"><h3>Clínico Geral 24h</h3><p>Consulta médica online</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="0" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Clínico Geral 24h"></button>
-</div></article>
-<article class="careTile professional" role="listitem" aria-label="Psicologia"><div class="careTileInteractive">
-
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
+  <div class="between quick-title"><h2 class="section-title">Como podemos ajudar?</h2><span class="microcopy">Escolha seu caminho</span></div>
+  <div class="feature-stack">
+    <a class="feature med" href="#telemedicina" aria-label="Explorar Telemedicina">
+      <div class="feature-copy"><span class="feature-kicker">Atendimento profissional</span><h3>Telemedicina</h3><p>Um acesso para cuidar da sua saúde.</p><span class="feature-link">Conhecer <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></span></span></div>
+      <div class="feature-photo"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="" loading="eager" decoding="async" width="480" height="288"></div>
+    </a>
+    <a class="feature wellness" href="#autocuidado" aria-label="Explorar Orientação e Autocuidado">
+      <div class="feature-copy"><span class="feature-kicker">Acolhimento e orientação</span><h3>Autocuidado</h3><p>Pequenos passos para viver melhor.</p><span class="feature-link">Explorar <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></span></span></div>
+      <div class="feature-photo"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="" loading="lazy" decoding="async" width="480" height="288"></div>
+    </a>
   </div>
-  <div class="careTileText"><h3>Psicologia</h3><p>Consulta psicológica online</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="1" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Psicologia"></button>
-</div></article>
-<article class="careTile professional" role="listitem" aria-label="Médico da Família"><div class="careTileInteractive">
-
-  <div class="careTileImage"><img src="https://images.pexels.com/photos/4266936/pexels-photo-4266936.jpeg?auto=compress&amp;dpr=1&amp;w=480&amp;h=288&amp;fit=crop&amp;q=72" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
+  <div class="help-row">
+    <div class="help-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v12H8l-4 3V6a1 1 0 0 1 1-1Z"/><path d="M8 9h8M8 13h6"/></svg></div>
+    <div><strong>Precisa falar com a PromoVie?</strong><p>Estamos à disposição para orientar você.</p></div>
+    <a href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20orienta%C3%A7%C3%B5es%20pela%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Conversar com a PromoVie pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
   </div>
-  <div class="careTileText"><h3>Médico da Família</h3><p>Consulta médica online</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="2" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Médico da Família"></button>
-</div></article>
-<article class="careTile professional" role="listitem" aria-label="Pediatra"><div class="careTileInteractive">
+  <p class="footer-note">A PromoVie aproxima você de informações e serviços de cuidado. Em emergências, procure atendimento imediato.</p>
+ </section>
 
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
-  </div>
-  <div class="careTileText"><h3>Pediatra</h3><p>Consulta médica online</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="3" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Pediatra"></button>
-</div></article>
-</div>
-<div class="groupCTA"><a class="action actionTele" href="/app/telemedicina/" id="telemedicinaAccess" aria-label="Acessar Telemedicina PromoVie para as quatro especialidades"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg><span>Acessar Telemedicina PromoVie</span></a></div>
-<p class="groupNotice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4.2v5.5c0 5-2.7 8.3-8 10.3-5.3-2-8-5.3-8-10.3V6.2Z"/><path d="m8.5 12 2.4 2.4 4.7-5.1"/></svg><span>O portal de telemedicina está em preparação. Nossa equipe pode orientar você.</span></p>
-</section>
-<section class="group infoGroup" id="acolhimento" aria-labelledby="titleInfo">
-<div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span><div><p class="headingMeta">Acolhimento e informações</p><h2 id="titleInfo">Orientação e Autocuidado</h2></div></div>
-<p class="groupDesc">Encontre informações e orientação para cuidar do seu bem-estar.</p>
-<div class="careTiles" role="list" aria-label="Áreas de orientação e acolhimento">
-<article class="careTile informational" role="listitem" aria-label="Nutrição"><div class="careTileInteractive">
+ <section id="telemedicina" class="screen" data-screen="telemedicina" aria-label="Telemedicina" hidden>
+   <div class="screen-intro">
+     <p class="eyebrow with-mark"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""> Saúde e atendimento profissional</p>
+     <h1 class="page-title grad">Telemedicina</h1>
+     <p class="lead">Atenção à sua saúde, com acesso às especialidades em um só lugar.</p>
+   </div>
+   <div class="portrait">
+     <img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" alt="Ilustração fotográfica da área de atendimento médico" loading="lazy" decoding="async" width="480" height="288">
+     <div class="portrait-label">Cuidar de você é nossa prioridade.</div>
+   </div>
+   <a class="action purple" href="/app/telemedicina/" aria-label="Abrir acesso à Telemedicina PromoVie"><span>Acessar Telemedicina PromoVie</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></a>
+   <div class="status"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></svg><span>O portal de atendimento está em preparação. Você pode falar com a PromoVie para receber orientações.</span></div>
+   <h2 class="list-title">Especialidades</h2>
+   <p class="list-intro">Selecione uma área para conhecer melhor.</p>
+   <div class="service-list" aria-label="Atendimentos profissionais"><button type="button" class="service-row" data-detail="0" aria-label="Saiba mais sobre Clínico Geral 24h"><span class="row-leading tele"><span>01</span></span><span class="row-copy"><strong>Clínico Geral 24h</strong><small>Clínico geral disponível 24h</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+<button type="button" class="service-row" data-detail="1" aria-label="Saiba mais sobre Psicologia"><span class="row-leading tele"><span>02</span></span><span class="row-copy"><strong>Psicologia</strong><small>Acolhimento e saúde emocional</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+<button type="button" class="service-row" data-detail="2" aria-label="Saiba mais sobre Médico da Família"><span class="row-leading tele"><span>03</span></span><span class="row-copy"><strong>Médico da Família</strong><small>Cuidado da pessoa e da família</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+<button type="button" class="service-row" data-detail="3" aria-label="Saiba mais sobre Pediatra"><span class="row-leading tele"><span>04</span></span><span class="row-copy"><strong>Pediatra</strong><small>Orientações para a saúde infantil</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button></div>
+   <p class="footer-note">Para urgências e emergências, procure atendimento presencial imediato.</p>
+ </section>
 
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="" loading="eager" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
-  </div>
-  <div class="careTileText"><h3>Nutrição</h3><p>Alimentação e hábitos</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="4" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Nutrição"></button>
-</div></article>
-<article class="careTile informational" role="listitem" aria-label="Condicionamento Físico"><div class="careTileInteractive">
-
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
-  </div>
-  <div class="careTileText"><h3>Condicionamento Físico</h3><p>Movimento e bem-estar</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="5" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Condicionamento Físico"></button>
-</div></article>
-<article class="careTile informational" role="listitem" aria-label="Saúde da Mulher"><div class="careTileInteractive">
-
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
-  </div>
-  <div class="careTileText"><h3>Saúde da Mulher</h3><p>Autocuidado e prevenção</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="6" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Saúde da Mulher"></button>
-</div></article>
-<article class="careTile informational" role="listitem" aria-label="Cuidados Pet"><div class="careTileInteractive">
-
-  <div class="careTileImage"><img src="https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
-    <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
-  </div>
-  <div class="careTileText"><h3>Cuidados Pet</h3><p>Bem-estar dos animais</p></div>
-<span class="careLearnMore" aria-hidden="true">Saiba mais <span>↗</span></span>
-<button class="careTileTap" type="button" data-care-index="7" aria-haspopup="dialog" aria-controls="careDetailDialog" aria-label="Ver detalhes sobre Cuidados Pet"></button>
-</div></article>
-</div>
-<div class="groupCTA"><a class="action actionInfo" href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20acolhimento%20e%20orienta%C3%A7%C3%B5es%20pela%20PromoVie." target="_blank" rel="noopener noreferrer" id="orientacaoAccess" aria-label="Solicitar acolhimento e orientações pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.2h16v11.7H8.6L4 20V5.2Z"/><path d="M8.4 10.4h7.2M8.4 13.1h4.8"/></svg><span>Conversar com a PromoVie</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a></div>
-<p class="groupNotice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.5 2.4 7.1L21.5 12l-7.1 2.4-2.4 7.1-2.4-7.1L2.5 12l7.1-2.4Z"/></svg><span>Para informações e orientações, utilize o contato acima.</span></p>
-</section>
-<div class="moreInfo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4.2v5.5c0 5-2.7 8.3-8 10.3-5.3-2-8-5.3-8-10.3V6.2Z"/><path d="m8.5 12 2.4 2.4 4.7-5.1"/></svg><span>Em casos de urgência ou emergência, procure atendimento presencial imediato.</span></div>
+ <section id="autocuidado" class="screen" data-screen="autocuidado" aria-label="Orientação e Autocuidado" hidden>
+   <div class="screen-intro">
+     <p class="eyebrow with-mark"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""> Um espaço de acolhimento</p>
+     <h1 class="page-title grad">Orientação e Autocuidado</h1>
+     <p class="lead">Cuidar de si também é prestar atenção às pequenas escolhas do dia a dia.</p>
+   </div>
+   <div class="portrait care-portrait">
+     <img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" alt="Ilustração fotográfica de alimentação e autocuidado" loading="lazy" decoding="async" width="480" height="288">
+     <div class="portrait-label">Bem-estar se constrói a cada dia.</div>
+   </div>
+   <div class="care-claim"><div class="claimhead"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 8.8c0 5.2-8.5 10.3-8.5 10.3S3.5 14 3.5 8.8a4.8 4.8 0 0 1 8.5-3 4.8 4.8 0 0 1 8.5 3Z"/></svg><span>Um olhar humano para o seu bem-estar.</span></div><p>Escuta, informação e orientações que ajudam você a encontrar o próximo passo.</p></div>
+   <h2 class="list-title">Como podemos orientar?</h2>
+   <p class="list-intro">Conheça as áreas de cuidado.</p>
+   <div class="service-list" aria-label="Orientação e Autocuidado"><button type="button" class="service-row" data-detail="4" aria-label="Saiba mais sobre Nutrição"><span class="row-leading care"><span>05</span></span><span class="row-copy"><strong>Nutrição</strong><small>Alimentação e hábitos</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+<button type="button" class="service-row" data-detail="5" aria-label="Saiba mais sobre Condicionamento Físico"><span class="row-leading care"><span>06</span></span><span class="row-copy"><strong>Condicionamento Físico</strong><small>Movimento e bem-estar</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+<button type="button" class="service-row" data-detail="6" aria-label="Saiba mais sobre Saúde da Mulher"><span class="row-leading care"><span>07</span></span><span class="row-copy"><strong>Saúde da Mulher</strong><small>Autocuidado e prevenção</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+<button type="button" class="service-row" data-detail="7" aria-label="Saiba mais sobre Cuidados Pet"><span class="row-leading care"><span>08</span></span><span class="row-copy"><strong>Cuidados Pet</strong><small>Bem-estar dos animais</small></span><span class="row-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button></div>
+   <div class="contact-bottom"><p>Para conversar sobre acolhimento e orientação:</p>
+     <a href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20orienta%C3%A7%C3%B5es%20pela%20PromoVie." target="_blank" rel="noopener noreferrer" class="action aqua"><span>Conversar com a PromoVie</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+   </div>
+   <p class="footer-note">Estas orientações não substituem avaliação médica presencial quando necessária.</p>
+ </section>
 </main>
-<nav class="appTabBar" aria-label="Navegação principal">
-<a class="appTabItem is-active" href="#inicio" data-section="inicio" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.8 10.5 8.2-6.9 8.2 6.9v9H5.5v-9"/><path d="M9.5 19.5v-6.4h5v6.4"/></svg><span>Início</span></a>
-<a class="appTabItem" href="#consultas" data-section="consultas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg><span>Telemedicina</span></a>
-<a class="appTabItem" href="#acolhimento" data-section="acolhimento"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg><span>Autocuidado</span></a>
+<nav class="bottom-nav" aria-label="Navegação principal do aplicativo">
+ <div class="nav-grid">
+  <button class="nav-tab" type="button" data-go="inicio" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-7 9 7v9h-7v-6h-4v6H3z"/></svg><span>Início</span></button>
+  <button class="nav-tab" type="button" data-go="telemedicina"><img class="nav-brand" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""><span>Telemedicina</span></button>
+  <button class="nav-tab" type="button" data-go="autocuidado"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 8.8c0 5.2-8.5 10.3-8.5 10.3S3.5 14 3.5 8.8a4.8 4.8 0 0 1 8.5-3 4.8 4.8 0 0 1 8.5 3Z"/></svg><span>Autocuidado</span></button>
+ </div>
 </nav>
-<dialog class="careDetailDialog" id="careDetailDialog" aria-labelledby="careDetailTitle" aria-describedby="careDetailBody">
-  <div class="careDetailSurface">
-    <div class="careDetailHeader"><span class="careDetailSymbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
-      <div><p class="careDetailGroup" id="careDetailGroup"></p><h2 id="careDetailTitle"></h2></div>
-      <button class="careDetailClose" type="button" id="careDetailClose" aria-label="Fechar detalhes">×</button>
-    </div>
-    <p class="careDetailLead" id="careDetailLead"></p>
-    <p class="careDetailBody" id="careDetailBody"></p>
-    <button class="careDetailDone" type="button" id="careDetailDone">Entendi</button>
+</div>
+<dialog class="detail-sheet" id="serviceDetail" aria-labelledby="sheetTitle" aria-describedby="sheetBody">
+ <div class="sheet-inner">
+  <div class="sheet-handle" aria-hidden="true"></div>
+  <div class="sheet-top">
+   <div class="sheet-symbol"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""></div>
+   <div class="sheet-copy"><p class="sheet-kicker" id="sheetGroup"></p><h2 class="sheet-title" id="sheetTitle"></h2></div>
+   <button class="sheet-close" type="button" id="sheetClose" aria-label="Fechar informações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
   </div>
+  <p class="sheet-lead" id="sheetLead"></p>
+  <p class="sheet-body" id="sheetBody"></p>
+  <a id="sheetAction" href="/app/telemedicina/" class="action purple sheet-cta"><span id="sheetActionLabel">Acessar Telemedicina</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12h15m-6-6 6 6-6 6"/></svg></a>
+ </div>
 </dialog>
-<script src="/app/config.js"></script>
 <script>
 (function(){
 "use strict";
-const careSource=[{"title":"Clínico Geral 24h","lead":"Consulta médica online.","details":"Consulta médica para avaliação de sintomas, dúvidas gerais e encaminhamento presencial quando clinicamente indicado."},{"title":"Psicologia","lead":"Consulta psicológica online.","details":"Espaço de escuta qualificada para emoções, relações, ansiedade, conflitos e desafios da vida pessoal ou profissional."},{"title":"Médico da Família","lead":"Consulta médica online.","details":"Atendimento médico para questões gerais de saúde e cuidado da pessoa e da família."},{"title":"Pediatra","lead":"Consulta médica online.","details":"Atendimento médico infantil para orientar responsáveis sobre questões de saúde, quando o atendimento remoto for adequado."},{"title":"Nutrição","lead":"Escuta, acolhimento e informação.","details":"Conversa on-line para ouvir dúvidas sobre alimentação e rotina, acolher necessidades e ajudar a encontrar informações confiáveis e organizar hábitos do dia a dia."},{"title":"Condicionamento Físico","lead":"Escuta, acolhimento e informação.","details":"Escuta e bate-papo sobre movimento, motivação e bem-estar, com apoio para esclarecer dúvidas, buscar informações confiáveis e organizar hábitos possíveis na rotina."},{"title":"Saúde da Mulher","lead":"Escuta, acolhimento e informação.","details":"Acolhimento e conversa sobre saúde da mulher, autocuidado e prevenção, com auxílio para esclarecer dúvidas e encontrar informações confiáveis para o cotidiano."},{"title":"Cuidados Pet","lead":"Escuta, acolhimento e informação.","details":"Escuta e conversa com tutores sobre os cuidados e o bem-estar dos animais de estimação, com auxílio para esclarecer dúvidas e informações confiáveis."}];
-
-const infoDialog=document.getElementById("careDetailDialog");
-const infoTitle=document.getElementById("careDetailTitle");
-const infoGroup=document.getElementById("careDetailGroup");
-const infoLead=document.getElementById("careDetailLead");
-const infoBody=document.getElementById("careDetailBody");
-let lastCareButton=null;
-function closeCareDetails(){
- if(typeof infoDialog.close==="function" && infoDialog.open) infoDialog.close();
- else infoDialog.removeAttribute("open");
- if(lastCareButton)lastCareButton.focus({preventScroll:true});
+const SERVICES=[{"title":"Clínico Geral 24h","lead":"Consulta médica online.","details":"Consulta médica para avaliação de sintomas, dúvidas gerais e encaminhamento presencial quando clinicamente indicado.","kind":"tele"},{"title":"Psicologia","lead":"Consulta psicológica online.","details":"Espaço de escuta qualificada para emoções, relações, ansiedade, conflitos e desafios da vida pessoal ou profissional.","kind":"tele"},{"title":"Médico da Família","lead":"Consulta médica online.","details":"Atendimento médico para questões gerais de saúde e cuidado da pessoa e da família.","kind":"tele"},{"title":"Pediatra","lead":"Consulta médica online.","details":"Atendimento médico infantil para orientar responsáveis sobre questões de saúde, quando o atendimento remoto for adequado.","kind":"tele"},{"title":"Nutrição","lead":"Escuta, acolhimento e informação.","details":"Conversa on-line para ouvir dúvidas sobre alimentação e rotina, acolher necessidades e ajudar a encontrar informações confiáveis e organizar hábitos do dia a dia.","kind":"care"},{"title":"Condicionamento Físico","lead":"Escuta, acolhimento e informação.","details":"Escuta e bate-papo sobre movimento, motivação e bem-estar, com apoio para esclarecer dúvidas, buscar informações confiáveis e organizar hábitos possíveis na rotina.","kind":"care"},{"title":"Saúde da Mulher","lead":"Escuta, acolhimento e informação.","details":"Acolhimento e conversa sobre saúde da mulher, autocuidado e prevenção, com auxílio para esclarecer dúvidas e encontrar informações confiáveis para o cotidiano.","kind":"care"},{"title":"Cuidados Pet","lead":"Escuta, acolhimento e informação.","details":"Escuta e conversa com tutores sobre os cuidados e o bem-estar dos animais de estimação, com auxílio para esclarecer dúvidas e informações confiáveis.","kind":"care"}];
+const CONTACT="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20receber%20orienta%C3%A7%C3%B5es%20pela%20PromoVie.";
+const views=[...document.querySelectorAll('[data-screen]')];
+const tabs=[...document.querySelectorAll('[data-go]')];
+const dlg=document.getElementById('serviceDetail');
+const title=document.getElementById('sheetTitle');
+const body=document.getElementById('sheetBody');
+const lead=document.getElementById('sheetLead');
+const group=document.getElementById('sheetGroup');
+const action=document.getElementById('sheetAction');
+const actionLabel=document.getElementById('sheetActionLabel');
+let previouslyFocused=null;
+let current='inicio';
+function route(){
+ const slug=decodeURIComponent(location.hash.slice(1));
+ const selected=['inicio','telemedicina','autocuidado'].includes(slug)?slug:'inicio';
+ if(selected!==current){window.scrollTo(0,0);}
+ current=selected;
+ for(const view of views)view.hidden=view.dataset.screen!==selected;
+ for(const tab of tabs){if(tab.dataset.go===selected)tab.setAttribute('aria-current','page');else tab.removeAttribute('aria-current');}
+ document.title=(selected==='inicio'?'PromoVie Vida':selected==='telemedicina'?'Telemedicina':'Autocuidado')+' | Prévia PromoVie';
 }
-document.querySelectorAll(".careTileTap").forEach(btn=>btn.addEventListener("click",function(){
- const i=Number(btn.dataset.careIndex);
- const entry=careSource[i];
- if(!entry)return;
- lastCareButton=btn;
- infoTitle.textContent=entry.title;
- infoGroup.textContent=i<4?"Atendimento profissional":"Acolhimento e informação";
- infoLead.textContent=entry.lead;
- infoBody.textContent=entry.details;
- infoDialog.dataset.kind=i<4?"professional":"informational";
- if(typeof infoDialog.showModal==="function")infoDialog.showModal();else infoDialog.setAttribute("open","");
- document.getElementById("careDetailClose").focus();
+tabs.forEach(tab=>tab.addEventListener('click',()=>{const id=tab.dataset.go;if(location.hash==='#'+id){window.scrollTo({top:0,behavior:'smooth'});return;}location.hash=id;}));
+window.addEventListener('hashchange',route);
+document.querySelectorAll('[data-detail]').forEach(btn=>btn.addEventListener('click',()=>{
+ const s=SERVICES[Number(btn.dataset.detail)];if(!s)return;
+ previouslyFocused=btn;
+ title.textContent=s.title;
+ lead.textContent=s.lead;
+ body.textContent=s.details;
+ group.textContent=s.kind==='tele'?'Atendimento profissional':'Orientação e Autocuidado';
+ action.href=s.kind==='tele'?'/app/telemedicina/':CONTACT;
+ action.target=s.kind==='tele'?'_self':'_blank';
+ action.rel=s.kind==='tele'?'':'noopener noreferrer';
+ action.className='action '+(s.kind==='tele'?'purple':'aqua')+' sheet-cta';
+ actionLabel.textContent=s.kind==='tele'?'Acessar Telemedicina':'Conversar com a PromoVie';
+ if(typeof dlg.showModal==='function')dlg.showModal();else dlg.setAttribute('open','');
 }));
-document.getElementById("careDetailClose").addEventListener("click",closeCareDetails);
-document.getElementById("careDetailDone").addEventListener("click",closeCareDetails);
-infoDialog.addEventListener("click",event=>{if(event.target===infoDialog)closeCareDetails();});
-infoDialog.addEventListener("close",()=>{if(lastCareButton)lastCareButton.focus({preventScroll:true});});
-const tabs=Array.from(document.querySelectorAll(".appTabItem"));
-function activate(id){
- tabs.forEach(tab=>{
-  const on=tab.dataset.section===id;
-  tab.classList.toggle("is-active",on);
-  if(on)tab.setAttribute("aria-current","page");else tab.removeAttribute("aria-current");
- });
-}
-tabs.forEach(tab=>tab.addEventListener("click",()=>activate(tab.dataset.section)));
-const sections=["inicio","consultas","acolhimento"];
-function sync(){const threshold=window.innerHeight*.34;let at="inicio";for(const id of sections.slice(1)){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=threshold)at=id;}activate(at);}
-window.addEventListener("scroll",sync,{passive:true});
-window.addEventListener("hashchange",sync);
-sync();
-
+function closeSheet(){if(dlg.open){if(typeof dlg.close==='function')dlg.close();else dlg.removeAttribute('open');}}
+document.getElementById('sheetClose').addEventListener('click',closeSheet);
+dlg.addEventListener('click',e=>{if(e.target===dlg)closeSheet()});
+dlg.addEventListener('close',()=>{if(previouslyFocused)previouslyFocused.focus({preventScroll:true})});
+route();
 })();
 </script>
 </body></html>
