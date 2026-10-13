@@ -1,0 +1,80 @@
+name: Wix Video Browser Inventory
+on:
+  push:
+    paths:
+      - .github/workflows/wix-video-browser-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Install headless Chromium for one-time read-only Wix scan
+        run: |
+          python3 -m venv /tmp/wixbrowser
+          /tmp/wixbrowser/bin/pip -q install playwright
+          /tmp/wixbrowser/bin/python -m playwright install chromium
+      - name: Inventory visible video players and public media requests
+        shell: bash
+        run: |
+          /tmp/wixbrowser/bin/python - <<'PY'
+          import asyncio,re,json
+          from playwright.async_api import async_playwright
+          async def main():
+            requests=[]
+            found={}
+            async with async_playwright() as p:
+              browser=await p.chromium.launch(headless=True,args=["--no-sandbox"])
+              context=await browser.new_context(viewport={"width":1440,"height":900},locale="pt-BR",user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
+              page=await context.new_page()
+              tasks=set()
+              async def monitor(response):
+                url=response.url
+                if not any(x in url.lower() for x in ["vod-","wix-vod","wixvideo","video.wixstatic","/_api/","/api/","wixapps.net","wixstatic.com/video"]):return
+                requests.append({"url":url,"status":response.status,"type":response.headers.get("content-type","")})
+                if len(requests)>200: return
+                if any(x in response.headers.get("content-type","").lower() for x in ["json","text","javascript"]):
+                  try:
+                    body=await response.text()
+                    if len(body)>3000000: return
+                    norm=body.replace("\\/","/").replace("\\u002F","/")
+                    pattern=r"https?://video[.]wixstatic[.]com/video/[a-zA-Z0-9_./?=&%-]+"
+                    for m in re.findall(pattern,norm):
+                      found[m]=url
+                    if "vod" in url.lower() or "wix-vod" in url.lower():
+                      print("RESPONSE_SAMPLE",response.status,url[:220],repr(body[:1100]))
+                    ids=list(dict.fromkeys(re.findall(r"279d86[_][0-9a-f]{32}",norm,re.I)))
+                    if ids: print("MEDIA_IDS_IN_RESPONSE",url[:160],len(ids),ids[:80])
+                  except Exception as e: print("READ_ERROR",url[:200],repr(e))
+              def onresponse(response):
+                t=asyncio.create_task(monitor(response));tasks.add(t);t.add_done_callback(tasks.discard)
+              page.on("response",onresponse)
+              try:
+                resp=await page.goto("https://polesevideo.wixsite.com/promovie/smart-films",wait_until="domcontentloaded",timeout=60000)
+                print("PAGE",resp.status if resp else None,page.url,"TITLE",await page.title())
+                await page.wait_for_timeout(14000)
+                for i in range(6):
+                  await page.mouse.wheel(0,1100)
+                  await page.wait_for_timeout(1200)
+                await page.wait_for_timeout(3000)
+                print("PAGE_TEXT",repr((await page.locator("body").inner_text())[:6000]))
+                print("FRAMES",len(page.frames))
+                for fi,frame in enumerate(page.frames):
+                  try:
+                    tx=(await frame.locator("body").inner_text(timeout=4500))[:5000]
+                    vids=await frame.locator("video").count()
+                    imgs=await frame.locator("img").count()
+                    samples=await frame.locator("img").evaluate_all("(xs)=>xs.slice(0,12).map(x=>({alt:x.alt,src:x.currentSrc||x.src}))")
+                    print("FRAME",fi,frame.url[:450],"VIDEOS",vids,"IMGS",imgs,"TEXT",repr(tx[:4200]))
+                    print("FRAME_IMAGES",fi,json.dumps(samples,ensure_ascii=False)[:4500])
+                  except Exception as e:print("FRAME_ERROR",fi,str(e)[:220])
+                print("NETWORK",len(requests),json.dumps(requests[:180],ensure_ascii=False)[:30000])
+                print("FOUND_MP4S",len(found))
+                for k,v in found.items(): print("MP4",k,"ORIGIN",v[:170])
+              except Exception as e: print("BROWSER_ERROR",type(e).__name__,str(e))
+              if tasks:await asyncio.gather(*list(tasks),return_exceptions=True)
+              await browser.close()
+          asyncio.run(main())
+          PY
