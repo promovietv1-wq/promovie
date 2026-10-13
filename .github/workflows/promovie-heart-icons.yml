@@ -1,0 +1,52 @@
+name: Generate PromoVie Heart PNG Icons
+on:
+  push:
+    paths:
+      - ".github/workflows/promovie-heart-icons.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python -m pip install Pillow
+      - name: Generate official heart icons
+        shell: bash
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          source=Image.open("app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp").convert("RGBA")
+          out=Path("app/icons")
+          for size in (192, 512):
+              canvas=Image.new("RGB",(size,size),"#FFFFFF")
+              mark=source.copy()
+              padding=12 if size==192 else 33
+              mark.thumbnail((size-padding*2,size-padding*2),Image.Resampling.LANCZOS)
+              canvas.paste(mark,((size-mark.width)//2,(size-mark.height)//2),mark)
+              canvas.save(out/f"heart-{size}.png",format="PNG",optimize=True)
+          PY
+      - name: Commit icon assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/icons/heart-192.png app/icons/heart-512.png
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Generate official PromoVie heart install icons in PNG"
+            git push
+          fi
