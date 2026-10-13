@@ -60,7 +60,11 @@ jobs:
                   await page.wait_for_timeout(1200)
                 await page.wait_for_timeout(3000)
                 print("PAGE_TEXT",repr((await page.locator("body").inner_text())[:6000]))
-                print("FRAMES",len(page.frames))
+                details=await page.locator("video").evaluate_all("""(vs)=>vs.map((v,i)=>({i,src:v.src,currentSrc:v.currentSrc,poster:v.poster,html:v.outerHTML.slice(0,2300),around:(v.closest('[data-testid]')||v.parentElement?.parentElement||v).outerHTML.slice(0,3200)}))""")
+          print("DOM_VIDEOS",json.dumps(details,ensure_ascii=False)[:135000])
+          imageinfo=await page.locator("img").evaluate_all("""(vs)=>vs.map((v,i)=>({i,alt:v.alt,src:v.currentSrc||v.src,html:v.outerHTML.slice(0,450)}))""")
+          print("DOM_IMAGES",json.dumps(imageinfo,ensure_ascii=False)[:30000])
+          print("FRAMES",len(page.frames))
                 for fi,frame in enumerate(page.frames):
                   try:
                     tx=(await frame.locator("body").inner_text(timeout=4500))[:5000]
