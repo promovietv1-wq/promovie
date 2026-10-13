@@ -262,7 +262,7 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 <script>
 (function(){
   "use strict";
-  const VALID=["inicio","consultas","psicologia","voce"];
+  const VALID=["inicio","consultas","psicologia","voce"]; // v9 heart icons and service navigation
   const screens=[...document.querySelectorAll("[data-screen]")];
   const tabs=[...document.querySelectorAll("[data-tab]")];
   let last="inicio";
@@ -285,7 +285,20 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
     if(d.open)for(const other of d.parentElement.querySelectorAll(".service-detail"))if(other!==d&&other.open)other.open=false;
   }));
   route();
-  if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("/app/sw.js",{scope:"/app/"}).catch(()=>{}));
+  if("serviceWorker" in navigator){
+    let refreshed=false;
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{
+      if(refreshed)return;
+      refreshed=true;
+      if(document.visibilityState==="visible")window.location.reload();
+      else document.addEventListener("visibilitychange",()=>{
+        if(document.visibilityState==="visible")window.location.reload();
+      },{once:true});
+    });
+    window.addEventListener("load",()=>navigator.serviceWorker.register("/app/sw.js",{
+      scope:"/app/",updateViaCache:"none"
+    }).then(registration=>registration.update()).catch(()=>{}));
+  }
 })();
 </script>
 </body>
