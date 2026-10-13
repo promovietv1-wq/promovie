@@ -1,4 +1,4 @@
-const CACHE="promovie-preview-fiel-2026-v41";
+const CACHE="promovie-preview-fiel-2026-v42";
 const BASE="/app/previa-fiel-20261010/";
 const CORE=[BASE,BASE+"inicio/",BASE+"telemedicina/",BASE+"style.css",BASE+"manifest.webmanifest",BASE+"coracao-promovie-original-20261010.avif",BASE+"coracao-promovie-com-logo-20261011.webp","/app/icons/icon-192.png","/app/icons/icon-512.png"];
 self.addEventListener("install",event=>{
@@ -11,7 +11,7 @@ self.addEventListener("fetch",event=>{
  const req=event.request,url=new URL(req.url);
  if(req.method!=="GET"||url.origin!==self.location.origin||!url.pathname.startsWith(BASE))return;
  if(req.mode==="navigate"){
-  event.respondWith(fetch(req).then(r=>{if(r.ok){let cp=r.clone();caches.open(CACHE).then(c=>c.put(req,cp));}return r;}).catch(()=>caches.match(req).then(x=>x||caches.match(BASE+"inicio/"))));return;
+  event.respondWith(fetch(req).then(r=>{if(r.ok){let cp=r.clone();caches.open(CACHE).then(c=>c.put(req,cp));}return r;}).catch(()=>caches.match(req).then(x=>x||caches.match(url.pathname===BASE?BASE:BASE+"inicio/"))));return;
  }
  event.respondWith(caches.match(req).then(x=>x||fetch(req)));
 });
