@@ -1,0 +1,36 @@
+{
+  "id": "/previews/app-telemedicina/",
+  "name": "PromoVie Saúde | Prévia",
+  "short_name": "PromoVie",
+  "description": "Prévia navegável do aplicativo PromoVie de telemedicina, telepsicologia e autocuidado.",
+  "lang": "pt-BR",
+  "start_url": "/previews/app-telemedicina/",
+  "scope": "/previews/app-telemedicina/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#f8f8fd",
+  "theme_color": "#ffffff",
+  "categories": [
+    "health",
+    "medical",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/app/icons/heart-192.png?v=13",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icons/heart-512.png?v=13",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "prefer_related_applications": false
+}
