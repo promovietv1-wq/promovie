@@ -170,45 +170,52 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 .inner-image.photo-psych img{object-position:center 43%}
 @media(max-width:350px){.bottom{padding-inline:7px}.tab{font-size:9.5px;letter-spacing:-.03em}}
 
-/* PromoVie: navegação nos três cartões da tela inicial, sem barra inferior */
-.page{padding-bottom:calc(35px + env(safe-area-inset-bottom))}
-.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;align-items:stretch;margin-top:15px}
-.tile{min-height:186px;border-radius:22px;padding:18px 13px 22px;box-shadow:0 7px 22px rgba(80,50,130,.045);transition:transform .2s ease,box-shadow .2s ease}
-.tile:hover{transform:translateY(-2px);box-shadow:0 11px 26px rgba(83,56,131,.09)}
-.tile-icon{height:43px;width:43px;margin-bottom:13px}
-.tile-icon svg{height:24px;width:24px}
-.tile h2{margin:0 0 8px;font-family:var(--font-display);font-size:clamp(12px,2.75vw,20px);font-weight:700;line-height:1.3;letter-spacing:-.038em;white-space:normal;overflow-wrap:break-word;hyphens:auto}
-.tile h2 .word-half{display:inline}
-.tile p{max-width:none;margin:0;padding-right:2px;font-size:clamp(10.5px,1.9vw,13px);line-height:1.5;color:#797493}
-.tile-arrow{right:11px;bottom:10px}
-.tile-arrow svg{width:17px;height:17px}
-.tile.psychology{background:linear-gradient(145deg,#faf9ff,#f0f3ff 70%,#fff);border-color:#e5e6fb;box-shadow:0 7px 22px rgba(90,94,173,.05)}
-.tile.psychology::before{background:rgba(173,176,247,.13)}
-.tile.psychology .tile-icon{background:#e9edff;color:#6a67d9}
-.tile.psychology .tile-arrow{color:#7777d9}
-.tile.care .tile-arrow{color:#19b7e0}
-@media(max-width:530px){
-  .tiles{gap:8px;margin-top:14px}
-  .tile{min-height:180px;padding:15px 9px 20px;border-radius:19px}
-  .tile-icon{width:39px;height:39px;margin-bottom:12px}
-  .tile-icon svg{width:22px;height:22px}
-  .tile h2{font-size:clamp(11.8px,3.05vw,15px);letter-spacing:-.055em}
-  .tile h2 .word-half{display:block}
-  .tile p{font-size:clamp(10.5px,2.65vw,12.5px);line-height:1.38}
-  .tile-arrow{right:6px;bottom:7px}
+/* Navegação pelos cartões: 2 serviços principais + Autocuidado em faixa inteira. */
+.page{padding-bottom:calc(38px + env(safe-area-inset-bottom))}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px;align-items:stretch}
+.tile{min-width:0;min-height:180px;display:flex;flex-direction:column;align-items:flex-start;position:relative;
+  padding:19px 17px 24px;border-radius:22px;border:1px solid #e8e3fa;
+  background:linear-gradient(145deg,#fcfaff,#f5f2ff 70%,#fff);
+  box-shadow:0 8px 22px rgba(71,39,119,.045);transition:transform .18s ease,box-shadow .18s ease;
 }
-@media(max-width:380px){
-  .tiles{gap:7px;margin-top:12px}
-  .tile{min-height:174px;padding:14px 7px 19px;border-radius:17px}
-  .tile-icon{height:38px;width:38px;margin-bottom:11px}
-  .tile h2{font-size:clamp(11px,3.3vw,13px);letter-spacing:-.065em;line-height:1.3}
-  .tile p{font-size:10.5px;line-height:1.39}
+.tile:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(74,45,119,.09)}
+.tile-icon{height:47px;width:47px;display:grid;place-items:center;flex:0 0 47px;margin-bottom:15px;border-radius:50%;background:#eee7fd;color:#7044db}
+.tile-icon svg{width:25px;height:25px}
+.tile h2{font-family:var(--font-display);font-size:clamp(14px,3.8vw,21px);line-height:1.3;letter-spacing:-.04em;font-weight:700;margin:0 0 8px;hyphens:none;overflow-wrap:normal;word-break:normal;white-space:normal}
+.tile p{margin:0;padding:0 18px 0 0;font-size:13px;line-height:1.48;color:#777493;max-width:none}
+.tile-arrow{position:absolute;right:14px;bottom:14px;color:#7d50d0}
+.tile-arrow svg{width:19px;height:19px}
+.tile.psychology{border-color:#e2e8f7;background:linear-gradient(145deg,#fbfbff,#f2f5ff 72%,#fff);box-shadow:0 8px 22px rgba(79,79,155,.04)}
+.tile.psychology::before{background:rgba(166,178,250,.12)}
+.tile.psychology .tile-icon{background:#e9ecff;color:#6866d6}
+.tile.psychology .tile-arrow{color:#7870d5}
+.tile.care{grid-column:1/-1;min-height:105px;padding:18px 20px;
+  display:flex;flex-direction:row;align-items:center;gap:17px;
+  border-color:#dceef6;background:linear-gradient(120deg,#f9fdff,#eefaff 75%,#fff);
 }
-@media(max-width:330px){
-  .tiles{gap:6px}
-  .tile{padding-inline:6px}
-  .tile h2{font-size:10.6px}
-  .tile p{font-size:10px}
+.tile.care .tile-icon{width:54px;height:54px;flex:0 0 54px;margin:0;background:#e0f5fb;color:#0ba6d0}
+.tile.care .tile-copy{display:block;flex:1;min-width:0}
+.tile.care h2{font-size:clamp(18px,4.8vw,23px);margin:0 0 4px}
+.tile.care p{font-size:13px;color:#718ea0;padding:0}
+.tile.care .tile-arrow{position:static;flex:0 0 22px;display:grid;place-items:center;color:#11a8d7}
+@media(max-width:420px){
+ .tiles{gap:10px;margin-top:14px}
+ .tile{min-height:178px;padding:17px 12px 23px;border-radius:20px}
+ .tile-icon{width:43px;height:43px;flex-basis:43px;margin-bottom:15px}
+ .tile h2{font-size:clamp(13px,3.6vw,16px);letter-spacing:-.05em}
+ .tile p{font-size:12.5px;line-height:1.45}
+ .tile-arrow{right:10px;bottom:11px}
+ .tile.care{padding:17px 16px;min-height:100px;gap:13px}
+ .tile.care .tile-icon{width:49px;height:49px;flex-basis:49px}
+ .tile.care h2{font-size:19px}
+}
+@media(max-width:355px){
+ .tiles{gap:8px}
+ .tile{padding:15px 10px 22px}
+ .tile h2{font-size:12.5px;letter-spacing:-.055em}
+ .tile p{font-size:11.7px}
+ .tile.care h2{font-size:17px}
+ .tile.care p{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.tile{transition:none}.tile:hover{transform:none}}
 
@@ -260,14 +267,13 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
     </a>
     <a class="tile psychology" href="#psicologia" aria-label="Abrir Telepsicologia">
       <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4c4.3 0 7.6 3.2 7.6 7.1 0 3.1-2.1 5.3l-.7 3-2.9-2.1c-3.9-.1-6.9-3-6.9-6.4 0-3.9 3.5-7.1 7.7-7.1Z"/><path d="M8.9 10.8h6.2m-6.2 3h4.3"/></svg></span>
-      <h2>Tele<span class="word-half">psicologia</span></h2>
+      <h2>Telepsicologia</h2>
       <p>Escuta e acolhimento.</p>
       <span class="tile-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5.3 6.7 6.7-6.7 6.7"/></svg></span>
     </a>
     <a class="tile care" href="#voce" aria-label="Abrir Autocuidado">
       <span class="tile-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2C5 17.3 6.3 10.7 12 3.4c5.7 7.3 7 13.9 0 16.8Z"/><path d="M12 20.2C5.9 21.5 2.2 17.6 2.2 12c4.1-.5 7.3 1 9.8 8.2Zm0 0c6.1 1.3 9.8-2.6 9.8-8.2-4.1-.5-7.3 1-9.8 8.2Z"/></svg></span>
-      <h2>Autocuidado</h2>
-      <p>Bem-estar todo dia.</p>
+      <span class="tile-copy"><h2>Autocuidado</h2><p>Orientações para viver melhor.</p></span>
       <span class="tile-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5.3 6.7 6.7-6.7 6.7"/></svg></span>
     </a>
   </div>
