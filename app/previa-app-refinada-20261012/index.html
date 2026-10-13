@@ -292,24 +292,97 @@ body{font-size:16px;background:var(--bg);color:var(--ink)}
  .careLearnMore{font-size:12px}
  .headerTag{font-size:10px}
 }
+
+/* Refinamento editorial: restaurar a assinatura visual aprovada da marca */
+.appHeaderInner{min-height:67px}
+.appLogo img{width:118px}
+.headerTag{font-size:11px;letter-spacing:0;color:#5b3d80;background:transparent;border:0;padding:6px 0}
+.headerTag .dot{width:5px;height:5px}
+.pageMain{padding-top:18px}
+.welcome{
+ position:relative;isolation:isolate;overflow:hidden;min-height:170px;
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ background:linear-gradient(108deg,#fff 6%,#fbf9ff 58%,#f3f8ff 100%);
+ border:1px solid #e9e7f3;border-radius:23px;
+ padding:18px 24px 18px 27px;margin:0 0 18px;
+ box-shadow:0 6px 20px rgba(55,35,105,.045);
+}
+.welcomeCopy{position:relative;z-index:1;min-width:0;flex:1}
+.welcome .hello{font-size:11px;line-height:1.25;letter-spacing:.105em;font-weight:820;color:#7043a9;margin:0 0 12px}
+.welcome h1{font-size:clamp(34px,5vw,45px);line-height:1.07;letter-spacing:-.045em;color:#1f2141;margin:0 0 11px;font-weight:870}
+.welcome h1 span{background:linear-gradient(105deg,#6820b4,#8134d9 62%,#078fc3);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.welcomeSub{font-size:15.5px;line-height:1.35;font-weight:620;letter-spacing:-.01em;color:#57556e;margin:0}
+.welcomeBrand{position:relative;flex:0 0 clamp(104px,15vw,134px);width:clamp(104px,15vw,134px);display:flex;align-items:center;justify-content:center}
+.welcomeBrand img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;transform:none;filter:drop-shadow(0 5px 8px rgba(103,57,175,.075))}
+.group{background:#fff;padding-top:23px;padding-bottom:22px}
+.group h2{font-weight:850}
+.groupDesc{font-size:15px;line-height:1.52}
+.careTile{box-shadow:none}
+.careTile:hover{box-shadow:0 6px 18px rgba(62,36,108,.075)}
+.careTileInteractive{min-height:190px}
+.careTileImage{min-height:190px}
+.careTileImage:after{background:linear-gradient(to top,rgba(18,12,58,.08),transparent 35%)}
+.careBadge{width:31px;height:31px;bottom:11px;left:11px}
+.careTile.informational .careBadge svg{fill:none;stroke:currentColor;stroke-width:1.9}
+.careTileText{padding:16px 12px 0 13px;justify-content:center}
+.careTileText h3{color:#422e61;font-weight:790;font-size:17px;line-height:1.26;letter-spacing:-.024em;overflow-wrap:normal;hyphens:auto;word-break:normal}
+.careTileText p{font-size:14px;line-height:1.42;color:#5a5e71}
+.careLearnMore{padding:7px 12px 15px 13px;font-size:12px;color:#6336a1;letter-spacing:0}
+.action{font-weight:800;font-size:16px}
+.groupNotice{font-size:12.5px;line-height:1.5}
+.moreInfo{font-size:12.5px}
+.appTabItem{color:#666477;font-size:12px}
+.careDetailBody{font-size:16px}
+@media(min-width:900px){
+ .welcome{min-height:177px}
+ .careTileInteractive,.careTileImage{min-height:196px}
+}
+@media(max-width:650px){
+ .pageMain{padding-top:13px}
+ .welcome{border-radius:20px;padding:19px 14px 19px 18px;min-height:151px;margin-bottom:15px}
+ .welcome .hello{font-size:10px;letter-spacing:.065em;margin-bottom:10px}
+ .welcome h1{font-size:clamp(32px,8.8vw,39px);margin-bottom:9px}
+ .welcomeSub{font-size:14px;line-height:1.35}
+ .welcomeBrand{width:clamp(106px,32vw,126px);flex-basis:clamp(106px,32vw,126px);margin-right:0}
+ .group{padding:19px 14px 19px;margin-bottom:15px}
+ .groupDesc{font-size:15px;margin-top:13px;margin-bottom:16px}
+ .careTiles{gap:12px}
+ .careTileInteractive,.careTileImage{min-height:190px}
+ .careTileText{padding:15px 11px 0 12px}
+ .careTileText h3{font-size:16.5px;line-height:1.25}
+ .careTileText p{font-size:14px;line-height:1.42}
+ .careLearnMore{padding:5px 11px 13px 12px;font-size:12px}
+ .appTabItem{font-size:12px}
+}
+@media(max-width:370px){
+ .welcome{padding-left:13px;padding-right:10px;gap:4px}
+ .welcomeBrand{width:103px;flex-basis:103px}
+ .welcome h1{font-size:32px}
+ .welcomeSub{font-size:13.5px}
+ .welcome .hello{font-size:9.5px}
+ .careTileText h3{font-size:15.6px}
+ .careTileText p{font-size:13.5px}
+}
 </style>
 </head>
 <body id="inicio">
 <header class="appHeader">
 <div class="appLayout appHeaderInner">
 <a class="appLogo" href="/app/previa-app-refinada-20261012/" aria-label="PromoVie, tela inicial"><img src="/preview-promovie-logo.webp" alt="PromoVie" onerror="this.hidden=true;this.nextElementSibling.hidden=false"/><span class="appLogoText" hidden>PromoVie</span></a>
-<span class="headerTag"><span class="dot"></span>Saúde e cuidado</span>
+<span class="headerTag"><span class="dot"></span>Seu espaço de saúde</span>
 </div>
 </header>
 <main class="appLayout pageMain">
 <section class="welcome" aria-labelledby="welcomeTitle">
-<div><p class="hello">Bem-vindo à PromoVie</p><h1 id="welcomeTitle">Sua saúde, <span>mais perto.</span></h1></div>
-<div class="welcomeMini" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></div>
-</section>
-<div class="hintBar">
-<span class="hintMark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4.2v5.5c0 5-2.7 8.3-8 10.3-5.3-2-8-5.3-8-10.3V6.2Z"/><path d="m8.5 12 2.4 2.4 4.7-5.1"/></svg></span>
-<div><strong>TeleSaúde PromoVie</strong><p>Encontre atendimentos e orientações em um só lugar.</p></div>
+<div class="welcomeCopy">
+<p class="hello">PROMOVIE · SAÚDE E BEM-ESTAR</p>
+<h1 id="welcomeTitle">Olá, <span>Vida!</span></h1>
+<p class="welcomeSub">Telemedicina e Autocuidado</p>
 </div>
+<div class="welcomeBrand">
+<img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" width="240" height="240" alt="Coração PromoVie com a logomarca" fetchpriority="high" decoding="async"/>
+</div>
+</section>
 <section class="group professionalGroup" id="consultas" aria-labelledby="titleConsultas">
 <div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg></span><div><p class="headingMeta">Atendimentos profissionais</p><h2 id="titleConsultas">Telemedicina</h2></div></div>
 <p class="groupDesc">Conheça as especialidades e encontre o acesso à telemedicina logo abaixo.</p>
@@ -334,7 +407,7 @@ body{font-size:16px;background:var(--bg);color:var(--ink)}
 </div></article>
 <article class="careTile professional" role="listitem" aria-label="Médico da Família"><div class="careTileInteractive">
 
-  <div class="careTileImage"><img src="https://images.pexels.com/photos/4266936/pexels-photo-4266936.jpeg?auto=compress&amp;dpr=1&amp;h=750&amp;w=1260" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
+  <div class="careTileImage"><img src="https://images.pexels.com/photos/4266936/pexels-photo-4266936.jpeg?auto=compress&amp;dpr=1&amp;w=480&amp;h=288&amp;fit=crop&amp;q=72" alt="" loading="lazy" decoding="async" onerror="this.hidden=true"/>
     <span class="careBadge" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.5c0 4.5-8.8 10.1-8.8 10.1S3.2 13 3.2 8.5a4.7 4.7 0 0 1 8.8-2.3 4.7 4.7 0 0 1 8.8 2.3Z"/></svg></span>
   </div>
   <div class="careTileText"><h3>Médico da Família</h3><p>Consulta médica online</p></div>
@@ -355,7 +428,7 @@ body{font-size:16px;background:var(--bg);color:var(--ink)}
 <p class="groupNotice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4.2v5.5c0 5-2.7 8.3-8 10.3-5.3-2-8-5.3-8-10.3V6.2Z"/><path d="m8.5 12 2.4 2.4 4.7-5.1"/></svg><span>O portal de telemedicina está em preparação. Nossa equipe pode orientar você enquanto isso.</span></p>
 </section>
 <section class="group infoGroup" id="acolhimento" aria-labelledby="titleInfo">
-<div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span><div><p class="headingMeta">Acolhimento e informações</p><h2 id="titleInfo">Orientações e cuidado</h2></div></div>
+<div class="groupTop"><span class="groupSymbol" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg></span><div><p class="headingMeta">Acolhimento e informações</p><h2 id="titleInfo">Orientação e Autocuidado</h2></div></div>
 <p class="groupDesc">Conheça as áreas de cuidado e orientação disponíveis.</p>
 <div class="careTiles" role="list" aria-label="Áreas de orientação e acolhimento">
 <article class="careTile informational" role="listitem" aria-label="Nutrição"><div class="careTileInteractive">
@@ -403,7 +476,7 @@ body{font-size:16px;background:var(--bg);color:var(--ink)}
 <nav class="appTabBar" aria-label="Navegação principal">
 <a class="appTabItem is-active" href="#inicio" data-section="inicio" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.8 10.5 8.2-6.9 8.2 6.9v9H5.5v-9"/><path d="M9.5 19.5v-6.4h5v6.4"/></svg><span>Início</span></a>
 <a class="appTabItem" href="#consultas" data-section="consultas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.3" y="4.1" width="17.4" height="15.1" rx="3.2"/><path d="M12 7.7v7.8M8.1 11.6h7.8"/></svg><span>Telemedicina</span></a>
-<a class="appTabItem" href="#acolhimento" data-section="acolhimento"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg><span>Acolhimento</span></a>
+<a class="appTabItem" href="#acolhimento" data-section="acolhimento"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 9.2c0 5.1-8.5 10.2-8.5 10.2S3.5 14.3 3.5 9.2a4.8 4.8 0 0 1 8.5-3.1 4.8 4.8 0 0 1 8.5 3.1Z"/></svg><span>Autocuidado</span></a>
 </nav>
 <dialog class="careDetailDialog" id="careDetailDialog" aria-labelledby="careDetailTitle" aria-describedby="careDetailBody">
   <div class="careDetailSurface">
