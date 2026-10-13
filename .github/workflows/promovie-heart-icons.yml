@@ -30,20 +30,29 @@ jobs:
           from pathlib import Path
           source=Image.open("app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp").convert("RGBA")
           out=Path("app/icons")
-          for size in (192, 512):
-              canvas=Image.new("RGB",(size,size),"#FFFFFF")
-              mark=source.copy()
-              padding=12 if size==192 else 33
+          for size in (32, 48, 180, 192, 512):
+              padding={32:1,48:2,180:10,192:12,512:33}[size]
+              canvas=Image.new("RGBA",(size,size),"#FFFFFF")
               mark=source.resize((size-padding*2,size-padding*2),Image.Resampling.LANCZOS)
-              canvas.paste(mark,((size-mark.width)//2,(size-mark.height)//2),mark)
-              canvas.save(out/f"heart-{size}.png",format="PNG",optimize=True)
+              canvas.alpha_composite(mark,(padding,padding))
+              image=canvas.convert("RGB")
+              if size in (192,512):
+                  image.save(out/f"heart-{size}.png",format="PNG",optimize=True)
+                  image.save(out/f"icon-{size}.png",format="PNG",optimize=True)
+              elif size==180:
+                  image.save(out/"apple-touch-180.png",format="PNG",optimize=True)
+              else:
+                  image.save(out/f"favicon-{size}.png",format="PNG",optimize=True)
+          source.resize((64,64),Image.Resampling.LANCZOS).convert("RGB").save(
+              out/"favicon.ico",format="ICO",sizes=[(16,16),(32,32),(48,48)]
+          )
           PY
       - name: Commit icon assets
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/icons/heart-192.png app/icons/heart-512.png
+          git add app/icons/heart-192.png app/icons/heart-512.png app/icons/icon-192.png app/icons/icon-512.png app/icons/favicon-32.png app/icons/favicon-48.png app/icons/favicon.ico app/icons/apple-touch-180.png
           if git diff --staged --quiet; then
             echo "No changes"
           else
