@@ -2636,6 +2636,83 @@ footer{
 }
 @media(prefers-reduced-motion:reduce){.top .pvBrandSwitchWrap > .pvGlobeSwitch{transition:none !important;}}
 </style>
+<style id="pv-twelve-preview-styles">
+/* Um unico link: 12 capas 16:9 sem botoes individuais, play central no hover. */
+a.portfolioVisual.pvTwelveVisual{
+  position:relative;isolation:isolate;display:flex !important;
+  flex-direction:column;justify-content:flex-start !important;align-items:stretch;
+  width:100%;max-width:540px;margin-inline:auto;
+  min-height:0 !important;height:auto !important;aspect-ratio:486/400;
+  padding:16px 19px !important;
+  color:inherit;text-decoration:none;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:box-shadow .3s ease,filter .3s ease;
+}
+a.portfolioVisual.pvTwelveVisual::before{inset:12px;z-index:4;pointer-events:none}
+a.portfolioVisual.pvTwelveVisual::after{opacity:.58;z-index:1;pointer-events:none}
+a.portfolioVisual.pvTwelveVisual .pvTwelveGrid{
+  position:relative !important;top:auto !important;right:auto !important;
+  bottom:auto !important;left:auto !important;inset:auto !important;
+  z-index:5 !important;display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  grid-template-rows:repeat(4,auto) !important;
+  gap:9px !important;
+  min-width:0;width:100%;height:auto !important;
+  margin:0 !important;padding:0 !important;
+  align-content:start;align-items:start;justify-content:center;
+}
+.pvTwelveVisual .pvTwelveShot{
+  display:block;position:relative;min-width:0;width:100%;height:auto !important;
+  aspect-ratio:16/9 !important;overflow:hidden;margin:0;padding:0;
+  border:1px solid rgba(255,255,255,.54);border-radius:11px;
+  background:#271739;box-shadow:0 6px 15px rgba(7,4,25,.31),0 0 0 1px rgba(137,96,211,.12);
+  transform:none !important;pointer-events:none;
+}
+.pvTwelveVisual .pvTwelveShot img{
+  display:block;width:100%;height:100%;object-fit:contain !important;object-position:center;
+  filter:none !important;pointer-events:none;
+}
+.pvTwelveVisual .pvTwelveShot::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(180deg,rgba(26,9,54,.02),rgba(31,12,58,.10));
+}
+.pvTwelveVisual .pvTwelveGrid::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:6;border-radius:10px;
+  background:linear-gradient(135deg,rgba(49,10,103,.10),rgba(27,4,60,.48));
+  opacity:0;transition:opacity .28s ease;
+}
+.pvTwelveCentralPlay{
+  position:absolute;z-index:7;top:50%;left:50%;
+  display:grid;place-items:center;width:76px;height:76px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.84);
+  background:rgba(255,255,255,.96);color:#552099;
+  box-shadow:0 14px 42px rgba(10,5,33,.3),0 0 0 11px rgba(255,255,255,.12);
+  opacity:0;transform:translate(-50%,-50%) scale(.84);
+  transition:opacity .28s ease,transform .28s ease;pointer-events:none;
+}
+.pvTwelveCentralPlay svg{display:block;width:32px;height:32px;margin-left:5px}
+@media(hover:hover) and (pointer:fine){
+  a.pvTwelveVisual:hover .pvTwelveGrid::after{opacity:1}
+  a.pvTwelveVisual:hover .pvTwelveCentralPlay{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+a.pvTwelveVisual:focus-visible{outline:3px solid #49c9ff;outline-offset:4px}
+a.pvTwelveVisual:focus-visible .pvTwelveGrid::after{opacity:1}
+a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translate(-50%,-50%) scale(1)}
+@media(hover:none), (pointer:coarse){
+  .pvTwelveCentralPlay{opacity:.92;transform:translate(-50%,-50%) scale(.72);box-shadow:0 10px 22px rgba(10,5,33,.30)}
+}
+@media(max-width:620px){
+  a.portfolioVisual.pvTwelveVisual{min-height:0 !important;aspect-ratio:486/400;max-width:100%;padding:13px 12px !important}
+  a.portfolioVisual.pvTwelveVisual::before{inset:8px;border-radius:15px}
+  a.portfolioVisual.pvTwelveVisual .pvTwelveGrid{gap:6px !important}
+  .pvTwelveVisual .pvTwelveShot{border-radius:7px}
+  .pvTwelveCentralPlay{width:64px;height:64px}
+  .pvTwelveCentralPlay svg{width:29px;height:29px}
+}
+@media(prefers-reduced-motion:reduce){
+  .pvTwelveCentralPlay,.pvTwelveGrid::after,a.pvTwelveVisual{transition:none !important}
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -2687,7 +2764,23 @@ footer{
 <h2>Referências que mostram repertório, <span class="grad">linguagem e possibilidades.</span></h2>
 <p>Para empresas, instituições, pessoas e projetos.</p>
 </div>
-<div class="portfolioVisual"><span aria-hidden="true" class="portfolioSheen"></span><div aria-hidden="true" class="cinemaStrip top"></div><div class="portfolioScene coversScene"><div class="portfolioMainShot coverShot"><img alt="Capa de trabalho audiovisual da PromoVie" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade" src="https://static.wixstatic.com/media/279d86_04d9ad78439146a493b337649c677375f000.jpg"/></div><div class="portfolioMidShot coverShot"><img alt="Capa de produção audiovisual da PromoVie" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade" src="https://static.wixstatic.com/media/279d86_16fcb030b0194459873fad99794539f5f000.jpg"/></div><div class="portfolioSideShot coverShot"><img alt="Capa de audiovisual estratégico da PromoVie" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade" src="https://static.wixstatic.com/media/279d86_b6bf2a5e1cf84b2a9631b36297e848e5f000.jpg"/></div></div><div aria-hidden="true" class="cinemaStrip bottom"></div><a aria-label="Ver portfólio audiovisual da PromoVie" class="portfolioVisualCta" href="/audiovisual/" target="_self"><span>Ver portfólio</span><b aria-hidden="true">↗</b></a></div>
+<a class="portfolioVisual pvTwelveVisual" href="/audiovisual/" aria-label="Abrir portfólio audiovisual da PromoVie">
+<div class="portfolioScene pvTwelveGrid" aria-hidden="true">
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_5011af2c37384593abd3a3f527c9fc6cf000.jpg" alt="Casal contemplando montanhas" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_378b44cd000744c885f8aca3764354acf000.jpg" alt="Vista aérea de uma cidade" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_7394c13b1ce042238067d5d2f110206af000.jpg" alt="Profissional de saúde utilizando tecnologia" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_d3fb26bac96941fcaf744db10fd5c7f3f000.jpg" alt="Animação digital com globo luminoso" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_934972d888914e0084717b16d323d9baf000.jpg" alt="Cena de gastronomia" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_0a4ba0d1edf3499f93c3fe9e05c28af0f000.jpg" alt="Pessoa praticando atividade física" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_f10107123387469ebb6b5e1033d9d0fef000.jpg" alt="Pessoas em um ambiente natural" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_83e6af0b2f1340dc8b187560d510bcb4f000.jpg" alt="Atendimento odontológico" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_b19d1e26efcc4ec8bc03e0c955f17da2f000.jpg" alt="Animação em rosa e dourado" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_795db9cf31c647c48406b5de3d46743df000.jpg" alt="Animação do planeta Terra" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_320fa19d96e2483bb1e1cffe078e90bdf000.jpg" alt="Arquitetura contemporânea" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<div class="pvTwelveShot"><img src="https://static.wixstatic.com/media/279d86_e124e167a05042c4b7d2a2a16c3c61d0f000.jpg" alt="Identidade visual em tons de azul" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></div>
+<span class="pvTwelveCentralPlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 4.75c0-.81.88-1.31 1.58-.9l11.04 6.97a1.4 1.4 0 0 1 0 2.36L9.58 20.15A1.04 1.04 0 0 1 8 19.25V4.75Z" fill="currentColor"/></svg></span>
+</div>
+</a>
 </div>
 </div>
 </section><section class="soft" id="telessaude">
