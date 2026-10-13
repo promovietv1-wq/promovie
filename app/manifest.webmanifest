@@ -17,13 +17,19 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp",
-      "sizes": "240x240",
-      "type": "image/webp",
+      "src": "/app/icons/heart-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/app/icons/icon.svg?v=8",
+      "src": "/app/icons/heart-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icons/icon.svg?v=9",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -37,9 +43,9 @@
       "url": "/app/telemedicina/",
       "icons": [
         {
-          "src": "/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp",
-          "sizes": "240x240",
-          "type": "image/webp"
+          "src": "/app/icons/heart-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     }
