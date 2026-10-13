@@ -3193,7 +3193,7 @@ body.appPage::before{
     font-size:14px;
   }
 }
-@media(max-width:349px){
+@media(max-width:389px){
   .appPage.pvEditorialCards44 #consultas .pvAccessFrame > .groupCards,
   .appPage.pvEditorialCards44 #acolhimento .pvAccessFrame > .groupCards{
     grid-template-columns:minmax(0,1fr);
