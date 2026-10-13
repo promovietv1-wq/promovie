@@ -242,38 +242,48 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 }
 
 
-/* Autocuidado: cartão diferenciado, alinhamento e texto centralizados. */
-.tile.care{grid-column:1/-1;position:relative;isolation:isolate;display:flex;flex-direction:column;
- align-items:center;justify-content:center;text-align:center;gap:0;min-height:174px;
- padding:20px 38px 17px;border:1.5px solid transparent;border-radius:25px;
- background:linear-gradient(115deg,#faf7ff,#f2f8ff 50%,#edfbff) padding-box,
- linear-gradient(110deg,rgba(160,115,228,.7),rgba(102,204,233,.82)) border-box;
- box-shadow:0 12px 30px rgba(73,67,145,.085)}
-.tile.care::before{width:180px;height:180px;left:-80px;top:-95px;right:auto;
- background:radial-gradient(circle,rgba(147,105,226,.19),transparent 72%);pointer-events:none}
-.tile.care .tile-icon{width:58px;height:54px;flex:0 0 54px;display:grid;place-items:center;
- margin:0 auto 5px;border:0;border-radius:0;background:transparent;color:inherit}
-.tile.care .tile-icon img{display:block;width:58px;height:54px;object-fit:contain;
- filter:drop-shadow(0 4px 8px rgba(83,53,150,.07))}
-.tile.care .tile-copy{display:flex;flex-direction:column;align-items:center;justify-content:center;
- width:100%;max-width:350px;min-width:0;flex:none;gap:4px;text-align:center}
-.tile.care h2{width:100%;margin:0;text-align:center;font-size:clamp(19px,4.8vw,23px);
- font-weight:700;line-height:1.28}
-.tile.care p{width:100%;margin:0;padding:0;text-align:center;color:#687d95;
- font-size:13px;line-height:1.48}
-.tile.care .tile-arrow{position:absolute;right:16px;top:50%;bottom:auto;
- transform:translateY(-50%);width:31px;height:31px;display:grid;place-items:center;
- flex:0 0 31px;border:1px solid rgba(106,183,217,.19);border-radius:50%;
- background:rgba(255,255,255,.76);color:#0e9ac4}
-.tile.care .tile-arrow svg{width:17px;height:17px}
-@media(max-width:420px){
- .tile.care{min-height:168px;padding:18px 35px 16px;border-radius:23px}
- .tile.care .tile-icon{width:54px;height:50px;flex-basis:50px}
- .tile.care .tile-icon img{width:54px;height:50px}
- .tile.care h2{font-size:20px}
- .tile.care p{font-size:12.5px}
- .tile.care .tile-arrow{right:11px;width:27px;height:27px}
+/* Botão independente de autocuidado: cápsula discreta, não terceiro cartão. */
+.care-launch{display:flex;justify-content:center;margin:20px auto 10px;padding:0 7px}
+.care-launch-button{
+ position:relative;display:flex;align-items:center;justify-content:center;
+ width:min(100%,350px);min-height:78px;padding:13px 57px;
+ border:1.5px solid transparent;border-radius:999px;
+ background:linear-gradient(#fff,#fff) padding-box,
+            linear-gradient(112deg,rgba(133,73,213,.62),rgba(0,179,225,.68)) border-box;
+ box-shadow:0 8px 22px rgba(67,45,140,.075),inset 0 1px 0 rgba(255,255,255,.86);
+ transition:transform .2s ease,box-shadow .2s ease;
 }
+.care-launch-button:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(67,45,140,.12)}
+.care-launch-button:active{transform:translateY(0)}
+.care-launch-symbol{
+ position:absolute;left:12px;top:50%;transform:translateY(-50%);
+ width:45px;height:45px;display:grid;place-items:center;border-radius:50%;
+ background:linear-gradient(140deg,#f6f0ff,#ecfaff);
+}
+.care-launch-symbol img{display:block;width:39px;height:39px;object-fit:contain}
+.care-launch-label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:100%;text-align:center}
+.care-launch-label strong{
+ display:block;font-family:var(--font-display);font-size:17px;line-height:1.35;font-weight:700;
+ letter-spacing:-.045em;text-align:center;background:linear-gradient(112deg,#4b0c8f 5%,#7334d8 60%,#00a5cc 100%);
+ background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.care-launch-label small{display:block;white-space:nowrap;font-size:11px;color:#79819b;line-height:1.4}
+.care-launch-next{
+ position:absolute;right:15px;top:50%;transform:translateY(-50%);
+ display:grid;place-items:center;color:#14a7cc;
+}
+.care-launch-next svg{width:18px;height:18px;stroke-width:2}
+@media(max-width:380px){
+ .care-launch{margin-top:16px}
+ .care-launch-button{width:min(100%,315px);min-height:76px;padding-inline:54px}
+ .care-launch-symbol{left:9px;width:42px;height:42px}
+ .care-launch-symbol img{width:37px;height:37px}
+ .care-launch-label strong{font-size:16px}
+ .care-launch-label small{font-size:10.5px}
+ .care-launch-next{right:11px}
+}
+@media(forced-colors:active){.care-launch-label strong{background:none;-webkit-text-fill-color:CanvasText}}
+@media(prefers-reduced-motion:reduce){.care-launch-button{transition:none}.care-launch-button:hover{transform:none}}
 
 </style>
 </head>
@@ -304,10 +314,13 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
       <p>Escuta e acolhimento.</p>
       <span class="tile-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5.3 6.7 6.7-6.7 6.7"/></svg></span>
     </a>
-    <a class="tile care" href="#voce" aria-label="Abrir Autocuidado">
-      <span class="tile-icon"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="" width="54" height="54" loading="lazy"></span>
-      <span class="tile-copy"><h2>Autocuidado</h2><p>Orientações para viver melhor.</p></span>
-      <span class="tile-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5.3 6.7 6.7-6.7 6.7"/></svg></span>
+
+  </div>
+  <div class="care-launch">
+    <a class="care-launch-button" href="#voce" aria-label="Abrir Autocuidado">
+      <span class="care-launch-symbol"><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" width="44" height="44" alt="" loading="lazy" decoding="async"></span>
+      <span class="care-launch-label"><strong>Autocuidado</strong><small>Seu espaço de bem-estar</small></span>
+      <span class="care-launch-next" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8.5 5.3 6.7 6.7-6.7 6.7"/></svg></span>
     </a>
   </div>
 </section>
