@@ -41,9 +41,9 @@ jobs:
               pats={
                 "wix_video_files":r"https?://video[.]wixstatic[.]com/video/[a-zA-Z0-9_./?=&%-]+",
                 "wix_media_video_ids":r"(?:wix:video://v1/|video/)[a-zA-Z0-9_-]{15,}",
-                "mp4_refs":r"https?://[^\s\\"'<>]+[.]mp4(?:\?[^\s\\"'<>]+)?",
+    "mp4_refs":r"https?://[^\s<>]+[.]mp4",
                 "wix_poster_files":r"https?://static[.]wixstatic[.]com/media/[a-zA-Z0-9_~./?=&%-]+",
-                "youtube_vimeo":r"https?://(?:www[.])?(?:youtube[.]com|youtu[.]be|vimeo[.]com)/[^\s\\"'<>]+",
+    "youtube_vimeo":r"https?://(?:www[.])?(?:youtube[.]com|youtu[.]be|vimeo[.]com)/[^\s<>]+",
               }
               for key,pattern in pats.items():
                 vals=[]
