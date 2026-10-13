@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" name="viewport"/>
-<title>Prévia · Experiência com 9 vídeos iguais | PromoVie</title>
+<title>Prévia · Experiência com 12 vídeos | PromoVie</title>
 <meta name="robots" content="noindex,nofollow">
 
 
@@ -2637,77 +2637,68 @@ footer{
 }
 @media(prefers-reduced-motion:reduce){.top .pvBrandSwitchWrap > .pvGlobeSwitch{transition:none !important;}}
 </style>
-<style id="pv-nine-preview-styles">
-/* Nove capas 16:9 idênticas em grade 3x3. Mantém o tamanho do quadro roxo. */
-.portfolioVisual.pvNineVisual{
-  position:relative;isolation:isolate;display:flex !important;
-  flex-direction:column;align-items:stretch;justify-content:flex-start !important;
-  width:100%;max-width:540px;margin-inline:auto;padding:18px 21px 19px !important;
-  min-height:0 !important;height:auto !important;aspect-ratio:486/400;
-  gap:0 !important;
+<style id="pv-twelve-preview-styles">
+/* Prévia da Experiência: 12 miniaturas 16:9, iguais, com acesso direto ao audiovisual. */
+.portfolioVisual.pvTwelveVisual{
+ position:relative;isolation:isolate;display:flex !important;
+ flex-direction:column;justify-content:flex-start !important;align-items:stretch;
+ width:100%;max-width:540px;margin-inline:auto;
+ min-height:0 !important;height:auto !important;aspect-ratio:486/400;
+ padding:16px 19px 16px !important;
 }
-.portfolioVisual.pvNineVisual::before{inset:13px;z-index:4;pointer-events:none}
-.portfolioVisual.pvNineVisual::after{opacity:.62;z-index:1;pointer-events:none}
-.portfolioVisual.pvNineVisual .pvNineScene{
-  position:relative !important;inset:auto !important;top:auto !important;
-  right:auto !important;bottom:auto !important;left:auto !important;
-  display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-  grid-template-rows:repeat(3,auto) !important;gap:9px !important;
-  width:100%;height:auto !important;min-width:0;
-  align-content:start;align-items:start;justify-content:center;flex:none;
-  padding:0 !important;margin:0;z-index:5 !important;
+.portfolioVisual.pvTwelveVisual::before{inset:12px;z-index:4;pointer-events:none}
+.portfolioVisual.pvTwelveVisual::after{opacity:.58;z-index:1;pointer-events:none}
+.portfolioVisual.pvTwelveVisual .pvTwelveGrid{
+ position:relative !important;top:auto !important;right:auto !important;
+ bottom:auto !important;left:auto !important;inset:auto !important;
+ z-index:5 !important;
+ display:grid !important;
+ grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+ grid-template-rows:repeat(4,auto) !important;
+ gap:9px !important;
+ min-width:0;width:100%;height:auto !important;
+ margin:0 !important;padding:0 !important;
+ align-content:start;align-items:start;justify-content:center;
 }
-.portfolioVisual.pvNineVisual .pvNineShot{
-  position:relative;display:block;flex:none !important;min-width:0;
-  width:100%;height:auto !important;aspect-ratio:16/9 !important;
-  margin:0;padding:0;border:1px solid rgba(255,255,255,.50);
-  border-radius:11px !important;overflow:hidden;color:#fff;
-  background:linear-gradient(145deg,#211333,#36234e);
-  box-shadow:0 7px 15px rgba(7,5,29,.28),0 0 0 1px rgba(131,95,207,.11);
-  cursor:pointer;transform:none !important;outline-offset:3px;
-  transition:border-color .22s ease,box-shadow .22s ease,filter .22s ease;
-  -webkit-tap-highlight-color:transparent;
+.portfolioVisual.pvTwelveVisual .pvTwelveShot{
+ display:block;position:relative;min-width:0;width:100%;height:auto !important;
+ aspect-ratio:16/9 !important;overflow:hidden;
+ margin:0;padding:0;border:1px solid rgba(255,255,255,.54);
+ border-radius:11px;background:#271739;color:#fff;text-decoration:none;
+ box-shadow:0 6px 15px rgba(7,4,25,.31),0 0 0 1px rgba(137,96,211,.12);
+ cursor:pointer;transform:none !important;outline-offset:3px;
+ transition:border-color .22s ease,filter .22s ease,box-shadow .22s ease;
 }
-.portfolioVisual.pvNineVisual .pvNineShot img{
-  display:block;width:100%;height:100%;object-fit:contain !important;
-  object-position:center;filter:none;pointer-events:none;
+.pvTwelveShot img{
+ display:block;width:100%;height:100%;object-fit:contain !important;object-position:center;
+ filter:none !important;pointer-events:none;
 }
-.pvNineShot::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(21,8,40,.02),rgba(43,11,80,.12))}
-.pvNinePlay{
-  position:absolute;z-index:2;left:50%;top:50%;
-  display:grid;place-items:center;width:23px;height:23px;
-  border-radius:50%;transform:translate(-50%,-50%);
-  background:rgba(255,255,255,.9);color:#5923a0;
-  box-shadow:0 3px 10px rgba(0,0,0,.2);transition:background .22s;
+.pvTwelveShot::after{
+ content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+ background:linear-gradient(180deg,rgba(26,9,54,.02),rgba(31,12,58,.10));
 }
-.pvNinePlay svg{width:11px;height:11px;margin-left:1px}
+.pvTwelveArrow{
+ position:absolute;bottom:6px;right:6px;z-index:2;
+ width:21px;height:21px;border:1px solid rgba(255,255,255,.26);
+ display:grid;place-items:center;border-radius:7px;
+ background:rgba(255,255,255,.92);color:#57239c;
+ box-shadow:0 2px 8px rgba(12,6,28,.25);
+ font-size:15px;font-weight:800;line-height:1;
+ transition:background .2s,transform .2s;
+}
 @media(hover:hover) and (pointer:fine){
-  .pvNineShot:hover{border-color:#fff;box-shadow:0 12px 22px rgba(8,5,29,.36),0 0 0 2px rgba(255,255,255,.14);filter:brightness(1.09);}
-  .pvNineShot:hover .pvNinePlay{background:#fff}
+ .pvTwelveShot:hover{border-color:#fff;filter:brightness(1.07);box-shadow:0 10px 20px rgba(9,5,29,.39),0 0 0 2px rgba(255,255,255,.15)}
+ .pvTwelveShot:hover .pvTwelveArrow{background:#fff;transform:translate(1px,-1px)}
 }
-.pvNineShot:focus-visible{outline:3px solid #44c5f5}
-.portfolioVisual.pvNineVisual .portfolioVisualCta{
-  position:relative !important;left:auto !important;right:auto !important;
-  top:auto !important;bottom:auto !important;z-index:8;
-  align-self:center;flex-shrink:0;margin:auto auto 0 !important;
-  min-height:48px !important;padding:0 20px !important;transform:none !important;
-}
-.portfolioVisual.pvNineVisual .portfolioVisualCta:hover{transform:translateY(-2px) !important}
-.pvNineDialog{position:fixed;margin:auto;inset:0;max-width:min(920px,calc(100vw - 28px));width:100%;padding:12px;border:1px solid rgba(201,177,240,.38);border-radius:21px;background:#150d25;box-shadow:0 30px 100px rgba(0,0,0,.52);color:#fff}
-.pvNineDialog::backdrop{background:rgba(10,5,24,.85);backdrop-filter:blur(8px)}
-.pvNineDialogTop{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 4px 11px;font-size:.91rem;font-weight:750}
-.pvNineDialogClose{width:38px;height:38px;flex:0 0 38px;border:1px solid rgba(255,255,255,.25);border-radius:10px;background:#2b1e42;color:#fff;cursor:pointer;font-size:1.4rem}
-.pvNineDialog video{display:block;width:100%;aspect-ratio:16/9;max-height:74vh;object-fit:contain;background:#000;border-radius:12px}
+.pvTwelveShot:focus-visible{outline:3px solid #49c9ff}
 @media(max-width:620px){
-  .portfolioVisual.pvNineVisual{max-width:100%;min-height:310px !important;aspect-ratio:486/400;padding:14px 13px 15px !important}
-  .portfolioVisual.pvNineVisual::before{inset:9px;border-radius:15px}
-  .portfolioVisual.pvNineVisual .pvNineScene{grid-template-columns:repeat(3,minmax(0,1fr)) !important;grid-template-rows:repeat(3,auto) !important;gap:6px !important}
-  .portfolioVisual.pvNineVisual .pvNineShot{border-radius:7px !important}
-  .pvNinePlay{width:18px;height:18px}
-  .pvNinePlay svg{width:9px;height:9px}
-  .portfolioVisual.pvNineVisual .portfolioVisualCta{min-height:42px !important;padding:0 15px !important;font-size:.84rem !important}
+ .portfolioVisual.pvTwelveVisual{min-height:0 !important;aspect-ratio:486/400;max-width:100%;padding:13px 12px !important}
+ .portfolioVisual.pvTwelveVisual::before{inset:8px;border-radius:15px}
+ .portfolioVisual.pvTwelveVisual .pvTwelveGrid{gap:6px !important}
+ .portfolioVisual.pvTwelveVisual .pvTwelveShot{border-radius:7px}
+ .pvTwelveArrow{width:16px;height:16px;bottom:3px;right:3px;border-radius:5px;font-size:11px}
 }
-@media(prefers-reduced-motion:reduce){.pvNineShot,.pvNinePlay{transition:none !important}}
+@media(prefers-reduced-motion:reduce){.pvTwelveShot,.pvTwelveArrow{transition:none !important}}
 </style>
 </head>
 <body>
@@ -2760,46 +2751,57 @@ footer{
 <h2>Referências que mostram repertório, <span class="grad">linguagem e possibilidades.</span></h2>
 <p>Para empresas, instituições, pessoas e projetos.</p>
 </div>
-<div class="portfolioVisual pvNineVisual">
-<div class="portfolioScene pvNineScene" role="group" aria-label="Nove vídeos do portfólio audiovisual PromoVie, todos do mesmo tamanho">
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_5011af2c37384593abd3a3f527c9fc6c/1080p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_5011af2c37384593abd3a3f527c9fc6cf000.jpg" aria-label="Assistir vídeo 1 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_5011af2c37384593abd3a3f527c9fc6cf000.jpg" alt="Casal contemplando paisagem natural" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_378b44cd000744c885f8aca3764354ac/1080p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_378b44cd000744c885f8aca3764354acf000.jpg" aria-label="Assistir vídeo 2 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_378b44cd000744c885f8aca3764354acf000.jpg" alt="Vista aérea urbana" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_7394c13b1ce042238067d5d2f110206a/720p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_7394c13b1ce042238067d5d2f110206af000.jpg" aria-label="Assistir vídeo 3 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_7394c13b1ce042238067d5d2f110206af000.jpg" alt="Profissional de saúde e tecnologia" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_d3fb26bac96941fcaf744db10fd5c7f3/1080p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_d3fb26bac96941fcaf744db10fd5c7f3f000.jpg" aria-label="Assistir vídeo 4 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_d3fb26bac96941fcaf744db10fd5c7f3f000.jpg" alt="Animação digital do globo" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_934972d888914e0084717b16d323d9ba/1080p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_934972d888914e0084717b16d323d9baf000.jpg" aria-label="Assistir vídeo 5 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_934972d888914e0084717b16d323d9baf000.jpg" alt="Cena gastronômica" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_0a4ba0d1edf3499f93c3fe9e05c28af0/720p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_0a4ba0d1edf3499f93c3fe9e05c28af0f000.jpg" aria-label="Assistir vídeo 6 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_0a4ba0d1edf3499f93c3fe9e05c28af0f000.jpg" alt="Movimento e atividade física" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_f10107123387469ebb6b5e1033d9d0fe/1080p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_f10107123387469ebb6b5e1033d9d0fef000.jpg" aria-label="Assistir vídeo 7 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_f10107123387469ebb6b5e1033d9d0fef000.jpg" alt="Pessoas em uma área verde" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_83e6af0b2f1340dc8b187560d510bcb4/720p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_83e6af0b2f1340dc8b187560d510bcb4f000.jpg" aria-label="Assistir vídeo 8 do portfólio PromoVie">
+<div class="portfolioVisual pvTwelveVisual">
+<div class="portfolioScene pvTwelveGrid" role="group" aria-label="Doze produções do portfólio audiovisual PromoVie, todas em 16 por 9">
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_5011af2c37384593abd3a3f527c9fc6cf000.jpg" alt="Casal contemplando montanhas" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_378b44cd000744c885f8aca3764354acf000.jpg" alt="Vista aérea de uma cidade" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_7394c13b1ce042238067d5d2f110206af000.jpg" alt="Profissional de saúde utilizando tecnologia" decoding="async" loading="eager" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_d3fb26bac96941fcaf744db10fd5c7f3f000.jpg" alt="Animação digital com globo luminoso" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_934972d888914e0084717b16d323d9baf000.jpg" alt="Cena de gastronomia" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_0a4ba0d1edf3499f93c3fe9e05c28af0f000.jpg" alt="Pessoa praticando atividade física" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_f10107123387469ebb6b5e1033d9d0fef000.jpg" alt="Pessoas em um ambiente natural" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
 <img src="https://static.wixstatic.com/media/279d86_83e6af0b2f1340dc8b187560d510bcb4f000.jpg" alt="Atendimento odontológico" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
-<button class="pvNineShot" type="button" data-pv-nine-src="https://video.wixstatic.com/video/279d86_b19d1e26efcc4ec8bc03e0c955f17da2/1080p/mp4/file.mp4" data-pv-nine-poster="https://static.wixstatic.com/media/279d86_b19d1e26efcc4ec8bc03e0c955f17da2f000.jpg" aria-label="Assistir vídeo 9 do portfólio PromoVie">
-<img src="https://static.wixstatic.com/media/279d86_b19d1e26efcc4ec8bc03e0c955f17da2f000.jpg" alt="Animação em tons de rosa e dourado" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-<span class="pvNinePlay" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 5.7 19 12 9 18.3Z" fill="currentColor"/></svg></span>
-</button>
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_b19d1e26efcc4ec8bc03e0c955f17da2f000.jpg" alt="Animação em rosa e dourado" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_795db9cf31c647c48406b5de3d46743df000.jpg" alt="Animação do planeta Terra" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_320fa19d96e2483bb1e1cffe078e90bdf000.jpg" alt="Arquitetura contemporânea" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
+<a class="pvTwelveShot" href="/audiovisual/" aria-label="Ver o portfólio audiovisual completo da PromoVie" title="Ver portfólio audiovisual">
+<img src="https://static.wixstatic.com/media/279d86_e124e167a05042c4b7d2a2a16c3c61d0f000.jpg" alt="Identidade visual em tons de azul" decoding="async" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+<span class="pvTwelveArrow" aria-hidden="true">↗</span>
+</a>
 </div>
-<a aria-label="Ver portfólio audiovisual completo da PromoVie" class="portfolioVisualCta" href="/audiovisual/" target="_self"><span>Ver portfólio</span><b aria-hidden="true">↗</b></a>
 </div>
 </div>
 </div>
@@ -2940,39 +2942,6 @@ reelPlayers.forEach(player=>{
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script>
-<dialog class="pvNineDialog" id="pvNineDialog" aria-label="Reprodutor de vídeo do portfólio">
-<div class="pvNineDialogTop"><span>PromoVie · Portfólio audiovisual</span><button type="button" class="pvNineDialogClose" id="pvNineDialogClose" aria-label="Fechar vídeo">×</button></div>
-<video id="pvNineVideo" playsinline controls preload="none" controlslist="nodownload"></video>
-</dialog>
-<script>
-(function(){
-  "use strict";
-  var dialog=document.getElementById("pvNineDialog");
-  var video=document.getElementById("pvNineVideo");
-  var close=document.getElementById("pvNineDialogClose");
-  var active=null;
-  function stop(){
-    video.pause();
-    video.removeAttribute("src");
-    video.removeAttribute("poster");
-    video.load();
-    if(dialog.open&&typeof dialog.close==="function")dialog.close();
-    if(active){active.focus();active=null;}
-  }
-  Array.from(document.querySelectorAll(".pvNineShot")).forEach(function(tile){
-    tile.addEventListener("click",function(){
-      active=tile;
-      video.poster=tile.dataset.pvNinePoster;
-      video.src=tile.dataset.pvNineSrc;
-      if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
-      var promise=video.play();
-      if(promise&&promise.catch)promise.catch(function(){});
-    });
-  });
-  close.addEventListener("click",stop);
-  dialog.addEventListener("cancel",function(evt){evt.preventDefault();stop();});
-  dialog.addEventListener("click",function(evt){if(evt.target===dialog)stop();});
-})();
-</script>
+
 </body>
 </html>
