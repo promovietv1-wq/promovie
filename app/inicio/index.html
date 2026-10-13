@@ -158,6 +158,16 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 }
 @media(max-width:330px){.tile h2{font-size:16px}.tile p{font-size:11.7px}.tile-arrow{bottom:35px}.brand-heart{width:142px}.start-top h1{font-size:33px}}
 @media(prefers-reduced-motion:reduce){.screen{animation:none}html{scroll-behavior:auto}.service-detail svg{transition:none}}
+
+/* Três serviços, navegação para as áreas de cuidado. */
+.tab{font-size:clamp(10px,2.6vw,12px);padding:5px 1px;gap:5px;min-width:0;text-align:center}
+.tab span{white-space:nowrap;letter-spacing:-.01em}
+.tab[aria-current="page"]{background:linear-gradient(130deg,rgba(117,68,225,.095),rgba(33,180,229,.045));border-radius:12px;font-weight:650}
+.tab[aria-current="page"] svg{fill:none;stroke-width:2.2}
+.inner-home-link{display:inline-grid;place-items:center;border-radius:18px;min-width:54px;min-height:54px}
+.inner-home-link:hover{background:rgba(118,67,215,.05)}
+.inner-image.photo-psych img{object-position:center 43%}
+@media(max-width:350px){.bottom{padding-inline:7px}.tab{font-size:9.5px;letter-spacing:-.03em}}
 </style>
 </head>
 <body>
@@ -191,7 +201,7 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 </section>
 <section class="screen" data-screen="consultas" id="consultas" aria-label="Consultas" hidden>
   <div class="inner-top">
-    <img class="inner-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="" width="240" height="240">
+    <a class="inner-home-link" href="#inicio" aria-label="Voltar à página inicial"><img class="inner-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="Coração PromoVie" width="240" height="240"></a>
     <span class="mini-label">Cuidado profissional</span>
     <h1>Telemedicina</h1>
     <p class="intro">Especialidades e atendimento em um só lugar.</p>
@@ -206,9 +216,23 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 <details class="service-detail"><summary><span class="service-index">04</span><span class="service-name">Pediatra</span><span class="service-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5.3 6.7 6.7-6.7 6.7"/></svg></span></summary><p>Atendimento médico infantil para orientar responsáveis sobre questões de saúde, quando o atendimento remoto for adequado.</p></details></div>
   <p class="note">Em situações de urgência ou emergência, procure atendimento presencial imediato.</p>
 </section>
+<section class="screen" data-screen="psicologia" id="psicologia" aria-label="Telepsicologia" hidden>
+  <div class="inner-top">
+    <a class="inner-home-link" href="#inicio" aria-label="Voltar à página inicial"><img class="inner-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="Coração PromoVie" width="240" height="240"></a>
+    <span class="mini-label">Saúde emocional</span>
+    <h1>Telepsicologia</h1>
+    <p class="intro">Um espaço de escuta, acolhimento e atenção à sua saúde mental.</p>
+  </div>
+  <div class="inner-image photo-psych"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" alt="Acolhimento psicológico e escuta profissional" loading="lazy" decoding="async"></div>
+  <a class="primary" href="/app/telemedicina/" aria-label="Acessar portal de atendimento e telepsicologia"><span>Acessar atendimento</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
+  <p class="note">O acesso à plataforma está em preparação. Para informações sobre telepsicologia, fale com a PromoVie.</p>
+  <div class="title-row"><h2>Cuidado emocional</h2><img src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt=""></div>
+  <div class="care-about"><h2>Um espaço para ser ouvido.</h2><p>Atendimento psicológico on-line com escuta qualificada para emoções, relações, ansiedade e desafios da vida pessoal ou profissional.</p></div>
+  <p class="note">Em situações de crise ou risco imediato, procure atendimento de emergência.</p>
+</section>
 <section class="screen" data-screen="voce" id="voce" aria-label="Autocuidado" hidden>
   <div class="inner-top">
-    <img class="inner-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="" width="240" height="240">
+    <a class="inner-home-link" href="#inicio" aria-label="Voltar à página inicial"><img class="inner-heart" src="/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp" alt="Coração PromoVie" width="240" height="240"></a>
     <span class="mini-label">Saúde e bem-estar</span>
     <h1>Autocuidado</h1>
     <p class="intro">Escuta, informação e orientação no seu dia a dia.</p>
@@ -224,15 +248,21 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 </section>
 </main>
 <nav class="bottom" aria-label="Navegação do aplicativo">
-  <a href="#inicio" class="tab" data-tab="inicio" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3.6l8.5 6.9V20h-6.4v-6.2H9.9V20H3.5z"/></svg><span>Início</span></a>
-  <a href="#consultas" class="tab" data-tab="consultas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="5.3" width="16.8" height="15" rx="3"/><path d="M7.7 3v4.3m8.5-4.3v4.3M3.6 10h16.8"/></svg><span>Consultas</span></a>
-  <a href="#voce" class="tab" data-tab="voce"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.7" r="3.9"/><path d="M4.8 21c.1-4.1 3-6.7 7.2-6.7s7.1 2.6 7.2 6.7"/></svg><span>Você</span></a>
+  <a href="#consultas" class="tab" data-tab="consultas" aria-label="Telemedicina">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.7" y="5.6" width="13.4" height="12.8" rx="2.7"/><path d="m16.1 9.4 5-3.2v11.6l-5-3.2"/></svg><span>Telemedicina</span>
+  </a>
+  <a href="#psicologia" class="tab" data-tab="psicologia" aria-label="Telepsicologia">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4c4.3 0 7.6 3.2 7.6 7.1 0 3.1-2.1 5.3-4.8 6.5l-.7 3-2.9-2.1c-3.9-.1-6.9-3-6.9-6.4 0-3.9 3.5-7.1 7.7-7.1Z"/><path d="M8.9 10.8h6.2m-6.2 3h4.3"/></svg><span>Telepsicologia</span>
+  </a>
+  <a href="#voce" class="tab" data-tab="voce" aria-label="Autocuidado">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2C5 17.3 6.3 10.7 12 3.4c5.7 7.3 7 13.9 0 16.8Z"/><path d="M12 20.2C5.9 21.5 2.2 17.6 2.2 12c4.1-.5 7.3 1 9.8 8.2Zm0 0c6.1 1.3 9.8-2.6 9.8-8.2-4.1-.5-7.3 1-9.8 8.2Z"/></svg><span>Autocuidado</span>
+  </a>
 </nav>
 </div>
 <script>
 (function(){
   "use strict";
-  const VALID=["inicio","consultas","voce"];
+  const VALID=["inicio","consultas","psicologia","voce"];
   const screens=[...document.querySelectorAll("[data-screen]")];
   const tabs=[...document.querySelectorAll("[data-tab]")];
   let last="inicio";
@@ -245,7 +275,7 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
        else tab.removeAttribute("aria-current");
     }
     if(selected!==last){window.scrollTo({top:0,behavior:"instant"});last=selected;}
-    document.title=(selected==="inicio"?"PromoVie":selected==="consultas"?"Consultas":"Autocuidado")+" | Saúde e bem-estar";
+    document.title=({inicio:"PromoVie",consultas:"Telemedicina",psicologia:"Telepsicologia",voce:"Autocuidado"}[selected])+" | Saúde e bem-estar";
   }
   window.addEventListener("hashchange",route);
   tabs.forEach(t=>t.addEventListener("click",()=>{
