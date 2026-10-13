@@ -37,5 +37,22 @@ jobs:
           from concurrent.futures import ThreadPoolExecutor
           with ThreadPoolExecutor(max_workers=10) as e:results=list(e.map(study,items))
           for item in results:print("THUMBNAIL_AUDIT",json.dumps(item))
+          from PIL import ImageDraw,ImageFont
+          import base64
+          sheet=Image.new("RGB",(5*190,6*131),(241,237,247))
+          draw=ImageDraw.Draw(sheet)
+          for n,entry in enumerate(items):
+           try:
+            link=entry["poster"]+"/v1/fill/w_320,h_180,al_c,q_82,enc_jpg/file.jpg"
+            with urllib.request.urlopen(urllib.request.Request(link,headers={"User-Agent":"Mozilla/5.0"}),timeout=15) as f:raw=f.read()
+            im=Image.open(io.BytesIO(raw)).convert("RGB").resize((184,104))
+            x=(n%5)*190+3;y=(n//5)*131+3
+            sheet.paste(im,(x,y))
+            draw.rectangle((x,y+83,x+40,y+103),fill=(22,16,37))
+            draw.text((x+5,y+87),str(n+1).zfill(2),fill=(255,255,255))
+           except Exception as e:print("CONTACT_ERROR",n+1,str(e))
+          buf=io.BytesIO()
+          sheet.save(buf,format="JPEG",quality=58,optimize=True)
+          print("CONTACT_SHEET_BASE64",base64.b64encode(buf.getvalue()).decode("ascii"))
           
           PY
