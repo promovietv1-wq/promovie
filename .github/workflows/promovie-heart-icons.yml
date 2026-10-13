@@ -34,7 +34,7 @@ jobs:
               canvas=Image.new("RGB",(size,size),"#FFFFFF")
               mark=source.copy()
               padding=12 if size==192 else 33
-              mark.thumbnail((size-padding*2,size-padding*2),Image.Resampling.LANCZOS)
+              mark=source.resize((size-padding*2,size-padding*2),Image.Resampling.LANCZOS)
               canvas.paste(mark,((size-mark.width)//2,(size-mark.height)//2),mark)
               canvas.save(out/f"heart-{size}.png",format="PNG",optimize=True)
           PY
