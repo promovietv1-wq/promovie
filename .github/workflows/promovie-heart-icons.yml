@@ -43,7 +43,10 @@ jobs:
                   image.save(out/"apple-touch-180.png",format="PNG",optimize=True)
               else:
                   image.save(out/f"favicon-{size}.png",format="PNG",optimize=True)
-          source.resize((64,64),Image.Resampling.LANCZOS).convert("RGB").save(
+          ico_bg=Image.new("RGBA",(64,64),"#FFFFFF")
+          ico_mark=source.resize((60,60),Image.Resampling.LANCZOS)
+          ico_bg.alpha_composite(ico_mark,(2,2))
+          ico_bg.convert("RGB").save(
               out/"favicon.ico",format="ICO",sizes=[(16,16),(32,32),(48,48)]
           )
           PY
