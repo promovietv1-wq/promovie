@@ -1,6 +1,6 @@
 /* PromoVie PWA: offline apenas da interface pública, nunca de dados de consultas ou páginas da Levita. */
-const CACHE="promovie-app-shell-v15";
-const SHELL=["/app/","/app/inicio/","/app/familias-amigos-promovie-2x.jpg","/app/telemedicina/","/app/manifest.webmanifest","/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp","/app/icons/heart-192.png","/app/icons/heart-512.png","/app/icons/favicon-32.png","/app/icons/favicon-48.png","/app/icons/favicon.ico","/app/icons/apple-touch-180.png","/app/icons/favicon-coracao-promovie-32.png","/app/icons/favicon-coracao-promovie-48.png","/app/icons/favicon-coracao-promovie.ico","/app/icons/apple-touch-coracao-promovie.png"];
+const CACHE="promovie-app-shell-v16";
+const SHELL=["/app/","/app/inicio/","/app/familias-amigos-promovie-2x.jpg","/app/telemedicina/","/app/manifest.webmanifest","/app/assets/coracao-promovie-com-logo.webp","/app/icons/heart-192.png","/app/icons/heart-512.png","/app/icons/favicon-32.png","/app/icons/favicon-48.png","/app/icons/favicon.ico","/app/icons/apple-touch-180.png","/app/icons/favicon-coracao-promovie-32.png","/app/icons/favicon-coracao-promovie-48.png","/app/icons/favicon-coracao-promovie.ico","/app/icons/apple-touch-coracao-promovie.png"];
 self.addEventListener("install",event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
 });
@@ -22,7 +22,7 @@ self.addEventListener("fetch",event=>{
   return;
  }
  event.respondWith(caches.match(request).then(match=>match||fetch(request).then(response=>{
-  if(response.ok&&["/app/manifest.webmanifest","/app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp","/app/icons/heart-192.png","/app/icons/heart-512.png","/app/icons/favicon-32.png","/app/icons/favicon-48.png","/app/icons/favicon.ico","/app/icons/apple-touch-180.png","/app/icons/favicon-coracao-promovie-32.png","/app/icons/favicon-coracao-promovie-48.png","/app/icons/favicon-coracao-promovie.ico","/app/icons/apple-touch-coracao-promovie.png"].includes(url.pathname)){
+  if(response.ok&&["/app/manifest.webmanifest","/app/assets/coracao-promovie-com-logo.webp","/app/icons/heart-192.png","/app/icons/heart-512.png","/app/icons/favicon-32.png","/app/icons/favicon-48.png","/app/icons/favicon.ico","/app/icons/apple-touch-180.png","/app/icons/favicon-coracao-promovie-32.png","/app/icons/favicon-coracao-promovie-48.png","/app/icons/favicon-coracao-promovie.ico","/app/icons/apple-touch-coracao-promovie.png"].includes(url.pathname)){
    const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(request,copy));
   }
   return response;

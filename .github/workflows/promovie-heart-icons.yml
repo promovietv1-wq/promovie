@@ -28,7 +28,7 @@ jobs:
           python - <<'PY'
           from PIL import Image
           from pathlib import Path
-          source=Image.open("app/previa-fiel-20261010/coracao-promovie-com-logo-20261011.webp").convert("RGBA")
+          source=Image.open("app/assets/coracao-promovie-com-logo.webp").convert("RGBA")
           out=Path("app/icons")
           for size in (32, 48, 180, 192, 512):
               padding={32:1,48:2,180:10,192:12,512:33}[size]
