@@ -39,7 +39,7 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 @keyframes enter{from{opacity:.7;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .start-top{
  position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;
- text-align:center;padding:39px 12px 26px;overflow:hidden;
+ text-align:center;padding:27px 12px 17px;overflow:hidden;
 }
 .start-top::before{
  content:"";position:absolute;inset:-140px -115px -30px;z-index:-2;pointer-events:none;
@@ -53,34 +53,34 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
 }
 .profile-link{position:absolute;right:1px;top:34px;display:grid;place-items:center;width:43px;height:43px;border-radius:50%;background:rgba(244,243,255,.96);color:#3d2c77;border:1px solid rgba(223,216,249,.52)}
 .profile-link svg{width:22px;height:22px}
-.brand-heart{display:block;width:clamp(132px,36vw,168px);height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 12px 22px rgba(110,71,183,.095))}
+ .brand-heart{display:block;width:clamp(153px,40vw,190px);height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 12px 22px rgba(110,71,183,.095))}
 .start-top h1{
- margin:2px 0 2px;color:#11113e;font-family:var(--font-display);
+ margin:-3px 0 0;color:#11113e;font-family:var(--font-display);
  font-size:clamp(49px,11.8vw,70px);line-height:.99;font-weight:500;letter-spacing:-.055em;
 }
 .slogan{margin:12px 0 0;font-size:clamp(9.7px,2.65vw,12px);letter-spacing:.25em;font-weight:550;color:#7e7a9e;text-transform:uppercase;white-space:nowrap}
-.family{display:block;position:relative;border-radius:23px;overflow:hidden;aspect-ratio:1.45;background:#f4eef8;box-shadow:0 7px 23px rgba(62,43,113,.045)}
+.family{display:block;position:relative;border-radius:22px;overflow:hidden;aspect-ratio:1.36;background:#f4eef8;box-shadow:0 7px 23px rgba(62,43,113,.045)}
 .family>img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 48%}
 .family::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);border-radius:inherit;pointer-events:none}
 .photo-wave{position:absolute;z-index:1;width:142px;height:76px;right:-7px;bottom:-2px;opacity:.8;pointer-events:none}
 .photo-wave path{stroke:url(#pv-photo-grad);stroke-width:6;fill:none;stroke-linecap:round}
-.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}
 .tile{
- position:relative;min-width:0;min-height:191px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
- overflow:hidden;border-radius:24px;padding:20px 18px 19px;
+ position:relative;min-width:0;min-height:162px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+ overflow:hidden;border-radius:23px;padding:17px 15px 16px;
  border:1px solid #ebe6ff;background:linear-gradient(145deg,#fbfaff 9%,#f4f0ff 67%,#fff);
  box-shadow:0 11px 25px rgba(85,60,149,.055);
 }
 .tile::before{content:"";position:absolute;right:-45px;top:-62px;width:148px;height:148px;border-radius:50%;background:rgba(203,194,250,.14)}
 .tile.care{border-color:#dfedf8;background:linear-gradient(145deg,#f7fcff 5%,#ecf9ff 70%,#fff);box-shadow:0 11px 25px rgba(10,159,203,.055)}
 .tile.care::before{background:rgba(132,223,247,.13)}
-.tile-icon{width:50px;height:50px;display:grid;place-items:center;flex-shrink:0;margin-bottom:11px;border-radius:50%;background:#ede7ff;color:#7749e7}
+.tile-icon{width:45px;height:45px;display:grid;place-items:center;flex-shrink:0;margin-bottom:9px;border-radius:50%;background:#ede7ff;color:#7749e7}
 .tile.care .tile-icon{background:#e2f4fc;color:#1eb5e1}
-.tile-icon svg{height:27px;width:27px;stroke-width:1.85}
-.tile h2{margin:0 0 4px;font-family:var(--font-display);font-size:clamp(26px,6.3vw,36px);font-weight:500;letter-spacing:-.045em;line-height:1.03;color:#27204b;white-space:nowrap}
-.tile p{font-size:13px;color:#8a83ad;line-height:1.42;margin:5px 0 0;max-width:155px}
+.tile-icon svg{height:25px;width:25px;stroke-width:1.85}
+.tile h2{margin:0 0 3px;font-family:var(--font-display);font-size:clamp(26px,6.3vw,34px);font-weight:500;letter-spacing:-.045em;line-height:1.03;color:#27204b;white-space:nowrap}
+.tile p{font-size:13px;color:#8a83ad;line-height:1.42;margin:2px 0 0;max-width:155px}
 .tile.care p{color:#7d9bad}
-.tile-arrow{position:absolute;right:11px;bottom:53px;color:#7a4ceb}
+.tile-arrow{position:absolute;right:9px;bottom:40px;color:#7a4ceb}
 .tile.care .tile-arrow{color:#19b7e0}
 .tile-arrow svg{width:20px;height:20px;stroke-width:2}
 .bottom{
@@ -139,24 +139,24 @@ svg{height:25px;width:25px;fill:none;stroke:currentColor;stroke-width:1.75;strok
  .start-top{padding-top:39px}
  .family{aspect-ratio:1.66}
  .tiles{gap:18px}
- .tile{min-height:190px}
+ .tile{min-height:172px}
  .tile h2{font-size:35px}
 }
 @media(max-width:380px){
  .page{padding-left:15px;padding-right:15px}
- .start-top{padding-top:34px;padding-bottom:22px}
- .brand-heart{width:133px}
+ .start-top{padding-top:26px;padding-bottom:14px}
+ .brand-heart{width:154px}
  .start-top h1{font-size:52px}
  .slogan{font-size:9px;letter-spacing:.17em}
- .family{border-radius:19px;aspect-ratio:1.42}
+ .family{border-radius:19px;aspect-ratio:1.36}
  .tiles{gap:10px;margin-top:12px}
- .tile{padding:17px 13px;min-height:177px;border-radius:20px}
- .tile-icon{height:44px;width:44px;margin-bottom:9px}
+ .tile{padding:15px 13px;min-height:154px;border-radius:20px}
+ .tile-icon{height:42px;width:42px;margin-bottom:8px}
  .tile h2{font-size:27px}
  .tile p{font-size:12.3px;line-height:1.38}
- .tile-arrow{right:8px;bottom:47px}
+ .tile-arrow{right:8px;bottom:37px}
 }
-@media(max-width:330px){.tile h2{font-size:24px}.tile p{font-size:11.7px}.tile-arrow{bottom:44px}.brand-heart{width:120px}.start-top h1{font-size:47px}}
+@media(max-width:330px){.tile h2{font-size:24px}.tile p{font-size:11.7px}.tile-arrow{bottom:35px}.brand-heart{width:142px}.start-top h1{font-size:47px}}
 @media(prefers-reduced-motion:reduce){.screen{animation:none}html{scroll-behavior:auto}.service-detail svg{transition:none}}
 </style>
 </head>
