@@ -68,7 +68,7 @@
 .mediquo-card-detail[open] .mediquo-expand{display:none}.mediquo-card-detail>p{font-size:12px;color:#686172;margin:12px 0 0;line-height:1.6}
 @media(max-width:850px){.mediquo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 @media(max-width:640px){.mediquo-grid{gap:10px}.mediquo-card-detail{padding:12px}.mediquo-card-detail strong{font-size:13px}.mediquo-lead{font-size:10px}.mediquo-card-detail>p{font-size:11px}}
-</style>
+@media(max-width:640px){.mediquo-nav-ready .bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.mediquo-nav-ready .bottom-nav button{font-size:9px;letter-spacing:-.04em;padding-left:0;padding-right:0}}</style>
 </head>
 <body>
 <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
@@ -247,7 +247,7 @@ const MEDIQUO_ORIGINAL=Object.freeze([
 ]);
 function renderOptionalMediquo(){
   const label=document.querySelectorAll('[data-med-tab]');
-  if(MEDIQUO_OPTIONS.tab)label.forEach(el=>{el.hidden=false;});
+  if(MEDIQUO_OPTIONS.tab){document.body.classList.add('mediquo-nav-ready');label.forEach(el=>{el.hidden=false;});}
   document.querySelectorAll('[data-med-grid]').forEach(host=>{
     const area=host.dataset.medGrid;
     if(!MEDIQUO_OPTIONS[area])return;
