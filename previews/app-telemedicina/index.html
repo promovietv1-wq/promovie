@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="PromoVie">
 <meta name="application-name" content="PromoVie">
 <meta name="robots" content="noindex,nofollow">
-<link rel="manifest" href="/previews/app-telemedicina/manifest.webmanifest?v=6">
+<link rel="manifest" href="/previews/app-telemedicina/manifest.webmanifest?v=7">
 <link rel="icon" href="/app/icons/favicon-coracao-promovie.ico?v=13" sizes="any">
 <link rel="icon" href="/app/icons/favicon-coracao-promovie-32.png?v=13" type="image/png" sizes="32x32">
 <link rel="icon" href="/app/icons/favicon-coracao-promovie-48.png?v=13" type="image/png" sizes="48x48">
@@ -52,6 +52,22 @@
 @media(max-width:880px){.header-inner{gap:8px}.logo{min-width:160px}.topnav{gap:2px}.topnav button,.topnav a{padding:11px 9px;font-size:12px}}
 @media(max-width:640px){.portal-shortcut{padding:17px 18px;display:block}.portal-shortcut-copy{align-items:flex-start}.portal-shortcut .btn{width:100%;margin-top:16px}.professional-intro{flex-wrap:wrap}.professional-intro .service-access{width:100%}.bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr));padding-left:5px;padding-right:5px}.bottom-nav button,.bottom-nav a{font-size:9px;min-width:0;letter-spacing:-.025em;gap:4px}.bottom-nav svg{width:21px;height:21px}}
 @media(max-width:375px){.bottom-nav button,.bottom-nav a{font-size:8px}}
+
+/* Médiquo: abas opcionais inicialmente desativadas */
+[hidden]{display:none!important}
+.mediquo-option{margin:27px 0 21px}.mediquo-option-head{margin-bottom:18px}
+.mediquo-option-head h2{font-size:28px;margin:0 0 8px}.mediquo-option-head p{font-size:13px;color:var(--muted);margin:0}
+.mediquo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.mediquo-card{border-radius:19px;overflow:hidden;background:#fff;border:1px solid var(--line);min-width:0;box-shadow:0 8px 22px #34205b08}
+.mediquo-card img{width:100%;aspect-ratio:5/3;object-fit:cover;background:#f4f0f8}
+.mediquo-card-detail{padding:14px}.mediquo-card-detail summary{cursor:pointer;list-style:none}.mediquo-card-detail summary::-webkit-details-marker{display:none}
+.mediquo-number{display:block;color:#916aae;font-size:10px;font-weight:750;margin-bottom:6px}
+.mediquo-card-detail strong{font:800 14px/1.28 Sora,Inter,sans-serif;letter-spacing:-.035em;display:block}
+.mediquo-lead{display:block;font-size:11px;color:#756c80;margin:7px 0 9px;line-height:1.48}
+.mediquo-expand{display:inline-block;font-size:11px;font-weight:800;color:#6634a0;margin-top:3px}
+.mediquo-card-detail[open] .mediquo-expand{display:none}.mediquo-card-detail>p{font-size:12px;color:#686172;margin:12px 0 0;line-height:1.6}
+@media(max-width:850px){.mediquo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media(max-width:640px){.mediquo-grid{gap:10px}.mediquo-card-detail{padding:12px}.mediquo-card-detail strong{font-size:13px}.mediquo-lead{font-size:10px}.mediquo-card-detail>p{font-size:11px}}
 </style>
 </head>
 <body>
@@ -75,7 +91,7 @@
 </svg>
 <header class="header"><div class="container header-inner">
 <a class="logo" href="#inicio" aria-label="PromoVie, página inicial"><span><strong>PromoVie</strong><small>Telemedicina</small></span></a>
-<nav class="topnav" aria-label="Seções do aplicativo"><button type="button" data-tab="inicio" aria-current="page">Início</button><button type="button" data-tab="atendimentos">Atendimentos</button><a href="https://connect.mediquo.com/provz45a0yi?target=patient" class="direct-tele" aria-label="Entrar diretamente na telemedicina">Telemedicina</a><button type="button" data-tab="autocuidado">Autocuidado</button></nav>
+<nav class="topnav" aria-label="Seções do aplicativo"><button type="button" data-tab="inicio" aria-current="page">Início</button><button type="button" data-tab="atendimentos">Atendimentos</button><a href="https://connect.mediquo.com/provz45a0yi?target=patient" class="direct-tele" aria-label="Entrar diretamente na telemedicina">Telemedicina</a><button type="button" data-tab="autocuidado">Autocuidado</button><button type="button" data-tab="mediquo" data-med-tab hidden>Médiquo</button></nav>
 <div class="header-right"><button class="install-btn" type="button" id="install"><svg viewBox="0 0 24 24"><use href="#ico-download"></use></svg>Instalar</button></div>
 </div></header>
 <main class="container">
@@ -94,6 +110,11 @@
 <button class="choice" type="button" data-go="atendimentos"><span class="iconbox cyan"><svg viewBox="0 0 24 24"><use href="#ico-med"></use></svg></span><span><small>Atendimento médico</small><h3>Preciso de atendimento</h3><p>Médico, psicólogo, pediatra e médico da família.</p></span><svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></button>
 <button class="choice" type="button" data-go="autocuidado"><span class="iconbox"><svg viewBox="0 0 24 24"><use href="#ico-heart"></use></svg></span><span><small>Bem-estar e informação</small><h3>Quero cuidar de mim</h3><p>Hábitos, saúde emocional e orientações para o dia a dia.</p></span><svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></button>
 </div>
+
+<section class="mediquo-option" data-med-option="inicio" hidden aria-label="Médiquo, especialidades opcionais">
+<div class="mediquo-option-head"><span class="eyebrow">Alternativa opcional</span><h2>Médiquo</h2><p>Especialidades e orientações, conforme a apresentação original da PromoVie.</p></div>
+<div class="mediquo-grid" data-med-grid="inicio"></div>
+</section>
 <div class="portal-shortcut"><div class="portal-shortcut-copy"><span class="iconbox cyan"><svg viewBox="0 0 24 24"><use href="#ico-shield"></use></svg></span><div><strong>Já tem acesso à telemedicina?</strong><p>Entre no ambiente do paciente.</p></div></div><a class="btn dark" href="https://connect.mediquo.com/provz45a0yi?target=patient" aria-label="Acessar diretamente a telemedicina">Acessar telemedicina <svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></a></div>
 <div class="shortcut"><div class="lead"><svg viewBox="0 0 24 24"><use href="#ico-chat"></use></svg><span><h3>Não sabe por onde começar?</h3><p>Converse com a equipe PromoVie para entender as opções de acesso.</p></span></div><a class="btn dark textlink" href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20os%20atendimentos%20da%20PromoVie." target="_blank" rel="noopener noreferrer">Vamos conversar</a></div>
 
@@ -108,6 +129,11 @@
 <button class="care-card" type="button" data-service="familia"><span class="service-top"><span class="iconbox pink"><svg viewBox="0 0 24 24"><use href="#ico-family"></use></svg></span><span class="small-tag">Atenção familiar</span></span><h3>Médico da família</h3><p>Cuidados e orientações médicas para a pessoa e sua família.</p><span class="card-link">Como acessar <svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></span></button>
 <button class="care-card" type="button" data-service="pediatria"><span class="service-top"><span class="iconbox pink"><svg viewBox="0 0 24 24"><use href="#ico-child"></use></svg></span><span class="small-tag">Saúde infantil</span></span><h3>Pediatria</h3><p>Orientações médicas para crianças e seus responsáveis.</p><span class="card-link">Como acessar <svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></span></button>
 </div>
+
+<section class="mediquo-option" data-med-option="atendimentos" hidden aria-label="Médiquo, especialidades opcionais">
+<div class="mediquo-option-head"><span class="eyebrow">Alternativa opcional</span><h2>Médiquo</h2><p>Especialidades e orientações, conforme a apresentação original da PromoVie.</p></div>
+<div class="mediquo-grid" data-med-grid="atendimentos"></div>
+</section>
 <div class="question"><div><h3>Tem alguma dúvida sobre os atendimentos?</h3><p>A equipe PromoVie explica as modalidades de acesso e pode orientar os próximos passos.</p></div><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20orienta%C3%A7%C3%B5es%20sobre%20a%20telemedicina%20PromoVie." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#ico-chat"></use></svg> Vamos conversar</a></div>
 <p class="note">Em casos de urgência ou emergência, procure atendimento presencial ou o SAMU (192). A indicação de atendimento remoto depende da avaliação do profissional e da modalidade disponível.</p>
 </section>
@@ -122,17 +148,28 @@
 <button class="topic" type="button" data-topic="familia"><span class="iconbox"><svg viewBox="0 0 24 24"><use href="#ico-family"></use></svg></span><h3>Família e convivência</h3><p>Conexões e cuidados compartilhados.</p><span class="card-link">Explorar <svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></span></button>
 <button class="topic" type="button" data-topic="pet"><span class="iconbox green"><svg viewBox="0 0 24 24"><use href="#ico-paw"></use></svg></span><h3>Cuidados Pet</h3><p>Bem-estar e orientação para tutores.</p><span class="card-link">Explorar <svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></span></button>
 </div>
+
+<section class="mediquo-option" data-med-option="autocuidado" hidden aria-label="Médiquo, especialidades opcionais">
+<div class="mediquo-option-head"><span class="eyebrow">Alternativa opcional</span><h2>Médiquo</h2><p>Especialidades e orientações, conforme a apresentação original da PromoVie.</p></div>
+<div class="mediquo-grid" data-med-grid="autocuidado"></div>
+</section>
 <div class="editorial"><div class="editorial-content"><div class="eyebrow">Cuidado é presença</div><h2>Às vezes, cuidar também é <span class="gradient">estar junto.</span></h2><p>Reserve espaço para o descanso, para o diálogo e para as pessoas que fazem parte da sua vida.</p></div><img src="https://images.pexels.com/photos/4173081/pexels-photo-4173081.jpeg?auto=compress&amp;fit=crop&amp;w=800&amp;h=550&amp;q=82" alt="Família aproveitando um momento de convivência ao ar livre" loading="lazy" width="800" height="550" onerror="this.onerror=null;this.src='/app/familias-amigos-promovie-2x.jpg'"></div>
 <div class="question"><div><h3>Precisa conversar sobre bem-estar?</h3><p>Você pode falar com a PromoVie para conhecer as possibilidades de acolhimento e apoio informativo.</p></div><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20sobre%20autocuidado%20na%20PromoVie." target="_blank" rel="noopener noreferrer">Vamos conversar</a></div>
 <p class="note">Estes conteúdos são informativos e não substituem avaliação ou tratamento individualizado com profissionais habilitados.</p>
 </section>
 
+
+<section class="view" id="screen-mediquo" aria-labelledby="heading-mediquo" hidden>
+<div class="page-heading"><div class="eyebrow">TeleSaúde integrada</div><h1 id="heading-mediquo"><span class="gradient">Médiquo</span></h1><p>Conheça as oito especialidades e os serviços de orientação da apresentação original da PromoVie.</p></div>
+<div class="mediquo-grid" data-med-grid="tab"></div>
+<p class="note">Os atendimentos remotos seguem critérios dos profissionais e da plataforma parceira, não substituindo avaliação presencial quando ela for indicada.</p>
+</section>
 </main>
 <nav class="bottom-nav" aria-label="Navegação do aplicativo">
 <button type="button" data-tab="inicio" aria-current="page"><svg viewBox="0 0 24 24"><use href="#ico-home"></use></svg>Início</button>
 <button type="button" data-tab="atendimentos"><svg viewBox="0 0 24 24"><use href="#ico-med"></use></svg>Atendimentos</button>
 <a href="https://connect.mediquo.com/provz45a0yi?target=patient" aria-label="Entrar diretamente na telemedicina"><svg viewBox="0 0 24 24"><use href="#ico-shield"></use></svg>Telemedicina</a>
-<button type="button" data-tab="autocuidado"><svg viewBox="0 0 24 24"><use href="#ico-heart"></use></svg>Autocuidado</button>
+<button type="button" data-tab="autocuidado"><svg viewBox="0 0 24 24"><use href="#ico-heart"></use></svg>Autocuidado</button><button type="button" data-tab="mediquo" data-med-tab hidden><svg viewBox="0 0 24 24"><use href="#ico-med"></use></svg>Médiquo</button>
 </nav>
 <div class="dialog-backdrop" id="backdrop" aria-hidden="true"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" id="dialog"><button type="button" class="close" aria-label="Fechar" id="close-dialog"><svg viewBox="0 0 24 24"><use href="#ico-close"></use></svg></button><div id="dialog-content"></div></div></div>
 <script>
@@ -152,7 +189,79 @@ mulher:{title:'Saúde da mulher',desc:'Autocuidado, prevenção e acesso a infor
 familia:{title:'Família e convivência',desc:'Conversar, ouvir e reservar tempo para quem você ama são atitudes que fortalecem vínculos e podem contribuir para o bem-estar.'},
 pet:{title:'Cuidados Pet',desc:'Rotina, alimentação, ambiente seguro e atenção a mudanças de comportamento são importantes para o bem-estar dos animais. Para dúvidas clínicas, procure atendimento veterinário.'}
 };
-const screens=['inicio','atendimentos','autocuidado'];
+
+/* PREPARADO, OCULTO E DESATIVADO. Ative individualmente quando for aprovado.
+   tab: aba própria Médiquo no menu. As demais opções revelam um bloco
+   alternativo nas telas com especialidades. Nenhum dado ou imagem desta
+   alternativa é renderizado enquanto todas as opções estiverem false. */
+const MEDIQUO_OPTIONS=Object.freeze({tab:false,inicio:false,atendimentos:false,autocuidado:false});
+const MEDIQUO_ORIGINAL=Object.freeze([
+ {
+  "title": "Clínico Geral 24h",
+  "lead": "Orientação médica remota.",
+  "desc": "Primeira orientação para sintomas, dúvidas gerais e encaminhamento quando a avaliação presencial for indicada.",
+  "image": "https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg"
+ },
+ {
+  "title": "Psicólogo",
+  "lead": "Escuta qualificada e saúde mental.",
+  "desc": "Espaço de escuta qualificada para emoções, relações, ansiedade, conflitos e desafios da vida pessoal ou profissional.",
+  "image": "https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg"
+ },
+ {
+  "title": "Nutricionista",
+  "lead": "Alimentação e equilíbrio.",
+  "desc": "Apoio para ajustar alimentação à rotina, energia, prevenção e qualidade de vida.",
+  "image": "https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg"
+ },
+ {
+  "title": "Treinador Físico",
+  "lead": "Movimento e saúde.",
+  "desc": "Orientação para movimento, postura, condicionamento e hábitos possíveis dentro da realidade da pessoa.",
+  "image": "https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg"
+ },
+ {
+  "title": "Ginecologista",
+  "lead": "Saúde feminina.",
+  "desc": "Atenção à saúde da mulher, dúvidas preventivas e acompanhamento remoto dentro dos critérios profissionais.",
+  "image": "https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg"
+ },
+ {
+  "title": "Dermatologista",
+  "lead": "Cuidado com a pele.",
+  "desc": "Avaliação inicial de dúvidas sobre pele, prevenção e cuidados quando o formato remoto for adequado.",
+  "image": "https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg"
+ },
+ {
+  "title": "Pediatra",
+  "lead": "Crianças e família.",
+  "desc": "Suporte aos responsáveis em dúvidas sobre sintomas, cuidados infantis e condutas seguras quando possível por teleatendimento.",
+  "image": "https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg"
+ },
+ {
+  "title": "Atendimento Pet",
+  "lead": "Cães e gatos.",
+  "desc": "Primeira orientação para tutores sobre cuidados, sinais de alerta e bem-estar de cães e gatos.",
+  "image": "https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg"
+ }
+]);
+function renderOptionalMediquo(){
+  const label=document.querySelectorAll('[data-med-tab]');
+  if(MEDIQUO_OPTIONS.tab)label.forEach(el=>{el.hidden=false;});
+  document.querySelectorAll('[data-med-grid]').forEach(host=>{
+    const area=host.dataset.medGrid;
+    if(!MEDIQUO_OPTIONS[area])return;
+    if(area!=='tab'){const block=host.closest('[data-med-option]');if(block)block.hidden=false;}
+    else document.getElementById('screen-mediquo').hidden=false;
+    host.innerHTML=MEDIQUO_ORIGINAL.map((item,i)=>'<article class="mediquo-card">'
+      +'<img src="'+safe(item.image)+'" alt="'+safe(item.title)+'" width="480" height="288" loading="lazy" decoding="async">'
+      +'<details class="mediquo-card-detail"><summary><span class="mediquo-number">'+String(i+1).padStart(2,'0')+'</span><strong>'+safe(item.title)+'</strong>'
+      +'<span class="mediquo-lead">'+safe(item.lead)+'</span><span class="mediquo-expand">Ver detalhes</span></summary>'
+      +'<p>'+safe(item.desc)+'</p></details></article>').join('');
+  });
+}
+renderOptionalMediquo();
+const screens=['inicio','atendimentos','autocuidado',...(MEDIQUO_OPTIONS.tab?['mediquo']:[])];
 function nav(name){if(!screens.includes(name))return;screens.forEach(key=>document.getElementById('screen-'+key).classList.toggle('active',key===name));document.querySelectorAll('[data-tab]').forEach(node=>{if(node.dataset.tab===name)node.setAttribute('aria-current','page');else node.removeAttribute('aria-current');});if(location.hash!=='#'+name)history.replaceState(null,'','#'+name);window.scrollTo({top:0,behavior:'auto'});}
 document.querySelectorAll('[data-tab],[data-go]').forEach(el=>el.addEventListener('click',()=>nav(el.dataset.tab||el.dataset.go)));
 document.querySelector('.logo').addEventListener('click',e=>{e.preventDefault();nav('inicio');});
@@ -170,7 +279,7 @@ document.querySelectorAll('[data-topic]').forEach(b=>b.addEventListener('click',
 let installPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;});
 document.getElementById('install').addEventListener('click',async()=>{if(installPrompt){const p=installPrompt;installPrompt=null;await p.prompt();return;}const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);open('<img src="/app/icons/heart-192.png?v=13" alt="Coração oficial PromoVie, ícone do aplicativo" width="86" height="86" style="border-radius:18px;margin-bottom:14px"><h2 id="dialog-title">PromoVie na tela inicial</h2><p>Este ícone é o coração oficial da PromoVie. Ao instalar esta página, você instala somente a <strong>prévia demonstrativa</strong>, sem alterar o aplicativo atual.</p><div class="box"><strong>'+(isIOS?'No iPhone':'No Android ou computador')+'</strong><p>'+(isIOS?'Abra a prévia no Safari, toque em Compartilhar e escolha Adicionar à Tela de Início.':'No menu do Chrome ou Edge, procure Instalar aplicativo ou Adicionar à tela inicial. A opção depende do dispositivo e navegador.')+'</p></div><div class="actions">'+buttonClose+'</div>');bindClose();});
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/previews/app-telemedicina/sw.js?v=6',{scope:'/previews/app-telemedicina/',updateViaCache:'none'}).catch(()=>{}));}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/previews/app-telemedicina/sw.js?v=7',{scope:'/previews/app-telemedicina/',updateViaCache:'none'}).catch(()=>{}));}
 const first=decodeURIComponent(location.hash.substring(1));if(screens.includes(first)&&first!=='inicio')nav(first);
 })();
 </script>
