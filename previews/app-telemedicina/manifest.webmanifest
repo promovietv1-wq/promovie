@@ -1,10 +1,10 @@
 {
   "id": "/previews/app-telemedicina/",
-  "name": "PromoVie Saúde | Prévia",
+  "name": "PromoVie | Telemedicina (Prévia)",
   "short_name": "PromoVie",
-  "description": "Prévia navegável do aplicativo PromoVie de telemedicina, telepsicologia e autocuidado.",
+  "description": "Prévia demonstrativa do aplicativo PromoVie: atendimentos médicos, telepsicologia e autocuidado.",
   "lang": "pt-BR",
-  "start_url": "/previews/app-telemedicina/",
+  "start_url": "/previews/app-telemedicina/?v=20261014-4",
   "scope": "/previews/app-telemedicina/",
   "display": "standalone",
   "display_override": [
