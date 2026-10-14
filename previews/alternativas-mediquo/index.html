@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<title>PromoVie | Comparativo das especialidades Médiquo</title>
+<link rel="icon" type="image/png" href="/app/icons/favicon-coracao-promovie-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--ink:#241b39;--muted:#6f6780;--edge:#ece5f2;--grad:linear-gradient(105deg,#4b0c8f 0%,#7334d8 54%,#bc388d 100%);font:14px/1.55 Inter,system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:#f9f7fc}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #1bb6e2;outline-offset:3px}
+.wrap{width:min(1180px,calc(100% - 36px));margin-inline:auto}
+.topbar{background:#fff;border-bottom:1px solid var(--edge)}
+.topinner{display:flex;justify-content:space-between;align-items:center;min-height:74px;gap:15px}
+.wordmark{font-family:Sora,Inter,sans-serif;font-size:21px;font-weight:800;line-height:1;letter-spacing:-.06em;background:var(--grad);background-clip:text;-webkit-text-fill-color:transparent}
+.wordmark small{font:650 10px/1.4 Inter,sans-serif;display:block;margin-top:6px;letter-spacing:.02em;-webkit-text-fill-color:#6c607e}
+.status{font-size:11px;font-weight:700;color:#70518e;background:#f4edfa;border-radius:99px;padding:8px 12px}
+main{padding:28px 0 50px}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;letter-spacing:-.045em}
+h1{font-size:clamp(26px,3.8vw,38px);line-height:1.22;margin:0 0 10px}
+.gradient{background:var(--grad);background-clip:text;-webkit-text-fill-color:transparent}
+.intro{color:var(--muted);font-size:13px;max-width:710px;margin:0 0 24px}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;background:#eee9f5;border:1px solid #e7e0f0;padding:7px;border-radius:18px}
+.tabs button{padding:14px 10px;border:0;border-radius:12px;background:transparent;color:#655a78;font-size:13px;font-weight:750;min-height:48px}
+.tabs button[aria-selected="true"]{background:#fff;color:#5b278c;box-shadow:0 2px 13px #4b277317}
+.controlbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:13px;padding:18px 2px 16px}
+.viewname{font-weight:800;font-size:15px}
+.subtitle{color:var(--muted);font-size:11px;margin-top:2px}
+.device{display:flex;border:1px solid var(--edge);padding:4px;background:#fff;border-radius:12px}
+.device button{border:0;background:transparent;border-radius:9px;padding:9px 13px;font-size:11px;font-weight:800;color:#756885}
+.device button[aria-pressed="true"]{background:#33214d;color:#fff}
+.viewer-area{display:flex;justify-content:center;align-items:flex-start;min-height:690px;padding:14px;background:linear-gradient(128deg,#ebe5f5,#edf6fa);border-radius:23px;border:1px solid #e7dfef;overflow:hidden}
+.viewer{width:100%;max-width:1120px;transition:width .25s ease;border:1px solid #e2dfeb;background:#fff;box-shadow:0 17px 50px #2b205423;border-radius:13px;overflow:hidden}
+.viewer.phone{width:390px;max-width:100%;border-radius:23px}
+iframe{display:block;width:100%;height:710px;border:0;background:#fff}
+.viewer.phone iframe{height:690px}
+.fallback{display:none;border:1px solid #e4d9f0;background:#fff;border-radius:16px;padding:17px;margin-top:17px;color:#685c78;font-size:13px}
+.fallback.show{display:block}
+.review{margin:22px 0 0;background:#fff;border:1px solid var(--edge);border-radius:20px;overflow:hidden}
+.review summary{padding:20px 23px;font-size:14px;font-weight:800;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.review summary::-webkit-details-marker{display:none}
+.review summary:after{content:"+";color:#7334d8;font-size:25px;font-weight:500}
+.review[open] summary:after{content:"−"}
+.review-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;padding:0 20px 22px}
+.review-card{border:1px solid var(--edge);border-radius:15px;overflow:hidden}
+.review-card img{display:block;width:100%;aspect-ratio:5/3;object-fit:cover;background:#f0edf6}
+.review-copy{padding:12px}.review-copy strong{display:block;line-height:1.35;font-size:12px}
+.review-copy small{display:block;font-size:11px;color:#7a638f;margin:5px 0}
+.review-copy p{font-size:11px;color:#716981;line-height:1.55;margin:0}
+.notice{font-size:11px;color:#81798e;padding:18px 2px 0}
+@media(max-width:750px){main{padding:23px 0 40px}.tabs button{font-size:11px;padding:12px 5px}.viewer-area{padding:8px;min-height:610px}.viewer:not(.phone) iframe{height:660px}.review-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 13px 18px;gap:10px}.review summary{padding:16px}.review-card{border-radius:13px}.controlbar{gap:8px}.viewname{font-size:13px}}
+@media(max-width:420px){.wrap{width:calc(100% - 22px)}.viewer-area{padding:4px;border-radius:15px}.tabs{padding:5px;gap:3px}.tabs button{font-size:10px;min-height:44px}.review-copy{padding:9px}.review-copy p{font-size:10px}.status{font-size:9px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap topinner"><div class="wordmark">PromoVie<small>Alternativas de TeleSaúde</small></div><span class="status">Prévia não publicada no menu</span></div></header>
+<main class="wrap">
+<h1>Especialidades Médiquo <span class="gradient">em três páginas.</span></h1>
+<p class="intro">Compare a apresentação alternativa das oito especialidades no próprio contexto de cada página, sem alterar o conteúdo do site oficial. As abas abaixo pertencem somente a esta área de pré-visualização.</p>
+<nav class="tabs" aria-label="Escolha a página para comparar">
+<button type="button" data-area="principal" aria-selected="true">Site principal</button>
+<button type="button" data-area="avulsa" aria-selected="false">Telemedicina Avulsa</button>
+<button type="button" data-area="experiencia" aria-selected="false">Experiência</button>
+</nav>
+<div class="controlbar">
+<div><div class="viewname" id="viewname">Site principal</div><div class="subtitle">A prévia mostra as especialidades no lugar dos cartões atuais.</div></div>
+<div class="device" aria-label="Tamanho da visualização">
+<button type="button" data-device="desktop" aria-pressed="true">Computador</button>
+<button type="button" data-device="phone" aria-pressed="false">Celular</button>
+</div>
+</div>
+<div class="viewer-area"><div class="viewer" id="viewer"><iframe id="site-frame" title="Prévia alternativa do site PromoVie" loading="eager"></iframe></div></div>
+<div class="fallback" id="fallback" role="status">Não foi possível incorporar a página nesta visualização. Você ainda pode conferir abaixo os oito textos e as fotos da versão alternativa.</div>
+<details class="review" id="review">
+<summary>Conferir as oito especialidades, fotos e descrições</summary>
+<div class="review-grid" id="review-grid"></div>
+</details>
+<p class="notice">Visualização comparativa. Nenhuma alteração foi aplicada ao site principal, à Telemedicina Avulsa ou à página Experiência. Os serviços apresentados devem ser confirmados com o fornecedor antes da ativação.</p>
+</main>
+<script>
+(function(){
+"use strict";
+const specialties=[{"title":"Clínico Geral 24h","lead":"Orientação médica remota.","desc":"Primeira orientação para sintomas, dúvidas gerais e encaminhamento quando a avaliação presencial for indicada.","image":"https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg"},{"title":"Psicólogo","lead":"Escuta qualificada e saúde mental.","desc":"Espaço de escuta qualificada para emoções, relações, ansiedade, conflitos e desafios da vida pessoal ou profissional.","image":"https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg"},{"title":"Nutricionista","lead":"Alimentação e equilíbrio.","desc":"Apoio para ajustar alimentação à rotina, energia, prevenção e qualidade de vida.","image":"https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg"},{"title":"Treinador Físico","lead":"Movimento e saúde.","desc":"Orientação para movimento, postura, condicionamento e hábitos possíveis dentro da realidade da pessoa.","image":"https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg"},{"title":"Ginecologista","lead":"Saúde feminina.","desc":"Atenção à saúde da mulher, dúvidas preventivas e acompanhamento remoto dentro dos critérios profissionais.","image":"https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg"},{"title":"Dermatologista","lead":"Cuidado com a pele.","desc":"Avaliação inicial de dúvidas sobre pele, prevenção e cuidados quando o formato remoto for adequado.","image":"https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg"},{"title":"Pediatra","lead":"Crianças e família.","desc":"Suporte aos responsáveis em dúvidas sobre sintomas, cuidados infantis e condutas seguras quando possível por teleatendimento.","image":"https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg"},{"title":"Atendimento Pet","lead":"Cães e gatos.","desc":"Primeira orientação para tutores sobre cuidados, sinais de alerta e bem-estar de cães e gatos.","image":"https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg"}];
+const previews={
+ principal:{name:"Site principal",src:"/?preview-mediquo=1#teleconsultas",selector:"#teleconsultas .teleGrid",section:"#teleconsultas"},
+ avulsa:{name:"Telemedicina Avulsa",src:"/?preview-mediquo=1#telemedicina-avulsa",selector:"#telemedicina-avulsa #avulsa-especialidades .teleGrid",section:"#avulsa-especialidades"},
+ experiencia:{name:"Experiência",src:"/experiencia/?preview-mediquo=1#telessaude",selector:"#telessaude .teleGrid",section:"#telessaude"}
+};
+const frame=document.getElementById("site-frame");
+const fallback=document.getElementById("fallback");
+const box=document.getElementById("viewer");
+const name=document.getElementById("viewname");
+const value=new URLSearchParams(location.search).get("area");
+let current=Object.prototype.hasOwnProperty.call(previews,value)?value:"principal";
+const grid=document.getElementById("review-grid");
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+grid.innerHTML=specialties.map(function(x,i){return '<article class="review-card"><img src="'+escapeHtml(x.image)+'" alt="'+escapeHtml(x.title)+'" loading="lazy"><div class="review-copy"><strong>'+String(i+1).padStart(2,"0")+' · '+escapeHtml(x.title)+'</strong><small>'+escapeHtml(x.lead)+'</small><p>'+escapeHtml(x.desc)+'</p></div></article>';}).join("");
+function inject(){
+ let doc;
+ try{doc=frame.contentDocument;}catch(e){fallback.classList.add("show");return;}
+ if(!doc){fallback.classList.add("show");return;}
+ const grid=doc.querySelector(previews[current].selector);
+ if(!grid){fallback.classList.add("show");return;}
+ const existing=Array.from(grid.children).filter(function(x){return x.tagName==="ARTICLE";});
+ if(!existing.length){fallback.classList.add("show");return;}
+ const professional=existing.find(function(x){return x.classList.contains("pvProfessional");})||existing[0];
+ const informative=existing.find(function(x){return x.classList.contains("pvInformative");})||existing[existing.length-1];
+ const fragment=doc.createDocumentFragment();
+ specialties.forEach(function(item,index){
+   const educational=index===7;
+   const copy=(educational?informative:professional).cloneNode(true);
+   copy.classList.remove("reveal","pv-entering");
+   copy.classList.toggle("pvInformative",educational);
+   copy.classList.toggle("pvProfessional",!educational);
+   copy.removeAttribute("style");
+   copy.classList.add("pv-mediquo-alternative-card");
+   const img=copy.querySelector("img");
+   if(img){
+      img.removeAttribute("srcset");
+      img.removeAttribute("data-full");
+      img.removeAttribute("onerror");
+      img.removeAttribute("sizes");
+      img.src=item.image;
+      img.alt=item.title;
+      img.loading="lazy";
+   }
+   const title=copy.querySelector("summary h3")||copy.querySelector("h3");
+   if(title)title.textContent=item.title;
+   const lead=copy.querySelector(".detailLead");
+   if(lead)lead.textContent=item.lead;
+   const description=copy.querySelector(".miniSummary");
+   if(description)description.textContent=item.desc;
+   const details=copy.querySelector("details");
+   if(details)details.open=false;
+   fragment.appendChild(copy);
+ });
+ grid.replaceChildren(fragment);
+ const label=doc.createElement("div");
+ label.setAttribute("data-preview-only","mediquo");
+ label.textContent="Médiquo · versão alternativa das especialidades";
+ label.style.cssText="font:750 12px/1.5 Inter,Arial,sans-serif;color:#5c268c;background:#f4edfa;border:1px solid #e8dbf4;border-radius:13px;padding:12px 16px;margin:14px 0 16px;text-align:center;";
+ grid.parentNode.insertBefore(label,grid);
+ if(current==="avulsa"){
+  const overlay=doc.getElementById("telemedicina-avulsa");
+  if(overlay){overlay.classList.add("is-open");overlay.setAttribute("aria-hidden","false");}
+ }
+ fallback.classList.remove("show");
+ const target=doc.querySelector(previews[current].section);
+ if(target){
+    frame.contentWindow.requestAnimationFrame(function(){
+       if(current==="avulsa"){
+          const overlay=doc.getElementById("telemedicina-avulsa");
+          if(overlay){overlay.scrollTop=Math.max(0,target.getBoundingClientRect().top+overlay.scrollTop-90);}
+       }else{target.scrollIntoView({block:"start",behavior:"auto"});}
+    });
+ }
+}
+frame.addEventListener("load",function(){
+ try{inject()}catch(e){fallback.classList.add("show");}
+});
+function choose(area){
+ current=area;
+ document.querySelectorAll("[data-area]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.area===area));});
+ name.textContent=previews[area].name;
+ fallback.classList.remove("show");
+ history.replaceState(null,"","?area="+encodeURIComponent(area));
+ frame.src=previews[area].src;
+}
+document.querySelectorAll("[data-area]").forEach(function(b){b.addEventListener("click",function(){choose(b.dataset.area)});});
+document.querySelectorAll("[data-device]").forEach(function(b){b.addEventListener("click",function(){box.classList.toggle("phone",b.dataset.device==="phone");document.querySelectorAll("[data-device]").forEach(function(el){el.setAttribute("aria-pressed",String(el===b));});});});
+choose(current);
+})();
+</script>
+</body>
+</html>
