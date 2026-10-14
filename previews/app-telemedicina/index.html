@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<title>PromoVie Saúde | Prévia simplificada</title>
+<title>PromoVie | Telemedicina • Prévia</title>
 <style>
 :root{color-scheme:light;--ink:#231c37;--muted:#665f76;--purple:#55228c;--violet:#7b38c7;--cyan:#009ec4;--pink:#cb408e;--line:#e9e5ee;--paper:#fff;--canvas:#faf9fc;--grad:linear-gradient(115deg,#47218a,#7b3ec7 61%,#c8439b);font-family:Inter,system-ui,sans-serif}
 *{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);-webkit-font-smoothing:antialiased}button,a{font:inherit}button{cursor:pointer}a{color:inherit}p{line-height:1.67}h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:Sora,Inter,sans-serif;letter-spacing:-.05em}svg{display:block;stroke:currentColor;fill:none;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}img{max-width:100%;display:block}button:focus-visible,a:focus-visible{outline:3px solid #12b0d0;outline-offset:3px}.container{width:min(1100px,calc(100% - 48px));margin:auto}
@@ -64,7 +64,7 @@
 <symbol id="ico-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
 </svg>
 <header class="header"><div class="container header-inner">
-<a class="logo" href="#inicio" aria-label="PromoVie, página inicial da prévia"><img src="/app/assets/coracao-promovie-com-logo.webp" width="53" height="53" alt=""><span><strong>PromoVie</strong><small>Saúde e bem-estar</small></span></a>
+<a class="logo" href="#inicio" aria-label="PromoVie, página inicial da prévia"><img src="/app/assets/coracao-promovie-com-logo.webp" width="53" height="53" alt=""><span><strong>PromoVie</strong><small>Telemedicina</small></span></a>
 <nav class="topnav" aria-label="Seções do aplicativo"><button type="button" data-tab="inicio" aria-current="page">Início</button><button type="button" data-tab="atendimentos">Atendimentos</button><button type="button" data-tab="autocuidado">Autocuidado</button></nav>
 <div class="header-right"><span class="demo-tag">Prévia</span><button class="install-btn" type="button" id="install"><svg viewBox="0 0 24 24"><use href="#ico-download"></use></svg>Instalar</button></div>
 </div></header>
@@ -81,7 +81,7 @@
 </div>
 <div class="below-hero"><div class="sectiontitle"><div><h2>O que você procura hoje?</h2><p>Escolha uma das duas opções.</p></div></div>
 <div class="two-choices">
-<button class="choice" type="button" data-go="atendimentos"><span class="iconbox cyan"><svg viewBox="0 0 24 24"><use href="#ico-med"></use></svg></span><span><small>Atendimento profissional</small><h3>Preciso de atendimento</h3><p>Médico, psicologia e cuidados com a família.</p></span><svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></button>
+<button class="choice" type="button" data-go="atendimentos"><span class="iconbox cyan"><svg viewBox="0 0 24 24"><use href="#ico-med"></use></svg></span><span><small>Atendimento médico</small><h3>Preciso de atendimento</h3><p>Médico, psicólogo e pediatra, com atendimento on-line.</p></span><svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></button>
 <button class="choice" type="button" data-go="autocuidado"><span class="iconbox"><svg viewBox="0 0 24 24"><use href="#ico-heart"></use></svg></span><span><small>Bem-estar e informação</small><h3>Quero cuidar de mim</h3><p>Hábitos, saúde emocional e orientações para o dia a dia.</p></span><svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></button>
 </div>
 <div class="shortcut"><div class="lead"><svg viewBox="0 0 24 24"><use href="#ico-chat"></use></svg><span><h3>Não sabe por onde começar?</h3><p>Converse com a equipe PromoVie para entender as opções de acesso.</p></span></div><a class="btn dark textlink" href="https://wa.me/5527999417458?text=Ol%C3%A1%21%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20os%20atendimentos%20da%20PromoVie." target="_blank" rel="noopener noreferrer">Vamos conversar</a></div>
@@ -89,7 +89,7 @@
 </div>
 </section>
 <section class="view" id="screen-atendimentos" aria-labelledby="heading-atendimentos">
-<div class="page-heading"><div class="eyebrow">Atendimento profissional</div><h1 id="heading-atendimentos">Encontre o cuidado <span class="gradient">que você precisa.</span></h1><p>Estas são as principais opções de atendimento apresentadas pela PromoVie. Selecione uma para entender como funciona.</p></div>
+<div class="page-heading"><div class="eyebrow">Atendimento médico</div><h1 id="heading-atendimentos">Encontre o cuidado <span class="gradient">que você precisa.</span></h1><p>Estas são as principais opções de atendimento apresentadas pela PromoVie. Selecione uma para entender como funciona.</p></div>
 <div class="professional-intro"><span class="iconbox cyan"><svg viewBox="0 0 24 24"><use href="#ico-info"></use></svg></span><div class="copy"><strong>Como ter acesso?</strong><p>Escolha um serviço e fale com nossa equipe. A plataforma de consultas ainda está em integração.</p></div></div>
 <div class="care-grid">
 <button class="care-card" type="button" data-service="clinico"><span class="service-top"><span class="iconbox cyan"><svg viewBox="0 0 24 24"><use href="#ico-med"></use></svg></span><span class="small-tag">Telemedicina</span></span><h3>Clínico geral 24h</h3><p>Consulta médica online para sintomas e dúvidas de saúde.</p><span class="card-link">Como acessar <svg viewBox="0 0 24 24"><use href="#ico-arrow"></use></svg></span></button>
@@ -152,7 +152,7 @@ closer.addEventListener('click',close);backdrop.addEventListener('click',e=>{if(
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&backdrop.classList.contains('open'))close();if(e.key==='Tab'&&backdrop.classList.contains('open')){const f=Array.from(document.querySelectorAll('#dialog button,#dialog a')).filter(n=>!n.disabled);if(!f.length)return;if(e.shiftKey&&document.activeElement===f[0]){e.preventDefault();f[f.length-1].focus();}else if(!e.shiftKey&&document.activeElement===f[f.length-1]){e.preventDefault();f[0].focus();}}});
 const buttonClose='<button type="button" class="btn light" id="dialog-back">Voltar</button>';
 function bindClose(){const btn=document.getElementById('dialog-back');if(btn)btn.addEventListener('click',close);}
-document.querySelectorAll('[data-service]').forEach(b=>b.addEventListener('click',()=>{const s=professional[b.dataset.service];if(!s)return;const url=WA+encodeURIComponent('Olá! Gostaria de informações sobre '+s.title+' na PromoVie.');open('<div class="eyebrow">Atendimento profissional</div><h2 id="dialog-title">'+safe(s.title)+'</h2><p>'+safe(s.desc)+'</p><div class="box"><strong>Como acessar?</strong><p>A plataforma está em integração. Por enquanto, a equipe PromoVie pode informar as condições de utilização.</p></div><p style="font-size:11px">'+safe(s.note)+'</p><div class="actions"><a class="btn primary" href="'+url+'" target="_blank" rel="noopener noreferrer">Vamos conversar</a>'+buttonClose+'</div>');bindClose();}));
+document.querySelectorAll('[data-service]').forEach(b=>b.addEventListener('click',()=>{const s=professional[b.dataset.service];if(!s)return;const url=WA+encodeURIComponent('Olá! Gostaria de informações sobre '+s.title+' na PromoVie.');open('<div class="eyebrow">Atendimento médico</div><h2 id="dialog-title">'+safe(s.title)+'</h2><p>'+safe(s.desc)+'</p><div class="box"><strong>Como acessar?</strong><p>A plataforma está em integração. Por enquanto, a equipe PromoVie pode informar as condições de utilização.</p></div><p style="font-size:11px">'+safe(s.note)+'</p><div class="actions"><a class="btn primary" href="'+url+'" target="_blank" rel="noopener noreferrer">Vamos conversar</a>'+buttonClose+'</div>');bindClose();}));
 document.querySelectorAll('[data-topic]').forEach(b=>b.addEventListener('click',()=>{const s=topics[b.dataset.topic];if(!s)return;open('<div class="eyebrow">Autocuidado</div><h2 id="dialog-title">'+safe(s.title)+'</h2><p>'+safe(s.desc)+'</p><div class="box"><p>Este conteúdo é informativo e não substitui orientação profissional individualizada.</p></div><div class="actions">'+buttonClose+'</div>');bindClose();}));
 let installPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;});
