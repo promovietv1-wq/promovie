@@ -57,125 +57,92 @@ iframe{display:block;width:100%;height:710px;border:0;background:#fff}
 .notice{font-size:11px;color:#81798e;padding:18px 2px 0}
 @media(max-width:750px){main{padding:23px 0 40px}.tabs button{font-size:11px;padding:12px 5px}.viewer-area{padding:8px;min-height:610px}.viewer:not(.phone) iframe{height:660px}.review-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 13px 18px;gap:10px}.review summary{padding:16px}.review-card{border-radius:13px}.controlbar{gap:8px}.viewname{font-size:13px}}
 @media(max-width:420px){.wrap{width:calc(100% - 22px)}.viewer-area{padding:4px;border-radius:15px}.tabs{padding:5px;gap:3px}.tabs button{font-size:10px;min-height:44px}.review-copy{padding:9px}.review-copy p{font-size:10px}.status{font-size:9px}}
+.versionbar{display:flex;align-items:center;gap:8px;margin:14px 0 0;flex-wrap:wrap}.versionbar button{border:1px solid #e6dcef;border-radius:13px;padding:12px 17px;font-weight:800;font-size:12px;color:#674e83;background:#fff;min-height:43px}.versionbar button[aria-pressed="true"]{background:linear-gradient(115deg,#47218a,#7b3ec7);color:#fff;border-color:#6e3eb4}.versionbar button:focus-visible{outline-offset:2px}@media(max-width:600px){.versionbar{display:grid;grid-template-columns:1fr 1fr}.versionbar button{padding:10px;font-size:10px}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="wrap topinner"><div class="wordmark">PromoVie<small>Alternativas de TeleSaúde</small></div><span class="status">Prévia não publicada no menu</span></div></header>
 <main class="wrap">
 <h1>Especialidades Médiquo <span class="gradient">em três páginas.</span></h1>
-<p class="intro">Compare a apresentação alternativa das oito especialidades no próprio contexto de cada página, sem alterar o conteúdo do site oficial. As abas abaixo pertencem somente a esta área de pré-visualização.</p>
+<p class="intro">Confira a versão publicada com as oito especialidades e compare com a apresentação anterior, preservada no GitHub. Esta área de comparação não aparece na navegação pública.</p>
 <nav class="tabs" aria-label="Escolha a página para comparar">
 <button type="button" data-area="principal" aria-selected="true">Site principal</button>
 <button type="button" data-area="avulsa" aria-selected="false">Telemedicina Avulsa</button>
 <button type="button" data-area="experiencia" aria-selected="false">Experiência</button>
 </nav>
+<div class="versionbar" aria-label="Escolha a versão"><button type="button" data-version="atual" aria-pressed="true">Atual · 8 especialidades</button><button type="button" data-version="anterior" aria-pressed="false">Anterior · versão salva</button></div>
 <div class="controlbar">
-<div><div class="viewname" id="viewname">Site principal</div><div class="subtitle">A prévia mostra as especialidades no lugar dos cartões atuais.</div></div>
+<div><div class="viewname" id="viewname">Site principal</div><div class="subtitle" id="view-subtitle">Especialidades publicadas nas páginas oficiais.</div></div>
 <div class="device" aria-label="Tamanho da visualização">
 <button type="button" data-device="desktop" aria-pressed="true">Computador</button>
 <button type="button" data-device="phone" aria-pressed="false">Celular</button>
 </div>
 </div>
 <div class="viewer-area"><div class="viewer" id="viewer"><iframe id="site-frame" title="Prévia alternativa do site PromoVie" loading="eager"></iframe></div></div>
-<div class="fallback" id="fallback" role="status">Não foi possível incorporar a página nesta visualização. Você ainda pode conferir abaixo os oito textos e as fotos da versão alternativa.</div>
+<div class="fallback" id="fallback" role="status">Não foi possível incorporar a página nesta visualização. Utilize os links diretos das páginas.</div>
 <details class="review" id="review">
-<summary>Conferir as oito especialidades, fotos e descrições</summary>
+<summary>Consultar fotos e textos da versão atual</summary>
 <div class="review-grid" id="review-grid"></div>
 </details>
-<p class="notice">Visualização comparativa. Nenhuma alteração foi aplicada ao site principal, à Telemedicina Avulsa ou à página Experiência. Os serviços apresentados devem ser confirmados com o fornecedor antes da ativação.</p>
+<p class="notice">A versão atual foi publicada nas três áreas. As páginas antigas estão arquivadas como alternativa e não estão disponíveis nos menus oficiais. Os serviços anunciados devem corresponder à oferta contratada com o fornecedor.</p>
 </main>
 <script>
 (function(){
 "use strict";
 const specialties=[{"title":"Clínico Geral 24h","lead":"Orientação médica remota.","desc":"Primeira orientação para sintomas, dúvidas gerais e encaminhamento quando a avaliação presencial for indicada.","image":"https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg"},{"title":"Psicólogo","lead":"Escuta qualificada e saúde mental.","desc":"Espaço de escuta qualificada para emoções, relações, ansiedade, conflitos e desafios da vida pessoal ou profissional.","image":"https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg"},{"title":"Nutricionista","lead":"Alimentação e equilíbrio.","desc":"Apoio para ajustar alimentação à rotina, energia, prevenção e qualidade de vida.","image":"https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg"},{"title":"Treinador Físico","lead":"Movimento e saúde.","desc":"Orientação para movimento, postura, condicionamento e hábitos possíveis dentro da realidade da pessoa.","image":"https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg"},{"title":"Ginecologista","lead":"Saúde feminina.","desc":"Atenção à saúde da mulher, dúvidas preventivas e acompanhamento remoto dentro dos critérios profissionais.","image":"https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg"},{"title":"Dermatologista","lead":"Cuidado com a pele.","desc":"Avaliação inicial de dúvidas sobre pele, prevenção e cuidados quando o formato remoto for adequado.","image":"https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg"},{"title":"Pediatra","lead":"Crianças e família.","desc":"Suporte aos responsáveis em dúvidas sobre sintomas, cuidados infantis e condutas seguras quando possível por teleatendimento.","image":"https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg"},{"title":"Atendimento Pet","lead":"Cães e gatos.","desc":"Primeira orientação para tutores sobre cuidados, sinais de alerta e bem-estar de cães e gatos.","image":"https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg"}];
-const previews={
- principal:{name:"Site principal",src:"/?preview-mediquo=1#teleconsultas",selector:"#teleconsultas .teleGrid",section:"#teleconsultas"},
- avulsa:{name:"Telemedicina Avulsa",src:"/?preview-mediquo=1#telemedicina-avulsa",selector:"#telemedicina-avulsa #avulsa-especialidades .teleGrid",section:"#avulsa-especialidades"},
- experiencia:{name:"Experiência",src:"/experiencia/?preview-mediquo=1#telessaude",selector:"#telessaude .teleGrid",section:"#telessaude"}
+const pages={
+  principal:{name:"Site principal",section:"#teleconsultas",current:"/?v=20261014med8#teleconsultas",previous:"/preview-site-versao-anterior-20261014.html#teleconsultas"},
+  avulsa:{name:"Telemedicina Avulsa",section:"#avulsa-especialidades",current:"/?v=20261014med8#telemedicina-avulsa",previous:"/preview-site-versao-anterior-20261014.html#telemedicina-avulsa"},
+  experiencia:{name:"Experiência",section:"#telessaude",current:"/experiencia/?v=20261014med8#telessaude",previous:"/experiencia/preview-versao-anterior-20261014.html#telessaude"}
 };
+const params=new URLSearchParams(location.search);
+let area=Object.hasOwn(pages,params.get("area"))?params.get("area"):"principal";
+let version=params.get("versao")==="anterior"?"anterior":"atual";
 const frame=document.getElementById("site-frame");
 const fallback=document.getElementById("fallback");
-const box=document.getElementById("viewer");
-const name=document.getElementById("viewname");
-const value=new URLSearchParams(location.search).get("area");
-let current=Object.prototype.hasOwnProperty.call(previews,value)?value:"principal";
-const grid=document.getElementById("review-grid");
-function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-grid.innerHTML=specialties.map(function(x,i){return '<article class="review-card"><img src="'+escapeHtml(x.image)+'" alt="'+escapeHtml(x.title)+'" loading="lazy"><div class="review-copy"><strong>'+String(i+1).padStart(2,"0")+' · '+escapeHtml(x.title)+'</strong><small>'+escapeHtml(x.lead)+'</small><p>'+escapeHtml(x.desc)+'</p></div></article>';}).join("");
-function inject(){
- let doc;
- try{doc=frame.contentDocument;}catch(e){fallback.classList.add("show");return;}
- if(!doc){fallback.classList.add("show");return;}
- const grid=doc.querySelector(previews[current].selector);
- if(!grid){fallback.classList.add("show");return;}
- const existing=Array.from(grid.children).filter(function(x){return x.tagName==="ARTICLE";});
- if(!existing.length){fallback.classList.add("show");return;}
- const professional=existing.find(function(x){return x.classList.contains("pvProfessional");})||existing[0];
- const informative=existing.find(function(x){return x.classList.contains("pvInformative");})||existing[existing.length-1];
- const fragment=doc.createDocumentFragment();
- specialties.forEach(function(item,index){
-   const educational=index===7;
-   const copy=(educational?informative:professional).cloneNode(true);
-   copy.classList.remove("reveal","pv-entering");
-   copy.classList.toggle("pvInformative",educational);
-   copy.classList.toggle("pvProfessional",!educational);
-   copy.removeAttribute("style");
-   copy.classList.add("pv-mediquo-alternative-card");
-   const img=copy.querySelector("img");
-   if(img){
-      img.removeAttribute("srcset");
-      img.removeAttribute("data-full");
-      img.removeAttribute("onerror");
-      img.removeAttribute("sizes");
-      img.src=item.image;
-      img.alt=item.title;
-      img.loading="lazy";
-   }
-   const title=copy.querySelector("summary h3")||copy.querySelector("h3");
-   if(title)title.textContent=item.title;
-   const lead=copy.querySelector(".detailLead");
-   if(lead)lead.textContent=item.lead;
-   const description=copy.querySelector(".miniSummary");
-   if(description)description.textContent=item.desc;
-   const details=copy.querySelector("details");
-   if(details)details.open=false;
-   fragment.appendChild(copy);
- });
- grid.replaceChildren(fragment);
- const label=doc.createElement("div");
- label.setAttribute("data-preview-only","mediquo");
- label.textContent="Médiquo · versão alternativa das especialidades";
- label.style.cssText="font:750 12px/1.5 Inter,Arial,sans-serif;color:#5c268c;background:#f4edfa;border:1px solid #e8dbf4;border-radius:13px;padding:12px 16px;margin:14px 0 16px;text-align:center;";
- grid.parentNode.insertBefore(label,grid);
- if(current==="avulsa"){
-  const overlay=doc.getElementById("telemedicina-avulsa");
-  if(overlay){overlay.classList.add("is-open");overlay.setAttribute("aria-hidden","false");}
- }
- fallback.classList.remove("show");
- const target=doc.querySelector(previews[current].section);
- if(target){
-    frame.contentWindow.requestAnimationFrame(function(){
-       if(current==="avulsa"){
-          const overlay=doc.getElementById("telemedicina-avulsa");
-          if(overlay){overlay.scrollTop=Math.max(0,target.getBoundingClientRect().top+overlay.scrollTop-90);}
-       }else{target.scrollIntoView({block:"start",behavior:"auto"});}
-    });
- }
+const viewer=document.getElementById("viewer");
+const heading=document.getElementById("viewname");
+const subtitle=document.getElementById("view-subtitle");
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]});}
+document.getElementById("review-grid").innerHTML=specialties.map(function(item,i){
+ return '<article class="review-card"><img src="'+escapeHtml(item.image)+'" alt="'+escapeHtml(item.title)+'" loading="lazy"><div class="review-copy"><strong>'+String(i+1).padStart(2,"0")+" · "+escapeHtml(item.title)+'</strong><small>'+escapeHtml(item.lead)+'</small><p>'+escapeHtml(item.desc)+'</p></div></article>';
+}).join("");
+function loaded(){
+ try{
+  const doc=frame.contentDocument;
+  if(!doc){fallback.classList.add("show");return}
+  const selection=doc.querySelector(pages[area].section);
+  if(!selection){fallback.classList.add("show");return}
+  if(area==="avulsa"){
+   const overlay=doc.getElementById("telemedicina-avulsa");
+   if(overlay){overlay.classList.add("is-open");overlay.setAttribute("aria-hidden","false")}
+  }
+  fallback.classList.remove("show");
+  frame.contentWindow.requestAnimationFrame(function(){
+   if(area==="avulsa"){
+    const overlay=doc.getElementById("telemedicina-avulsa");
+    if(overlay){overlay.scrollTop=Math.max(0,selection.getBoundingClientRect().top+overlay.scrollTop-110)}
+   }else{selection.scrollIntoView({block:"start",behavior:"auto"})}
+  });
+ }catch(e){fallback.classList.add("show")}
 }
-frame.addEventListener("load",function(){
- try{inject()}catch(e){fallback.classList.add("show");}
-});
-function choose(area){
- current=area;
- document.querySelectorAll("[data-area]").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.area===area));});
- name.textContent=previews[area].name;
+frame.addEventListener("load",loaded);
+function choose(){
+ document.querySelectorAll("[data-area]").forEach(function(button){button.setAttribute("aria-selected",String(button.dataset.area===area))});
+ document.querySelectorAll("[data-version]").forEach(function(button){button.setAttribute("aria-pressed",String(button.dataset.version===version))});
+ heading.textContent=pages[area].name;
+ subtitle.textContent=version==="atual"?"Oito especialidades publicadas, em desktop e mobile.":"Apresentação anterior guardada como alternativa no GitHub.";
  fallback.classList.remove("show");
- history.replaceState(null,"","?area="+encodeURIComponent(area));
- frame.src=previews[area].src;
+ history.replaceState(null,"","?area="+encodeURIComponent(area)+"&versao="+encodeURIComponent(version));
+ frame.src=pages[area][version==="atual"?"current":"previous"];
 }
-document.querySelectorAll("[data-area]").forEach(function(b){b.addEventListener("click",function(){choose(b.dataset.area)});});
-document.querySelectorAll("[data-device]").forEach(function(b){b.addEventListener("click",function(){box.classList.toggle("phone",b.dataset.device==="phone");document.querySelectorAll("[data-device]").forEach(function(el){el.setAttribute("aria-pressed",String(el===b));});});});
-choose(current);
+document.querySelectorAll("[data-area]").forEach(function(b){b.addEventListener("click",function(){area=b.dataset.area;choose()})});
+document.querySelectorAll("[data-version]").forEach(function(b){b.addEventListener("click",function(){version=b.dataset.version;choose()})});
+document.querySelectorAll("[data-device]").forEach(function(b){b.addEventListener("click",function(){
+ viewer.classList.toggle("phone",b.dataset.device==="phone");
+ document.querySelectorAll("[data-device]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});
+})});
+choose();
 })();
 </script>
 </body>
