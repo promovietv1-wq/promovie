@@ -1,4 +1,4 @@
-const CACHE='promovie-previa-v7';
+const CACHE='promovie-previa-v8';
 const HOME='/previews/app-telemedicina/';
 const SHELL=[HOME,HOME+'index.html',HOME+'manifest.webmanifest','/app/assets/coracao-promovie-com-logo.webp','/app/icons/heart-192.png','/app/icons/heart-512.png'];
 self.addEventListener('install',event=>{
