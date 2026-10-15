@@ -6,7 +6,7 @@
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "/app/inicio/",
-  "scope": "/app/",
+  "scope": "/app/inicio/",
   "display": "standalone",
   "display_override": [
     "standalone",
