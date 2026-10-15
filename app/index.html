@@ -35,11 +35,10 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
 .mobile-only{display:none}html[data-device="smartphone"] .mobile-only{display:block}html[data-device="smartphone"] .desktop-only{display:none}
 .desktop-only{display:grid;min-height:100vh;min-height:100dvh;place-items:center;padding:30px;background:radial-gradient(ellipse at 80% 10%,#f1e9fa,transparent 44%),radial-gradient(ellipse at 5% 100%,#eaf6fb,transparent 50%),#fff}
 .desktop-panel{text-align:center;background:#fff;border:1px solid #eee7f5;border-radius:27px;padding:48px 40px;max-width:530px;width:100%;box-shadow:0 20px 80px #361b5a13}
-.desktop-panel img{width:87px;height:87px;object-fit:contain;margin:0 auto 26px}
+.desktop-panel img{width:128px;height:128px;object-fit:contain;margin:0 auto 26px}
 .desktop-panel h1{font-size:clamp(24px,3.2vw,33px);line-height:1.22;letter-spacing:-.055em;margin:0 0 14px}
 .desktop-panel p{font-size:14px;line-height:1.74;color:#72687f;margin:0 auto 16px;max-width:360px}
 .desktop-address{display:inline-block;padding:11px 17px;border-radius:12px;background:#f3ecfb;color:#5c2ba0;font-size:13px;font-weight:800;user-select:all}
-.desktop-panel .small{margin:22px auto 0;font-size:11px;color:#958a9f}
 .page{max-width:430px;min-height:100vh;min-height:100dvh;margin:0 auto;padding:0 23px calc(114px + env(safe-area-inset-bottom));overflow:hidden;position:relative}
 .masthead{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:23px 0 19px;position:relative;z-index:1}
 .identity{display:flex;align-items:center;gap:10px}
@@ -97,11 +96,10 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
 <body>
 <section class="desktop-only">
   <div class="desktop-panel">
-    <img src="/app/assets/coracao-promovie-com-logo.webp" width="87" height="87" alt="Coração PromoVie">
+    <img src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
     <h1>Abra a página pelo celular.</h1>
     <p>A instalação está disponível somente em smartphones. No seu iPhone ou Android, visite:</p>
     <span class="desktop-address">www.promovie.tv.br/app/</span>
-    <p class="small">O botão de instalação não aparece em computadores.</p>
   </div>
 </section>
 <div class="mobile-only">
