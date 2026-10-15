@@ -222,11 +222,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .site-identity{gap:10px}
   .site-globe{width:28px;height:28px}
   .site-globe svg{width:16px;height:16px}
+  /* CTA vem antes do smartphone, sem sobreposicao */
   .main{
-    grid-template-columns:minmax(0,1fr);min-height:auto;gap:3px;
-    padding:8px 0 12px
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"copy" "install" "phone";
+    min-height:auto;gap:6px;padding:8px 0 14px
   }
-  .copy{max-width:550px;padding:0}
+  .copy{grid-area:copy;max-width:550px;padding:0}
+  .right-col{display:contents}
   .heart-stage{width:145px;height:134px;margin:0 auto 3px}
   .hero-heart{width:138px;height:138px}
   .copy h1{
@@ -235,13 +238,26 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   }
   .copy h1 .gradient{padding-bottom:3px}
   .lead{font-size:12px;line-height:1.4}
-  .right-col{padding:0}
-  /* Levanta a moldura sem reduzir a altura do aparelho. */
-  .phone-stage{min-height:0;height:auto;padding:0 12px 1px;margin-top:6px}
-  .phone-stage::after{width:315px;height:315px}
-  /* The phone keeps a fixed, realistic silhouette: never squeeze height alone. */
+  .install-block{
+    grid-area:install;
+    position:relative;left:auto;bottom:auto;transform:none;
+    z-index:5;align-self:center;justify-self:center;
+    width:min(335px,calc(100vw - 36px));
+    max-width:none;margin:8px auto 7px
+  }
+  .install{
+    font-size:13px;min-height:51px;border-radius:14px;padding:10px 16px;
+    box-shadow:0 12px 27px rgba(91,35,182,.20)
+  }
+  .phone-stage{
+    grid-area:phone;
+    min-height:0;height:auto;
+    padding:4px 12px 8px;margin:0
+  }
+  .phone-stage::after{width:295px;height:295px}
+  /* Escala uniforme: a largura determina a altura, preservando o formato 1:2,06. */
   .phone{
-    width:clamp(205px,56vw,230px);
+    width:clamp(156px,calc((100svh - 346px)/2.06),210px);
     height:auto;aspect-ratio:1 / 2.06;
     border-width:5px;border-radius:35px;transform:rotate(-3deg)
   }
@@ -261,22 +277,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .phone-nav{min-height:35px}
   .phone-nav svg{width:14px;height:14px}
   .phone-nav span{font-size:7px}
-  /* Alinha o botão ao rodapé do mockup, independente do navegador embutido.
-     A margem negativa faz a sobreposição verdadeira no telefone. */
-  .install-block{
-    position:relative;
-    left:auto;bottom:auto;transform:none;
-    z-index:5;
-    align-self:center;
-    margin:-91px auto 0;
-    width:min(335px,calc(100vw - 36px));
-    max-width:none;
-  }
-  .install{
-    font-size:13px;min-height:53px;border-radius:14px;padding:11px 16px;
-    box-shadow:0 12px 31px rgba(68,28,148,.26),0 2px 8px rgba(24,14,60,.09);
-  }
-  .main{padding-bottom:32px}
 }
 @media(max-width:370px){
   .container{width:calc(100% - 28px)}
@@ -285,18 +285,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .heart-stage{width:126px;height:119px}
   .hero-heart{width:123px;height:123px}
   .phone-stage{padding-inline:9px}
-  .phone{width:205px}
+  .install-block{width:calc(100vw - 28px)}
   .chat-row img{width:23px;height:23px}
 }
 @media(max-width:700px) and (max-height:760px){
   .heart-stage{width:120px;height:112px;margin-bottom:2px}
   .hero-heart{width:115px;height:115px}
   .copy h1{font-size:clamp(26px,7.2vw,35px)}
+  .install-block{margin:5px auto 5px}
+  .phone-stage{padding-top:2px;padding-bottom:5px}
 }
 @media(max-width:700px) and (max-height:630px){
   .heart-stage{width:105px;height:100px}
   .hero-heart{width:102px;height:102px}
   .copy h1{font-size:clamp(25px,7vw,31px)}
+  .phone{width:min(156px,calc(100svh / 3.65))}
+  .phone-stage{padding-bottom:4px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
