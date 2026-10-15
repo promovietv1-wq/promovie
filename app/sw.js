@@ -1,5 +1,5 @@
 /* PromoVie PWA: offline apenas da interface pública, nunca de dados de consultas ou páginas da Levita. */
-const CACHE="promovie-app-shell-v17";
+const CACHE="promovie-app-shell-v18";
 const SHELL=["/app/","/app/inicio/","/app/familias-amigos-promovie-2x.jpg","/app/telemedicina/","/app/manifest.webmanifest","/app/assets/coracao-promovie-com-logo.webp","/app/icons/heart-192.png","/app/icons/heart-512.png","/app/icons/favicon-32.png","/app/icons/favicon-48.png","/app/icons/favicon.ico","/app/icons/apple-touch-180.png","/app/icons/favicon-coracao-promovie-32.png","/app/icons/favicon-coracao-promovie-48.png","/app/icons/favicon-coracao-promovie.ico","/app/icons/apple-touch-coracao-promovie.png"];
 self.addEventListener("install",event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
