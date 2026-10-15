@@ -207,6 +207,87 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .install-dialog p{font-size:13px;line-height:1.75;color:#667085;margin:0 auto;max-width:355px}
 .install-dialog .dialog-url{display:inline-block;font-size:13px;font-weight:800;color:#5b2d96;background:#f5f0fb;padding:12px 15px;margin:17px auto 0;border-radius:12px;user-select:all}
 
+
+/* Ampliação da prévia: controle visível somente no mobile. */
+.phone-zoom-trigger{display:none}
+.phone-zoom-dialog{
+  box-sizing:border-box;position:fixed;inset:0;margin:0;
+  width:100%;max-width:none;height:100%;height:100dvh;max-height:none;
+  border:0;border-radius:0;padding:0;overflow:hidden;
+  background:#12101c;color:#fff
+}
+.phone-zoom-dialog::backdrop{background:rgba(8,8,15,.86)}
+.phone-zoom-dialog[open]{display:flex;align-items:center;justify-content:center}
+.phone-zoom-device{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  box-sizing:border-box;padding:calc(55px + env(safe-area-inset-top)) 14px calc(12px + env(safe-area-inset-bottom))
+}
+.phone-zoom-close{
+  position:absolute;top:calc(12px + env(safe-area-inset-top));
+  right:calc(15px + env(safe-area-inset-right));z-index:5;
+  width:44px;height:44px;border:1px solid rgba(255,255,255,.24);
+  border-radius:50%;background:rgba(255,255,255,.12);color:#fff;
+  display:grid;place-items:center;backdrop-filter:blur(8px);
+  transition:background .2s ease,border-color .2s ease
+}
+.phone-zoom-close:hover,.phone-zoom-close:focus-visible{
+  background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.58)
+}
+.phone-zoom-close svg{width:21px;height:21px}
+.phone-zoom-dialog .phone{
+  flex:none;position:relative;
+  width:min(87vw,370px,calc((100dvh - 115px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) / 2.06));
+  height:auto;aspect-ratio:1 / 2.06;max-width:100%;
+  border:7px solid #272034;border-radius:43px;
+  transform:none;box-shadow:0 28px 70px rgba(0,0,0,.54)
+}
+.phone-zoom-dialog .phone:hover{transform:none;box-shadow:0 28px 70px rgba(0,0,0,.54)}
+.phone-zoom-dialog .phone::before{width:79px;height:17px}
+.phone-zoom-dialog .phone::after{border-radius:35px}
+.phone-zoom-dialog .list-heading{padding:31px 14px 10px;min-height:62px}
+.phone-zoom-dialog .list-heading strong{font-size:14px}
+.phone-zoom-dialog .list-heading span{font-size:11px}
+.phone-zoom-dialog .chat-list{padding:0 10px}
+.phone-zoom-dialog .chat-row{gap:9px;padding:3px 2px}
+.phone-zoom-dialog .chat-row img{
+  width:clamp(32px,10.2vw,45px);height:clamp(32px,10.2vw,45px)
+}
+.phone-zoom-dialog .chat-info strong{font-size:clamp(10px,2.85vw,12.5px)}
+.phone-zoom-dialog .chat-info small{font-size:clamp(8px,2.2vw,10px);margin-top:3px}
+.phone-zoom-dialog .chat-live{font-size:10px;padding:4px 7px}
+.phone-zoom-dialog .chat-arrow{font-size:20px}
+.phone-zoom-dialog .phone-nav{min-height:49px}
+.phone-zoom-dialog .phone-nav span{font-size:10px}
+.phone-zoom-dialog .phone-nav svg{width:20px;height:20px}
+html.phone-zoom-open{overflow:hidden}
+@media(max-width:700px){
+  .phone-zoom-trigger{
+    position:absolute;left:calc(50% + 82px);top:14%;z-index:6;
+    width:42px;height:42px;display:grid;place-items:center;
+    padding:0;border:1px solid rgba(115,52,216,.19);border-radius:50%;
+    color:#622db5;background:rgba(255,255,255,.97);
+    box-shadow:0 5px 19px rgba(45,28,87,.16);
+    cursor:zoom-in;touch-action:manipulation;
+    transition:box-shadow .2s ease,background-color .2s ease
+  }
+  .phone-zoom-trigger:hover,.phone-zoom-trigger:focus-visible{
+    background:#f8f5ff;box-shadow:0 6px 22px rgba(45,28,87,.22)
+  }
+  .phone-zoom-trigger svg{width:20px;height:20px;stroke-width:1.8}
+}
+@media(max-width:370px){
+  .phone-zoom-trigger{left:calc(50% + 77px);width:40px;height:40px}
+}
+@media(min-width:701px){
+  .phone-zoom-dialog{display:none!important}
+}
+@media(max-height:575px){
+  .phone-zoom-device{padding-top:53px;padding-bottom:7px}
+  .phone-zoom-dialog .list-heading{padding:20px 12px 4px;min-height:44px}
+  .phone-zoom-dialog .phone-nav{min-height:32px}
+  .phone-zoom-dialog .chat-row img{width:26px;height:26px}
+}
+
 @media(max-width:900px){
   .main{gap:22px;grid-template-columns:minmax(0,1fr) minmax(290px,.9fr)}
   .copy h1{font-size:clamp(35px,4.9vw,55px)}
@@ -350,6 +431,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           </div>
         </div>
       </div>
+      <button type="button" class="phone-zoom-trigger" id="phone-zoom-trigger"
+              aria-label="Ampliar a visualização do aplicativo" aria-haspopup="dialog"
+              aria-controls="phone-zoom-dialog" title="Ampliar visualização">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="6.5"/>
+          <path d="m16 16 4.5 4.5M10.8 7.9v5.8M7.9 10.8h5.8"/>
+        </svg>
+      </button>
     </div>
     <div class="install-block">
       <button type="button" class="install" id="install-now" aria-label="Instale no seu smartphone">
@@ -359,6 +448,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     </div>
   </div>
 </main>
+<dialog id="phone-zoom-dialog" class="phone-zoom-dialog" aria-label="Visualização ampliada do aplicativo">
+  <button type="button" class="phone-zoom-close" id="phone-zoom-close" aria-label="Fechar visualização ampliada" title="Fechar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5 19 19M19 5 5 19"/></svg>
+  </button>
+  <div class="phone-zoom-device" id="phone-zoom-device"></div>
+</dialog>
 <dialog id="install-desktop-dialog" class="install-dialog" aria-labelledby="install-desktop-title" aria-describedby="install-desktop-desc">
   <form method="dialog"><button class="dialog-close" type="submit" aria-label="Fechar aviso"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button></form>
   <img class="dialog-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
@@ -384,6 +479,37 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     else{window.alert("Abra esta página pelo smartphone: www.promovie.tv.br/app/");}
   });
   dialog.addEventListener("click",function(event){if(event.target===dialog)dialog.close();});
+  const zoomTrigger=document.getElementById("phone-zoom-trigger");
+  const zoomDialog=document.getElementById("phone-zoom-dialog");
+  const zoomClose=document.getElementById("phone-zoom-close");
+  const zoomDevice=document.getElementById("phone-zoom-device");
+  const sourcePhone=document.querySelector(".phone-stage > .phone");
+  if(zoomTrigger && zoomDialog && zoomClose && zoomDevice && sourcePhone){
+    zoomTrigger.addEventListener("click",function(){
+      if(!window.matchMedia("(max-width:700px)").matches)return;
+      const expanded=sourcePhone.cloneNode(true);
+      expanded.setAttribute("aria-label","Prévia ampliada do smartphone com oito especialidades");
+      expanded.querySelectorAll('img[loading="lazy"]').forEach(function(img){img.loading="eager";});
+      zoomDevice.replaceChildren(expanded);
+      if(typeof zoomDialog.showModal==="function"){
+        zoomDialog.showModal();
+        document.documentElement.classList.add("phone-zoom-open");
+        zoomClose.focus({preventScroll:true});
+      }
+    });
+    zoomClose.addEventListener("click",function(){if(zoomDialog.open)zoomDialog.close();});
+    zoomDialog.addEventListener("click",function(event){
+      if(event.target===zoomDialog || event.target===zoomDevice)zoomDialog.close();
+    });
+    zoomDialog.addEventListener("close",function(){
+      document.documentElement.classList.remove("phone-zoom-open");
+      zoomDevice.replaceChildren();
+      if(window.matchMedia("(max-width:700px)").matches)zoomTrigger.focus({preventScroll:true});
+    });
+    window.addEventListener("resize",function(){
+      if(zoomDialog.open && !window.matchMedia("(max-width:700px)").matches)zoomDialog.close();
+    });
+  }
 })();
 </script>
 </body>
