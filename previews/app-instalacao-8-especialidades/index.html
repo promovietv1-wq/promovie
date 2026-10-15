@@ -214,9 +214,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   box-sizing:border-box;position:fixed;inset:0;margin:0;
   width:100%;max-width:none;height:100%;height:100dvh;max-height:none;
   border:0;border-radius:0;padding:0;overflow:hidden;
-  background:#12101c;color:#fff
+  background:linear-gradient(160deg,#fbf9ff 0%,#f3edff 52%,#eadffd 100%);color:#4b0c8f
 }
-.phone-zoom-dialog::backdrop{background:rgba(8,8,15,.86)}
+.phone-zoom-dialog::backdrop{background:rgba(60,30,102,.24)}
 .phone-zoom-dialog[open]{display:flex;align-items:center;justify-content:center}
 .phone-zoom-device{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;
@@ -225,13 +225,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .phone-zoom-close{
   position:absolute;top:calc(12px + env(safe-area-inset-top));
   right:calc(15px + env(safe-area-inset-right));z-index:5;
-  width:44px;height:44px;border:1px solid rgba(255,255,255,.24);
-  border-radius:50%;background:rgba(255,255,255,.12);color:#fff;
+  width:44px;height:44px;border:1px solid rgba(115,52,216,.15);
+  border-radius:50%;background:rgba(255,255,255,.89);color:#622db5;
   display:grid;place-items:center;backdrop-filter:blur(8px);
   transition:background .2s ease,border-color .2s ease
 }
 .phone-zoom-close:hover,.phone-zoom-close:focus-visible{
-  background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.58)
+  background:#fff;border-color:rgba(115,52,216,.38)
 }
 .phone-zoom-close svg{width:21px;height:21px}
 .phone-zoom-dialog .phone{
@@ -239,9 +239,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   width:min(87vw,370px,42dvh);
   height:auto;aspect-ratio:1 / 2.06;max-width:100%;
   border:7px solid #272034;border-radius:43px;
-  transform:none;box-shadow:0 28px 70px rgba(0,0,0,.54)
+  transform:none;box-shadow:0 24px 54px rgba(64,32,111,.24)
 }
-.phone-zoom-dialog .phone:hover{transform:none;box-shadow:0 28px 70px rgba(0,0,0,.54)}
+.phone-zoom-dialog .phone:hover{transform:none;box-shadow:0 24px 54px rgba(64,32,111,.24)}
 .phone-zoom-dialog .phone::before{width:79px;height:17px}
 .phone-zoom-dialog .phone::after{border-radius:35px}
 .phone-zoom-dialog .list-heading{padding:31px 14px 10px;min-height:62px}
@@ -414,7 +414,7 @@ html.phone-zoom-open{overflow:hidden}
       <div class="phone" role="img" aria-label="Ilustração de um smartphone com o aplicativo PromoVie, mostrando as oito especialidades de atendimento">
         <div class="phone-screen">
           
-          <div class="list-heading"><strong>Especialidades</strong><span>8 opções</span></div>
+          <div class="list-heading"><strong>Especialidades</strong></div>
           <div class="chat-list"><div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" width="36" height="36" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Clínico Geral 24h</strong><small>Orientação médica on-line</small></span><span class="chat-live">24h</span></div>
 <div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" width="36" height="36" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Psicólogo</strong><small>Escuta e saúde mental</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
 <div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" width="36" height="36" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Nutricionista</strong><small>Alimentação e equilíbrio</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
