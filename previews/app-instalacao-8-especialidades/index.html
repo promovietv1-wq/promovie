@@ -228,23 +228,23 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .phone-zoom-trigger[aria-pressed="true"]{cursor:zoom-out}
   /* Modo ampliado: CTA no topo, smartphone grande, fundo lilás leve. */
   /* Modo ampliado: alinhamento central e superfícies consistentes. */
-  .main.phone-expanded{row-gap:7px}
+  /* Zoom mobile: faixa de instalação e superfície lavanda alinhadas de ponta a ponta. */
+  .main.phone-expanded{row-gap:0}
   .main.phone-expanded .install-block{
-    width:min(335px,calc(100vw - 36px));
-    max-width:100%;justify-self:center;
-    margin:9px auto 7px;z-index:4
+    width:100vw;max-width:none;justify-self:center;
+    margin:9px 0 0;z-index:4
   }
   .main.phone-expanded .install{
-    min-height:54px;font-size:clamp(13px,3.65vw,15px);
-    font-weight:800;border-radius:14px;border:1px solid rgba(255,255,255,.22);
-    box-shadow:0 9px 24px rgba(85,31,177,.19)
+    width:100%;min-height:56px;font-size:clamp(13px,3.65vw,15px);
+    font-weight:800;border-radius:0;border:0;
+    box-shadow:0 7px 20px rgba(85,31,177,.17)
   }
   .main.phone-expanded .install span{max-width:none}
   .main.phone-expanded .phone-stage{
-    width:100%;max-width:440px;justify-self:center;
+    width:100vw;max-width:none;justify-self:center;
     box-sizing:border-box;position:relative;min-height:0;height:auto;
-    padding:25px 14px 30px;margin:0 auto 7px;overflow:hidden;
-    border-radius:24px;
+    padding:25px 14px 30px;margin:0;overflow:hidden;
+    border-radius:0;
     background:linear-gradient(155deg,#f0e5ff 0%,#e6d6fa 55%,#efe5ff 100%)
   }
   .main.phone-expanded .phone-stage::before,
