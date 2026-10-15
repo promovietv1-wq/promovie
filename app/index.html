@@ -1,260 +1,230 @@
 <!doctype html>
-<html lang="pt-BR" data-device="desktop">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
-<meta name="description" content="Instale o aplicativo de atendimento da PromoVie no seu celular. Telemedicina e profissionais de saúde a um toque.">
+<meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex,nofollow">
+<meta name="description" content="PromoVie: telemedicina na palma da sua mão. Instale o aplicativo de telemedicina no seu smartphone.">
 <link rel="canonical" href="https://www.promovie.tv.br/app/">
-<link rel="icon" href="/app/icons/favicon-coracao-promovie.ico?v=13" sizes="any">
-<link rel="icon" href="/app/icons/favicon-coracao-promovie-32.png?v=13" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=13" sizes="180x180">
+<link rel="icon" href="/app/icons/favicon-coracao-promovie.ico?v=14" sizes="any">
+<link rel="icon" href="/app/icons/favicon-coracao-promovie-32.png?v=14" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
+<link rel="preload" href="/preview-promovie-logo.webp" as="image" type="image/webp">
 <link rel="preload" href="/app/assets/coracao-promovie-com-logo.webp" as="image" type="image/webp">
-<title>PromoVie | Instale o aplicativo de Telemedicina</title>
-<script>
-(function(){
-  "use strict";
-  var ua=navigator.userAgent||"";
-  var tablet=/iPad|Tablet|Silk|Android(?!.*Mobile)/i.test(ua)||(/Macintosh/i.test(ua)&&navigator.maxTouchPoints>1);
-  var mobileHint=!!(navigator.userAgentData&&navigator.userAgentData.mobile);
-  var phone=!tablet&&(/iPhone|iPod|Android.*Mobile|Windows Phone|IEMobile|BlackBerry|BB10|Opera Mini/i.test(ua)||mobileHint);
-  document.documentElement.dataset.device=phone?"smartphone":"desktop";
-  document.addEventListener("DOMContentLoaded",function(){
-    var cta=document.getElementById("install-now");
-    if(cta){cta.addEventListener("click",function(){
-      if(phone){window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");return;}
-      var dialog=document.getElementById("install-desktop-dialog");
-      if(dialog&&typeof dialog.showModal==="function"){dialog.showModal();}
-      else{window.alert("Para instalar, abra www.promovie.tv.br/app/ no seu smartphone.");}
-    });}
-    var dialog=document.getElementById("install-desktop-dialog");
-    if(dialog){dialog.addEventListener("click",function(event){if(event.target===dialog)dialog.close();});}
-  });
-})();
-</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<title>PromoVie | Telemedicina na palma da sua mão</title>
 <style>
-:root{color-scheme:light;--deep:#402080;--purple:#6226bd;--bright:#833fd7;--ink:#211835;--sub:#777081;--line:#ece8f2;--light:#f7f4fc;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-*{box-sizing:border-box}html{min-width:320px}body{margin:0;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased}
-img,svg{display:block}svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
-button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aabe;outline-offset:3px}
-.mobile-only{display:block}.desktop-only{display:none!important}
-.page{max-width:430px;min-height:100vh;min-height:100dvh;margin:0 auto;padding:0 23px calc(114px + env(safe-area-inset-bottom));overflow:hidden;position:relative}
-.masthead{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:23px 0 19px;position:relative;z-index:1}
-.identity{display:flex;align-items:center;gap:10px}
-.identity img{width:43px;height:43px;object-fit:contain;flex:none}
-.identity strong{display:block;font-weight:850;font-size:21px;letter-spacing:-.065em;line-height:1.1;color:#52249c}
-.identity small{display:block;font-size:10px;font-weight:600;color:#8e839c;margin-top:4px}
-.masthead-label{font-size:9px;font-weight:800;color:#7041ae;border:1px solid #e8def3;background:#faf7ff;border-radius:99px;padding:8px 10px;white-space:nowrap}
-.hero{position:relative;z-index:1;padding:15px 0 10px}
-.kicker{display:flex;align-items:center;gap:7px;color:#7a50b4;font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:850;margin:0 0 12px}
-.kicker:before{content:"";height:5px;width:5px;background:#6b31b9;border-radius:50%}
-.hero h1{font-size:clamp(33px,9.1vw,43px);font-weight:850;letter-spacing:-.067em;line-height:1.13;margin:0 0 13px;max-width:365px}
-.hero h1 span{color:#7234bd}
-.hero p{font-size:13px;color:#746d80;line-height:1.65;margin:0;max-width:340px}
-.app-showcase{position:relative;padding:20px 0 0;isolation:isolate}
-.app-showcase:before{content:"";position:absolute;inset:7px -90px 7px;background:radial-gradient(ellipse at center,#ede3f9 0%,#f7f2fd 42%,rgba(255,255,255,0) 71%);z-index:-1;pointer-events:none}
-.phone{position:relative;width:min(100%,323px);margin:0 auto;background:#fff;border:7px solid #352446;border-radius:39px;box-shadow:0 17px 35px #2c1c4227,0 1px 8px #2c1c4223;overflow:hidden;transform:rotate(-1.3deg)}
-.phone:before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);height:16px;width:87px;background:#352446;border-radius:0 0 12px 12px;z-index:3}
-.phone-screen{height:482px;overflow:hidden;background:#fff;border-radius:32px 32px 26px 26px;position:relative}
-.status-line{height:26px;padding:8px 18px 0;display:flex;align-items:center;justify-content:space-between;font-size:9px;font-weight:800;color:#322947}
-.status-bars{display:flex;align-items:center;gap:5px}
-.status-bars svg{width:13px;height:13px;stroke-width:2}
-.app-purple{background:#6024ba;color:#fff;padding:14px 14px 14px}
-.purple-top{display:flex;justify-content:space-between;align-items:center}
-.purple-top span{font-weight:850;font-size:15px;letter-spacing:-.045em}
-.purple-top svg{width:18px;height:18px}
-.purple-sub{font-size:9px;color:#e4cff8;margin:3px 0 13px}
-.quick-search{display:flex;align-items:center;gap:8px;border-radius:10px;background:#fff;color:#928b9e;font-size:9px;padding:9px 10px}
-.quick-search svg{width:14px;height:14px;color:#9e82bf}
-.chat-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px 13px 5px}
-.chat-panel-head strong{font-size:10px;color:#34283f;font-weight:850}
-.chat-panel-head span{font-size:9px;color:#7846b0;font-weight:700}
-.chat-list{padding:0 9px}
-.chat-row{display:flex;align-items:center;gap:10px;padding:9px 4px;min-height:57px;border-bottom:1px solid #f0edf4}
-.avatar-wrap{flex:none;width:44px;height:44px}
-.avatar-wrap img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#f0e8fa}
-.chat-copy{flex:1;min-width:0}
-.chat-copy strong{font-size:10px;font-weight:840;color:#2e2440;letter-spacing:-.012em;display:block;margin-bottom:4px}
-.chat-copy span{font-size:8px;color:#948a9e;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;display:block}
-.chat-chevron{font-size:18px;line-height:1;color:#ae99c9;padding:0 4px}
-.availability{font-size:9px;font-weight:850;color:#6331b6;background:#eee6f9;border-radius:7px;padding:3px 5px}
-.app-menu{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee9f4;min-height:51px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;box-shadow:0 -5px 15px #fff}
-.app-menu div{display:flex;flex-direction:column;align-items:center;gap:2px;color:#a096ad;font-size:8px;font-weight:700}
-.app-menu div.current{color:#6330b7}
-.app-menu svg{width:17px;height:17px}
-.fineprint{font-size:10px;text-align:center;color:#9990a2;margin:18px auto 0;line-height:1.55}
-.bottom-cta{position:fixed;z-index:4;bottom:0;left:0;right:0;padding:13px max(17px,env(safe-area-inset-left)) calc(11px + env(safe-area-inset-bottom)) max(17px,env(safe-area-inset-right));background:linear-gradient(180deg,rgba(255,255,255,.88),#fff 28%);border-top:1px solid #f0ebf5;box-shadow:0 -8px 28px #26154410}
-.cta-inner{max-width:390px;margin:0 auto}
-.install{display:flex;align-items:center;justify-content:center;gap:11px;background:#5d25ac;color:#fff;width:100%;min-height:58px;border:0;border-radius:16px;font-size:15px;font-weight:840;box-shadow:0 9px 20px #4c238137}
-.install svg{width:19px;height:19px}
-.install-note{font-size:10px;line-height:1.4;color:#8b8397;text-align:center;margin:9px 0 0}
-/* Desktop: a mesma página abre diretamente; somente a instalação exige celular. */
-@media(min-width:780px){
-  body{background:radial-gradient(ellipse at 90% 25%,#f5effb 0%,transparent 48%),#fff}
-  .page{max-width:1140px;padding:0 48px 55px;overflow:visible}
-  .masthead{padding:28px 0 16px}
-  .identity img{width:58px;height:58px}
-  .identity strong{font-size:27px}
-  .identity small{font-size:12px}
-  .masthead-label{font-size:11px;padding:10px 15px}
-  .page main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);grid-template-rows:1fr auto;column-gap:58px;align-items:center;min-height:650px}
-  .hero{grid-column:1;grid-row:1 / span 2;align-self:center;padding:28px 0 80px}
-  .hero h1{font-size:clamp(44px,4.8vw,62px);line-height:1.13;max-width:510px;margin-bottom:20px}
-  .hero p:not(.kicker){font-size:16px;line-height:1.7;max-width:435px}
-  .kicker{font-size:12px;margin-bottom:20px}
-  .app-showcase{grid-column:2;grid-row:1;align-self:end;padding:20px 0 0}
-  .app-showcase:before{inset:-40px -70px -8px}
-  .phone{width:333px;max-width:92%;transform:rotate(-1.3deg)}
-  .phone-screen{height:498px}
-  .fineprint{grid-column:2;grid-row:2;align-self:start;margin:18px auto 57px}
-  .bottom-cta{position:static;margin:33px 0 0;padding:0;width:100%;border:none;box-shadow:none;background:transparent}
-  .cta-inner{max-width:415px;margin:0}
-  .install{max-width:375px}
-  .install-note{text-align:left;font-size:12px;margin-top:13px;max-width:385px}
+:root{
+  --ink:#111827;--body:#405066;--muted:#667085;--line:#e7edf6;
+  --purple:#4b0c8f;--violet:#7334d8;--cyan:#00bde8;--pink:#e6008d;
+  --grad:linear-gradient(110deg,#4b0c8f 2%,#7334d8 53%,#00bde8 100%);
+  --font-body:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --font-display:Sora,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 }
-@media(min-width:780px) and (max-width:1010px){
-  .page{padding-inline:30px}
-  .page main{column-gap:25px}
-  .hero h1{font-size:44px}
-  .phone{max-width:100%;width:305px}
+*{box-sizing:border-box}
+html{min-width:320px}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{display:block}img{max-width:100%}
+svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}
+.container{width:min(1160px,calc(100% - 64px));margin:0 auto}
+.site-header{height:90px;border-bottom:1px solid #edf0f6;background:#fff}
+.site-header .container{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.site-brand{display:flex;align-items:center;min-width:0}
+.site-brand img{width:175px;height:auto;max-height:66px;object-fit:contain;object-position:left center}
+.site-section{font-size:11px;font-weight:800;color:#694a95;border:1px solid #e8dff2;background:#faf7fc;padding:9px 13px;border-radius:999px;white-space:nowrap}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.88fr);align-items:center;gap:clamp(32px,5vw,90px);min-height:calc(100dvh - 150px);padding-top:40px;padding-bottom:42px}
+.copy{align-self:center;max-width:580px}
+.kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#6f46a8;font-weight:800;margin:0 0 21px;display:flex;align-items:center;gap:9px}
+.kicker:before{content:"";width:19px;height:3px;border-radius:3px;background:var(--grad)}
+.copy h1{font-family:var(--font-display);font-size:clamp(41px,4.85vw,69px);font-weight:700;letter-spacing:-.065em;line-height:1.09;margin:0 0 24px;max-width:650px}
+.copy h1 .gradient{display:block;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:var(--purple);-webkit-text-fill-color:transparent;padding-bottom:5px}
+.lead{font-size:clamp(14px,1.35vw,17px);color:#5f6c7e;line-height:1.78;max-width:460px;margin:0}
+.context{margin:27px 0 0;color:#6b7380;font-size:12px;line-height:1.7;display:flex;align-items:flex-start;gap:9px}
+.context svg{flex:none;width:17px;height:17px;color:#6b3c9f;margin-top:1px}
+.right-col{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
+.phone-stage{width:100%;display:flex;justify-content:center;align-items:center;padding:9px 0 6px;position:relative;isolation:isolate}
+.phone-stage:before{content:"";position:absolute;inset:11% 3% 9%;z-index:-1;background:radial-gradient(ellipse at center,#eff1fc 0%,#f6f9fe 42%,transparent 74%)}
+.phone{
+  width:252px;max-width:100%;height:518px;flex:none;background:#fff;
+  border:7px solid #2c2637;border-radius:41px;box-shadow:0 26px 60px #23163720,0 4px 13px #25183422;
+  position:relative;overflow:hidden
 }
-@media(min-width:780px) and (max-height:700px){
-  .page main{min-height:540px}
-  .hero{padding-bottom:35px}
-  .fineprint{margin-bottom:22px}
+.phone:before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);background:#2c2637;width:76px;height:18px;border-radius:0 0 13px 13px;z-index:2}
+.phone-screen{height:100%;background:#fff;overflow:hidden;position:relative}
+.phone-status{height:32px;display:flex;align-items:center;justify-content:space-between;padding:9px 15px 0;font-size:9px;font-weight:800;color:#3c3450}
+.phone-status svg{width:13px;height:13px}
+.phone-icons{display:flex;gap:4px}
+.phone-head{background:linear-gradient(132deg,#4b0c8f 5%,#7334d8 100%);color:#fff;padding:21px 15px 19px}
+.phone-head-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.phone-head-top strong{font-size:16px;line-height:1.2;letter-spacing:-.04em;font-weight:800}
+.phone-head-top svg{width:16px;height:16px}
+.phone-head small{display:block;font-size:9px;color:#ede1fb;margin:4px 0 14px}
+.phone-search{border-radius:11px;background:#fff;color:#9b93a8;font-size:9px;padding:11px 10px;display:flex;align-items:center;gap:8px}
+.phone-search svg{width:14px;height:14px;color:#8664af}
+.list-heading{display:flex;justify-content:space-between;align-items:center;padding:19px 13px 7px}
+.list-heading strong{font-size:11px;color:#2a2441;font-weight:800}
+.list-heading span{font-size:9px;color:#7748a4;font-weight:700}
+.chat-list{padding:0 10px}
+.chat-row{display:flex;align-items:center;gap:9px;min-height:69px;border-bottom:1px solid #efedf4;padding:12px 2px}
+.chat-row img{width:41px;height:41px;border-radius:50%;object-fit:cover;background:#f4f0f8;flex:none}
+.chat-info{display:block;flex:1;min-width:0}
+.chat-info strong{font-size:10px;color:#2f2842;font-weight:800;line-height:1.25;display:block}
+.chat-info small{font-size:8px;color:#8a8297;display:block;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-live{font-size:9px;border-radius:7px;padding:4px 6px;color:#62269a;background:#f0e9fa;font-weight:800}
+.chat-arrow{font-size:19px;color:#a494b5;padding:0 4px}
+.other-services{text-align:center;color:#7e6a97;padding:17px 6px;font-size:9px;font-weight:700}
+.phone-nav{position:absolute;left:0;right:0;bottom:0;min-height:51px;background:#fff;border-top:1px solid #ece9f4;display:flex;justify-content:space-around;align-items:center}
+.phone-nav span{display:flex;flex-direction:column;gap:2px;align-items:center;color:#968ca2;font-size:8px;font-weight:650}
+.phone-nav span:first-child{color:#7131ac}
+.phone-nav svg{width:17px;height:17px}
+.preview-caption{text-align:center;color:#8a8797;font-size:10px;line-height:1.5;margin:11px 0 0}
+.install-block{width:100%;max-width:405px;margin:27px 0 0;text-align:center}
+.install{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;min-height:64px;padding:15px 21px;border:0;border-radius:15px;
+  font-size:13.5px;line-height:1.45;font-weight:800;text-align:center;
+  color:#fff;background:#302149;box-shadow:0 12px 27px #35205026;
+  transition:transform .18s ease,box-shadow .18s ease
 }
-@media(max-width:359px){.page{padding-inline:16px}.masthead{padding-top:16px}.identity img{width:38px;height:38px}.identity strong{font-size:19px}.masthead-label{font-size:8px;padding:7px 9px}.hero{padding-top:9px}.hero h1{font-size:31px}.app-showcase{padding-top:12px}.phone{width:300px;max-width:100%}}
-
-/* Uma única vitrine para computadores e celulares, com o botão abaixo do smartphone. */
-.page{padding-bottom:calc(135px + env(safe-area-inset-bottom))}
-.identity img{width:52px;height:52px}
-.identity strong{font-size:23px}
-.hero h1{max-width:410px}
-.install{padding:13px 17px;line-height:1.33;text-align:center;font-size:13.5px;letter-spacing:-.015em}
-.install svg{flex:none}
-.install span{display:block}
-.install-note{font-size:10px}
-.install-dialog{position:fixed;inset:0;border:1px solid #eee7f5;border-radius:25px;background:#fff;color:var(--ink);padding:40px 32px 35px;box-shadow:0 26px 100px #2311393b;max-width:min(490px,calc(100% - 36px));max-height:calc(100dvh - 36px);overflow:auto;text-align:center}
-.install-dialog::backdrop{background:rgba(30,18,54,.62);backdrop-filter:blur(6px)}
-.dialog-heart{width:128px;height:128px;object-fit:contain;margin:0 auto 23px}
-.install-dialog h2{font-size:clamp(25px,4.5vw,31px);line-height:1.18;letter-spacing:-.055em;font-weight:850;margin:0 0 13px}
-.install-dialog p{color:#716780;font-size:14px;line-height:1.72;margin:0 auto;max-width:380px}
-.install-dialog .dialog-address{display:inline-block;background:#f3ecfb;color:#5d29a3;border-radius:12px;padding:12px 15px;margin-top:20px;font-size:13px;font-weight:830;user-select:all}
-.dialog-close{position:absolute;right:17px;top:16px;width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:10px;color:#785f90;background:#f8f5fa}
-.dialog-close svg{width:18px;height:18px}
-@media(min-width:780px){
-  .page{padding-bottom:45px}
-  .page main{grid-template-rows:auto auto auto;min-height:670px;column-gap:45px}
-  .hero{grid-column:1;grid-row:1 / span 3;padding:0 0 5px}
-  .hero h1{max-width:570px}
-  .app-showcase{grid-column:2;grid-row:1;align-self:end;padding-top:0}
-  .fineprint{grid-column:2;grid-row:2;align-self:start;margin:12px auto 0}
-  .bottom-cta{grid-column:2;grid-row:3;align-self:start;width:min(100%,430px);margin:22px auto 20px}
-  .cta-inner{max-width:430px;margin:0 auto}
-  .install{max-width:none;min-height:63px;padding:11px 20px;font-size:14px}
-  .install-note{text-align:center;font-size:11px}
-  .identity img{width:63px;height:63px}
-  .identity strong{font-size:29px}
+.install:hover{transform:translateY(-2px);box-shadow:0 15px 34px #35205030}
+.install svg{width:20px;height:20px;flex:none}
+.install span{max-width:300px}
+.install-explain{font-size:11px;color:#78808b;line-height:1.65;margin:12px 0 0}
+.footer{padding:18px 0 23px;border-top:1px solid #edf0f5;font-size:11px;color:#8290a1;text-align:center}
+.install-dialog{
+  border:1px solid #e8e4f0;background:#fff;color:var(--ink);position:fixed;
+  width:min(480px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;
+  padding:35px 28px 38px;border-radius:24px;text-align:center;box-shadow:0 28px 90px #22153c4d
 }
-@media(max-width:779px){
-  .bottom-cta{max-width:100%;margin:0}
-  .install{min-height:61px}
+.install-dialog::backdrop{background:rgba(21,14,40,.60);backdrop-filter:blur(5px)}
+.dialog-close{position:absolute;right:15px;top:14px;width:34px;height:34px;border:0;border-radius:10px;background:#f6f3fa;color:#745a94;display:grid;place-items:center}
+.dialog-close svg{height:18px;width:18px}
+.dialog-heart{width:128px;height:128px;object-fit:contain;margin:0 auto 18px}
+.install-dialog h2{font:700 clamp(23px,5vw,30px)/1.19 var(--font-display);letter-spacing:-.045em;margin:0 auto 13px;max-width:370px}
+.install-dialog p{font-size:13px;line-height:1.75;color:#667085;margin:0 auto;max-width:340px}
+.install-dialog .dialog-url{display:inline-block;font-size:13px;font-weight:800;color:#5b2d96;background:#f5f0fb;padding:12px 15px;margin:19px auto 0;border-radius:12px;user-select:all}
+@media(max-width:800px){
+  .container{width:calc(100% - 42px)}
+  .site-header{height:76px}
+  .site-brand img{width:153px}
+  .site-section{font-size:10px;padding:8px 10px}
+  .main{grid-template-columns:minmax(0,1fr);gap:27px;padding-top:41px;padding-bottom:41px;min-height:auto}
+  .copy{text-align:left;max-width:560px;margin:0 auto;width:100%}
+  .copy h1{font-size:clamp(37px,7.2vw,53px);line-height:1.15;margin-bottom:17px}
+  .lead{max-width:500px;font-size:14px}
+  .context{margin-top:17px}
+  .phone{width:246px;height:506px}
+  .install-block{margin-top:22px}
 }
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media(max-width:480px){
+  .container{width:calc(100% - 34px)}
+  .site-header{height:69px}
+  .site-brand img{width:137px}
+  .site-section{font-size:9px;padding:7px 10px}
+  .main{padding-top:32px;padding-bottom:35px;gap:25px}
+  .copy h1{font-size:clamp(34px,9.4vw,43px)}
+  .kicker{font-size:10px;margin-bottom:14px}
+  .lead{font-size:13px;line-height:1.72}
+  .context{font-size:11px}
+  .phone{width:231px;height:476px;border-width:6px;border-radius:37px}
+  .phone-head{padding:18px 13px 16px}
+  .phone-screen{border-radius:28px}
+  .chat-row{min-height:63px;padding:9px 2px}
+  .chat-row img{width:38px;height:38px}
+  .list-heading{padding-top:14px}
+  .other-services{padding:13px 5px}
+  .install{min-height:59px;font-size:12.5px;padding:12px 14px}
+  .install svg{width:18px;height:18px}
+}
+@media(max-width:360px){
+  .container{width:calc(100% - 26px)}
+  .site-section{font-size:8px}
+  .copy h1{font-size:33px}
+}
+@media(prefers-reduced-motion:reduce){.install{transition:none}.install:hover{transform:none}}
 </style>
 </head>
 <body>
-<div class="mobile-only">
-  <div class="page">
-    <header class="masthead">
-      <div class="identity"><img src="/app/assets/coracao-promovie-com-logo.webp" width="43" height="43" alt="Coração oficial PromoVie">
-        <div><strong>PromoVie</strong><small>Telemedicina e bem-estar</small></div>
-      </div>
-      <span class="masthead-label">App para celular</span>
-    </header>
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <p class="kicker">PromoVie · Saúde conectada</p>
-        <h1 id="hero-title">Telemedicina <span>na palma da sua mão.</span></h1>
-        <p>Seu cuidado mais perto. Encontre profissionais de saúde e converse com praticidade, onde estiver.</p>
-      </section>
-      <div class="app-showcase">
-        <div class="phone" aria-label="Prévia ilustrativa da navegação por especialidades">
-          <div class="phone-screen">
-            <div class="status-line"><span>9:41</span><div class="status-bars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20V15m5 5v-8m5 8V9m5 11V5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11c6-6 14-6 20 0M6 15c4-4 8-4 12 0m-7 4c1-1 2-1 3 0"/></svg></div></div>
-            <div class="app-purple">
-              <div class="purple-top"><span>Conversas</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
-              <p class="purple-sub">Encontre profissionais para seu cuidado</p>
-              <div class="quick-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>Pesquisar atendimento</div>
-            </div>
-            <div class="chat-panel-head"><strong>Especialidades</strong><span>Ver todas</span></div>
-            <div class="chat-list">
-              <div class="chat-row">
-  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="eager"></div>
-  <div class="chat-copy"><strong>Clínico geral 24h</strong><span>Atendimento médico on-line</span></div>
-  <span class="availability">24h</span>
-</div>
-<div class="chat-row">
-  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="eager"></div>
-  <div class="chat-copy"><strong>Psicologia</strong><span>Escuta, cuidado e acolhimento</span></div>
-  <span class="chat-chevron" aria-hidden="true">›</span>
-</div>
-<div class="chat-row">
-  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="eager"></div>
-  <div class="chat-copy"><strong>Ginecologia</strong><span>Orientações sobre saúde feminina</span></div>
-  <span class="chat-chevron" aria-hidden="true">›</span>
-</div>
-<div class="chat-row">
-  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="lazy"></div>
-  <div class="chat-copy"><strong>Pediatria</strong><span>Cuidado infantil e orientações</span></div>
-  <span class="chat-chevron" aria-hidden="true">›</span>
-</div>
-<div class="chat-row">
-  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="lazy"></div>
-  <div class="chat-copy"><strong>Nutrição</strong><span>Alimentação e qualidade de vida</span></div>
-  <span class="chat-chevron" aria-hidden="true">›</span>
-</div>
-<div class="chat-row">
-  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="lazy"></div>
-  <div class="chat-copy"><strong>Dermatologia</strong><span>Saúde da pele e prevenção</span></div>
-  <span class="chat-chevron" aria-hidden="true">›</span>
-</div>
-            </div>
-            <div class="app-menu" aria-hidden="true">
-              <div class="current"><svg viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8c-2 0-3-.4-4-.8L3 21l2-6a8 8 0 1 1 16-4z"/></svg>Conversas</div>
-              <div><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>Início</div>
-              <div><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-9 14-9 14 0"/></svg>Perfil</div>
-            </div>
+<header class="site-header">
+  <div class="container">
+    <div class="site-brand"><img src="/preview-promovie-logo.webp" width="175" alt="PromoVie | Soluções Organizacionais Integradas" decoding="async" fetchpriority="high"></div>
+    <span class="site-section">Telemedicina</span>
+  </div>
+</header>
+<main class="container main">
+  <section class="copy" aria-labelledby="hero-title">
+    <p class="kicker">Cuidado e conexão</p>
+    <h1 id="hero-title">Telemedicina <span class="gradient">na palma da sua mão.</span></h1>
+    <p class="lead">Converse com profissionais de saúde com praticidade, onde estiver. Um acesso simples para cuidar de você e de quem você ama.</p>
+    <p class="context"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>Um aplicativo pensado para aproximar você do cuidado.</p>
+  </section>
+  <div class="right-col">
+    <div class="phone-stage">
+      <div class="phone" role="img" aria-label="Ilustração de um smartphone com o aplicativo PromoVie, mostrando conversas com três especialidades">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span class="phone-icons"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-4m5 4v-8m5 8V6m5 13V3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 10c6-6 14-6 20 0M6 14c4-4 8-4 12 0m-7 4c1-1 2-1 3 0"/></svg></span></div>
+          <div class="phone-head">
+            <div class="phone-head-top"><strong>Conversas</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+            <small>Profissionais de saúde</small>
+            <div class="phone-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>Pesquisar atendimento</div>
+          </div>
+          <div class="list-heading"><strong>Especialidades</strong><span>Ver todas</span></div>
+          <div class="chat-list"><div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_112,h_112,al_c,q_75,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" width="41" height="41" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Clínico geral 24h</strong><small>Orientação médica on-line</small></span><span class="chat-live">24h</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_112,h_112,al_c,q_75,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" width="41" height="41" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Psicologia</strong><small>Escuta e acolhimento</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_112,h_112,al_c,q_75,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" width="41" height="41" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Nutrição</strong><small>Saúde e alimentação</small></span><span class="chat-arrow" aria-hidden="true">›</span></div></div>
+          <div class="other-services">E outras opções de atendimento</div>
+          <div class="phone-nav" aria-hidden="true">
+            <span><svg viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8c-2 0-3-.4-4-.8L3 21l2-6a8 8 0 1 1 16-4z"/></svg>Conversas</span>
+            <span><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>Início</span>
+            <span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-9 14-9 14 0"/></svg>Perfil</span>
           </div>
         </div>
       </div>
-      <p class="fineprint">Prévia ilustrativa da experiência de atendimento.</p>
-      <div class="bottom-cta">
-        <div class="cta-inner">
-          <button class="install" id="install-now" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
-            <span>Instale nosso aplicativo de telemedicina no seu smartphone</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-          </button>
-          <p class="install-note">Acesse a instalação pelo convite da PromoVie.</p>
-        </div>
-      </div>
-    </main>
+    </div>
+    <p class="preview-caption">Prévia ilustrativa da navegação por profissionais.</p>
+    <div class="install-block">
+      <button type="button" class="install" id="install-now" aria-label="Instale nosso aplicativo de telemedicina no seu smartphone">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
+        <span>Instale nosso aplicativo de telemedicina no seu smartphone</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <p class="install-explain">Acesso à instalação pelo convite da PromoVie.</p>
+    </div>
   </div>
-
-</div>
-<dialog id="install-desktop-dialog" class="install-dialog" aria-labelledby="install-desktop-title" aria-describedby="install-desktop-description">
-  <form method="dialog">
-    <button class="dialog-close" type="submit" aria-label="Fechar aviso">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
-    </button>
-  </form>
+</main>
+<footer class="footer"><div class="container">PromoVie · Comunicação, cuidado e desenvolvimento humano</div></footer>
+<dialog id="install-desktop-dialog" class="install-dialog" aria-labelledby="install-desktop-title" aria-describedby="install-desktop-desc">
+  <form method="dialog"><button class="dialog-close" type="submit" aria-label="Fechar aviso"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button></form>
   <img class="dialog-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
   <h2 id="install-desktop-title">Abra esta página pelo smartphone.</h2>
-  <p id="install-desktop-description">Para instalar o aplicativo de telemedicina, acesse o endereço abaixo no seu iPhone ou Android.</p>
-  <p class="dialog-address">www.promovie.tv.br/app/</p>
+  <p id="install-desktop-desc">Para instalar o aplicativo de telemedicina, acesse este endereço no seu iPhone ou Android.</p>
+  <p class="dialog-url">www.promovie.tv.br/app/</p>
 </dialog>
+<script>
+(function(){
+  "use strict";
+  const button=document.getElementById("install-now");
+  const dialog=document.getElementById("install-desktop-dialog");
+  button.addEventListener("click",function(){
+    const ua=navigator.userAgent||"";
+    const tablet=/iPad|Tablet|Silk|Android(?!.*Mobile)/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints>1);
+    const mobileHint=Boolean(navigator.userAgentData && navigator.userAgentData.mobile);
+    const smartphone=!tablet && (/iPhone|iPod|Android.*Mobile|Windows Phone|IEMobile|BlackBerry|BB10|Opera Mini/i.test(ua)||mobileHint);
+    if(smartphone){
+      window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");
+      return;
+    }
+    if(typeof dialog.showModal==="function"){dialog.showModal();}
+    else{window.alert("Abra esta página pelo smartphone: www.promovie.tv.br/app/");}
+  });
+  dialog.addEventListener("click",function(event){if(event.target===dialog)dialog.close();});
+})();
+</script>
 </body>
 </html>
