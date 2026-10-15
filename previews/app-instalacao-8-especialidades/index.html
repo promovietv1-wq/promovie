@@ -54,7 +54,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   transition:background .2s ease,transform .2s ease,box-shadow .2s ease
 }
 .site-globe svg{width:18px;height:18px;stroke-width:1.6}
-.site-globe:hover{background:#f7f2fd;box-shadow:0 7px 18px rgba(75,12,143,.12);transform:translateY(-2px)}
+.site-globe:hover,.site-globe:focus-visible{
+  background:#f8f5ff;border-color:rgba(115,52,216,.55);
+  box-shadow:0 0 0 4px rgba(115,52,216,.065),0 0 20px rgba(115,52,216,.22);
+  filter:brightness(1.055)
+}
 .main{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.96fr);
   align-items:center;gap:clamp(26px,5vw,74px);
@@ -63,8 +67,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 .copy{align-self:center;position:relative;z-index:1;max-width:590px;padding-bottom:12px}
 .heart-stage{
-  width:238px;height:220px;display:grid;place-items:center;
-  position:relative;isolation:isolate;margin:0 0 6px -15px
+  width:272px;height:251px;display:grid;place-items:center;
+  position:relative;isolation:isolate;margin:0 auto 9px
 }
 .heart-stage::before{
   content:"";position:absolute;inset:10% 5%;border-radius:50%;z-index:-2;
@@ -77,8 +81,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   box-shadow:0 0 0 22px rgba(115,52,216,.022),0 0 0 43px rgba(0,189,232,.014)
 }
 .hero-heart{
-  width:214px;height:214px;object-fit:contain;position:relative;z-index:1;
+  width:241px;height:241px;object-fit:contain;position:relative;z-index:1;
   filter:drop-shadow(0 14px 19px rgba(76,22,126,.16));
+  transition:filter .35s ease;
   animation:heart-breathe 2.6s ease-in-out infinite;
   transform-origin:center;will-change:transform
 }
@@ -91,8 +96,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 .copy h1{
   font:700 clamp(43px,4.7vw,66px)/1.09 var(--font-display);
-  letter-spacing:-.064em;margin:0 0 17px;max-width:600px
+  letter-spacing:-.064em;margin:0 0 17px;max-width:600px;
+  transition:filter .3s ease,text-shadow .3s ease
 }
+.copy h1:hover{filter:drop-shadow(0 0 12px rgba(115,52,216,.16));text-shadow:0 0 18px rgba(115,52,216,.10)}
+.copy h1 .gradient{transition:filter .3s ease}
+.copy h1:hover .gradient,.copy h1 .gradient:hover{filter:drop-shadow(0 0 11px rgba(0,189,232,.26))}
+.heart-stage:hover .hero-heart{filter:drop-shadow(0 13px 23px rgba(115,52,216,.3)) drop-shadow(0 0 21px rgba(0,189,232,.16))}
+
 .copy h1 .gradient{
   display:block;background:var(--grad);
   background-clip:text;-webkit-background-clip:text;
@@ -122,12 +133,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   width:260px;height:508px;max-width:100%;flex:none;position:relative;overflow:hidden;
   border:7px solid #272034;border-radius:43px;background:#fff;
   box-shadow:0 31px 64px rgba(30,16,55,.21),8px 9px 21px rgba(25,21,52,.11),inset 0 0 0 1px #716784;
-  transform:rotate(-6deg) translateY(0);transform-origin:center;
-  transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s ease
+  transform:rotate(-6deg);transform-origin:center;
+  transition:box-shadow .35s ease,filter .35s ease
 }
 .phone:hover{
-  transform:rotate(-3deg) translateY(-7px);
-  box-shadow:0 38px 78px rgba(30,16,55,.24),8px 12px 24px rgba(25,21,52,.12)
+  transform:rotate(-6deg);
+  box-shadow:0 31px 72px rgba(30,16,55,.23),0 0 0 2px rgba(115,52,216,.22),0 0 32px rgba(115,52,216,.26),0 0 38px rgba(0,189,232,.11);
+  filter:brightness(1.02)
 }
 .phone::before{
   content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
@@ -152,6 +164,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   padding:4px 2px;min-height:0;border-bottom:1px solid #f0edf5
 }
 .chat-row:last-child{border-bottom:0}
+.chat-row{transition:background .22s ease}
+.chat-row:hover{background:linear-gradient(90deg,rgba(115,52,216,.065),rgba(0,189,232,.02))}
+.chat-row strong{transition:color .22s ease,text-shadow .22s ease}
+.chat-row:hover strong{color:#5e269f;text-shadow:0 0 10px rgba(115,52,216,.2)}
+
 .chat-row img{width:34px;height:34px;flex:none;border-radius:50%;background:#f2eff7;object-fit:cover}
 .chat-info{display:block;flex:1;min-width:0}
 .chat-info strong{display:block;color:#2b2540;font-size:9.4px;line-height:1.25;font-weight:800}
@@ -173,17 +190,26 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   background:linear-gradient(120deg,#322145 0%,#312247 60%,#432661 100%);
   box-shadow:0 14px 30px rgba(48,28,76,.20),inset 0 1px 0 rgba(255,255,255,.12);
   font-size:13px;font-weight:800;line-height:1.34;text-align:center;
-  transition:transform .2s ease,box-shadow .2s ease
+  transition:box-shadow .26s ease,filter .26s ease
 }
 .install::before{
   content:"";pointer-events:none;position:absolute;top:-100%;bottom:-100%;left:-70%;
   width:35%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.11),transparent);
   transform:skewX(-18deg);transition:left .6s ease;z-index:-1
 }
-.install:hover{transform:translateY(-3px);box-shadow:0 18px 37px rgba(48,28,76,.28)}
+.install:hover,.install:focus-visible{
+  box-shadow:0 18px 37px rgba(48,28,76,.26),0 0 0 2px rgba(115,52,216,.18),0 0 25px rgba(115,52,216,.29);
+  filter:brightness(1.08)
+}
 .install:hover::before{left:135%}
 .install svg{height:19px;width:19px;flex:none}
-.install span{max-width:277px}
+.install span{max-width:277px;transition:text-shadow .25s ease}
+.install:hover span,.install:focus-visible span{text-shadow:0 0 14px rgba(255,255,255,.5)}
+.site-brand img{transition:filter .3s ease}
+.site-brand img:hover{filter:drop-shadow(0 0 10px rgba(115,52,216,.2))}
+.lead{transition:text-shadow .25s ease}
+.lead:hover{text-shadow:0 0 15px rgba(115,52,216,.12)}
+
 .install-dialog{
   width:min(490px,calc(100% - 32px));max-height:calc(100dvh - 32px);
   border:1px solid #e8e4f0;background:#fff;color:var(--ink);position:fixed;
@@ -200,8 +226,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 @media(max-width:900px){
   .main{gap:22px;grid-template-columns:minmax(0,1fr) minmax(290px,.9fr)}
   .copy h1{font-size:clamp(35px,4.9vw,55px)}
-  .heart-stage{width:200px;height:190px}
-  .hero-heart{width:186px;height:186px}
+  .heart-stage{width:238px;height:221px}
+  .hero-heart{width:216px;height:216px}
   .phone-stage{min-height:530px;padding-inline:8px}
   .phone{width:252px;height:497px}
 }
@@ -214,15 +240,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .site-globe svg{width:16px;height:16px}
   .main{grid-template-columns:minmax(0,1fr);min-height:auto;gap:12px;padding:18px 0 26px}
   .copy{max-width:550px;padding:0}
-  .heart-stage{width:163px;height:159px;margin:0 0 6px -10px}
-  .hero-heart{width:161px;height:161px}
+  .heart-stage{width:217px;height:202px;margin:0 auto 7px}
+  .hero-heart{width:192px;height:192px}
   .copy h1{font-size:clamp(35px,7.8vw,49px);line-height:1.14;margin-bottom:12px}
   .lead{font-size:13px;line-height:1.65}
   .right-col{padding:0}
   .phone-stage{min-height:490px;padding:14px 20px 8px}
   .phone-stage::after{width:390px;height:390px}
   .phone{width:238px;height:464px;border-width:6px;border-radius:38px;transform:rotate(-4deg)}
-  .phone:hover{transform:rotate(-2deg) translateY(-4px)}
+  .phone:hover{transform:rotate(-4deg)}
   .phone::after{border-radius:32px}
   .list-heading{min-height:59px;padding:26px 12px 9px}
   .chat-row{gap:7px;padding:3px 2px}
@@ -244,8 +270,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .hero-heart{animation:none;will-change:auto}
-  .site-globe,.phone,.install,.install::before{transition:none}
-  .site-globe:hover,.phone:hover,.install:hover{transform:none}
+  .site-globe,.phone,.install,.install::before,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.chat-row strong{transition:none}
+  .phone:hover{transform:rotate(-6deg)}
   .install:hover::before{left:-70%}
 }
 </style>
@@ -264,7 +290,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 <main class="container main">
   <section class="copy" aria-labelledby="hero-title">
     <div class="heart-stage">
-      <img class="hero-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="210" height="210" alt="Coração PromoVie" decoding="async" fetchpriority="high">
+      <img class="hero-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
     </div>
     <h1 id="hero-title">Telemedicina <span class="gradient">na palma da sua mão.</span></h1>
     <p class="lead">Converse com profissionais de saúde, de onde estiver.</p>
