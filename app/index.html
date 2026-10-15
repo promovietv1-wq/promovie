@@ -23,7 +23,11 @@
   document.documentElement.dataset.device=phone?"smartphone":"desktop";
   document.addEventListener("DOMContentLoaded",function(){
     var cta=document.getElementById("install-now");
-    if(phone&&cta){cta.addEventListener("click",function(){window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");});}
+    if(cta){cta.addEventListener("click",function(){
+      if(phone){window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");return;}
+      var message=document.getElementById("install-message");
+      if(message){message.textContent="Para instalar, abra www.promovie.tv.br/app/ no seu iPhone ou Android.";}
+    });}
   });
 })();
 </script>
@@ -32,13 +36,7 @@
 *{box-sizing:border-box}html{min-width:320px}body{margin:0;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased}
 img,svg{display:block}svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
 button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aabe;outline-offset:3px}
-.mobile-only{display:none}html[data-device="smartphone"] .mobile-only{display:block}html[data-device="smartphone"] .desktop-only{display:none}
-.desktop-only{display:grid;min-height:100vh;min-height:100dvh;place-items:center;padding:30px;background:radial-gradient(ellipse at 80% 10%,#f1e9fa,transparent 44%),radial-gradient(ellipse at 5% 100%,#eaf6fb,transparent 50%),#fff}
-.desktop-panel{text-align:center;background:#fff;border:1px solid #eee7f5;border-radius:27px;padding:48px 40px;max-width:530px;width:100%;box-shadow:0 20px 80px #361b5a13}
-.desktop-panel img{width:128px;height:128px;object-fit:contain;margin:0 auto 26px}
-.desktop-panel h1{font-size:clamp(24px,3.2vw,33px);line-height:1.22;letter-spacing:-.055em;margin:0 0 14px}
-.desktop-panel p{font-size:14px;line-height:1.74;color:#72687f;margin:0 auto 16px;max-width:360px}
-.desktop-address{display:inline-block;padding:11px 17px;border-radius:12px;background:#f3ecfb;color:#5c2ba0;font-size:13px;font-weight:800;user-select:all}
+.mobile-only{display:block}.desktop-only{display:none!important}
 .page{max-width:430px;min-height:100vh;min-height:100dvh;margin:0 auto;padding:0 23px calc(114px + env(safe-area-inset-bottom));overflow:hidden;position:relative}
 .masthead{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:23px 0 19px;position:relative;z-index:1}
 .identity{display:flex;align-items:center;gap:10px}
@@ -89,19 +87,46 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
 .install{display:flex;align-items:center;justify-content:center;gap:11px;background:#5d25ac;color:#fff;width:100%;min-height:58px;border:0;border-radius:16px;font-size:15px;font-weight:840;box-shadow:0 9px 20px #4c238137}
 .install svg{width:19px;height:19px}
 .install-note{font-size:10px;line-height:1.4;color:#8b8397;text-align:center;margin:9px 0 0}
+/* Desktop: a mesma página abre diretamente; somente a instalação exige celular. */
+@media(min-width:780px){
+  body{background:radial-gradient(ellipse at 90% 25%,#f5effb 0%,transparent 48%),#fff}
+  .page{max-width:1140px;padding:0 48px 55px;overflow:visible}
+  .masthead{padding:28px 0 16px}
+  .identity img{width:58px;height:58px}
+  .identity strong{font-size:27px}
+  .identity small{font-size:12px}
+  .masthead-label{font-size:11px;padding:10px 15px}
+  .page main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);grid-template-rows:1fr auto;column-gap:58px;align-items:center;min-height:650px}
+  .hero{grid-column:1;grid-row:1 / span 2;align-self:center;padding:28px 0 80px}
+  .hero h1{font-size:clamp(44px,4.8vw,62px);line-height:1.13;max-width:510px;margin-bottom:20px}
+  .hero p:not(.kicker){font-size:16px;line-height:1.7;max-width:435px}
+  .kicker{font-size:12px;margin-bottom:20px}
+  .app-showcase{grid-column:2;grid-row:1;align-self:end;padding:20px 0 0}
+  .app-showcase:before{inset:-40px -70px -8px}
+  .phone{width:333px;max-width:92%;transform:rotate(-1.3deg)}
+  .phone-screen{height:498px}
+  .fineprint{grid-column:2;grid-row:2;align-self:start;margin:18px auto 57px}
+  .bottom-cta{position:static;margin:33px 0 0;padding:0;width:100%;border:none;box-shadow:none;background:transparent}
+  .cta-inner{max-width:415px;margin:0}
+  .install{max-width:375px}
+  .install-note{text-align:left;font-size:12px;margin-top:13px;max-width:385px}
+}
+@media(min-width:780px) and (max-width:1010px){
+  .page{padding-inline:30px}
+  .page main{column-gap:25px}
+  .hero h1{font-size:44px}
+  .phone{max-width:100%;width:305px}
+}
+@media(min-width:780px) and (max-height:700px){
+  .page main{min-height:540px}
+  .hero{padding-bottom:35px}
+  .fineprint{margin-bottom:22px}
+}
 @media(max-width:359px){.page{padding-inline:16px}.masthead{padding-top:16px}.identity img{width:38px;height:38px}.identity strong{font-size:19px}.masthead-label{font-size:8px;padding:7px 9px}.hero{padding-top:9px}.hero h1{font-size:31px}.app-showcase{padding-top:12px}.phone{width:300px;max-width:100%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<section class="desktop-only">
-  <div class="desktop-panel">
-    <img src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
-    <h1>Abra a página pelo celular.</h1>
-    <p>A instalação está disponível somente em smartphones. No seu iPhone ou Android, visite:</p>
-    <span class="desktop-address">www.promovie.tv.br/app/</span>
-  </div>
-</section>
 <div class="mobile-only">
   <div class="page">
     <header class="masthead">
@@ -115,6 +140,16 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
         <p class="kicker">Cuidado conectado</p>
         <h1 id="hero-title">Sua saúde, <span>uma conversa mais perto.</span></h1>
         <p>O cuidado que você precisa, com profissionais de saúde em um aplicativo simples e acessível.</p>
+        <div class="bottom-cta">
+          <div class="cta-inner">
+            <button class="install" id="install-now" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
+              Instalar aplicativo
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+            </button>
+            <p class="install-note" id="install-message" role="status" aria-live="polite">No celular, continue para instalar pelo convite da PromoVie.</p>
+          </div>
+        </div>
       </section>
       <div class="app-showcase">
         <div class="phone" aria-label="Prévia ilustrativa da navegação por especialidades">
@@ -169,16 +204,7 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
       <p class="fineprint">Imagem ilustrativa da experiência de atendimento.</p>
     </main>
   </div>
-  <div class="bottom-cta">
-    <div class="cta-inner">
-      <button class="install" id="install-now" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
-        Instalar aplicativo
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-      </button>
-      <p class="install-note">Acesso à instalação pelo convite da PromoVie.</p>
-    </div>
-  </div>
+
 </div>
 </body>
 </html>
