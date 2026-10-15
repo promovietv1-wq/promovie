@@ -211,7 +211,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 
 /* No celular, a lupa amplia o próprio mockup na página, como na referência. */
 .phone-zoom-trigger{display:none}
-.phone-zoom-tagline{display:none}
 @media(max-width:700px){
   .phone-zoom-trigger{
     position:absolute;left:calc(50% + 82px);top:14%;z-index:6;
@@ -286,18 +285,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     box-shadow:0 5px 16px rgba(82,34,153,.15)
   }
   .main.phone-expanded .phone-zoom-trigger svg{width:22px;height:22px}
-  /* Frase integrada à superfície lilás, sem afetar a proporção do smartphone. */
-  .main.phone-expanded .phone-zoom-tagline{
-    display:block;flex:none;margin:17px auto 0;
-    max-width:350px;padding:0 12px 3px;text-align:center;
-    font:800 clamp(17px,4.5vw,22px)/1.32 var(--font-display);
-    letter-spacing:-.035em;color:#55269b;
-  }
-  .main.phone-expanded .phone-zoom-tagline span{
-    display:block;
-    background:var(--grad);background-clip:text;-webkit-background-clip:text;
-    color:transparent;-webkit-text-fill-color:transparent
-  }
 }
 @media(max-width:370px){
   .phone-zoom-trigger{left:calc(50% + 77px);width:40px;height:40px}
@@ -406,6 +393,17 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .phone{width:min(156px,calc(100svh / 3.65))}
   .phone-stage{padding-bottom:4px}
 }
+/* No primeiro quadro mobile, o título usa a tipografia compacta antes usada no zoom.
+   O smartphone mantém exatamente sua largura, altura e proporção. */
+@media(max-width:700px){
+  .copy h1{
+    font:800 clamp(17px,4.5vw,22px)/1.32 var(--font-display);
+    letter-spacing:-.035em;
+    max-width:350px;
+    margin:0 auto 6px;
+    text-align:center;
+  }
+}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .hero-heart{animation:none;will-change:auto}
@@ -418,8 +416,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   <div class="container">
     <div class="site-identity">
       <div class="site-brand"><img src="/preview-promovie-logo.webp" width="175" alt="PromoVie | Soluções Organizacionais Integradas" decoding="async" fetchpriority="high"></div>
-      <a class="site-globe" href="/" title="Voltar ao site principal" aria-label="Voltar ao site principal da PromoVie">
-        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 2.5 4.4 5.5 4.4 9S15 18.5 12 21M12 3c-3 2.5-4.4 5.5-4.4 9S9 18.5 12 21"/></svg>
+      <a class="site-globe" href="/" title="Ir para a página inicial" aria-label="Ir para a página inicial da PromoVie">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-7h6v7"/></svg>
       </a>
     </div>
   </div>
@@ -462,7 +460,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           <path d="m16 16 4.5 4.5M10.8 7.9v5.8M7.9 10.8h5.8"/>
         </svg>
       </button>
-      <p class="phone-zoom-tagline">Telemedicina e autocuidado <span>na palma da sua mão.</span></p>
     </div>
     <div class="install-block">
       <button type="button" class="install" id="install-now" aria-label="Instalar App">
