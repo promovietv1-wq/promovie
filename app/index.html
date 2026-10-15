@@ -25,9 +25,12 @@
     var cta=document.getElementById("install-now");
     if(cta){cta.addEventListener("click",function(){
       if(phone){window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");return;}
-      var message=document.getElementById("install-message");
-      if(message){message.textContent="Para instalar, abra www.promovie.tv.br/app/ no seu iPhone ou Android.";}
+      var dialog=document.getElementById("install-desktop-dialog");
+      if(dialog&&typeof dialog.showModal==="function"){dialog.showModal();}
+      else{window.alert("Para instalar, abra www.promovie.tv.br/app/ no seu smartphone.");}
     });}
+    var dialog=document.getElementById("install-desktop-dialog");
+    if(dialog){dialog.addEventListener("click",function(event){if(event.target===dialog)dialog.close();});}
   });
 })();
 </script>
@@ -123,6 +126,42 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
   .fineprint{margin-bottom:22px}
 }
 @media(max-width:359px){.page{padding-inline:16px}.masthead{padding-top:16px}.identity img{width:38px;height:38px}.identity strong{font-size:19px}.masthead-label{font-size:8px;padding:7px 9px}.hero{padding-top:9px}.hero h1{font-size:31px}.app-showcase{padding-top:12px}.phone{width:300px;max-width:100%}}
+
+/* Uma única vitrine para computadores e celulares, com o botão abaixo do smartphone. */
+.page{padding-bottom:calc(135px + env(safe-area-inset-bottom))}
+.identity img{width:52px;height:52px}
+.identity strong{font-size:23px}
+.hero h1{max-width:410px}
+.install{padding:13px 17px;line-height:1.33;text-align:center;font-size:13.5px;letter-spacing:-.015em}
+.install svg{flex:none}
+.install span{display:block}
+.install-note{font-size:10px}
+.install-dialog{position:fixed;inset:0;border:1px solid #eee7f5;border-radius:25px;background:#fff;color:var(--ink);padding:40px 32px 35px;box-shadow:0 26px 100px #2311393b;max-width:min(490px,calc(100% - 36px));max-height:calc(100dvh - 36px);overflow:auto;text-align:center}
+.install-dialog::backdrop{background:rgba(30,18,54,.62);backdrop-filter:blur(6px)}
+.dialog-heart{width:128px;height:128px;object-fit:contain;margin:0 auto 23px}
+.install-dialog h2{font-size:clamp(25px,4.5vw,31px);line-height:1.18;letter-spacing:-.055em;font-weight:850;margin:0 0 13px}
+.install-dialog p{color:#716780;font-size:14px;line-height:1.72;margin:0 auto;max-width:380px}
+.install-dialog .dialog-address{display:inline-block;background:#f3ecfb;color:#5d29a3;border-radius:12px;padding:12px 15px;margin-top:20px;font-size:13px;font-weight:830;user-select:all}
+.dialog-close{position:absolute;right:17px;top:16px;width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:10px;color:#785f90;background:#f8f5fa}
+.dialog-close svg{width:18px;height:18px}
+@media(min-width:780px){
+  .page{padding-bottom:45px}
+  .page main{grid-template-rows:auto auto auto;min-height:670px;column-gap:45px}
+  .hero{grid-column:1;grid-row:1 / span 3;padding:0 0 5px}
+  .hero h1{max-width:570px}
+  .app-showcase{grid-column:2;grid-row:1;align-self:end;padding-top:0}
+  .fineprint{grid-column:2;grid-row:2;align-self:start;margin:12px auto 0}
+  .bottom-cta{grid-column:2;grid-row:3;align-self:start;width:min(100%,430px);margin:22px auto 20px}
+  .cta-inner{max-width:430px;margin:0 auto}
+  .install{max-width:none;min-height:63px;padding:11px 20px;font-size:14px}
+  .install-note{text-align:center;font-size:11px}
+  .identity img{width:63px;height:63px}
+  .identity strong{font-size:29px}
+}
+@media(max-width:779px){
+  .bottom-cta{max-width:100%;margin:0}
+  .install{min-height:61px}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
@@ -137,19 +176,9 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
     </header>
     <main>
       <section class="hero" aria-labelledby="hero-title">
-        <p class="kicker">Cuidado conectado</p>
-        <h1 id="hero-title">Sua saúde, <span>uma conversa mais perto.</span></h1>
-        <p>O cuidado que você precisa, com profissionais de saúde em um aplicativo simples e acessível.</p>
-        <div class="bottom-cta">
-          <div class="cta-inner">
-            <button class="install" id="install-now" type="button">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
-              Instalar aplicativo
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-            </button>
-            <p class="install-note" id="install-message" role="status" aria-live="polite">No celular, continue para instalar pelo convite da PromoVie.</p>
-          </div>
-        </div>
+        <p class="kicker">PromoVie · Saúde conectada</p>
+        <h1 id="hero-title">Telemedicina <span>na palma da sua mão.</span></h1>
+        <p>Seu cuidado mais perto. Encontre profissionais de saúde e converse com praticidade, onde estiver.</p>
       </section>
       <div class="app-showcase">
         <div class="phone" aria-label="Prévia ilustrativa da navegação por especialidades">
@@ -201,10 +230,31 @@ button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aab
           </div>
         </div>
       </div>
-      <p class="fineprint">Imagem ilustrativa da experiência de atendimento.</p>
+      <p class="fineprint">Prévia ilustrativa da experiência de atendimento.</p>
+      <div class="bottom-cta">
+        <div class="cta-inner">
+          <button class="install" id="install-now" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
+            <span>Instale nosso aplicativo de telemedicina no seu smartphone</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+          </button>
+          <p class="install-note">Acesse a instalação pelo convite da PromoVie.</p>
+        </div>
+      </div>
     </main>
   </div>
 
 </div>
+<dialog id="install-desktop-dialog" class="install-dialog" aria-labelledby="install-desktop-title" aria-describedby="install-desktop-description">
+  <form method="dialog">
+    <button class="dialog-close" type="submit" aria-label="Fechar aviso">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+    </button>
+  </form>
+  <img class="dialog-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
+  <h2 id="install-desktop-title">Abra esta página pelo smartphone.</h2>
+  <p id="install-desktop-description">Para instalar o aplicativo de telemedicina, acesse o endereço abaixo no seu iPhone ou Android.</p>
+  <p class="dialog-address">www.promovie.tv.br/app/</p>
+</dialog>
 </body>
 </html>
