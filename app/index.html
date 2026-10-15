@@ -5,162 +5,182 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
-<meta name="description" content="PromoVie Telemedicina. Abra pelo smartphone para acessar a instalação do aplicativo de atendimento.">
+<meta name="description" content="Instale o aplicativo de atendimento da PromoVie no seu celular. Telemedicina e profissionais de saúde a um toque.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://www.promovie.tv.br/app/">
-<link rel="icon" sizes="any" href="/app/icons/favicon-coracao-promovie.ico?v=13">
-<link rel="icon" type="image/png" sizes="32x32" href="/app/icons/favicon-coracao-promovie-32.png?v=13">
-<link rel="apple-touch-icon" sizes="180x180" href="/app/icons/apple-touch-coracao-promovie.png?v=13">
+<link rel="icon" href="/app/icons/favicon-coracao-promovie.ico?v=13" sizes="any">
+<link rel="icon" href="/app/icons/favicon-coracao-promovie-32.png?v=13" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=13" sizes="180x180">
 <link rel="preload" href="/app/assets/coracao-promovie-com-logo.webp" as="image" type="image/webp">
-<title>PromoVie | Instalar aplicativo</title>
+<title>PromoVie | Instale o aplicativo de Telemedicina</title>
 <script>
 (function(){
-  const ua=navigator.userAgent||"";
-  const tablet=/iPad|Tablet|Silk|Android(?!.*Mobile)/i.test(ua)||(/Macintosh/i.test(ua)&&navigator.maxTouchPoints>1);
-  const mobileFlag=navigator.userAgentData&&navigator.userAgentData.mobile===true;
-  const smartphone=!tablet&&(/iPhone|iPod|Android.*Mobile|Windows Phone|IEMobile|BlackBerry|BB10|Opera Mini/i.test(ua)||mobileFlag);
-  document.documentElement.dataset.device=smartphone?"smartphone":"desktop";
-  window.addEventListener("DOMContentLoaded",function(){
-    const cta=document.getElementById("install-now");
-    if(cta&&smartphone){
-      cta.addEventListener("click",function(){window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");});
-    }
+  "use strict";
+  var ua=navigator.userAgent||"";
+  var tablet=/iPad|Tablet|Silk|Android(?!.*Mobile)/i.test(ua)||(/Macintosh/i.test(ua)&&navigator.maxTouchPoints>1);
+  var mobileHint=!!(navigator.userAgentData&&navigator.userAgentData.mobile);
+  var phone=!tablet&&(/iPhone|iPod|Android.*Mobile|Windows Phone|IEMobile|BlackBerry|BB10|Opera Mini/i.test(ua)||mobileHint);
+  document.documentElement.dataset.device=phone?"smartphone":"desktop";
+  document.addEventListener("DOMContentLoaded",function(){
+    var cta=document.getElementById("install-now");
+    if(phone&&cta){cta.addEventListener("click",function(){window.location.assign("https://www.mediquo.com/app/connect?code=provz45a0yi");});}
   });
 })();
 </script>
 <style>
-:root{color-scheme:light;--ink:#261c3b;--muted:#776f86;--plum:#3d2455;--purple:#7032b8;--cyan:#009eb8;--line:#ebe6f0;--grad:linear-gradient(110deg,#4c1889,#7632b6 58%,#b14eab);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-*{box-sizing:border-box}
-body{margin:0;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-img,svg{display:block}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #10bdd7;outline-offset:3px}
-.smartphone-only{display:none}html[data-device="smartphone"] .smartphone-only{display:block}html[data-device="smartphone"] .desktop-only{display:none}
-.desktop-only{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:32px;background:radial-gradient(ellipse at 70% 15%,#f4edf9,transparent 45%),radial-gradient(ellipse at 15% 90%,#eef9fb,transparent 49%),#fff}
-.desktop-card{max-width:560px;width:100%;padding:48px 45px;text-align:center;background:#fff;border:1px solid var(--line);box-shadow:0 26px 80px #2e1a4712;border-radius:27px}
-.desktop-card .heart{width:86px;height:86px;object-fit:contain;margin:0 auto 24px}
-.desktop-icon{background:linear-gradient(145deg,#f0eafa,#effafb);width:74px;height:74px;border-radius:25px;margin:0 auto 25px;color:#713bad;display:grid;place-items:center}
-.desktop-icon svg{width:32px;height:32px}
-.desktop-card h1{font-size:clamp(25px,3vw,34px);letter-spacing:-.055em;line-height:1.22;margin:0 0 16px;font-weight:810}
-.desktop-card p{font-size:15px;line-height:1.75;color:#756e80;margin:0 auto 20px;max-width:410px}
-.desktop-url{display:inline-block;color:#5e368d;background:#f5effa;padding:11px 19px;border-radius:12px;font-weight:780;font-size:13px;user-select:all}
-.desktop-note{font-size:11px!important;margin-top:23px!important;margin-bottom:0!important}
-.ambient{position:fixed;pointer-events:none;top:-130px;right:-135px;width:350px;height:350px;border-radius:100%;background:radial-gradient(circle,#eaddf7 0%,#f9f5fd 47%,transparent 73%);opacity:.78}
-.mobile-shell{position:relative;max-width:490px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:0 22px 144px;overflow:hidden}
-.header{height:86px;display:flex;align-items:center;gap:11px;position:relative;z-index:1}
-.header img{height:48px;width:48px;object-fit:contain}
-.brand-text strong{display:block;font-size:23px;font-weight:870;letter-spacing:-.065em;line-height:1.08;background:var(--grad);color:#5f258f;background-clip:text;-webkit-text-fill-color:transparent}
-.brand-text span{display:block;font-size:10px;font-weight:650;color:#7f738f;letter-spacing:.025em;margin-top:6px}
-.hero{position:relative;z-index:1;padding:13px 0 16px}
-.overline{color:#8052ab;font-size:10px;letter-spacing:.16em;font-weight:850;text-transform:uppercase;margin:0 0 12px;display:flex;gap:8px;align-items:center}
-.overline:before{content:"";height:5px;width:5px;border-radius:99px;background:#2aacc2}
-.hero h1{font-size:clamp(33px,9vw,43px);line-height:1.16;letter-spacing:-.067em;font-weight:865;margin:0 0 14px}
-.gradient{color:#6b2dab;background:var(--grad);background-clip:text;-webkit-text-fill-color:transparent}
-.hero .lead{margin:0;color:#70677c;line-height:1.63;font-size:13px;max-width:375px}
-.chat-card{position:relative;z-index:1;margin:22px 0 0;background:#fff;border-radius:23px;border:1px solid #e8e1ef;box-shadow:0 15px 43px #3c246c14;overflow:hidden}
-.chat-head{padding:18px 16px 16px;background:linear-gradient(125deg,#faf7ff 0%,#f3f0fc 55%,#eaf9fc 100%);border-bottom:1px solid #eee8f6}
-.chat-hello{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.chat-hello > div{display:flex;gap:11px;align-items:center;min-width:0}
-.chat-heart{width:36px;height:36px;object-fit:contain}
-.chat-hello strong{font-size:14px;font-weight:840;line-height:1.2;display:block;letter-spacing:-.04em}
-.chat-hello small{display:block;color:#857b91;font-size:9px;margin-top:4px}
-.chat-bubble{height:33px;width:33px;display:grid;place-items:center;border-radius:12px;background:#fff;box-shadow:0 3px 10px #39255c10;color:#7546a6}
-.chat-bubble svg{width:18px;height:18px}
-.chat-search{margin-top:15px;border-radius:12px;background:#fff;border:1px solid #ede7f3;padding:11px 12px;color:#8b8295;font-size:10px;display:flex;gap:9px;align-items:center}
-.chat-search svg{width:15px;height:15px;color:#8f79a7}
-.contacts-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:18px 16px 8px}
-.contacts-head strong{font-size:12px;font-weight:840}.contacts-head span{color:#845fa9;font-size:10px;font-weight:780}
-.contacts{padding:0 9px 10px}
-.contact{min-height:64px;padding:9px 8px;display:flex;align-items:center;gap:11px;border-radius:13px}
-.contact+.contact{border-top:1px solid #f1edf5;border-radius:0}
-.portrait{width:44px;height:44px;border-radius:15px;object-fit:cover;background:linear-gradient(120deg,#f0e8f8,#e6f7fa);flex:none}
-.contact-text{min-width:0;flex:1}
-.contact-text strong{display:block;font-size:11px;line-height:1.4;color:#33253e;font-weight:810}
-.contact-text span{font-size:10px;display:block;color:#958a9e;line-height:1.4;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.contact-chevron{color:#baa9ca}.contact-chevron svg{width:15px;height:15px;stroke-width:2}
-.more{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0 16px;color:#7954a3;font-size:10px;font-weight:760}
-.more svg{width:14px;height:14px}
-.illustrative{display:flex;justify-content:center;align-items:center;gap:6px;color:#93899c;font-size:10px;margin:14px 0 0;position:relative;z-index:1;text-align:center}
-.illustrative svg{width:13px;height:13px}
-.action-dock{position:fixed;z-index:4;bottom:0;left:0;right:0;padding:17px max(19px,env(safe-area-inset-right)) calc(13px + env(safe-area-inset-bottom)) max(19px,env(safe-area-inset-left));background:linear-gradient(180deg,rgba(255,255,255,.88),#fff 26%);border-top:1px solid #f0ecf4;box-shadow:0 -11px 24px #2517350b}
-.action-inner{max-width:446px;margin:0 auto}
-.primary-action{border:0;width:100%;min-height:58px;display:flex;justify-content:center;align-items:center;gap:14px;border-radius:17px;background:#302147;color:#fff;box-shadow:0 8px 20px #452c6624;font-weight:810;font-size:15px;letter-spacing:-.02em}
-.primary-action svg{height:19px;width:19px}
-.action-subtitle{display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;color:#898292;font-size:10px;margin:10px 0 0;line-height:1.45}
-.action-subtitle svg{width:12px;height:12px;color:#65899a}
-@media(min-width:490px){.mobile-shell{box-shadow:0 0 65px #29143b0a;min-height:100vh}.action-dock{background:#fff}}
-@media(max-width:359px){.mobile-shell{padding-inline:16px}.header{height:76px}.header img{height:44px;width:44px}.hero h1{font-size:31px}.chat-card{margin-top:17px}.contact{gap:8px}.portrait{width:40px;height:40px}.contact-text span{font-size:9px}.action-dock{padding-inline:14px}}
+:root{color-scheme:light;--deep:#402080;--purple:#6226bd;--bright:#833fd7;--ink:#211835;--sub:#777081;--line:#ece8f2;--light:#f7f4fc;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}html{min-width:320px}body{margin:0;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased}
+img,svg{display:block}svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #15aabe;outline-offset:3px}
+.mobile-only{display:none}html[data-device="smartphone"] .mobile-only{display:block}html[data-device="smartphone"] .desktop-only{display:none}
+.desktop-only{display:grid;min-height:100vh;min-height:100dvh;place-items:center;padding:30px;background:radial-gradient(ellipse at 80% 10%,#f1e9fa,transparent 44%),radial-gradient(ellipse at 5% 100%,#eaf6fb,transparent 50%),#fff}
+.desktop-panel{text-align:center;background:#fff;border:1px solid #eee7f5;border-radius:27px;padding:48px 40px;max-width:530px;width:100%;box-shadow:0 20px 80px #361b5a13}
+.desktop-panel img{width:87px;height:87px;object-fit:contain;margin:0 auto 26px}
+.desktop-panel h1{font-size:clamp(24px,3.2vw,33px);line-height:1.22;letter-spacing:-.055em;margin:0 0 14px}
+.desktop-panel p{font-size:14px;line-height:1.74;color:#72687f;margin:0 auto 16px;max-width:360px}
+.desktop-address{display:inline-block;padding:11px 17px;border-radius:12px;background:#f3ecfb;color:#5c2ba0;font-size:13px;font-weight:800;user-select:all}
+.desktop-panel .small{margin:22px auto 0;font-size:11px;color:#958a9f}
+.page{max-width:430px;min-height:100vh;min-height:100dvh;margin:0 auto;padding:0 23px calc(114px + env(safe-area-inset-bottom));overflow:hidden;position:relative}
+.masthead{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:23px 0 19px;position:relative;z-index:1}
+.identity{display:flex;align-items:center;gap:10px}
+.identity img{width:43px;height:43px;object-fit:contain;flex:none}
+.identity strong{display:block;font-weight:850;font-size:21px;letter-spacing:-.065em;line-height:1.1;color:#52249c}
+.identity small{display:block;font-size:10px;font-weight:600;color:#8e839c;margin-top:4px}
+.masthead-label{font-size:9px;font-weight:800;color:#7041ae;border:1px solid #e8def3;background:#faf7ff;border-radius:99px;padding:8px 10px;white-space:nowrap}
+.hero{position:relative;z-index:1;padding:15px 0 10px}
+.kicker{display:flex;align-items:center;gap:7px;color:#7a50b4;font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:850;margin:0 0 12px}
+.kicker:before{content:"";height:5px;width:5px;background:#6b31b9;border-radius:50%}
+.hero h1{font-size:clamp(33px,9.1vw,43px);font-weight:850;letter-spacing:-.067em;line-height:1.13;margin:0 0 13px;max-width:365px}
+.hero h1 span{color:#7234bd}
+.hero p{font-size:13px;color:#746d80;line-height:1.65;margin:0;max-width:340px}
+.app-showcase{position:relative;padding:20px 0 0;isolation:isolate}
+.app-showcase:before{content:"";position:absolute;inset:7px -90px 7px;background:radial-gradient(ellipse at center,#ede3f9 0%,#f7f2fd 42%,rgba(255,255,255,0) 71%);z-index:-1;pointer-events:none}
+.phone{position:relative;width:min(100%,323px);margin:0 auto;background:#fff;border:7px solid #352446;border-radius:39px;box-shadow:0 17px 35px #2c1c4227,0 1px 8px #2c1c4223;overflow:hidden;transform:rotate(-1.3deg)}
+.phone:before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);height:16px;width:87px;background:#352446;border-radius:0 0 12px 12px;z-index:3}
+.phone-screen{height:482px;overflow:hidden;background:#fff;border-radius:32px 32px 26px 26px;position:relative}
+.status-line{height:26px;padding:8px 18px 0;display:flex;align-items:center;justify-content:space-between;font-size:9px;font-weight:800;color:#322947}
+.status-bars{display:flex;align-items:center;gap:5px}
+.status-bars svg{width:13px;height:13px;stroke-width:2}
+.app-purple{background:#6024ba;color:#fff;padding:14px 14px 14px}
+.purple-top{display:flex;justify-content:space-between;align-items:center}
+.purple-top span{font-weight:850;font-size:15px;letter-spacing:-.045em}
+.purple-top svg{width:18px;height:18px}
+.purple-sub{font-size:9px;color:#e4cff8;margin:3px 0 13px}
+.quick-search{display:flex;align-items:center;gap:8px;border-radius:10px;background:#fff;color:#928b9e;font-size:9px;padding:9px 10px}
+.quick-search svg{width:14px;height:14px;color:#9e82bf}
+.chat-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px 13px 5px}
+.chat-panel-head strong{font-size:10px;color:#34283f;font-weight:850}
+.chat-panel-head span{font-size:9px;color:#7846b0;font-weight:700}
+.chat-list{padding:0 9px}
+.chat-row{display:flex;align-items:center;gap:10px;padding:9px 4px;min-height:57px;border-bottom:1px solid #f0edf4}
+.avatar-wrap{flex:none;width:44px;height:44px}
+.avatar-wrap img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#f0e8fa}
+.chat-copy{flex:1;min-width:0}
+.chat-copy strong{font-size:10px;font-weight:840;color:#2e2440;letter-spacing:-.012em;display:block;margin-bottom:4px}
+.chat-copy span{font-size:8px;color:#948a9e;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;display:block}
+.chat-chevron{font-size:18px;line-height:1;color:#ae99c9;padding:0 4px}
+.availability{font-size:9px;font-weight:850;color:#6331b6;background:#eee6f9;border-radius:7px;padding:3px 5px}
+.app-menu{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee9f4;min-height:51px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;box-shadow:0 -5px 15px #fff}
+.app-menu div{display:flex;flex-direction:column;align-items:center;gap:2px;color:#a096ad;font-size:8px;font-weight:700}
+.app-menu div.current{color:#6330b7}
+.app-menu svg{width:17px;height:17px}
+.fineprint{font-size:10px;text-align:center;color:#9990a2;margin:18px auto 0;line-height:1.55}
+.bottom-cta{position:fixed;z-index:4;bottom:0;left:0;right:0;padding:13px max(17px,env(safe-area-inset-left)) calc(11px + env(safe-area-inset-bottom)) max(17px,env(safe-area-inset-right));background:linear-gradient(180deg,rgba(255,255,255,.88),#fff 28%);border-top:1px solid #f0ebf5;box-shadow:0 -8px 28px #26154410}
+.cta-inner{max-width:390px;margin:0 auto}
+.install{display:flex;align-items:center;justify-content:center;gap:11px;background:#5d25ac;color:#fff;width:100%;min-height:58px;border:0;border-radius:16px;font-size:15px;font-weight:840;box-shadow:0 9px 20px #4c238137}
+.install svg{width:19px;height:19px}
+.install-note{font-size:10px;line-height:1.4;color:#8b8397;text-align:center;margin:9px 0 0}
+@media(max-width:359px){.page{padding-inline:16px}.masthead{padding-top:16px}.identity img{width:38px;height:38px}.identity strong{font-size:19px}.masthead-label{font-size:8px;padding:7px 9px}.hero{padding-top:9px}.hero h1{font-size:31px}.app-showcase{padding-top:12px}.phone{width:300px;max-width:100%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<section class="desktop-only" aria-labelledby="desktop-title">
-  <div class="desktop-card">
-    <img class="heart" src="/app/assets/coracao-promovie-com-logo.webp" width="86" height="86" alt="Coração PromoVie">
-    <div class="desktop-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div>
-    <h1 id="desktop-title">Abra esta página pelo smartphone.</h1>
-    <p>A instalação do aplicativo de telemedicina está disponível somente para celulares. Acesse o endereço abaixo no seu iPhone ou Android.</p>
-    <div class="desktop-url">www.promovie.tv.br/app/</div>
-    <p class="desktop-note">O acesso à instalação fica desativado em computadores.</p>
+<section class="desktop-only">
+  <div class="desktop-panel">
+    <img src="/app/assets/coracao-promovie-com-logo.webp" width="87" height="87" alt="Coração PromoVie">
+    <h1>Abra a página pelo celular.</h1>
+    <p>A instalação está disponível somente em smartphones. No seu iPhone ou Android, visite:</p>
+    <span class="desktop-address">www.promovie.tv.br/app/</span>
+    <p class="small">O botão de instalação não aparece em computadores.</p>
   </div>
 </section>
-<div class="smartphone-only">
-  <div class="mobile-shell">
-    <div class="ambient" aria-hidden="true"></div>
-    <header class="header">
-      <img src="/app/assets/coracao-promovie-com-logo.webp" width="48" height="48" alt="Coração oficial PromoVie">
-      <div class="brand-text"><strong>PromoVie</strong><span>TELEMEDICINA E AUTOCUIDADO</span></div>
+<div class="mobile-only">
+  <div class="page">
+    <header class="masthead">
+      <div class="identity"><img src="/app/assets/coracao-promovie-com-logo.webp" width="43" height="43" alt="Coração oficial PromoVie">
+        <div><strong>PromoVie</strong><small>Telemedicina e bem-estar</small></div>
+      </div>
+      <span class="masthead-label">App para celular</span>
     </header>
     <main>
-      <section class="hero" aria-labelledby="mobile-title">
-        <p class="overline">Saúde com mais proximidade</p>
-        <h1 id="mobile-title">Seu cuidado começa <span class="gradient">com uma conversa.</span></h1>
-        <p class="lead">Um caminho simples para encontrar profissionais de saúde e cuidar do seu bem-estar.</p>
+      <section class="hero" aria-labelledby="hero-title">
+        <p class="kicker">Cuidado conectado</p>
+        <h1 id="hero-title">Sua saúde, <span>uma conversa mais perto.</span></h1>
+        <p>O cuidado que você precisa, com profissionais de saúde em um aplicativo simples e acessível.</p>
       </section>
-      <section class="chat-card" aria-label="Ilustração de uma lista de atendimentos">
-        <div class="chat-head">
-          <div class="chat-hello">
-            <div><img class="chat-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="36" height="36" alt=""><div><strong>Olá, Vida.</strong><small>Com quem vamos conversar?</small></div></div>
-            <div class="chat-bubble"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.4a8.5 8.5 0 1 1 17.1-4.6Z"/></svg></div>
+      <div class="app-showcase">
+        <div class="phone" aria-label="Prévia ilustrativa da navegação por especialidades">
+          <div class="phone-screen">
+            <div class="status-line"><span>9:41</span><div class="status-bars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20V15m5 5v-8m5 8V9m5 11V5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11c6-6 14-6 20 0M6 15c4-4 8-4 12 0m-7 4c1-1 2-1 3 0"/></svg></div></div>
+            <div class="app-purple">
+              <div class="purple-top"><span>Conversas</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+              <p class="purple-sub">Encontre profissionais para seu cuidado</p>
+              <div class="quick-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>Pesquisar atendimento</div>
+            </div>
+            <div class="chat-panel-head"><strong>Especialidades</strong><span>Ver todas</span></div>
+            <div class="chat-list">
+              <div class="chat-row">
+  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="eager"></div>
+  <div class="chat-copy"><strong>Clínico geral 24h</strong><span>Atendimento médico on-line</span></div>
+  <span class="availability">24h</span>
+</div>
+<div class="chat-row">
+  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="eager"></div>
+  <div class="chat-copy"><strong>Psicologia</strong><span>Escuta, cuidado e acolhimento</span></div>
+  <span class="chat-chevron" aria-hidden="true">›</span>
+</div>
+<div class="chat-row">
+  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="eager"></div>
+  <div class="chat-copy"><strong>Ginecologia</strong><span>Orientações sobre saúde feminina</span></div>
+  <span class="chat-chevron" aria-hidden="true">›</span>
+</div>
+<div class="chat-row">
+  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="lazy"></div>
+  <div class="chat-copy"><strong>Pediatria</strong><span>Cuidado infantil e orientações</span></div>
+  <span class="chat-chevron" aria-hidden="true">›</span>
+</div>
+<div class="chat-row">
+  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="lazy"></div>
+  <div class="chat-copy"><strong>Nutrição</strong><span>Alimentação e qualidade de vida</span></div>
+  <span class="chat-chevron" aria-hidden="true">›</span>
+</div>
+<div class="chat-row">
+  <div class="avatar-wrap"><img src="https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg/v1/fill/w_88,h_88,al_c,q_72,enc_auto/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg" width="44" height="44" alt="" decoding="async" loading="lazy"></div>
+  <div class="chat-copy"><strong>Dermatologia</strong><span>Saúde da pele e prevenção</span></div>
+  <span class="chat-chevron" aria-hidden="true">›</span>
+</div>
+            </div>
+            <div class="app-menu" aria-hidden="true">
+              <div class="current"><svg viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8c-2 0-3-.4-4-.8L3 21l2-6a8 8 0 1 1 16-4z"/></svg>Conversas</div>
+              <div><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>Início</div>
+              <div><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-9 14-9 14 0"/></svg>Perfil</div>
+            </div>
           </div>
-          <div class="chat-search" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>Buscar especialidade ou atendimento</div>
         </div>
-        <div class="contacts-head"><strong>Profissionais de saúde</strong><span>Ver especialidades</span></div>
-        <div class="contacts">
-        <div class="contact">
-    <img class="portrait" src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_112,h_112,al_c,q_72,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" width="44" height="44" alt="" loading="lazy" decoding="async">
-    <div class="contact-text"><strong>Clínico Geral 24h</strong><span>Avaliação clínica e orientação</span></div>
-    <span class="contact-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>
-  </div>
-<div class="contact">
-    <img class="portrait" src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_112,h_112,al_c,q_72,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" width="44" height="44" alt="" loading="lazy" decoding="async">
-    <div class="contact-text"><strong>Psicologia</strong><span>Um espaço para conversar</span></div>
-    <span class="contact-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>
-  </div>
-<div class="contact">
-    <img class="portrait" src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_112,h_112,al_c,q_72,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" width="44" height="44" alt="" loading="lazy" decoding="async">
-    <div class="contact-text"><strong>Nutrição</strong><span>Apoio à alimentação e hábitos</span></div>
-    <span class="contact-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>
-  </div>
-<div class="contact">
-    <img class="portrait" src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_112,h_112,al_c,q_72,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" width="44" height="44" alt="" loading="lazy" decoding="async">
-    <div class="contact-text"><strong>Pediatria</strong><span>Cuidados para crianças</span></div>
-    <span class="contact-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>
-  </div>
-<div class="contact">
-    <img class="portrait" src="https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg/v1/fill/w_112,h_112,al_c,q_72,enc_auto/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg" width="44" height="44" alt="" loading="lazy" decoding="async">
-    <div class="contact-text"><strong>Dermatologia</strong><span>Cuidado com a pele</span></div>
-    <span class="contact-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>
-  </div>
-        </div>
-        <div class="more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>Mais possibilidades de cuidado</div>
-      </section>
-      <p class="illustrative"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v6m0-10h.01"/></svg>Visual ilustrativo dos atendimentos.</p>
+      </div>
+      <p class="fineprint">Imagem ilustrativa da experiência de atendimento.</p>
     </main>
   </div>
-  <div class="action-dock"><div class="action-inner">
-    <button type="button" class="primary-action" id="install-now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>Instalar aplicativo</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
-    <p class="action-subtitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>Continua pelo acesso personalizado da PromoVie</p>
-  </div></div>
+  <div class="bottom-cta">
+    <div class="cta-inner">
+      <button class="install" id="install-now" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
+        Instalar aplicativo
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <p class="install-note">Acesso à instalação pelo convite da PromoVie.</p>
+    </div>
+  </div>
 </div>
 </body>
 </html>
