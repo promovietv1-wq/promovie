@@ -60,9 +60,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 .main{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.96fr);
-  align-items:center;gap:clamp(26px,5vw,74px);
+  align-items:center;gap:clamp(16px,3.9vw,58px);
   width:min(1160px,calc(100% - 66px));min-height:calc(100svh - 80px);
-  padding-top:30px;padding-bottom:42px
+  padding-top:14px;padding-bottom:19px
 }
 .copy{align-self:center;position:relative;z-index:1;max-width:590px;padding-bottom:12px}
 .heart-stage{
@@ -95,25 +95,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 .copy h1{
   font:700 clamp(43px,4.7vw,66px)/1.09 var(--font-display);
-  letter-spacing:-.064em;margin:0 0 17px;max-width:600px;
-  transition:color .25s ease
-}
-.copy h1:hover .gradient{filter:brightness(1.08)}
-.heart-stage:hover .hero-heart{filter:drop-shadow(0 15px 20px rgba(76,22,126,.17))}
-.copy h1 .gradient{
-  display:block;background:var(--grad);
-  background-clip:text;-webkit-background-clip:text;
-  color:var(--purple);-webkit-text-fill-color:transparent;padding-bottom:5px;
+  letter-spacing:-.064em;margin:0 0 15px;max-width:600px;
+  background:var(--grad);background-clip:text;-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
   transition:filter .25s ease
 }
+.copy h1:hover{filter:brightness(1.075)}
+.heart-stage:hover .hero-heart{filter:drop-shadow(0 15px 20px rgba(76,22,126,.17))}
+.copy h1 .gradient{display:block;padding-bottom:5px;-webkit-text-fill-color:inherit;color:inherit}
 .lead{margin:0;font-size:16px;line-height:1.75;color:#5f6b80;max-width:470px}
 .right-col{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   position:relative;min-width:0;padding:8px 0 0
 }
 .phone-stage{
-  width:100%;min-height:550px;display:flex;justify-content:center;align-items:center;
-  padding:19px 28px 18px;isolation:isolate;position:relative;overflow:visible
+  width:100%;min-height:475px;display:flex;justify-content:center;align-items:center;
+  padding:10px 22px 7px;isolation:isolate;position:relative;overflow:visible
 }
 .phone-stage::before{
   content:"";position:absolute;inset:3% 4%;border-radius:50%;z-index:-2;
@@ -127,7 +124,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   box-shadow:0 0 0 34px rgba(115,52,216,.018)
 }
 .phone{
-  width:260px;height:508px;max-width:100%;flex:none;position:relative;overflow:hidden;
+  width:239px;height:448px;max-width:100%;flex:none;position:relative;overflow:hidden;
   border:7px solid #272034;border-radius:43px;background:#fff;
   box-shadow:0 31px 64px rgba(30,16,55,.21),8px 9px 21px rgba(25,21,52,.11),inset 0 0 0 1px #716784;
   transform:rotate(-6deg);transform-origin:center;
@@ -150,7 +147,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .phone-screen{height:100%;display:flex;flex-direction:column;overflow:hidden;background:#fff;position:relative}
 .list-heading{
   flex:none;display:flex;justify-content:space-between;align-items:center;
-  padding:30px 14px 10px;min-height:67px;
+  padding:27px 14px 8px;min-height:57px;
   background:linear-gradient(180deg,#fdfbff 0%,#fff 100%);
   border-bottom:1px solid #f4f0f8
 }
@@ -171,15 +168,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .chat-live{font-size:8px;font-weight:800;color:#6e30a7;background:#f2e9fc;padding:4px 6px;border-radius:7px}
 .chat-arrow{font-size:18px;color:#aa91bd;padding:0 3px;line-height:1}
 .phone-nav{
-  min-height:46px;flex:none;display:flex;justify-content:space-around;align-items:center;
+  min-height:40px;flex:none;display:flex;justify-content:space-around;align-items:center;
   border-top:1px solid #eeeaf4;background:#fff
 }
 .phone-nav span{display:flex;flex-direction:column;align-items:center;gap:2px;color:#9b90a7;font-size:8px;font-weight:650}
 .phone-nav span:first-child{color:#7134b5}
 .phone-nav svg{width:16px;height:16px}
-.install-block{width:min(100%,395px);margin:12px 0 0;text-align:center;z-index:1}
+.install-block{width:min(100%,395px);margin:5px 0 0;text-align:center;z-index:1}
 .install{
-  width:100%;min-height:63px;padding:13px 17px;display:flex;gap:12px;
+  width:100%;min-height:56px;padding:11px 17px;display:flex;gap:12px;
   justify-content:center;align-items:center;position:relative;overflow:hidden;
   border:1px solid rgba(255,255,255,.22);border-radius:16px;color:#fff;
   background:linear-gradient(112deg,#5a18b6 0%,#7130d7 52%,#5160df 100%);
@@ -215,44 +212,85 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .copy h1{font-size:clamp(35px,4.9vw,55px)}
   .heart-stage{width:238px;height:221px}
   .hero-heart{width:216px;height:216px}
-  .phone-stage{min-height:530px;padding-inline:8px}
-  .phone{width:252px;height:497px}
+  .phone-stage{min-height:468px;padding-inline:8px}
+  .phone{width:236px;height:439px}
 }
 @media(max-width:700px){
-  .container{width:calc(100% - 42px)}
-  .site-header{height:69px}
-  .site-brand img{width:148px}
-  .site-identity{gap:11px}
-  .site-globe{width:29px;height:29px}
+  .container{width:calc(100% - 36px)}
+  .site-header{height:62px}
+  .site-brand img{width:139px}
+  .site-identity{gap:10px}
+  .site-globe{width:28px;height:28px}
   .site-globe svg{width:16px;height:16px}
-  .main{grid-template-columns:minmax(0,1fr);min-height:auto;gap:12px;padding:18px 0 26px}
+  .main{
+    grid-template-columns:minmax(0,1fr);min-height:auto;gap:3px;
+    padding:8px 0 12px
+  }
   .copy{max-width:550px;padding:0}
-  .heart-stage{width:217px;height:202px;margin:0 auto 7px}
-  .hero-heart{width:192px;height:192px}
-  .copy h1{font-size:clamp(35px,7.8vw,49px);line-height:1.14;margin-bottom:12px}
-  .lead{font-size:13px;line-height:1.65}
+  .heart-stage{width:145px;height:134px;margin:0 auto 3px}
+  .hero-heart{width:138px;height:138px}
+  .copy h1{
+    font-size:clamp(28px,7.65vw,39px);line-height:1.105;
+    margin:0 0 5px;letter-spacing:-.053em
+  }
+  .copy h1 .gradient{padding-bottom:3px}
+  .lead{font-size:12px;line-height:1.4}
   .right-col{padding:0}
-  .phone-stage{min-height:490px;padding:14px 20px 8px}
-  .phone-stage::after{width:390px;height:390px}
-  .phone{width:238px;height:464px;border-width:6px;border-radius:38px;transform:rotate(-4deg)}
-  .phone:hover{transform:rotate(-4deg)}
-  .phone::after{border-radius:32px}
-  .list-heading{min-height:59px;padding:26px 12px 9px}
-  .chat-row{gap:7px;padding:3px 2px}
-  .chat-row img{width:31px;height:31px}
-  .chat-info strong{font-size:8.8px}
-  .chat-info small{font-size:7px}
-  .phone-nav{min-height:42px}
-  .install-block{margin-top:6px;width:min(100%,395px)}
-  .install{font-size:12.5px;min-height:59px;border-radius:15px}
+  .phone-stage{min-height:0;height:auto;padding:5px 12px 1px}
+  .phone-stage::after{width:315px;height:315px}
+  .phone{
+    width:210px;height:clamp(295px,43svh,382px);
+    border-width:5px;border-radius:35px;transform:rotate(-3deg)
+  }
+  .phone:hover{transform:rotate(-3deg)}
+  .phone::before{width:66px;height:13px}
+  .phone::after{border-radius:29px}
+  .list-heading{min-height:43px;padding:23px 10px 5px}
+  .list-heading strong{font-size:10px}
+  .list-heading span{font-size:8px}
+  .chat-list{padding:0 6px}
+  .chat-row{gap:6px;padding:2px 1px}
+  .chat-row img{width:25px;height:25px}
+  .chat-info strong{font-size:8px}
+  .chat-info small{font-size:6.5px;margin-top:2px}
+  .chat-arrow{font-size:15px}
+  .chat-live{font-size:7px;padding:2px 4px}
+  .phone-nav{min-height:35px}
+  .phone-nav svg{width:14px;height:14px}
+  .phone-nav span{font-size:7px}
+  .install-block{margin-top:4px;width:min(100%,335px)}
+  .install{font-size:13px;min-height:49px;border-radius:14px;padding:10px 13px}
 }
 @media(max-width:370px){
-  .container{width:calc(100% - 30px)}
-  .site-brand img{width:135px}
-  .copy h1{font-size:33px}
-  .phone-stage{padding-inline:12px}
-  .phone{width:231px;height:452px}
-  .chat-row img{width:29px;height:29px}
+  .container{width:calc(100% - 28px)}
+  .site-brand img{width:132px}
+  .copy h1{font-size:clamp(27px,7.7vw,33px)}
+  .heart-stage{width:126px;height:119px}
+  .hero-heart{width:123px;height:123px}
+  .phone-stage{padding-inline:9px}
+  .phone{width:202px;height:clamp(280px,43svh,352px)}
+  .chat-row img{width:23px;height:23px}
+}
+@media(max-width:700px) and (max-height:760px){
+  .main{padding-top:5px;gap:1px}
+  .heart-stage{width:120px;height:112px;margin-bottom:2px}
+  .hero-heart{width:115px;height:115px}
+  .copy h1{font-size:clamp(26px,7.2vw,35px);margin-bottom:3px}
+  .lead{font-size:11.5px}
+  .phone{height:clamp(273px,40svh,315px)}
+  .phone-stage{padding-block:2px 0}
+  .install-block{margin-top:3px}
+  .install{min-height:47px}
+}
+@media(max-width:700px) and (max-height:630px){
+  .heart-stage{width:99px;height:92px}
+  .hero-heart{width:96px;height:96px}
+  .copy h1{font-size:clamp(25px,7vw,31px);line-height:1.06}
+  .phone{height:clamp(252px,39svh,280px)}
+  .list-heading{min-height:38px;padding:19px 10px 4px}
+  .chat-row img{width:20px;height:20px}
+  .phone-nav{min-height:29px}
+  .install{min-height:44px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -304,10 +342,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       </div>
     </div>
     <div class="install-block">
-      <button type="button" class="install" id="install-now" aria-label="Instale nosso aplicativo no seu smartphone">
+      <button type="button" class="install" id="install-now" aria-label="Instale no seu smartphone">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
-        <span>Instale nosso aplicativo no seu smartphone</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        <span>Instale no seu smartphone</span>
       </button>
     </div>
   </div>
