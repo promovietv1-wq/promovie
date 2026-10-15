@@ -51,23 +51,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .site-globe{
   display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:50%;
   border:1px solid rgba(115,52,216,.26);background:#fff;color:var(--purple);text-decoration:none;
-  position:relative;isolation:isolate;
-  transition:background .2s ease,box-shadow .2s ease,filter .2s ease
+  transition:background-color .22s ease,border-color .22s ease,box-shadow .22s ease,color .22s ease
 }
 .site-globe svg{width:18px;height:18px;stroke-width:1.6}
 .site-globe:hover,.site-globe:focus-visible{
-  background:linear-gradient(135deg,#fff 0%,#eaf2f9 45%,#fff 75%);
-  border-color:#bac8d3;
-  box-shadow:inset 0 0 0 1px #fff,0 4px 13px rgba(45,66,85,.16),0 0 16px rgba(228,237,245,.95);
-  filter:brightness(1.1)
+  background:#f5f2fb;border-color:#baa6db;
+  box-shadow:0 3px 12px rgba(75,12,143,.10);color:#6331ae
 }
-.site-globe::after{
-  content:"";position:absolute;top:-8px;right:-7px;width:15px;height:15px;
-  background:radial-gradient(circle,#fff 0 20%,#d4e5f1 53%,transparent 73%);
-  clip-path:polygon(50% 0,58% 41%,100% 50%,58% 59%,50% 100%,42% 59%,0 50%,42% 41%);
-  filter:drop-shadow(0 0 3px rgba(130,162,189,.72));opacity:0;pointer-events:none
-}
-.site-globe:hover::after,.site-globe:focus-visible::after{animation:optic-flash 1.05s ease-out both}
 .main{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.96fr);
   align-items:center;gap:clamp(26px,5vw,74px);
@@ -86,13 +76,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 .heart-stage::after{
   content:"";position:absolute;inset:12%;border-radius:50%;z-index:-1;
-  border:1px solid rgba(190,208,222,.21);
-  box-shadow:0 0 0 22px rgba(212,224,235,.04),0 0 0 43px rgba(220,230,238,.025)
+  border:1px solid rgba(115,52,216,.09);
+  box-shadow:0 0 0 22px rgba(115,52,216,.017)
 }
 .hero-heart{
   width:241px;height:241px;object-fit:contain;position:relative;z-index:1;
-  filter:drop-shadow(0 14px 19px rgba(76,22,126,.16));
-  transition:filter .35s ease;
+  filter:drop-shadow(0 12px 17px rgba(76,22,126,.12));
+  transition:filter .25s ease;
   animation:heart-breathe 2.6s ease-in-out infinite;
   transform-origin:center;will-change:transform
 }
@@ -106,32 +96,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .copy h1{
   font:700 clamp(43px,4.7vw,66px)/1.09 var(--font-display);
   letter-spacing:-.064em;margin:0 0 17px;max-width:600px;
-  transition:filter .3s ease,text-shadow .3s ease
+  transition:color .25s ease
 }
-.copy h1{position:relative}
-.copy h1:hover{text-shadow:0 0 9px rgba(255,255,255,.95),0 1px 3px rgba(170,190,205,.28)}
-.copy h1 .gradient{transition:filter .3s ease}
-.copy h1:hover .gradient{
-  background-image:linear-gradient(108deg,#4b0c8f 9%,#7334d8 35%,#fff 49%,#f2fbff 51%,#00bde8 64%,#7334d8 90%);
-  background-size:250% 100%;
-  animation:optical-type 1.15s ease-out 1
-}
-.copy h1::after{
-  content:"";position:absolute;right:4%;top:38%;height:23px;width:23px;
-  background:radial-gradient(circle,#fff 0 23%,#e9f5fd 40%,#b7d0df 62%,transparent 80%);
-  clip-path:polygon(50% 0,58% 41%,100% 50%,58% 59%,50% 100%,42% 59%,0 50%,42% 41%);
-  filter:drop-shadow(0 0 5px rgba(150,172,191,.65));
-  pointer-events:none;opacity:0
-}
-.copy h1:hover::after{animation:optic-flash 1.15s .18s ease-out both}
-.heart-stage:hover .hero-heart{
-  filter:drop-shadow(0 13px 21px rgba(55,61,72,.19)) drop-shadow(0 0 7px rgba(255,255,255,.9))
-}
-
+.copy h1:hover .gradient{filter:brightness(1.08)}
+.heart-stage:hover .hero-heart{filter:drop-shadow(0 15px 20px rgba(76,22,126,.17))}
 .copy h1 .gradient{
   display:block;background:var(--grad);
   background-clip:text;-webkit-background-clip:text;
-  color:var(--purple);-webkit-text-fill-color:transparent;padding-bottom:5px
+  color:var(--purple);-webkit-text-fill-color:transparent;padding-bottom:5px;
+  transition:filter .25s ease
 }
 .lead{margin:0;font-size:16px;line-height:1.75;color:#5f6b80;max-width:470px}
 .right-col{
@@ -145,30 +118,26 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .phone-stage::before{
   content:"";position:absolute;inset:3% 4%;border-radius:50%;z-index:-2;
   background:
-    radial-gradient(circle at 43% 48%,rgba(237,244,249,.72),rgba(230,239,246,.3) 32%,rgba(255,255,255,.7) 51%,transparent 70%);
+    radial-gradient(circle at 43% 48%,rgba(115,52,216,.075),rgba(115,52,216,.025) 40%,transparent 69%);
   filter:blur(12px)
 }
 .phone-stage::after{
   content:"";position:absolute;width:455px;max-width:94%;height:455px;border-radius:50%;
-  border:1px solid rgba(190,205,219,.24);z-index:-1;
-  box-shadow:0 0 0 34px rgba(222,232,239,.06),0 0 0 72px rgba(238,243,248,.035)
+  border:1px solid rgba(115,52,216,.075);z-index:-1;
+  box-shadow:0 0 0 34px rgba(115,52,216,.018)
 }
 .phone{
   width:260px;height:508px;max-width:100%;flex:none;position:relative;overflow:hidden;
   border:7px solid #272034;border-radius:43px;background:#fff;
   box-shadow:0 31px 64px rgba(30,16,55,.21),8px 9px 21px rgba(25,21,52,.11),inset 0 0 0 1px #716784;
   transform:rotate(-6deg);transform-origin:center;
-  transition:box-shadow .35s ease,filter .35s ease
+  transition:box-shadow .28s ease
 }
 .phone:hover{
-  transform:rotate(-6deg);
   box-shadow:
-    0 31px 72px rgba(24,28,35,.25),
-    0 0 0 1px rgba(255,255,255,.96),
-    0 0 0 3px rgba(206,218,229,.52),
-    0 0 22px rgba(246,251,255,.98),
-    0 0 38px rgba(201,219,233,.5);
-  filter:brightness(1.035)
+    0 33px 67px rgba(30,16,55,.23),
+    0 8px 22px rgba(25,21,52,.11),
+    0 0 0 1px rgba(115,52,216,.16)
 }
 .phone::before{
   content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
@@ -193,11 +162,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   padding:4px 2px;min-height:0;border-bottom:1px solid #f0edf5
 }
 .chat-row:last-child{border-bottom:0}
-.chat-row{transition:background .22s ease}
-.chat-row:hover{background:linear-gradient(105deg,#fff 0%,#ecf3f9 37%,#fff 53%,#f0f7fc 69%,#fff 100%);background-size:220% 100%;animation:optical-type 1.0s ease-out 1}
-.chat-row strong{transition:color .22s ease,text-shadow .22s ease}
-.chat-row:hover strong{color:#263140;text-shadow:0 0 10px #fff,0 1px 2px rgba(155,175,193,.58)}
-
+.chat-row{transition:background-color .2s ease}
+.chat-row:hover{background-color:#f7f6fb}
 .chat-row img{width:34px;height:34px;flex:none;border-radius:50%;background:#f2eff7;object-fit:cover}
 .chat-info{display:block;flex:1;min-width:0}
 .chat-info strong{display:block;color:#2b2540;font-size:9.4px;line-height:1.25;font-weight:800}
@@ -214,43 +180,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .install-block{width:min(100%,395px);margin:12px 0 0;text-align:center;z-index:1}
 .install{
   width:100%;min-height:63px;padding:13px 17px;display:flex;gap:12px;
-  justify-content:center;align-items:center;position:relative;isolation:isolate;overflow:hidden;
-  border:1px solid rgba(255,255,255,.08);border-radius:16px;color:#fff;
-  background:linear-gradient(120deg,#322145 0%,#312247 60%,#432661 100%);
-  box-shadow:0 14px 30px rgba(48,28,76,.20),inset 0 1px 0 rgba(255,255,255,.12);
+  justify-content:center;align-items:center;position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.22);border-radius:16px;color:#fff;
+  background:linear-gradient(112deg,#5a18b6 0%,#7130d7 52%,#5160df 100%);
+  box-shadow:0 12px 25px rgba(91,35,182,.21),inset 0 1px 0 rgba(255,255,255,.17);
   font-size:13px;font-weight:800;line-height:1.34;text-align:center;
-  transition:box-shadow .26s ease,filter .26s ease
-}
-.install::before{
-  content:"";pointer-events:none;position:absolute;top:-100%;bottom:-100%;left:-70%;
-  width:35%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08) 13%,rgba(255,255,255,.7) 49%,rgba(247,252,255,.9) 50%,rgba(255,255,255,.15) 87%,transparent);
-  transform:skewX(-18deg);transition:left .6s ease;z-index:1
+  transition:box-shadow .25s ease,filter .25s ease,background-color .25s ease
 }
 .install:hover,.install:focus-visible{
-  box-shadow:
-    0 17px 38px rgba(39,36,49,.25),
-    inset 0 0 0 1px rgba(255,255,255,.55),
-    0 0 0 2px rgba(228,238,247,.6),
-    0 0 22px rgba(235,245,255,.92);
-  filter:brightness(1.08)
+  box-shadow:0 15px 30px rgba(91,35,182,.28),inset 0 1px 0 rgba(255,255,255,.2);
+  filter:brightness(1.08) saturate(1.06)
 }
-.install::after{
-  content:"";position:absolute;top:5px;right:21px;width:19px;height:19px;
-  background:radial-gradient(circle,#fff 0 23%,#e6f2fb 48%,transparent 75%);
-  clip-path:polygon(50% 0,58% 41%,100% 50%,58% 59%,50% 100%,42% 59%,0 50%,42% 41%);
-  filter:drop-shadow(0 0 6px rgba(255,255,255,.95));pointer-events:none;opacity:0;z-index:3
-}
-.install:hover::after,.install:focus-visible::after{animation:optic-flash 1.1s .25s ease-out both}
-.install:hover::before{left:135%}
-.install svg{height:19px;width:19px;flex:none;position:relative;z-index:2}
-.install span{max-width:277px;transition:text-shadow .25s ease;position:relative;z-index:2}
-.install:hover span,.install:focus-visible span{text-shadow:0 0 5px #fff,0 0 17px rgba(244,249,255,.63)}
-.site-brand img{transition:filter .3s ease}
-.site-brand img:hover{filter:drop-shadow(0 0 7px rgba(255,255,255,.98)) drop-shadow(0 0 8px rgba(178,198,214,.45))}
-.lead{transition:text-shadow .25s ease}
-.lead:hover{text-shadow:0 0 9px #fff,0 0 13px rgba(198,215,229,.47)}
-
-
+.install:active{filter:brightness(.98)}
+.install svg{height:19px;width:19px;flex:none}
+.install span{max-width:277px}
+.site-brand img{transition:filter .25s ease}
+.site-brand img:hover{filter:brightness(1.035)}
 .install-dialog{
   width:min(490px,calc(100% - 32px));max-height:calc(100dvh - 32px);
   border:1px solid #e8e4f0;background:#fff;color:var(--ink);position:fixed;
@@ -264,57 +209,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .install-dialog h2{font:700 clamp(23px,5vw,30px)/1.2 var(--font-display);letter-spacing:-.045em;margin:0 auto 12px;max-width:390px}
 .install-dialog p{font-size:13px;line-height:1.75;color:#667085;margin:0 auto;max-width:355px}
 .install-dialog .dialog-url{display:inline-block;font-size:13px;font-weight:800;color:#5b2d96;background:#f5f0fb;padding:12px 15px;margin:17px auto 0;border-radius:12px;user-select:all}
-
-/* Reflexos óticos brancos/prateados. Sem halos roxos. */
-.optic-star{
-  display:block;position:absolute;z-index:7;pointer-events:none;opacity:0;
-  width:31px;height:31px;transform:scale(.18);
-  filter:drop-shadow(0 1px 1px rgba(103,133,156,.56))
-         drop-shadow(0 0 5px rgba(255,255,255,.98))
-         drop-shadow(0 0 7px rgba(178,200,220,.82));
-}
-.optic-star::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 50%,#fff 0 25%,#f5fbff 35%,#becfdb 58%,transparent 80%);
-  clip-path:polygon(50% 0,58% 41%,100% 50%,58% 59%,50% 100%,42% 59%,0 50%,42% 41%);
-}
-.optic-star::after{
-  content:"";position:absolute;left:42%;top:42%;width:16%;height:16%;border-radius:50%;
-  background:#fff;box-shadow:0 0 8px 4px rgba(255,255,255,.96),0 0 12px 6px rgba(213,229,240,.52)
-}
-.heart-sparkle-one{top:12%;right:19%;width:37px;height:37px}
-.heart-sparkle-two{left:7%;top:52%;width:23px;height:23px}
-.heart-sparkle-three{right:8%;bottom:11%;width:17px;height:17px}
-.phone-sparkle-one{top:5%;right:22%;width:32px;height:32px}
-.phone-sparkle-two{bottom:12%;left:18%;width:22px;height:22px}
-.heart-stage:hover .heart-sparkle-one{animation:optic-flash 1.25s ease-out both}
-.heart-stage:hover .heart-sparkle-two{animation:optic-flash 1.25s .23s ease-out both}
-.heart-stage:hover .heart-sparkle-three{animation:optic-flash 1.2s .45s ease-out both}
-.phone-stage:hover .phone-sparkle-one{animation:optic-flash 1.2s ease-out both}
-.phone-stage:hover .phone-sparkle-two{animation:optic-flash 1.2s .26s ease-out both}
-.phone-reflection{
-  position:absolute;top:-85%;left:-14%;width:34%;height:260%;z-index:6;
-  transform:translateX(-230%) rotate(22deg);pointer-events:none;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.02) 5%,rgba(255,255,255,.22) 29%,rgba(255,255,255,.67) 48%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.23) 66%,transparent 100%);
-}
-.phone:hover .phone-reflection{animation:specular-sweep 1.12s ease-in-out 1}
-@keyframes specular-sweep{
-  0%{transform:translateX(-230%) rotate(22deg);opacity:0}
-  16%{opacity:.85}
-  78%{opacity:1}
-  100%{transform:translateX(690%) rotate(22deg);opacity:0}
-}
-@keyframes optic-flash{
-  0%{opacity:0;transform:scale(.12) rotate(-9deg)}
-  30%{opacity:1;transform:scale(1.04) rotate(0deg)}
-  52%{opacity:1;transform:scale(1.24) rotate(5deg)}
-  78%{opacity:.84;transform:scale(.86) rotate(9deg)}
-  100%{opacity:0;transform:scale(.34) rotate(13deg)}
-}
-@keyframes optical-type{
-  from{background-position:100% 50%}
-  to{background-position:0% 50%}
-}
 
 @media(max-width:900px){
   .main{gap:22px;grid-template-columns:minmax(0,1fr) minmax(290px,.9fr)}
@@ -363,14 +257,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .hero-heart{animation:none;will-change:auto}
-  .site-globe,.phone,.install,.install::before,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.chat-row strong{transition:none}
-  .heart-stage:hover .optic-star,.phone-stage:hover .optic-star,
-  .site-globe:hover::after,.site-globe:focus-visible::after,
-  .copy h1:hover::after,.install:hover::after,.install:focus-visible::after{animation:none;opacity:1;transform:scale(.8)}
-  .phone:hover .phone-reflection{animation:none;opacity:0}
-  .copy h1:hover .gradient,.chat-row:hover{animation:none}
-  .phone:hover{transform:rotate(-6deg)}
-  .install:hover::before{left:-70%}
+  .site-globe,.site-brand img,.phone,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.install{transition:none}
 }
 </style>
 </head>
@@ -389,17 +276,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   <section class="copy" aria-labelledby="hero-title">
     <div class="heart-stage">
       <img class="hero-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
-      <span class="optic-star heart-sparkle heart-sparkle-one" aria-hidden="true"></span>
-      <span class="optic-star heart-sparkle heart-sparkle-two" aria-hidden="true"></span>
-      <span class="optic-star heart-sparkle heart-sparkle-three" aria-hidden="true"></span>
     </div>
     <h1 id="hero-title">Telemedicina <span class="gradient">na palma da sua mão.</span></h1>
     <p class="lead">Converse com profissionais de saúde, de onde estiver.</p>
   </section>
   <div class="right-col">
     <div class="phone-stage">
-      <span class="optic-star phone-sparkle phone-sparkle-one" aria-hidden="true"></span>
-      <span class="optic-star phone-sparkle phone-sparkle-two" aria-hidden="true"></span>
       <div class="phone" role="img" aria-label="Ilustração de um smartphone com o aplicativo PromoVie, mostrando as oito especialidades de atendimento">
         <div class="phone-screen">
           
@@ -419,7 +301,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
             <span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-9 14-9 14 0"/></svg>Perfil</span>
           </div>
         </div>
-        <span class="phone-reflection" aria-hidden="true"></span>
       </div>
     </div>
     <div class="install-block">
