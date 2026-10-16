@@ -410,6 +410,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .site-globe,.site-brand img,.phone,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.install{transition:none}
 }
 
+/* Feedback aparece somente quando o SDK não consegue abrir. */
+#sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#8a3440;background:#fff2f2;border:1px solid #eccbd0;border-radius:10px;text-align:center}
+#sdk-entry-status[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -467,26 +470,88 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
         <span>Instalar App</span>
       </button>
+      <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
     </div>
   </div>
 </main>
 
-<dialog id="install-desktop-dialog" class="install-dialog" aria-labelledby="install-desktop-title" aria-describedby="install-desktop-desc">
-  <form method="dialog"><button class="dialog-close" type="submit" aria-label="Fechar aviso"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button></form>
-  <img class="dialog-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
-  <h2 id="install-desktop-title">Abra esta página pelo smartphone.</h2>
-  <p id="install-desktop-desc">Para instalar o aplicativo de telemedicina, acesse este endereço no seu iPhone ou Android.</p>
-  <p class="dialog-url">www.promovie.tv.br/app/</p>
-</dialog>
 <script>
 (function(){
   "use strict";
   const button=document.getElementById("install-now");
-  const dialog=document.getElementById("install-desktop-dialog");
-  button.addEventListener("click",function(){
-    window.location.assign("/app-teste/atendimento/");
+  // Teste da integração diretamente nesta página, sem tela intermediária.
+  const status=document.getElementById("sdk-entry-status");
+  const label=button.querySelector("span");
+  const sdkSrc="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+  const stagingApiKey="8cwnN2BA4nslSfhI";
+  let sdkLoad=null;
+  let sdkReady=false;
+
+  function feedback(message){
+    status.textContent=message;
+    status.hidden=!message;
+  }
+  function loadSdk(){
+    if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")
+      return Promise.resolve();
+    if(sdkLoad)return sdkLoad;
+    sdkLoad=new Promise(function(resolve,reject){
+      const script=document.createElement("script");
+      script.src=sdkSrc;
+      script.async=true;
+      script.onload=function(){
+        if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")resolve();
+        else reject(new Error("O SDK não ficou disponível no navegador."));
+      };
+      script.onerror=function(){reject(new Error("Não foi possível carregar o SDK da Médiquo."));};
+      document.head.appendChild(script);
+    }).catch(function(error){sdkLoad=null;throw error;});
+    return sdkLoad;
+  }
+  function openWidget(){
+    if(!window.MediquoWidget||typeof window.MediquoWidget.open!=="function")
+      throw new Error("A interface do atendimento não foi disponibilizada.");
+    window.MediquoWidget.open();
+  }
+  button.addEventListener("click",async function(){
+    if(sdkReady){
+      try{openWidget();feedback("");}
+      catch(error){feedback("Não foi possível reabrir o atendimento. Atualize a página e tente novamente.");}
+      return;
+    }
+    button.disabled=true;
+    label.textContent="Abrindo telemedicina...";
+    feedback("");
+    try{
+      await loadSdk();
+      await Promise.resolve(window.MediquoWidget.init({
+        apiKey:stagingApiKey,
+        adapter:"web",
+        environment:"sandbox",
+        show:"always",
+        isMobileView:true,
+        theme:{
+          launcher:"base",position:"right",locale:"pt",
+          colors:{primary:"#477c83",primaryContrast:"#ffffff",secondary:"#2563c7",accent:"#dfe9e9"}
+        }
+      }));
+      sdkReady=true;
+      // Aguarda a interface do widget concluir sua montagem.
+      window.setTimeout(function(){
+        try{openWidget();}
+        catch(error){
+          sdkReady=false;
+          feedback("O SDK foi carregado, mas não abriu o atendimento. Solicite à Médiquo a habilitação do Widget Web no ambiente de testes.");
+        }
+      },450);
+    }catch(error){
+      sdkReady=false;
+      feedback("Não foi possível abrir o atendimento de teste. Verifique a liberação da API Key de Staging com a Médiquo.");
+    }finally{
+      button.disabled=false;
+      label.textContent="Instalar App";
+    }
   });
-  dialog.addEventListener("click",function(event){if(event.target===dialog)dialog.close();});
   const zoomTrigger=document.getElementById("phone-zoom-trigger");
   const main=document.querySelector("main.main");
   const installBlock=document.querySelector(".install-block");
