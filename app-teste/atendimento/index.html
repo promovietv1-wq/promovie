@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Ambiente de testes do atendimento por telemedicina PromoVie e Médiquo, sem dados ou licenças de produção.">
+<link rel="canonical" href="https://www.promovie.tv.br/app-teste/atendimento/">
+<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+<link rel="preconnect" href="https://widget.mediquo.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<title>Atendimento de teste | PromoVie</title>
+<style>
+*{box-sizing:border-box}
+:root{font-family:Inter,Arial,sans-serif;color:#283443;background:#f5f7f8;--blue:#477c83;--ink:#283443}
+html{min-height:100%;scroll-behavior:smooth}
+body{margin:0;min-height:100svh;display:flex;flex-direction:column}
+a{color:#305d69;text-underline-offset:3px}
+button{font:inherit}
+.header{background:#fff;border-bottom:1px solid #e6e9ec}
+.wrap{width:min(1070px,calc(100% - 36px));margin-inline:auto}
+.header .wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:13px}
+.brand img{width:160px;max-width:44vw;height:auto;display:block}
+.back{display:inline-flex;align-items:center;gap:8px;color:#425266;text-decoration:none;font-size:12px;font-weight:750;border:1px solid #d9dfe3;border-radius:10px;padding:10px 13px;background:#fff}
+.back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 0 54px}
+.card{background:#fff;border:1px solid #e2e7e9;border-radius:22px;padding:clamp(22px,4.5vw,55px);display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.57fr);align-items:center;gap:clamp(20px,4vw,52px);box-shadow:0 18px 65px rgba(43,62,74,.055)}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:#477c83}
+.eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:#4f9b83}
+h1{font:800 clamp(27px,4vw,43px)/1.17 Sora,Inter,sans-serif;letter-spacing:-.052em;margin:14px 0 16px;color:#263a45}
+.lead{font-size:15px;line-height:1.8;color:#566773;margin:0 0 16px}
+.small{font-size:12px;line-height:1.75;color:#667781;margin:0}
+.info{display:flex;gap:10px;align-items:flex-start;background:#f3f8f8;border:1px solid #e2eeee;border-radius:13px;padding:14px;margin-top:18px}
+.info svg{flex:none;width:20px;height:20px;stroke:#497c85;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.info p{font-size:12px;line-height:1.65;color:#48626c;margin:0}
+.actions{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+.action{border:0;border-radius:12px;background:#477c83;color:white;cursor:pointer;font-size:14px;font-weight:800;padding:15px 19px;min-height:50px}
+.action:hover,.action:focus-visible{background:#355f65}
+.action:disabled{opacity:.65;cursor:wait}
+.secondary{color:#477c83;background:white;border:1px solid #bdd0d3}
+.secondary:hover,.secondary:focus-visible{background:#eff7f7}
+.illustration{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:250px}
+.illustration img{width:min(245px,100%);height:auto;filter:drop-shadow(0 15px 22px rgba(91,80,130,.13))}
+.illustration p{font-size:12px;color:#839097;font-weight:700;text-align:center;margin:0}
+.status{min-height:2.5em;font-size:12px;line-height:1.7;color:#456373;margin:14px 0 0}
+.status[data-error="true"]{color:#a13e3e}
+.footer{font-size:11px;text-align:center;color:#7f8d97;margin-top:18px;line-height:1.6}
+.footer a{color:#586f78}
+@media(max-width:700px){
+.header .wrap{min-height:62px}
+.brand img{width:130px}
+.back{font-size:11px;padding:9px}
+.card{grid-template-columns:1fr;padding:24px 20px 18px;gap:8px}
+main{padding:20px 0 30px}
+.illustration{order:-1;min-height:0}
+.illustration img{width:110px}
+.illustration p{display:none}
+h1{font-size:25px}
+.lead{font-size:13px;line-height:1.7}
+.actions{display:block}
+.action{width:100%;margin:0 0 8px}
+}
+</style>
+</head>
+<body>
+<header class="header"><div class="wrap">
+  <div class="brand"><img src="/preview-promovie-logo.webp" width="160" alt="PromoVie" decoding="async"></div>
+  <a class="back" href="/app-teste/" aria-label="Voltar à página de teste">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    Voltar
+  </a>
+</div></header>
+<main class="wrap" id="conteudo">
+  <div class="card">
+    <section aria-labelledby="atendimento-title">
+      <span class="eyebrow">Telemedicina · Ambiente de homologação</span>
+      <h1 id="atendimento-title">Seu atendimento, em um só lugar.</h1>
+      <p class="lead">Esta página está conectada ao Widget Web da Médiquo para testar a experiência de atendimento no navegador. A tela de cadastro temporário pode aparecer ao abrir.</p>
+      <p class="small">O ambiente é de testes, não de produção. A exibição de profissionais e consultas depende da habilitação feita pela Médiquo. Não utilize dados reais de pacientes.</p>
+      <div class="info">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg>
+        <p><strong>Sessão temporária de teste:</strong> não necessita de login próprio e não mantém o histórico entre acessos. Para atender beneficiários reais, será necessária a autenticação segura que a Médiquo descreveu por e-mail.</p>
+      </div>
+      <div class="actions">
+        <button id="open-widget" class="action" type="button" disabled>Aguarde, conectando...</button>
+        <button id="close-widget" class="action secondary" type="button" hidden>Fechar atendimento</button>
+      </div>
+      <p id="widget-status" class="status" role="status" aria-live="polite">Carregando a plataforma de telemedicina de teste...</p>
+    </section>
+    <aside class="illustration">
+      <img src="/app/assets/coracao-promovie-com-logo.webp" width="241" height="241" alt="Coração PromoVie" decoding="async">
+      <p>PromoVie · Conectada ao cuidado</p>
+    </aside>
+  </div>
+  <div class="footer">
+    Acesso administrativo separado: <a href="https://id.mediquo-staging.com.br/login/" target="_blank" rel="noopener noreferrer">Painel da Médiquo (Staging)</a>
+  </div>
+</main>
+<script>
+(function(){
+  "use strict";
+  // O Widget Web recebe a API Key pública de homologação no próprio navegador,
+  // conforme a documentação oficial. NÃO incluir Secret Key, senha ou token.
+  const stagingApiKey="8cwnN2BA4nslSfhI";
+  const sdkSrc="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+  const button=document.getElementById("open-widget");
+  const close=document.getElementById("close-widget");
+  const status=document.getElementById("widget-status");
+  let ready=false;
+  function note(message,error){
+    status.textContent=message;
+    status.dataset.error=error?"true":"false";
+  }
+  function open(){
+    if(!ready)return;
+    try{
+      window.MediquoWidget.open();
+      note("A interface de teste foi solicitada. Se houver cadastro, preencha somente com informações fictícias.");
+    }catch(error){
+      note("Não foi possível abrir o atendimento. Verifique a liberação do SDK com a Médiquo.",true);
+    }
+  }
+  button.addEventListener("click",open);
+  close.addEventListener("click",function(){
+    if(!ready)return;
+    try{window.MediquoWidget.close();note("Interface fechada. Você pode reabrir quando quiser.");}
+    catch(e){note("Não foi possível fechar o widget.",true);}
+  });
+  function initialize(){
+    try{
+      if(!window.MediquoWidget||typeof window.MediquoWidget.init!=="function")throw new Error("SDK indisponível");
+      const options={
+        apiKey:stagingApiKey,
+        adapter:"web",
+        environment:"sandbox",
+        show:"always",
+        isMobileView:window.matchMedia("(max-width:700px)").matches,
+        theme:{
+          launcher:"base",
+          position:"right",
+          locale:"pt",
+          colors:{
+            primary:"#477c83",
+            primaryContrast:"#ffffff",
+            secondary:"#2563c7",
+            accent:"#dfe9e9"
+          }
+        },
+        text:{
+          launcher:"Atendimento",
+          title:"Telemedicina",
+          welcome_title:"Atendimento de teste"
+        }
+      };
+      Promise.resolve(window.MediquoWidget.init(options)).then(()=>{
+        ready=true;
+        button.disabled=false;
+        button.textContent="Abrir atendimento";
+        close.hidden=false;
+        note("Widget de homologação carregado. Abrindo atendimento...");
+        open();
+      }).catch(error=>{throwable(error);});
+    }catch(error){throwable(error);}
+  }
+  function throwable(error){
+    button.disabled=true;
+    button.textContent="SDK indisponível";
+    note("Não foi possível iniciar o ambiente de teste. Pode ser necessário que a Médiquo habilite o Widget Web ou a origem do site para esta API Key. "+(error&&error.message?error.message:""),true);
+  }
+  const script=document.createElement("script");
+  script.src=sdkSrc;
+  script.async=true;
+  script.onload=initialize;
+  script.onerror=()=>throwable(new Error("Falha ao carregar a biblioteca oficial."));
+  document.head.appendChild(script);
+})();
+</script>
+</body>
+</html>
