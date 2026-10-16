@@ -6,8 +6,8 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="PromoVie: telemedicina e autocuidado na palma da sua mão. Conheça os atendimentos e instale o app pelo smartphone.">
-<link rel="canonical" href="https://www.promovie.tv.br/app/">
+<meta name="description" content="Laboratório PromoVie para testar a integração do Widget Web Médiquo em ambiente de homologação.">
+<link rel="canonical" href="https://www.promovie.tv.br/app-teste/">
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
 <link rel="preload" href="/preview-promovie-logo.webp" as="image" type="image/webp">
@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-<title>PromoVie | Telemedicina e autocuidado</title>
+<title>PromoVie | Teste de integração SDK</title>
 <style>
 :root{
   --ink:#111827;--muted:#667085;--line:#e7edf6;
@@ -409,6 +409,44 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .hero-heart{animation:none;will-change:auto}
   .site-globe,.site-brand img,.phone,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.install{transition:none}
 }
+
+/* Laboratório independente da página oficial: Widget Web SDK em Staging. */
+.sdk-lab{width:min(1020px,calc(100% - 44px));margin:18px auto 56px;position:relative;isolation:isolate}
+.sdk-lab-card{
+  background:#fff;border:1px solid #e9e5f1;border-radius:24px;
+  box-shadow:0 18px 54px rgba(38,23,73,.065);padding:clamp(19px,3.8vw,40px);
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:clamp(22px,4vw,55px)
+}
+.sdk-lab-kicker{font:800 10px/1.5 var(--font-body);letter-spacing:.17em;text-transform:uppercase;color:#7551a3}
+.sdk-lab h2{font:750 clamp(24px,3vw,35px)/1.16 var(--font-display);letter-spacing:-.046em;color:#2e2443;margin:9px 0 14px}
+.sdk-lab p{margin:0;color:#576273;font-size:14px;line-height:1.7}
+.sdk-lab p+p{margin-top:10px}
+.sdk-lab-points{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.sdk-lab-points span{background:#f4f6f8;border:1px solid #e8eaf0;color:#505d68;border-radius:999px;font-size:11px;font-weight:750;padding:7px 10px}
+.sdk-lab-note{padding:14px 16px;border:1px solid #e0e8eb;background:#f6fafb;border-radius:12px;font-size:12px!important;color:#48606b!important}
+.sdk-lab-form{background:#f8f7fb;border:1px solid #ebe7f3;border-radius:19px;padding:20px;align-self:start}
+.sdk-lab-form label{display:block;font:750 12px/1.5 var(--font-body);color:#384455;margin-bottom:9px}
+.sdk-lab-form input{display:block;width:100%;min-height:48px;background:#fff;border:1px solid #cdd5df;border-radius:11px;padding:12px 13px;color:#253345;font:500 14px/1.4 var(--font-body);outline-offset:3px}
+.sdk-lab-form input:focus{outline:2px solid #9c84dc;border-color:#9c84dc}
+.sdk-lab-help{font-size:11px!important;line-height:1.55!important;margin:8px 0 14px!important}
+.sdk-lab-button{width:100%;min-height:47px;border-radius:12px;border:0;background:linear-gradient(115deg,#5a18b6,#7130d7 57%,#5160df);color:#fff;font:750 13px var(--font-body);padding:11px 15px;cursor:pointer;transition:filter .2s ease}
+.sdk-lab-button:hover,.sdk-lab-button:focus-visible{filter:brightness(1.08)}
+.sdk-lab-button:disabled{cursor:wait;opacity:.7}
+.sdk-lab-close{border:1px solid #d7d3e1;background:#fff;color:#5b4684;margin-top:9px}
+.sdk-lab-close[hidden]{display:none}
+.sdk-lab-status{color:#5a6373!important;font-size:12px!important;margin-top:12px!important;min-height:34px;line-height:1.55!important}
+.sdk-lab a{color:#562ca4;text-underline-offset:3px;font-weight:750}
+.sdk-lab-links{display:flex;flex-wrap:wrap;gap:15px;margin-top:17px}
+.sdk-lab details{margin-top:20px;border-top:1px solid #eae7ef;padding-top:15px}
+.sdk-lab summary{color:#453c55;font-size:13px;font-weight:750;cursor:pointer}
+.sdk-lab details p{font-size:12px;line-height:1.7;margin-top:9px}
+@media(max-width:700px){
+  .sdk-lab{width:calc(100% - 28px);margin:24px auto 34px}
+  .sdk-lab-card{display:flex;flex-direction:column;gap:20px;border-radius:19px;padding:19px}
+  .sdk-lab h2{font-size:24px}
+  .sdk-lab-form{padding:15px}
+}
+
 </style>
 </head>
 <body>
@@ -469,6 +507,36 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     </div>
   </div>
 </main>
+
+<section class="sdk-lab" id="sdk-staging" aria-labelledby="sdk-lab-title">
+  <div class="sdk-lab-card">
+    <div>
+      <span class="sdk-lab-kicker">Área de testes · Staging</span>
+      <h2 id="sdk-lab-title">Teste de integração da telemedicina</h2>
+      <p>Esta área permite abrir o Widget Web oficial da Médiquo em ambiente de homologação, sem mudar a página de instalação ou as licenças reais.</p>
+      <div class="sdk-lab-points"><span>Widget oficial</span><span>Ambiente de testes</span><span>Sem login próprio</span></div>
+      <p class="sdk-lab-note"><strong>Importante:</strong> a sessão temporária serve para experimentar a interface. Não valida uma licença existente e não preserva o histórico. Utilize somente dados fictícios, nunca informações de pacientes reais.</p>
+      <div class="sdk-lab-links">
+        <a href="https://id.mediquo-staging.com.br/login/" target="_blank" rel="noopener noreferrer">Painel da Médiquo ↗</a>
+        <a href="https://documentacao.mediquo.com.br/sdk-widget.html" target="_blank" rel="noopener noreferrer">Documentação do SDK ↗</a>
+      </div>
+      <details>
+        <summary>E para entrar com beneficiários e licenças?</summary>
+        <p>No acesso permanente, a Médiquo gera um token para cada beneficiário já cadastrado. Essa etapa precisa ser protegida em um servidor ou oferecida por um fluxo gerenciado pela própria Médiquo. Não basta digitar um CPF numa página pública para identificar o titular.</p>
+        <p>Nesta página não são solicitadas senhas, Secret Keys, CPF ou dados médicos.</p>
+      </details>
+    </div>
+    <div class="sdk-lab-form">
+      <label for="sdk-test-key">API Key do ambiente de testes</label>
+      <input type="password" id="sdk-test-key" placeholder="Cole a API Key recebida por e-mail" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="256" aria-describedby="sdk-test-help">
+      <p id="sdk-test-help" class="sdk-lab-help">Use somente a <strong>API Key de Staging</strong> da Médiquo, nunca a Secret Key nem a senha do painel. A chave será usada apenas nesta sessão e não será salva.</p>
+      <button class="sdk-lab-button" type="button" id="sdk-test-start">Abrir widget de teste</button>
+      <button class="sdk-lab-button sdk-lab-close" type="button" id="sdk-test-stop" hidden>Encerrar teste</button>
+      <p id="sdk-test-status" class="sdk-lab-status" role="status" aria-live="polite">Pronto para iniciar o teste em sandbox.</p>
+    </div>
+  </div>
+</section>
+
 <dialog id="install-desktop-dialog" class="install-dialog" aria-labelledby="install-desktop-title" aria-describedby="install-desktop-desc">
   <form method="dialog"><button class="dialog-close" type="submit" aria-label="Fechar aviso"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button></form>
   <img class="dialog-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="128" height="128" alt="Coração PromoVie">
@@ -536,5 +604,77 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   }
 })();
 </script>
+
+<script>
+(function(){
+  "use strict";
+  const start=document.getElementById("sdk-test-start");
+  const stop=document.getElementById("sdk-test-stop");
+  const field=document.getElementById("sdk-test-key");
+  const status=document.getElementById("sdk-test-status");
+  let loadingScript=null;
+  let active=false;
+  function setStatus(message){status.textContent=message;}
+  function loadOfficialWidget(){
+    if(window.MediquoWidget && typeof window.MediquoWidget.init==="function")return Promise.resolve();
+    if(loadingScript)return loadingScript;
+    loadingScript=new Promise((resolve,reject)=>{
+      const el=document.createElement("script");
+      el.src="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+      el.async=true;
+      const timeout=window.setTimeout(()=>{el.remove();reject(new Error("Tempo limite excedido ao carregar o SDK."));},15000);
+      el.onload=()=>{window.clearTimeout(timeout);if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")resolve();else reject(new Error("O script carregou, mas o SDK não inicializou."));};
+      el.onerror=()=>{window.clearTimeout(timeout);el.remove();reject(new Error("Não foi possível carregar o SDK oficial."));};
+      document.head.appendChild(el);
+    }).catch(error=>{loadingScript=null;throw error;});
+    return loadingScript;
+  }
+  start.addEventListener("click",async()=>{
+    const apiKey=field.value.trim();
+    if(!apiKey){setStatus("Cole a API Key de Staging para iniciar o teste.");field.focus();return;}
+    if(active && window.MediquoWidget){
+      try{window.MediquoWidget.open();setStatus("Tentando abrir o widget de homologação.");}catch(e){setStatus("Não foi possível reabrir o widget. Encerre e tente novamente.");}
+      return;
+    }
+    start.disabled=true;
+    setStatus("Carregando o Widget Web oficial da Médiquo...");
+    try{
+      await loadOfficialWidget();
+      const options={
+        apiKey,
+        adapter:"web",
+        environment:"sandbox",
+        show:"always",
+        isMobileView:window.matchMedia("(max-width:700px)").matches,
+        theme:{
+          launcher:"base",position:"right",locale:"pt",
+          colors:{primary:"#477C83",primaryContrast:"#ffffff",secondary:"#2563C7",accent:"#DFE9E9"}
+        }
+      };
+      await Promise.resolve(window.MediquoWidget.init(options));
+      active=true;
+      field.value="";
+      stop.hidden=false;
+      setStatus("SDK inicializado em sandbox. Se abrir o cadastro, use somente dados fictícios. O atendimento e a liberação de profissionais dependem da configuração da Médiquo.");
+      if(typeof window.MediquoWidget.open==="function")window.MediquoWidget.open();
+    }catch(error){
+      setStatus("O widget não foi aberto: "+(error&&error.message?error.message:"revise a API Key e as permissões do ambiente de testes.")+" Consulte a Médiquo se o acesso ao sandbox estiver bloqueado.");
+      start.disabled=false;
+    }finally{
+      if(active)start.disabled=false;
+    }
+  });
+  stop.addEventListener("click",()=>{
+    try{
+      if(window.MediquoWidget&&typeof window.MediquoWidget.destroy==="function")window.MediquoWidget.destroy();
+      else if(window.MediquoWidget&&typeof window.MediquoWidget.close==="function")window.MediquoWidget.close();
+    }catch(e){}
+    active=false;
+    stop.hidden=true;start.disabled=false;
+    setStatus("Teste encerrado. Você pode iniciar outro quando quiser.");
+  });
+})();
+</script>
+
 </body>
 </html>
