@@ -2,106 +2,15 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#ffffff">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Ambiente de testes do atendimento por telemedicina PromoVie e Médiquo, sem dados ou licenças de produção.">
-<link rel="canonical" href="https://www.promovie.tv.br/app-teste/atendimento/">
-<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
-<link rel="preconnect" href="https://widget.mediquo.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-<title>Atendimento de teste | PromoVie</title>
-<style>
-*{box-sizing:border-box}
-:root{font-family:Inter,Arial,sans-serif;color:#283443;background:#fff}
-html,body{margin:0;width:100%;height:100%;overflow:hidden}
-body{background:#fff}
-#waiting{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:#fff;z-index:1}
-#waiting-box{width:min(390px,100%);text-align:center}
-#waiting-box img{width:116px;max-width:100%;height:auto;margin:0 auto 20px;display:block}
-#waiting h1{font:750 clamp(18px,4.2vw,25px)/1.3 Sora,Inter,sans-serif;color:#293c46;margin:0 0 10px}
-#waiting p{font-size:13px;line-height:1.7;color:#5d7080;margin:0}
-#waiting button,#waiting a{background:#477c83;border:0;border-radius:10px;color:#fff;text-decoration:none;cursor:pointer;padding:12px 18px;font:750 13px Inter,Arial,sans-serif;display:inline-block;margin-top:17px}
-#waiting button[hidden],#waiting a[hidden]{display:none}
-#waiting.error{z-index:2147483646}
-#waiting.error p{color:#7e3c43}
-#waiting.ready{pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s}
-#back{position:fixed;left:13px;top:13px;z-index:2147483640;background:#fff;border:1px solid #d9e2e5;border-radius:99px;display:inline-flex;gap:7px;align-items:center;padding:9px 13px;text-decoration:none;color:#46616b;font:700 11px Inter,Arial,sans-serif;box-shadow:0 5px 17px #172f3a12}
-#back svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
-@media(max-width:700px){#back{top:9px;left:9px;padding:8px 10px}}
-</style>
+<meta http-equiv="refresh" content="0; url=/app-teste/">
+<link rel="canonical" href="https://www.promovie.tv.br/app-teste/">
+<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp">
+<title>PromoVie | Teste de telemedicina</title>
+<script>window.location.replace("/app-teste/");</script>
 </head>
 <body>
-<a id="back" href="/app-teste/" aria-label="Voltar à página de teste"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg> Voltar</a>
-<div id="waiting" role="status" aria-live="polite">
-  <div id="waiting-box">
-    <img src="/app/assets/coracao-promovie-com-logo.webp" width="116" height="116" alt="PromoVie">
-    <h1 id="waiting-title">Abrindo a telemedicina...</h1>
-    <p id="waiting-text">Aguarde enquanto o atendimento da Médiquo é carregado em ambiente de teste.</p>
-    <button id="retry" type="button" hidden>Tentar novamente</button>
-    <a id="go-admin" href="https://id.mediquo-staging.com.br/login/" target="_blank" rel="noopener noreferrer" hidden>Abrir painel de testes da Médiquo</a>
-  </div>
-</div>
-<script>
-(function(){
-"use strict";
-// API Key de Staging identifica o widget no navegador. Nunca publicar Secret Key ou senha do painel.
-const apiKey="8cwnN2BA4nslSfhI";
-const sdkUrl="https://widget.mediquo.com/js/1.0.0/mediquo.js";
-const cover=document.getElementById("waiting");
-const heading=document.getElementById("waiting-title");
-const description=document.getElementById("waiting-text");
-const retry=document.getElementById("retry");
-const admin=document.getElementById("go-admin");
-let widgetReady=false;
-function errorState(message){
-  cover.classList.remove("ready");
-  cover.classList.add("error");
-  heading.textContent="Não foi possível abrir a telemedicina";
-  description.textContent=message;
-  retry.hidden=false;
-  admin.hidden=false;
-}
-function started(){
-  widgetReady=true;
-  cover.classList.remove("error");
-  cover.classList.add("ready");
-  try{window.MediquoWidget.open();}
-  catch(e){errorState("O widget foi carregado, mas a abertura falhou. Tente novamente ou solicite a habilitação à Médiquo.");}
-}
-function boot(){
-  retry.hidden=true;admin.hidden=true;cover.classList.remove("error","ready");
-  heading.textContent="Abrindo a telemedicina...";
-  description.textContent="Conectando ao ambiente de homologação da Médiquo.";
-  if(widgetReady){started();return;}
-  if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function"){initialize();return;}
-  const element=document.createElement("script");element.src=sdkUrl;element.async=true;
-  element.onload=initialize;
-  element.onerror=()=>errorState("A biblioteca oficial do atendimento não pôde ser carregada. Verifique sua conexão e tente novamente.");
-  document.head.appendChild(element);
-}
-function initialize(){
-  if(!window.MediquoWidget||typeof window.MediquoWidget.init!=="function"){
-    errorState("A Médiquo não disponibilizou o widget neste navegador.");return;
-  }
-  try{
-    const options={
-      apiKey:apiKey,adapter:"web",environment:"sandbox",show:"always",
-      isMobileView:true,
-      theme:{launcher:"base",position:"right",locale:"pt",
-        colors:{primary:"#477c83",primaryContrast:"#ffffff",secondary:"#2563c7",accent:"#dfe9e9"}}
-    };
-    Promise.resolve(window.MediquoWidget.init(options)).then(started).catch(err=>errorState(
-      "O ambiente de teste não liberou a sessão. Confirme no painel da Médiquo se o cliente e a API Key estão habilitados para o Widget Web."
-    ));
-  }catch(err){errorState("O ambiente não conseguiu iniciar a sessão de teste. Confira a habilitação da API Key no painel da Médiquo.");}
-}
-retry.addEventListener("click",boot);
-boot();
-})();
-</script>
+<p>O teste do SDK foi concentrado em <a href="/app-teste/">www.promovie.tv.br/app-teste/</a>.</p>
 </body>
 </html>
