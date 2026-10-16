@@ -498,76 +498,99 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 (function(){
   "use strict";
   const button=document.getElementById("install-now");
-  // Teste da integração diretamente nesta página, sem tela intermediária.
   const status=document.getElementById("sdk-entry-status");
   const label=button.querySelector("span");
-  const sdkSrc="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+  // Configuração mínima do Widget Web, conforme o guia oficial Médiquo.
+  const sdkSource="https://widget.mediquo.com/js/1.0.0/mediquo.js";
   const stagingApiKey="8cwnN2BA4nslSfhI";
-  let sdkLoad=null;
-  let sdkReady=false;
+  let sdkLoader=null;
+  let sdkInitialized=false;
+  let busy=false;
 
   function feedback(message){
-    status.textContent=message;
+    if(!status)return;
+    status.textContent=message||"";
     status.hidden=!message;
   }
   function loadSdk(){
-    if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")
+    if(window.MediquoWidget && typeof window.MediquoWidget.init==="function")
       return Promise.resolve();
-    if(sdkLoad)return sdkLoad;
-    sdkLoad=new Promise(function(resolve,reject){
+    if(sdkLoader)return sdkLoader;
+    sdkLoader=new Promise(function(resolve,reject){
       const script=document.createElement("script");
-      script.src=sdkSrc;
+      let completed=false;
+      const deadline=window.setTimeout(function(){
+        if(completed)return;
+        completed=true;
+        script.remove();
+        reject(new Error("Tempo excedido ao carregar a biblioteca SDK."));
+      },15000);
+      script.src=sdkSource;
       script.async=true;
       script.onload=function(){
-        if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")resolve();
-        else reject(new Error("O SDK não ficou disponível no navegador."));
+        if(completed)return;
+        completed=true;
+        window.clearTimeout(deadline);
+        if(window.MediquoWidget && typeof window.MediquoWidget.init==="function")resolve();
+        else reject(new Error("A biblioteca carregou, mas o Widget Web não ficou disponível."));
       };
-      script.onerror=function(){reject(new Error("Não foi possível carregar o SDK da Médiquo."));};
+      script.onerror=function(){
+        if(completed)return;
+        completed=true;
+        window.clearTimeout(deadline);
+        script.remove();
+        reject(new Error("Falha de rede ao carregar a biblioteca SDK."));
+      };
       document.head.appendChild(script);
-    }).catch(function(error){sdkLoad=null;throw error;});
-    return sdkLoad;
+    }).catch(function(error){sdkLoader=null;throw error;});
+    return sdkLoader;
   }
-  function openWidget(){
-    if(!window.MediquoWidget||typeof window.MediquoWidget.open!=="function")
-      throw new Error("A interface do atendimento não foi disponibilizada.");
-    window.MediquoWidget.open();
-  }
-  button.addEventListener("click",async function(){
-    if(sdkReady){
-      try{openWidget();feedback("");}
-      catch(error){feedback("Não foi possível reabrir o atendimento. Atualize a página e tente novamente.");}
-      return;
-    }
+  async function startWidget(){
+    if(busy)return;
+    busy=true;
     button.disabled=true;
     label.textContent="Abrindo telemedicina...";
     feedback("");
     try{
       await loadSdk();
-      await Promise.resolve(window.MediquoWidget.init({
-        apiKey:stagingApiKey,
-        adapter:"web",
-        environment:"sandbox",
-        // Tela cheia apenas em smartphones: em desktops, use o widget responsivo da Médiquo.
-        isMobileView:window.matchMedia("(max-width:700px)").matches,
-        theme:{launcher:"base",position:"right",locale:"pt"}
-      }));
-      sdkReady=true;
-      // Aguarda a interface do widget concluir sua montagem.
-      window.setTimeout(function(){
-        try{openWidget();}
-        catch(error){
-          sdkReady=false;
-          feedback("O SDK foi carregado, mas não abriu o atendimento. Solicite à Médiquo a habilitação do Widget Web no ambiente de testes.");
-        }
-      },450);
+      if(!sdkInitialized){
+        // A API de init pode retornar void ou Promise, dependendo da versão carregada.
+        await Promise.resolve(window.MediquoWidget.init({
+          apiKey:stagingApiKey,
+          adapter:"web",
+          environment:"sandbox",
+          theme:{
+            launcher:"base",
+            position:"right",
+            locale:"pt"
+          }
+        }));
+        sdkInitialized=true;
+      }
+      if(typeof window.MediquoWidget.open!=="function")
+        throw new Error("O método de abertura do atendimento está indisponível.");
+      // Permite a montagem do widget após init, sem depender de um tempo fixo.
+      await new Promise(function(resolve){
+        window.requestAnimationFrame(function(){
+          window.requestAnimationFrame(resolve);
+        });
+      });
+      window.MediquoWidget.open();
+      feedback("Widget solicitado em Staging. Se a janela continuar em branco, a API Key ou os serviços da Médiquo precisam ser validados pelo suporte.");
     }catch(error){
-      sdkReady=false;
-      feedback("Não foi possível abrir o atendimento de teste. Verifique a liberação da API Key de Staging com a Médiquo.");
+      feedback("Não foi possível iniciar o Widget Web em Staging. "+(error&&error.message?error.message:"Verifique as credenciais de homologação com a Médiquo."));
+      sdkInitialized=false;
+      try{
+        if(window.MediquoWidget && typeof window.MediquoWidget.destroy==="function")
+          window.MediquoWidget.destroy();
+      }catch(ignored){}
     }finally{
+      busy=false;
       button.disabled=false;
       label.textContent="Instalar App";
     }
-  });
+  }
+  button.addEventListener("click",startWidget);
   const zoomTrigger=document.getElementById("phone-zoom-trigger");
   const main=document.querySelector("main.main");
   const installBlock=document.querySelector(".install-block");
