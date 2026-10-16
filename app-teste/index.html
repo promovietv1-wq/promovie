@@ -2,6 +2,25 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script>
+(function(){
+  "use strict";
+  // Exibe o endereço institucional sem parâmetros de rastreamento na barra do navegador.
+  try{
+    const url=new URL(window.location.href);
+    let changed=false;
+    for(const key of Array.from(url.searchParams.keys())){
+      if(/^utm_/i.test(key)||["v","gclid","fbclid","msclkid"].includes(key.toLowerCase())){
+        url.searchParams.delete(key);
+        changed=true;
+      }
+    }
+    if(changed){
+      window.history.replaceState(window.history.state,"",url.pathname+url.search+url.hash);
+    }
+  }catch(error){}
+})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#ffffff">
