@@ -1,0 +1,34 @@
+name: PromoVie - avisar buscadores via IndexNow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+      - 'experiencia/index.html'
+      - 'audiovisual/index.html'
+      - '.github/workflows/promovie-indexnow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Comunicar as tres paginas publicas ao IndexNow
+        shell: bash
+        run: |
+          CODE=$(curl -sS --retry 2 --max-time 30 \
+            -o /tmp/indexnow-reply -w "%{http_code}" \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data '{"host":"www.promovie.tv.br","key":"d8b6a70c4e239f1582a7c90b63e41d5f","urlList":["https://www.promovie.tv.br/experiencia/","https://www.promovie.tv.br/","https://www.promovie.tv.br/audiovisual/"]}' \
+            'https://api.indexnow.org/indexnow')
+          echo "IndexNow: HTTP ${CODE}"
+          if [ "${CODE}" != "200" ] && [ "${CODE}" != "202" ]; then
+            cat /tmp/indexnow-reply
+            exit 1
+          fi
