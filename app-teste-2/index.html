@@ -429,6 +429,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .site-globe,.site-brand img,.phone,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.install{transition:none}
 }
 
+.sdk-lab{margin:11px auto 0;text-align:left;border:1px solid #e5dcf2;background:#fbf9ff;border-radius:12px;padding:11px 13px;color:#56456d;font:500 11px/1.55 var(--font-body)}
+.sdk-lab summary{color:#5d259e;font:700 11px/1.5 var(--font-body);cursor:pointer;text-align:center}
+.sdk-lab p{margin:9px 0;color:#625774;font-size:11px;line-height:1.55}
+.sdk-lab small{display:block;color:#72647d;margin-top:8px;line-height:1.5}
+.sdk-modes{display:flex;gap:6px;margin-top:10px}
+.sdk-modes button{width:50%;border:1px solid #ddd2ec;border-radius:9px;background:#fff;color:#5b4471;cursor:pointer;padding:8px 6px;font:700 11px/1.4 var(--font-body)}
+.sdk-modes button[aria-pressed="true"]{color:#fff;border-color:#6928b4;background:#6526ab}
+.sdk-modes button:focus-visible{outline:2px solid #6930b9;outline-offset:2px}
 /* O botão mantém a identidade PromoVie; o laboratório externo é opcional. */
 .official-lab-link{display:inline-block;margin:13px auto 0;text-align:center;color:#60319f;font:600 11px/1.5 var(--font-body);text-decoration:underline;text-decoration-color:#d7c8f4;text-underline-offset:4px}
 .official-lab-link:hover,.official-lab-link:focus-visible{color:#4b0c8f;text-decoration-color:#4b0c8f}
@@ -494,6 +502,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         <span>Acessar telemedicina</span>
       </button>
       <a class="official-lab-link" href="https://sandbox.mediquo.com/" target="_blank" rel="noopener noreferrer">Testar no laboratório oficial da Médiquo <span aria-hidden="true">↗</span></a>
+      <details class="sdk-lab">
+        <summary>Comparar configurações do SDK</summary>
+        <p>Teste a mesma chave do Staging com a configuração oficial mínima ou com as cores PromoVie. Não é necessário informar CPF nem senha.</p>
+        <div class="sdk-modes" role="group" aria-label="Tipo de teste do Widget Web">
+          <button type="button" id="sdk-mode-minimum" aria-pressed="false">Médiquo padrão</button>
+          <button type="button" id="sdk-mode-promovie" aria-pressed="true">Cores PromoVie</button>
+        </div>
+        <small>Comparação técnica: se ambas falharem, a personalização não explica o bloqueio.</small>
+      </details>
       <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
     </div>
   </div>
@@ -534,6 +551,25 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     welcome_text:"Cuidado e orientação em saúde em um só lugar.",
     welcome_button:"Começar atendimento"
   };
+  // Duas configurações comparáveis, usando a mesma chave e o mesmo ambiente.
+  // "Médiquo padrão" replica o exemplo da documentação, sem personalização.
+  let testMode="promovie";
+  const modeMinimum=document.getElementById("sdk-mode-minimum");
+  const modePromoVie=document.getElementById("sdk-mode-promovie");
+  function setMode(nextMode){
+    if(busy||nextMode===testMode)return;
+    testMode=nextMode;
+    sdkInitialized=false;
+    try{
+      if(window.MediquoWidget && typeof window.MediquoWidget.destroy==="function")
+        window.MediquoWidget.destroy();
+    }catch(error){}
+    modeMinimum.setAttribute("aria-pressed",nextMode==="minimum"?"true":"false");
+    modePromoVie.setAttribute("aria-pressed",nextMode==="promovie"?"true":"false");
+    feedback("");
+  }
+  modeMinimum.addEventListener("click",function(){setMode("minimum");});
+  modePromoVie.addEventListener("click",function(){setMode("promovie");});
   let sdkLoader=null;
   let sdkInitialized=false;
   let busy=false;
@@ -590,15 +626,16 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     try{
       await loadSdk();
       if(!sdkInitialized){
-        await Promise.resolve(window.MediquoWidget.init({
+        const options={
           apiKey:stagingApiKey,
           adapter:"web",
           environment:"sandbox",
-          show:"always",
-          isMobileView:window.matchMedia("(max-width:700px)").matches,
-          theme:themePromoVie,
-          text:copyPromoVie
-        }));
+          theme:testMode==="minimum"
+            ?{launcher:"base",position:"right",locale:"pt"}
+            :themePromoVie
+        };
+        if(testMode==="promovie")options.text=copyPromoVie;
+        await Promise.resolve(window.MediquoWidget.init(options));
         sdkInitialized=true;
       }
       if(typeof window.MediquoWidget.open!=="function")
