@@ -2739,7 +2739,7 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 .cgHeroBtns{margin-top:28px;display:flex;flex-wrap:wrap;gap:13px}
 .cgHeroVisual{min-width:0;overflow:hidden;border-radius:26px;background:#f7f9fc;box-shadow:0 18px 45px rgba(17,24,39,.09);isolation:isolate}
 .cgHeroVisual::before,.cgHeroVisual::after{content:none!important}
-.cgHeroPortrait{width:100%;height:auto;display:block;object-fit:contain;border:0;max-height:none;filter:none!important;transform:none!important;image-rendering:auto}
+.cgHeroPortrait{width:100%;height:clamp(410px,42vw,560px);display:block;object-fit:cover;object-position:57% 43%;border:0;filter:none!important;transform:none!important;image-rendering:auto}
 #conexoes .conectaCards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 #conexoes .card{min-width:0}
 #contato .conectaInquiry{display:block;max-width:245px;color:#fff;font-size:.94rem;font-weight:700;line-height:1.45;text-align:center;margin-bottom:12px}
@@ -2755,7 +2755,7 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 .conectaHero .cgHeroGrid{display:flex;flex-direction:column;align-items:stretch;gap:26px}
 .cgHeroTitle{font-size:clamp(2.75rem,10vw,4.2rem);margin:18px 0}
 .cgHeroTagline{font-size:clamp(1.26rem,4.8vw,1.65rem)}
-.cgHeroVisual{width:100%;max-width:620px;margin:auto;border-radius:20px}
+.cgHeroVisual{width:100%;max-width:620px;margin:auto;border-radius:20px}\n.cgHeroPortrait{height:auto;aspect-ratio:1.2;object-position:57% 43%}
 .cgHeroBtns{margin-top:22px}
 #conexoes .conectaCards{grid-template-columns:1fr;gap:16px}
 }
@@ -2775,15 +2775,10 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 <section class="hero conectaHero" id="inicio">
 <div class="wrap cgHeroGrid">
 <div class="cgHeroCopy reveal">
-<span class="kicker">PromoVie | Conecta Gestão</span>
+
 <h1 class="cgHeroTitle">Conecta <span class="grad">Gestão.</span></h1>
-<p class="cgHeroTagline">Conectar quem lidera às pessoas, à instituição e ao cuidado.</p>
-<p class="cgHeroText">Comunicação estratégica, estratégias de liderança e promoção da saúde para fortalecer as relações entre o gestor, seus liderados e a organização.</p>
-<p class="cgHeroDetail">Uma proposta inicial para compreender sua realidade, conhecer nossas ferramentas e descobrir como aplicá-las a você, às suas equipes e à instituição.</p>
-<div class="heroBtns cgHeroBtns">
-<a class="btn primary" href="#oferta">Conheça a proposta</a>
-<a class="btn outline" href="#conexoes">Entenda as conexões</a>
-</div>
+<p class="cgHeroTagline">Comunicação, liderança e cuidado que aproximam gestores, equipes e instituições.</p>
+<p class="cgHeroText">Uma experiência estratégica para fortalecer relações, desenvolver pessoas e promover saúde.</p>
 </div>
 <div class="cgHeroVisual reveal">
 <img class="cgHeroPortrait" alt="Marco Polese, da PromoVie, em ambiente corporativo, representando comunicação, liderança e promoção da saúde" src="/conecta-gestao/hero-retrato-conecta-gestao.jpg" loading="eager" decoding="async" fetchpriority="high" width="994" height="941"/>
