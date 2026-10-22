@@ -432,22 +432,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 /* Feedback aparece somente quando o SDK não consegue abrir. */
 #sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#44516b;background:#f4f8fe;border:1px solid #dce8f4;border-radius:10px;text-align:center}
 #sdk-entry-status[data-kind="error"]:not([hidden]){color:#8a3440;background:#fff2f2;border-color:#eccbd0}
-/* Laboratório de frontend: opções discretas sem alterar o layout principal. */
-.sdk-settings{margin:12px 0 0;padding:0 14px;background:#fafcff;border:1px solid #e4eaf5;border-radius:12px;color:#44516b;text-align:left;font:500 12px/1.5 var(--font-body)}
-.sdk-settings summary{padding:11px 3px;cursor:pointer;font-weight:700;color:#50477e;list-style-position:inside}
-.sdk-settings[open] summary{border-bottom:1px solid #e4eaf5}
-.sdk-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 0}
-.sdk-field{display:flex;flex-direction:column;gap:4px;min-width:0;font-size:11px;font-weight:650;color:#44516b}
-.sdk-field select,.sdk-field input{max-width:100%;min-width:0;width:100%;box-sizing:border-box;padding:9px 10px;border:1px solid #d8e1f0;border-radius:9px;background:white;color:#243148;font:500 12px var(--font-body)}
-.sdk-field select:focus-visible,.sdk-field input:focus-visible{outline:2px solid #775ed3;outline-offset:2px}
-.sdk-token-box[hidden]{display:none!important}
-.sdk-token-box{grid-column:1/-1}
-.sdk-token-box small{font-size:10px;color:#7f5060;font-weight:450}
-.sdk-settings-note{margin:0 0 12px;color:#69788c;font:450 11px/1.55 var(--font-body)}
-.sdk-tools{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
-.sdk-copy{border:1px solid #cbd8eb;border-radius:8px;background:#fff;color:#50477e;font:650 11px var(--font-body);padding:8px 11px;cursor:pointer}
-.sdk-copy:hover{background:#eef2fb}
-@media(max-width:440px){.sdk-fields{grid-template-columns:1fr}}
 #sdk-entry-status[hidden]{display:none}
 </style>
 </head>
@@ -502,43 +486,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       </button>
     </div>
     <div class="install-block">
-      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina no ambiente de teste">
+      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
         <span>Acessar telemedicina</span>
       </button>
-      <details class="sdk-settings">
-        <summary>Configurar atendimento (teste)</summary>
-        <div class="sdk-fields">
-          <label class="sdk-field" for="sdk-appearance">Cores da telemedicina
-            <select id="sdk-appearance">
-              <option value="neutral">Neutras · saúde</option>
-              <option value="blue">Azul clínico</option>
-              <option value="promovie">Cores PromoVie</option>
-            </select>
-          </label>
-          <label class="sdk-field" for="sdk-title">Título do atendimento
-            <select id="sdk-title">
-              <option value="TeleSaúde">TeleSaúde</option>
-              <option value="Autocuidado">Autocuidado</option>
-              <option value="Vida Saudável">Vida Saudável</option>
-            </select>
-          </label>
-          <label class="sdk-field" for="sdk-session">Tipo de acesso
-            <select id="sdk-session">
-              <option value="temporary">Temporário (API Key)</option>
-              <option value="patient">Paciente com token de teste</option>
-            </select>
-          </label>
-          <div id="sdk-token-box" class="sdk-token-box" hidden>
-            <label class="sdk-field" for="sdk-patient-token">Token de sessão SDK de teste
-              <input type="password" id="sdk-patient-token" autocomplete="off" spellcheck="false" placeholder="Cole somente um token temporário de paciente de teste" />
-            </label>
-            <small>Este campo não aceita Secret Key. O token deve ser emitido por um servidor seguro e não será salvo nesta página.</small>
-          </div>
-        </div>
-        <p class="sdk-settings-note">As cores e o título são enviados ao Widget Web. A ausência de logomarcas internas depende dos recursos permitidos pela Médiquo. A Secret Key não é exposta no navegador.</p>
-        <div class="sdk-tools"><button type="button" class="sdk-copy" id="sdk-copy-debug">Copiar informações técnicas do teste</button></div>
-      </details>
       <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
     </div>
   </div>
@@ -556,68 +507,24 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   const sdkSource="https://widget.mediquo.com/js/1.0.0/mediquo.js";
   const stagingApiKey="8cwnN2BA4nslSfhI";
 
-  const appearance=document.getElementById("sdk-appearance");
-  const titleSelect=document.getElementById("sdk-title");
-  const sessionSelect=document.getElementById("sdk-session");
-  const tokenArea=document.getElementById("sdk-token-box");
-  const tokenInput=document.getElementById("sdk-patient-token");
-  const copyDebug=document.getElementById("sdk-copy-debug");
-  const palette={
-    neutral:{
-      primary:"#176c82",primaryContrast:"#ffffff",secondary:"#2b8793",accent:"#3ba98b",
-      messageTextOutgoing:"#203548",messageTextIncoming:"#28394e",messageTextSystem:"#526378",
-      bubbleBackgroundOutgoing:"#e2f2f4",bubbleBackgroundIncoming:"#f3f7fa",
-      bubbleBackgroundSystem:"#f2f5f8",alertText:"#285878",alertBackground:"#eaf4f7"
-    },
-    blue:{
-      primary:"#2160a8",primaryContrast:"#ffffff",secondary:"#357cc5",accent:"#43a7b2",
-      messageTextOutgoing:"#20324a",messageTextIncoming:"#293b4c",messageTextSystem:"#4e6279",
-      bubbleBackgroundOutgoing:"#e4f0ff",bubbleBackgroundIncoming:"#f4f7fc",
-      bubbleBackgroundSystem:"#f2f6fc",alertText:"#23588b",alertBackground:"#eef5fe"
-    },
-    promovie:{
-      primary:"#4b0c8f",primaryContrast:"#ffffff",secondary:"#7334d8",accent:"#00bde8",
-      messageTextOutgoing:"#32104f",messageTextIncoming:"#263248",messageTextSystem:"#443250",
-      bubbleBackgroundOutgoing:"#efe5ff",bubbleBackgroundIncoming:"#f4f7fb",
-      bubbleBackgroundSystem:"#f5eefb",alertText:"#643179",alertBackground:"#f6edf9"
-    }
+
+  const options={
+    apiKey:stagingApiKey,
+    adapter:"web",
+    environment:"sandbox",
+    theme:{launcher:"base",position:"right",locale:"pt"}
   };
   let sdkPromise=null;
   let initialized=false;
   let connecting=false;
   let attempted=false;
   let serverError=false;
-  let lastConfigSignature="";
-  let lastError="Nenhum teste realizado";
-  const endpointNote="Autenticação definitiva requer backend; Secret Key nunca vai ao frontend.";
+  let clicks=0;
 
   function feedback(message,kind){
     status.textContent=message||"";
     status.hidden=!message;
     status.dataset.kind=kind||"info";
-    if(message)lastError=message;
-  }
-
-  function buildWidgetOptions(patientToken){
-    const theme={
-      launcher:"base",
-      position:"right",
-      locale:"pt",
-      colors:palette[appearance.value]||palette.neutral,
-      text:{title:titleSelect.value,launcher:"Atendimento"}
-    };
-    const opts={
-      apiKey:stagingApiKey,
-      adapter:"web",
-      environment:"sandbox",
-      theme:theme
-    };
-    if(patientToken){
-      // Aceitar exclusivamente accessToken de paciente emitido por backend autorizado.
-      opts.accessToken=patientToken;
-      opts.show="withActiveSession";
-    }
-    return opts;
   }
 
   function loadSdk(){
@@ -634,20 +541,23 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         if(finished)return;
         finished=true;
         script.remove();
-        reject(new Error("Tempo esgotado ao carregar o SDK da Médiquo."));
+        reject(new Error("Tempo de carregamento esgotado."));
       },20000);
       function complete(error){
         if(finished)return;
         finished=true;
         window.clearTimeout(timer);
         if(error){
-          script.remove();reject(error);
+          script.remove();
+          reject(error);
         }else if(!window.MediquoWidget||typeof window.MediquoWidget.init!=="function"){
-          reject(new Error("A biblioteca foi carregada, mas o Widget não foi disponibilizado."));
+          reject(new Error("O atendimento não pôde ser iniciado."));
         }else resolve(window.MediquoWidget);
       }
       script.onload=function(){complete();};
-      script.onerror=function(){complete(new Error("Não foi possível baixar a biblioteca do Widget."));};
+      script.onerror=function(){
+        complete(new Error("Não foi possível carregar o serviço de atendimento."));
+      };
       document.head.appendChild(script);
     }).catch(function(error){
       sdkPromise=null;
@@ -656,81 +566,49 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     return sdkPromise;
   }
 
-  function clearPreviousSession(){
-    if(initialized && window.MediquoWidget && typeof window.MediquoWidget.destroy==="function"){
-      try{window.MediquoWidget.destroy();}catch(ignored){}
-    }
-    initialized=false;
-    lastConfigSignature="";
-    tokenInput.value="";
-  }
-
-  function onConfigurationChanged(){
-    if(connecting)return;
-    clearPreviousSession();
-    tokenArea.hidden=sessionSelect.value!=="patient";
-    feedback("Configuração de teste atualizada. Clique em Acessar telemedicina para iniciar.","info");
-  }
-  appearance.addEventListener("change",onConfigurationChanged);
-  titleSelect.addEventListener("change",onConfigurationChanged);
-  sessionSelect.addEventListener("change",onConfigurationChanged);
-
-  function reportServiceError(message){
+  function reportServiceError(){
     if(!attempted)return;
     serverError=true;
-    feedback(message,"error");
+    initialized=false;
+    feedback("Não foi possível conectar ao atendimento neste momento. Nossa equipe está verificando a disponibilidade do serviço.","error");
   }
-  // O SDK pode rejeitar chamadas de API depois que init() / open() retornam.
+
+  // A comunicação da Médiquo pode falhar após a abertura da janela.
   window.addEventListener("unhandledrejection",function(event){
     if(!attempted)return;
-    const err=String(event.reason&&(event.reason.message||event.reason)||"");
-    if(/Not valid API Key|invalid api.?key|unauthori[sz]ed|invalid credential/i.test(err)){
-      reportServiceError("O servidor da Médiquo recusou a API Key. É necessário validar a credencial do Widget Web e a configuração do Staging.");
-    }else if(/Failed to fetch|NetworkError|CORS|ERR_FAILED|Load failed/i.test(err)){
-      reportServiceError("Falha de comunicação com os serviços da Médiquo (rede ou CORS). Verifique o Console do navegador (F12).");
+    const error=String(event.reason&&(event.reason.message||event.reason)||"");
+    if(/Not valid API Key|invalid api.?key|unauthori[sz]ed|invalid credential|Failed to fetch|NetworkError|CORS|ERR_FAILED|Load failed/i.test(error)){
+      reportServiceError();
     }
   });
   window.addEventListener("error",function(event){
     if(!attempted)return;
-    const err=String(event.message||"");
-    if(/Not valid API Key|invalid api.?key/i.test(err)){
-      reportServiceError("A chave foi recusada pela Médiquo. A equipe técnica precisa verificar a autorização do Widget Web.");
-    }else if(/CORS|Failed to fetch|NetworkError/i.test(err)){
-      reportServiceError("Problema de comunicação com os serviços Médiquo. Consulte o Console do navegador (F12).");
+    const error=String(event.message||"");
+    if(/Not valid API Key|invalid api.?key|CORS|Failed to fetch|NetworkError/i.test(error)){
+      reportServiceError();
     }
   });
 
   async function startWidget(){
     if(connecting)return;
-    const signature=[appearance.value,titleSelect.value,sessionSelect.value].join("|");
-    const requiresToken=sessionSelect.value==="patient" && (!initialized||lastConfigSignature!==signature);
-    const patientToken=requiresToken?tokenInput.value.trim():"";
-    if(requiresToken && patientToken.length<20){
-      feedback("Para testar um paciente SDK, informe somente um accessToken temporário emitido por servidor seguro. Não use a Secret Key.","error");
-      return;
-    }
     connecting=true;
     attempted=true;
     serverError=false;
+    clicks++;
     button.disabled=true;
     label.textContent="Conectando...";
-    feedback("Preparando o atendimento no ambiente de homologação...","info");
+    feedback("Abrindo atendimento...","info");
     try{
       const widget=await loadSdk();
-      if(!initialized || lastConfigSignature!==signature){
-        if(typeof widget.destroy==="function"){
+      if(!initialized){
+        if(clicks>1&&typeof widget.destroy==="function"){
           try{widget.destroy();}catch(ignored){}
         }
-        // API Key pública do widget: autorizada para integração frontend pela documentação.
-        // Secret Key e geração de tokens permanecem exclusivamente no backend.
-        const options=buildWidgetOptions(patientToken);
-        tokenInput.value=""; // Token digitado não permanece no formulário.
         await Promise.resolve(widget.init(options));
         initialized=true;
-        lastConfigSignature=signature;
       }
       if(typeof widget.open!=="function"){
-        throw new Error("Método de abertura não disponível na biblioteca.");
+        throw new Error("O atendimento não está disponível.");
       }
       await new Promise(function(resolve){
         window.requestAnimationFrame(function(){
@@ -738,52 +616,16 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         });
       });
       await Promise.resolve(widget.open());
-      if(!serverError)feedback("Janela solicitada à Médiquo. O funcionamento dos profissionais só estará confirmado quando o atendimento carregar; se permanecer em branco, confira os erros na aba Rede/Network (F12).","info");
+      if(!serverError)feedback("Atendimento solicitado. Caso a janela não carregue, o serviço ainda não está disponível.","info");
     }catch(error){
       initialized=false;
-      lastConfigSignature="";
-      tokenInput.value="";
-      feedback("Não foi possível abrir o atendimento: "+(error&&error.message?error.message:"Falha inesperada."),"error");
+      feedback("Não foi possível abrir o atendimento agora. Tente novamente mais tarde.","error");
     }finally{
       connecting=false;
       button.disabled=false;
       label.textContent="Acessar telemedicina";
     }
   }
-
-  copyDebug.addEventListener("click",async function(){
-    const summary=[
-      "Diagnóstico frontend PromoVie / Médiquo",
-      "Página: "+window.location.origin+window.location.pathname,
-      "SDK: "+sdkSource,
-      "Ambiente: sandbox",
-      "Chave informada: "+stagingApiKey.length+" caracteres, final "+stagingApiKey.slice(-4),
-      "Tipo de sessão: "+(sessionSelect.value==="patient"?"paciente com token":"temporária"),
-      "Aparência: "+appearance.value,
-      "Título: "+titleSelect.value,
-      "Último status: "+lastError,
-      endpointNote,
-      "Não incluir credenciais secretas, tokens de paciente, CPF ou dados clínicos em capturas."
-    ].join("\n");
-    try{
-      if(navigator.clipboard && window.isSecureContext){
-        await navigator.clipboard.writeText(summary);
-      }else{
-        const temp=document.createElement("textarea");
-        temp.value=summary;
-        temp.style.position="fixed";
-        temp.style.left="-9999px";
-        document.body.appendChild(temp);
-        temp.select();
-        const didCopy=document.execCommand("copy");
-        temp.remove();
-        if(!didCopy)throw new Error("Cópia indisponível");
-      }
-      feedback("Informações técnicas copiadas, sem chaves completas ou tokens.","info");
-    }catch(error){
-      feedback("A cópia não foi permitida pelo navegador. Consulte os erros na aba Rede/Network (F12).","error");
-    }
-  });
   button.addEventListener("click",startWidget);
   const zoomTrigger=document.getElementById("phone-zoom-trigger");
   const main=document.querySelector("main.main");
