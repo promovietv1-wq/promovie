@@ -2856,6 +2856,27 @@ main .head p, main .card p, main .cgHeroText, main .cgContactCopy p {
  #conexoes { padding-top:36px!important; }
  #conexoes .head h2 { margin-top:0!important; }
 }
+
+/* Valor do Conecta Gestão, mesmo preço da Experiência Estratégica. */
+#contato .ctaBox .quote{flex-direction:column!important;gap:12px!important;align-items:center!important;}
+#contato .ctaBox .quote .cgPrice{
+ display:block!important;
+ margin:0!important;
+ font-family:var(--font-display)!important;
+ font-size:clamp(2.05rem,3.4vw,2.8rem)!important;
+ font-weight:800!important;
+ line-height:1.15!important;
+ white-space:nowrap!important;
+ background:var(--cg-grad)!important;
+ -webkit-background-clip:text!important;
+ background-clip:text!important;
+ color:transparent!important;
+ -webkit-text-fill-color:transparent!important;
+}
+@media(max-width:760px){
+ #contato .ctaBox .quote{align-items:stretch!important;gap:14px!important;}
+ #contato .ctaBox .quote .cgPrice{text-align:center!important;}
+}
 </style><script src="/assets/js/promovie-navigation.js" defer></script>
 </head>
 <body>
@@ -2939,7 +2960,7 @@ main .head p, main .card p, main .cgHeroText, main .cgContactCopy p {
 <div class="wrap">
 <div class="ctaBox reveal">
 <div class="cgContactCopy"><h2 class="cgSectionTitle">Conecta Gestão</h2><p>Descubra como conectar gestores, equipes e instituições por meio da comunicação, da liderança e da promoção da saúde.</p></div>
-<div class="quote"><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20Conecta%20Gest%C3%A3o%20PromoVie%20e%20conversar%20sobre%20a%20aplica%C3%A7%C3%A3o%20das%20ferramentas.">WhatsApp</a></div>
+<div class="quote"><strong class="cgPrice">R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20Conecta%20Gest%C3%A3o%20PromoVie%20e%20conversar%20sobre%20a%20aplica%C3%A7%C3%A3o%20das%20ferramentas.">WhatsApp</a></div>
 </div>
 <p class="formatNote noteEnd"> O Conecta Gestão acontece prioritariamente de forma remota, com atendimentos on-line ao vivo. Se houver necessidade de alguma etapa presencial, essa possibilidade pode ser avaliada em conjunto.</p>
 </div>
