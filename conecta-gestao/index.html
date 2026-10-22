@@ -2732,9 +2732,10 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 .conectaHero .cgHeroGrid{width:min(1160px,92vw);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.01fr);align-items:center;gap:clamp(26px,5vw,70px)}
 .cgHeroCopy{min-width:0}
 .cgHeroCopy .kicker{font-size:.74rem}
-.cgHeroTitle{font-family:var(--font-display);font-size:clamp(3rem,5.7vw,5.4rem);line-height:1.015;letter-spacing:-.058em;margin:20px 0 22px;font-weight:750}
-.cgHeroTagline{font-family:var(--font-display);font-weight:650;color:var(--ink);font-size:clamp(1.24rem,2vw,1.75rem);line-height:1.32;margin:0 0 16px}
-.cgHeroText{font-size:clamp(1.02rem,1.25vw,1.12rem);line-height:1.72;color:var(--text);margin:0 0 15px}
+.cgHeroTitle.grad,.cgHeroTagline.grad{background:linear-gradient(100deg,#4b0c8f 0%,#7334d8 53%,#00bde8 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent!important}
+.cgHeroTitle{font-family:var(--font-display);font-size:clamp(3.25rem,5.9vw,5.7rem);line-height:1.015;letter-spacing:-.058em;margin:10px 0 24px;font-weight:750}
+.cgHeroTagline{font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,2.65vw,2.45rem);line-height:1.19;letter-spacing:-.024em;margin:0 0 18px}
+.cgHeroText{font-size:clamp(1.05rem,1.5vw,1.22rem);line-height:1.6;color:var(--text);margin:0 0 15px}
 .cgHeroDetail{font-size:.99rem;line-height:1.68;color:var(--muted);margin:0}
 .cgHeroBtns{margin-top:28px;display:flex;flex-wrap:wrap;gap:13px}
 .cgHeroVisual{min-width:0;overflow:hidden;border-radius:26px;background:#f7f9fc;box-shadow:0 18px 45px rgba(17,24,39,.09);isolation:isolate}
@@ -2747,14 +2748,14 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 .conectaHero{padding:45px 0 60px!important}
 .conectaHero .cgHeroGrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
 .cgHeroTitle{font-size:clamp(2.5rem,5.5vw,4rem)}
-.cgHeroTagline{font-size:clamp(1.15rem,2.15vw,1.5rem)}
+.cgHeroTagline{font-size:clamp(1.5rem,2.45vw,2.15rem)}
 .cgHeroDetail{font-size:.93rem}
 }
 @media(max-width:760px){
 .conectaHero{padding:32px 0 50px!important}
 .conectaHero .cgHeroGrid{display:flex;flex-direction:column;align-items:stretch;gap:26px}
 .cgHeroTitle{font-size:clamp(2.75rem,10vw,4.2rem);margin:18px 0}
-.cgHeroTagline{font-size:clamp(1.26rem,4.8vw,1.65rem)}
+.cgHeroTagline{font-size:clamp(1.65rem,6vw,2.3rem)}
 .cgHeroVisual{width:100%;max-width:620px;margin:auto;border-radius:20px}
 .cgHeroPortrait{width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;object-position:center center}
 .cgHeroBtns{margin-top:22px}
@@ -2777,9 +2778,9 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 <div class="wrap cgHeroGrid">
 <div class="cgHeroCopy reveal">
 
-<h1 class="cgHeroTitle">Conecta <span class="grad">Gestão.</span></h1>
-<p class="cgHeroTagline">Comunicação, liderança e cuidado que aproximam gestores, equipes e instituições.</p>
-<p class="cgHeroText">Uma experiência estratégica para fortalecer relações, desenvolver pessoas e promover saúde.</p>
+<h1 class="cgHeroTitle grad">Conecta Gestão</h1>
+<p class="cgHeroTagline grad">Comunicação, liderança e cuidado na instituição.</p>
+<p class="cgHeroText">Fortaleça relações. Desenvolva pessoas e promova saúde.</p>
 </div>
 <div class="cgHeroVisual reveal">
 <img class="cgHeroPortrait" alt="Marco Polese, da PromoVie, em ambiente corporativo, representando comunicação, liderança e promoção da saúde" src="/conecta-gestao/hero-conecta-gestao-final.jpg" loading="eager" decoding="async" fetchpriority="high" width="1254" height="1254"/>
@@ -2787,7 +2788,7 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 </div>
 </section><section id="conexoes">
 <div class="wrap">
-<div class="head reveal"><span class="kicker">Por que Conecta Gestão?</span><h2>Conexões que fortalecem <span class="grad">pessoas e organizações.</span></h2><p>Quem gere precisa alinhar objetivos, cultivar relações e encontrar apoio para conduzir pessoas e decisões. A PromoVie reúne ferramentas para tornar essas conexões mais claras, humanas e efetivas.</p></div>
+<div class="head reveal"><h2>Conexões que fortalecem <span class="grad">pessoas e organizações.</span></h2><p>Quem gere precisa alinhar objetivos, cultivar relações e encontrar apoio para conduzir pessoas e decisões. A PromoVie reúne ferramentas para tornar essas conexões mais claras, humanas e efetivas.</p></div>
 <div class="cards conectaCards">
 <article class="card reveal"><div class="icon">01</div><h3>Gestor e liderados</h3><p>Escuta, comunicação e estratégias de liderança para aproximar a equipe, desenvolver confiança e favorecer o diálogo.</p></article>
 <article class="card reveal"><div class="icon">02</div><h3>Gestor e instituição</h3><p>Alinhamento entre objetivos, cultura, responsabilidades e comunicação para fortalecer o trabalho e as relações institucionais.</p></article>
@@ -2796,7 +2797,7 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 </div>
 </section><section class="soft" id="oferta">
 <div class="wrap">
-<div class="head reveal"><span class="kicker">Seu primeiro contato com a PromoVie</span><h2>Recursos concretos para <span class="grad">fortalecer suas conexões.</span></h2><p>O ponto de partida é quem exerce a gestão. A partir de uma conversa estratégica, identificamos como nossa comunicação, nossos conteúdos e nossas soluções de saúde podem ser utilizados por você, por sua equipe ou pela instituição.</p></div>
+<div class="head reveal"><h2>Recursos concretos para <span class="grad">fortalecer suas conexões.</span></h2><p>O ponto de partida é quem exerce a gestão. A partir de uma conversa estratégica, identificamos como nossa comunicação, nossos conteúdos e nossas soluções de saúde podem ser utilizados por você, por sua equipe ou pela instituição.</p></div>
 <div class="cards">
 <article class="card reveal"><div class="icon">01</div><h3>Encontro estratégico</h3><p>Escuta individual, análise e direcionamento para compreender os desafios do gestor, as relações com os liderados e as necessidades da instituição.</p></article>
 <article class="card reveal"><div class="icon">02</div><h3>4 peças para redes sociais</h3><p>Arte e texto para a comunicação do gestor, da equipe ou da instituição, conforme a identidade, as prioridades e os objetivos identificados.</p></article>
