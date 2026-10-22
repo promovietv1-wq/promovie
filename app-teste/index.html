@@ -521,10 +521,23 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   let serverError=false;
   let clicks=0;
 
+  let feedbackTimer=null;
   function feedback(message,kind){
+    if(feedbackTimer){
+      window.clearTimeout(feedbackTimer);
+      feedbackTimer=null;
+    }
     status.textContent=message||"";
     status.hidden=!message;
     status.dataset.kind=kind||"info";
+    // Mensagens de falha desaparecem automaticamente; nada fica na tela após fechar o atendimento.
+    if(message && kind==="error"){
+      feedbackTimer=window.setTimeout(function(){
+        status.textContent="";
+        status.hidden=true;
+        feedbackTimer=null;
+      },6000);
+    }
   }
 
   function loadSdk(){
@@ -597,7 +610,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     clicks++;
     button.disabled=true;
     label.textContent="Conectando...";
-    feedback("Abrindo atendimento...","info");
+    // O próprio botão indica o carregamento; não manter aviso abaixo dele.
+    feedback("","info");
     try{
       const widget=await loadSdk();
       if(!initialized){
@@ -616,7 +630,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         });
       });
       await Promise.resolve(widget.open());
-      if(!serverError)feedback("Atendimento solicitado. Caso a janela não carregue, o serviço ainda não está disponível.","info");
+      if(!serverError)feedback("","info");
     }catch(error){
       initialized=false;
       feedback("Não foi possível abrir o atendimento agora. Tente novamente mais tarde.","error");
