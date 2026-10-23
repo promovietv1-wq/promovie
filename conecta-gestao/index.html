@@ -2857,6 +2857,11 @@ main .head p, main .card p, main .cgHeroText, main .cgContactCopy p {
  #conexoes .head h2 { margin-top:0!important; }
 }
 
+/* A frase final ganha uma linha própria somente no mobile. */
+@media(max-width:760px){
+ .conectaHero .cgHeroHealth{display:block!important;white-space:nowrap;}
+}
+
 /* Valor do Conecta Gestão, mesmo preço da Experiência Estratégica. */
 #contato .ctaBox .quote{flex-direction:column!important;gap:12px!important;align-items:center!important;}
 #contato .ctaBox .quote .cgPrice{
@@ -2894,7 +2899,7 @@ main .head p, main .card p, main .cgHeroText, main .cgContactCopy p {
 
 <h1 class="cgHeroTitle grad">Conecta Gestão</h1>
 <p class="cgHeroTagline grad">Comunicação, liderança e cuidado na instituição.</p>
-<p class="cgHeroText">Fortaleça relações. Desenvolva pessoas. Promova saúde.</p>
+<p class="cgHeroText">Fortaleça relações. Desenvolva pessoas. <span class="cgHeroHealth">Promova saúde.</span></p>
 </div>
 <div class="cgHeroVisual reveal">
 <img class="cgHeroPortrait" alt="Marco Polese, da PromoVie, em ambiente corporativo, representando comunicação, liderança e promoção da saúde" src="/conecta-gestao/hero-conecta-gestao-final.jpg" loading="eager" decoding="async" fetchpriority="high" width="1254" height="1254"/>
