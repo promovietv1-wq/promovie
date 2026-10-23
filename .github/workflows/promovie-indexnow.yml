@@ -8,6 +8,7 @@ on:
       - 'index.html'
       - 'experiencia/index.html'
       - 'audiovisual/index.html'
+      - 'conecta-gestao/index.html'
       - '.github/workflows/promovie-indexnow.yml'
   workflow_dispatch:
 
@@ -19,13 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Comunicar as tres paginas publicas ao IndexNow
+      - name: Comunicar as quatro paginas publicas ao IndexNow
         shell: bash
         run: |
           CODE=$(curl -sS --retry 2 --max-time 30 \
             -o /tmp/indexnow-reply -w "%{http_code}" \
             -H 'Content-Type: application/json; charset=utf-8' \
-            --data '{"host":"www.promovie.tv.br","key":"d8b6a70c4e239f1582a7c90b63e41d5f","urlList":["https://www.promovie.tv.br/experiencia/","https://www.promovie.tv.br/","https://www.promovie.tv.br/audiovisual/"]}' \
+            --data '{"host":"www.promovie.tv.br","key":"d8b6a70c4e239f1582a7c90b63e41d5f","urlList":["https://www.promovie.tv.br/experiencia/","https://www.promovie.tv.br/","https://www.promovie.tv.br/audiovisual/","https://www.promovie.tv.br/conecta-gestao/"]}' \
             'https://api.indexnow.org/indexnow')
           echo "IndexNow: HTTP ${CODE}"
           if [ "${CODE}" != "200" ] && [ "${CODE}" != "202" ]; then
