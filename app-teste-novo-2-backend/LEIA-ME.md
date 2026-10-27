@@ -18,7 +18,7 @@ Este módulo implementa o fluxo da **segunda opção do kit enviado por Pedro/M�
 5. Acesse `https://www.promovie.tv.br/app-teste-novo-2/`, digite a senha privada de teste e clique em **Acessar telemedicina**.
 6. O browser solicita `GET /api/mediquo/config`, depois `POST /api/mediquo/token`; o backend usa as credenciais privadas para falar com `/v1/patients` e `/v1/patients/authenticate`.
 
-**Importante:** se a Médiquo usa API separada para Staging, confirme com Pedro qual `MEDIQUO_BASE_URL` deverá ser usada. O valor padrão foi mantido conforme o kit técnico dele.
+**Importante:** confirme com Pedro a URL **específica de Staging** para `MEDIQUO_BASE_URL`. O backend exige essa configuração e recusa o endpoint padrão de produção do kit, para não criar registros ou realizar chamadas no ambiente errado. Não invente o endereço e não insira a Secret Key no GitHub.
 
 ## Execução local
 
