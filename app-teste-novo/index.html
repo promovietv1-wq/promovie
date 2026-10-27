@@ -447,6 +447,132 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 #sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#44516b;background:#f4f8fe;border:1px solid #dce8f4;border-radius:10px;text-align:center}
 #sdk-entry-status[data-kind="error"]:not([hidden]){color:#8a3440;background:#fff2f2;border-color:#eccbd0}
 #sdk-entry-status[hidden]{display:none}
+
+/* Ajustes mobile exclusivos do App Teste Novo — preservam a versão desktop e o SDK. */
+@media (max-width:700px){
+  body:has(.main:not(.phone-expanded)){
+    background:radial-gradient(ellipse 90% 30% at 2% 28%,rgba(0,189,232,.075),transparent 75%),
+               radial-gradient(ellipse 80% 30% at 96% 67%,rgba(115,52,216,.075),transparent 75%),#fbfcff;
+  }
+  .site-header{height:70px;box-shadow:0 5px 20px rgba(45,24,81,.045)}
+  .site-header .container{width:calc(100% - 34px)}
+  .site-brand img{width:153px;max-height:55px}
+  .site-identity{gap:12px}
+  .site-globe{width:36px;height:36px;background:#f9f7ff;border-color:rgba(115,52,216,.2)}
+  .site-globe svg{width:18px;height:18px}
+  .main:not(.phone-expanded){
+    width:min(470px,calc(100% - 28px));padding:15px 0 32px;gap:0;
+    grid-template-areas:"copy" "install" "phone";
+    grid-template-columns:minmax(0,1fr);align-items:stretch;min-height:auto;
+  }
+  .main:not(.phone-expanded) .copy{
+    grid-area:copy;isolation:isolate;overflow:hidden;
+    width:100%;max-width:none;margin:0;padding:18px 18px 22px;
+    border:1px solid rgba(220,222,243,.9);border-radius:28px;
+    background:radial-gradient(circle at 50% 6%,rgba(241,226,255,.76),transparent 55%),
+               linear-gradient(153deg,#fff 0%,#fcfaff 60%,#f5fbff 100%);
+    box-shadow:0 11px 36px rgba(70,45,124,.065),inset 0 1px 0 #fff;text-align:center;
+  }
+  .main:not(.phone-expanded) .copy::before{
+    content:"";pointer-events:none;position:absolute;top:-69px;right:-77px;
+    width:212px;height:212px;border-radius:50%;z-index:-1;
+    background:radial-gradient(circle,rgba(0,189,232,.12),transparent 68%);
+  }
+  .main:not(.phone-expanded) .heart-stage{width:176px;height:166px;margin:0 auto 8px}
+  .main:not(.phone-expanded) .heart-stage::before{
+    inset:1% -5%;background:radial-gradient(circle,rgba(244,237,255,.94),
+      rgba(243,237,252,.28) 55%,transparent 76%);filter:blur(11px);
+  }
+  .main:not(.phone-expanded) .heart-stage::after{
+    inset:11%;box-shadow:0 0 0 28px rgba(115,52,216,.024);border-color:rgba(115,52,216,.085);
+  }
+  .main:not(.phone-expanded) .hero-heart{
+    width:160px;height:160px;filter:drop-shadow(0 13px 14px rgba(71,21,129,.13));
+  }
+  .main:not(.phone-expanded) .copy h1{
+    font:800 clamp(27px,7.2vw,35px)/1.16 var(--font-display);
+    letter-spacing:-.052em;max-width:390px;margin:0 auto 11px;text-align:center;
+  }
+  .main:not(.phone-expanded) .copy h1 .gradient{padding-bottom:4px}
+  .main:not(.phone-expanded) .lead{
+    max-width:330px;margin:0 auto;font-size:14.5px;line-height:1.54;
+    letter-spacing:-.006em;color:#59677a;
+  }
+  .main:not(.phone-expanded) .install-block{
+    grid-area:install;width:100%;max-width:none;margin:14px auto 15px;justify-self:stretch;
+  }
+  .main:not(.phone-expanded) .install{
+    min-height:60px;width:100%;border:1px solid rgba(255,255,255,.2);
+    border-radius:19px;padding:13px 20px;font-size:15px;font-weight:800;
+    letter-spacing:-.01em;gap:12px;
+    background:linear-gradient(110deg,#5614a9 0%,#7334d8 58%,#455fd8 100%);
+    box-shadow:0 13px 29px rgba(83,35,174,.23),inset 0 1px 0 rgba(255,255,255,.23);
+  }
+  .main:not(.phone-expanded) .install svg{width:21px;height:21px}
+  .main:not(.phone-expanded) .install span{max-width:none}
+  .main:not(.phone-expanded) .phone-stage{
+    grid-area:phone;width:100%;min-height:0;margin:0;padding:27px 12px 30px;
+    overflow:hidden;border:1px solid rgba(218,211,241,.83);border-radius:28px;
+    background:linear-gradient(145deg,#f9f5ff 0%,#f2f1ff 52%,#f0faff 100%);
+    box-shadow:0 10px 30px rgba(59,36,113,.06),inset 0 1px 0 rgba(255,255,255,.86);
+  }
+  .main:not(.phone-expanded) .phone-stage::before{
+    inset:6% 0;background:radial-gradient(circle at 48% 49%,
+      rgba(115,52,216,.12),rgba(115,52,216,.045) 45%,transparent 72%);
+    filter:blur(14px);
+  }
+  .main:not(.phone-expanded) .phone-stage::after{
+    width:310px;max-width:86%;height:310px;
+    border:1px solid rgba(115,52,216,.075);box-shadow:0 0 0 34px rgba(115,52,216,.023);
+  }
+  .main:not(.phone-expanded) .phone{
+    width:clamp(218px,61vw,256px);height:auto;aspect-ratio:1 / 2.06;
+    border-width:7px;border-radius:42px;transform:rotate(-3deg);
+    box-shadow:0 24px 41px rgba(45,29,83,.2),6px 8px 16px rgba(26,23,49,.075);
+  }
+  .main:not(.phone-expanded) .phone:hover{transform:rotate(-3deg)}
+  .main:not(.phone-expanded) .phone::before{width:78px;height:16px}
+  .main:not(.phone-expanded) .phone::after{border-radius:33px}
+  .main:not(.phone-expanded) .list-heading{min-height:57px;padding:26px 13px 8px}
+  .main:not(.phone-expanded) .list-heading strong{font-size:11.5px}
+  .main:not(.phone-expanded) .chat-list{padding:0 9px}
+  .main:not(.phone-expanded) .chat-row{gap:8px;padding:4px 1px}
+  .main:not(.phone-expanded) .chat-row img{width:31px;height:31px}
+  .main:not(.phone-expanded) .chat-info strong{font-size:9.5px}
+  .main:not(.phone-expanded) .chat-info small{font-size:7.5px;margin-top:3px}
+  .main:not(.phone-expanded) .chat-live{font-size:8px;padding:3px 5px}
+  .main:not(.phone-expanded) .chat-arrow{font-size:18px}
+  .main:not(.phone-expanded) .phone-nav{min-height:43px}
+  .main:not(.phone-expanded) .phone-nav span{font-size:8.5px}
+  .main:not(.phone-expanded) .phone-nav svg{width:17px;height:17px}
+  .main:not(.phone-expanded) .phone-zoom-trigger{
+    top:14px;right:13px;left:auto;width:43px;height:43px;
+    border:1px solid rgba(103,54,174,.19);background:#fff;
+    box-shadow:0 6px 18px rgba(73,40,121,.13);
+  }
+  .main.phone-expanded .copy{display:none}
+  .main.phone-expanded .install-block{margin-top:0}
+}
+@media (max-width:370px){
+  .main:not(.phone-expanded){width:calc(100% - 24px);padding-top:12px}
+  .main:not(.phone-expanded) .copy{padding:14px 12px 20px;border-radius:23px}
+  .main:not(.phone-expanded) .heart-stage{width:145px;height:139px;margin-bottom:6px}
+  .main:not(.phone-expanded) .hero-heart{width:137px;height:137px}
+  .main:not(.phone-expanded) .copy h1{font-size:clamp(25px,7.7vw,28px)}
+  .main:not(.phone-expanded) .lead{font-size:13.5px}
+  .main:not(.phone-expanded) .install{min-height:57px}
+  .main:not(.phone-expanded) .phone-stage{padding:21px 7px 24px;border-radius:24px}
+  .main:not(.phone-expanded) .phone{width:clamp(206px,68vw,238px)}
+}
+@media (max-width:700px) and (max-height:670px){
+  .main:not(.phone-expanded) .heart-stage{width:148px;height:141px;margin-bottom:6px}
+  .main:not(.phone-expanded) .hero-heart{width:139px;height:139px}
+  .main:not(.phone-expanded) .copy{padding-top:15px;padding-bottom:19px}
+  .main:not(.phone-expanded) .copy h1{font-size:clamp(25px,6.7vw,32px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .main:not(.phone-expanded) .hero-heart{animation:none;will-change:auto}
+}
 </style>
 </head>
 <body>
