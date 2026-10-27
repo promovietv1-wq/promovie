@@ -10,11 +10,11 @@ const apiKey=(env.MEDIQUO_API_KEY||"").trim();
 const secret=(env.MEDIQUO_SECRET_KEY||"").trim();
 const password=env.PROMOVIE_TEST_PASSWORD||"";
 const patientCode=(env.MEDIQUO_TEST_PATIENT_CODE||"").trim();
-const base=(env.MEDIQUO_BASE_URL||"https://sdk.mediquo.com/v1").replace(/\/+$/,"");
+const base=(env.MEDIQUO_BASE_URL||"").trim().replace(/\/+$/,"");
 const plan=(env.MEDIQUO_TEST_PLAN||"").trim();
 const allowed=new Set((env.ALLOWED_ORIGINS||"").split(",").map(x=>x.trim()).filter(Boolean));
 
-if(!apiKey||!secret||password.length<16||!patientCode||!allowed.size){
+if(!apiKey||!secret||password.length<16||!patientCode||!allowed.size||!base){
   console.error("Configuração incompleta. Verifique as variáveis de ambiente privadas.");
   process.exit(1);
 }
@@ -23,6 +23,14 @@ if(!Number.isInteger(PORT)||PORT<1||PORT>65535){
 }
 if(!base.startsWith("https://") && !(env.NODE_ENV!=="production" && /^http:\/\/(127\.0\.0\.1|localhost):\d+/.test(base))){
   console.error("A URL da API Médiquo deve usar HTTPS (exceto testes locais).");
+  process.exit(1);
+}
+
+
+// Evita que o teste de homologação utilize acidentalmente o endpoint de produção
+// do exemplo enviado pelo fornecedor. Solicite ao Pedro o endpoint de Staging.
+if(/^https:\/\/sdk\.mediquo\.com\/v1\/?$/i.test(base)){
+  console.error("URL de produção não permitida neste backend exclusivo de homologação.");
   process.exit(1);
 }
 
