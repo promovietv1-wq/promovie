@@ -1,0 +1,14 @@
+{
+  "name": "promovie-mediquo-teste-paciente",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor restrito de homologação Médiquo para App Teste Novo 2",
+  "type": "module",
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --env-file=.env server.mjs"
+  }
+}
