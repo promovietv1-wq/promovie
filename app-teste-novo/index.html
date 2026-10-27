@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#ffffff">
+  <title>TeleSaúde | App Teste Novo</title>
+  <style>
+    :root{font-family:Arial,Helvetica,sans-serif;color:#213048;background:#f8fafc}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 10%,#e0f3f5 0,transparent 49%),#f8fafc}
+    header{min-height:86px;background:#fff;border-bottom:1px solid #e6edf3;padding:13px max(20px,calc((100vw - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+    header img{width:170px;max-width:44vw;height:auto;display:block}
+    header small{font-size:11px;color:#63768b;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    main{width:min(1060px,100%);min-height:calc(100vh - 150px);margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:45px 25px}
+    .tag{text-transform:uppercase;letter-spacing:.15em;color:#138a94;font-weight:700;font-size:12px}
+    h1{font-size:clamp(36px,5vw,59px);letter-spacing:-.04em;line-height:1.1;margin:20px 0;color:#20334e}
+    h1 strong{background:linear-gradient(110deg,#168ba3,#5273c1);background-clip:text;-webkit-background-clip:text;color:transparent}
+    p{font-size:18px;line-height:1.65;color:#5d6e80}
+    button{display:inline-flex;align-items:center;justify-content:center;min-height:54px;border:0;border-radius:14px;background:linear-gradient(120deg,#0e7692,#176bb2);box-shadow:0 10px 28px #167ba328;color:#fff;font-size:16px;font-weight:700;padding:14px 27px;cursor:pointer}
+    button:disabled{opacity:.75;cursor:wait}
+    button:focus-visible{outline:3px solid #12a2b8;outline-offset:3px}
+    #status{margin-top:15px;color:#a3414c;font-size:13px;line-height:1.5}
+    #status[hidden]{display:none}
+    .visual{position:relative;display:grid;place-items:center;min-height:330px}
+    .visual::before{content:"";position:absolute;width:320px;max-width:90%;aspect-ratio:1;border-radius:50%;background:#eaf6f6;box-shadow:0 0 0 40px #e9f3f577}
+    .visual img{position:relative;width:min(330px,90%);height:auto;filter:drop-shadow(0 13px 15px #13304b22)}
+    footer{text-align:center;font-size:12px;color:#8291a3;padding:20px}
+    @media(max-width:720px){header{padding:14px 18px}main{grid-template-columns:1fr;gap:15px;text-align:center;padding:38px 24px}.visual{min-height:230px;grid-row:1}.visual img{width:min(230px,60vw)}.visual::before{width:min(220px,59vw);box-shadow:0 0 0 25px #e9f3f577}h1{font-size:clamp(34px,9vw,44px)}p{font-size:16px}}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" aria-label="PromoVie - Página inicial"><img src="/preview-promovie-logo.webp" alt="PromoVie" width="170"></a>
+    <small>Homologação</small>
+  </header>
+  <main>
+    <section>
+      <div class="tag">TeleSaúde</div>
+      <h1>Saúde e acolhimento <strong>onde você estiver.</strong></h1>
+      <p>Converse online com profissionais de saúde.</p>
+      <button id="open-care" type="button" disabled><span>Acessar telemedicina</span></button>
+      <p id="status" role="status" aria-live="polite" hidden></p>
+    </section>
+    <div class="visual" aria-hidden="true"><img src="/app/assets/coracao-promovie-com-logo.webp" width="330" height="330" alt=""></div>
+  </main>
+  <footer>PromoVie | Teste independente de integração</footer>
+  <script src="https://widget.mediquo.com/js/1.0.0/mediquo.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      // Preencher com a API Key do Widget Web aprovada para Staging.
+      // A Secret Key pertence somente ao backend e NÃO deve constar neste HTML.
+      var apiKey = "PREENCHER_API_KEY_STAGING";
+      var button = document.getElementById("open-care");
+      var label = button.querySelector("span");
+      var status = document.getElementById("status");
+      var initialized = false, busy = false, timer = null;
+      var config = {
+        apiKey: apiKey,
+        adapter: "web",
+        environment: "sandbox",
+        theme: {launcher:"hidden", position:"right", locale:"pt", text:{title:"TeleSaúde"}}
+      };
+      function message(text) {
+        if (timer) clearTimeout(timer);
+        status.textContent = text || "";
+        status.hidden = !text;
+        if (text) timer = setTimeout(function(){status.textContent="";status.hidden=true;},7000);
+      }
+      async function initialize() {
+        if (initialized) return true;
+        if (apiKey === "PREENCHER_API_KEY_STAGING") {
+          message("Aguardando configuração da chave de homologação.");
+          return false;
+        }
+        if (!window.MediquoWidget || typeof window.MediquoWidget.init !== "function") {
+          message("Não foi possível carregar o atendimento.");
+          return false;
+        }
+        try {
+          await Promise.resolve(window.MediquoWidget.init(config));
+          initialized = true;
+          return true;
+        } catch (err) {
+          message("Não foi possível conectar ao atendimento.");
+          return false;
+        }
+      }
+      async function openCare() {
+        if (busy) return;
+        busy = true;
+        button.disabled = true;
+        label.textContent = "Conectando...";
+        message("");
+        try {
+          if (!await initialize()) return;
+          if (typeof window.MediquoWidget.open !== "function") throw new Error("open indisponível");
+          await Promise.resolve(window.MediquoWidget.open());
+          message("");
+        } catch (err) {
+          message("Não foi possível abrir o atendimento agora.");
+        } finally {
+          busy = false;
+          button.disabled = false;
+          label.textContent = "Acessar telemedicina";
+        }
+      }
+      window.addEventListener("load", function () {
+        button.disabled = false;
+        if (apiKey !== "PREENCHER_API_KEY_STAGING") initialize();
+      });
+      window.addEventListener("unhandledrejection", function (event) {
+        var err = String(event.reason && (event.reason.message || event.reason) || "");
+        if (/Not valid API Key|invalid api.?key|unauthori[sz]ed/i.test(err)) {
+          message("A Médiquo precisa validar a API Key e o domínio de homologação.");
+        }
+      });
+      button.addEventListener("click", openCare);
+    })();
+  </script>
+</body>
+</html>
