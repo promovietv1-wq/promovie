@@ -429,6 +429,20 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .site-globe,.site-brand img,.phone,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.install{transition:none}
 }
 
+/* Versão de maior densidade para o coração, sem o fundo branco do ícone.
+   O WebP original fornece somente o recorte alfa, no mesmo enquadramento
+   de 464px centralizados no ícone de 512px. Layout e animação preservados. */
+.hero-heart{
+  -webkit-mask-image:url("/app/assets/coracao-promovie-com-logo.webp");
+  mask-image:url("/app/assets/coracao-promovie-com-logo.webp");
+  -webkit-mask-size:90.625% 90.625%;
+  mask-size:90.625% 90.625%;
+  -webkit-mask-position:center;
+  mask-position:center;
+  -webkit-mask-repeat:no-repeat;
+  mask-repeat:no-repeat;
+}
+
 /* Feedback aparece somente quando o SDK não consegue abrir. */
 #sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#44516b;background:#f4f8fe;border:1px solid #dce8f4;border-radius:10px;text-align:center}
 #sdk-entry-status[data-kind="error"]:not([hidden]){color:#8a3440;background:#fff2f2;border-color:#eccbd0}
@@ -449,7 +463,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 <main class="container main">
   <section class="copy" aria-labelledby="hero-title">
     <div class="heart-stage">
-      <img class="hero-heart" src="/app/assets/coracao-promovie-com-logo.webp" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
+      <img class="hero-heart" src="/app/icons/heart-512.png" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
     </div>
     <h1 id="hero-title">Telemedicina e autocuidado <span class="gradient">na palma da sua mão.</span></h1>
     <p class="lead">Converse com profissionais de saúde, de onde estiver.</p>
