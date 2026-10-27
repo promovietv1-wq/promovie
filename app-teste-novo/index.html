@@ -50,74 +50,79 @@
   <script>
     (function () {
       "use strict";
-      // Preencher com a API Key do Widget Web aprovada para Staging.
-      // A Secret Key pertence somente ao backend e NÃO deve constar neste HTML.
-      var apiKey = "PREENCHER_API_KEY_STAGING";
-      var button = document.getElementById("open-care");
-      var label = button.querySelector("span");
-      var status = document.getElementById("status");
-      var initialized = false, busy = false, timer = null;
-      var config = {
-        apiKey: apiKey,
-        adapter: "web",
-        environment: "sandbox",
-        theme: {launcher:"hidden", position:"right", locale:"pt", text:{title:"TeleSaúde"}}
-      };
-      function message(text) {
-        if (timer) clearTimeout(timer);
-        status.textContent = text || "";
-        status.hidden = !text;
-        if (text) timer = setTimeout(function(){status.textContent="";status.hidden=true;},7000);
-      }
-      async function initialize() {
-        if (initialized) return true;
-        if (apiKey === "PREENCHER_API_KEY_STAGING") {
-          message("Aguardando configuração da chave de homologação.");
-          return false;
-        }
-        if (!window.MediquoWidget || typeof window.MediquoWidget.init !== "function") {
-          message("Não foi possível carregar o atendimento.");
-          return false;
-        }
-        try {
-          await Promise.resolve(window.MediquoWidget.init(config));
-          initialized = true;
-          return true;
-        } catch (err) {
-          message("Não foi possível conectar ao atendimento.");
-          return false;
+      // Implementação adaptada do frontend-simples/index.html do kit enviado pela Médiquo.
+      // A Secret Key NÃO pertence ao frontend.
+      const API_KEY="8cwnN2BA4nslSfhI";
+      const btn=document.getElementById("open-care");
+      const label=btn.querySelector("span");
+      const aviso=document.getElementById("status");
+      let connecting=false;
+      let initialized=false;
+      let attempted=false;
+      let errorTimer=null;
+
+      function feedback(text){
+        if(errorTimer){clearTimeout(errorTimer);errorTimer=null;}
+        aviso.textContent=text||"";
+        aviso.hidden=!text;
+        if(text){
+          errorTimer=setTimeout(function(){
+            aviso.textContent="";
+            aviso.hidden=true;
+            errorTimer=null;
+          },7000);
         }
       }
-      async function openCare() {
-        if (busy) return;
-        busy = true;
-        button.disabled = true;
-        label.textContent = "Conectando...";
-        message("");
-        try {
-          if (!await initialize()) return;
-          if (typeof window.MediquoWidget.open !== "function") throw new Error("open indisponível");
+
+      async function openCare(){
+        if(connecting)return;
+        connecting=true;
+        attempted=true;
+        btn.disabled=true;
+        label.textContent="Conectando...";
+        feedback("");
+        try{
+          if(!window.MediquoWidget ||
+             typeof window.MediquoWidget.init!=="function" ||
+             typeof window.MediquoWidget.open!=="function"){
+            throw new Error("O Widget Web não foi carregado.");
+          }
+          // Exatamente o fluxo sem sessão do kit: somente API Key, título e cor.
+          // Não enviar adapter, environment, accessToken ou Secret Key.
+          if(!initialized){
+            await Promise.resolve(window.MediquoWidget.init({
+              apiKey:API_KEY,
+              theme:{
+                text:{title:"TeleSaude"},
+                colors:{primary:"#4b0c8f"}
+              }
+            }));
+            initialized=true;
+          }
           await Promise.resolve(window.MediquoWidget.open());
-          message("");
-        } catch (err) {
-          message("Não foi possível abrir o atendimento agora.");
-        } finally {
-          busy = false;
-          button.disabled = false;
-          label.textContent = "Acessar telemedicina";
+          feedback(""); // Nenhum aviso persistente após abrir/fechar a janela.
+        }catch(e){
+          initialized=false;
+          feedback("Não foi possível abrir o atendimento. Se o acesso não estiver liberado, a Médiquo deve validar a API Key e este domínio.");
+        }finally{
+          connecting=false;
+          btn.disabled=false;
+          label.textContent="Acessar telemedicina";
         }
       }
-      window.addEventListener("load", function () {
-        button.disabled = false;
-        if (apiKey !== "PREENCHER_API_KEY_STAGING") initialize();
-      });
-      window.addEventListener("unhandledrejection", function (event) {
-        var err = String(event.reason && (event.reason.message || event.reason) || "");
-        if (/Not valid API Key|invalid api.?key|unauthori[sz]ed/i.test(err)) {
-          message("A Médiquo precisa validar a API Key e o domínio de homologação.");
+
+      window.addEventListener("unhandledrejection",function(event){
+        if(!attempted)return;
+        const message=String(event.reason&&(event.reason.message||event.reason)||"");
+        if(/Not valid API Key|invalid api.?key|unauthori[sz]ed|invalid credential/i.test(message)){
+          feedback("A Médiquo recusou a API Key. É necessário confirmar a chave e a autorização do domínio www.promovie.tv.br.");
+        }else if(/CORS|Failed to fetch|NetworkError|ERR_FAILED|Load failed/i.test(message)){
+          feedback("Não foi possível conectar aos serviços de telemedicina.");
         }
       });
-      button.addEventListener("click", openCare);
+
+      btn.disabled=false;
+      btn.addEventListener("click",openCare);
     })();
   </script>
 </body>
