@@ -2906,6 +2906,11 @@ html.pv-ver-preco #contato .ctaBox .quote .pvOfertaPreco{display:block!important
 if(new URLSearchParams(window.location.search).has('preco')){
  document.documentElement.classList.add('pv-ver-preco');
 }
+document.addEventListener('DOMContentLoaded', function(){
+ var showPrice = new URLSearchParams(window.location.search).has('preco');
+ document.querySelectorAll('.pvOfertaSaibaMais').forEach(function(el){el.style.setProperty('display',showPrice?'none':'block','important');});
+ document.querySelectorAll('.pvOfertaPreco').forEach(function(el){el.style.setProperty('display',showPrice?'block':'none','important');});
+});
 </script>
 </head>
 <body>
@@ -2989,7 +2994,7 @@ if(new URLSearchParams(window.location.search).has('preco')){
 <div class="wrap">
 <div class="ctaBox reveal">
 <div class="cgContactCopy"><h2 class="cgSectionTitle">Conecta Gestão</h2><p>Descubra ferramentas para se engajar com equipes e instituições por meio da comunicação, da liderança e da promoção da saúde.</p></div>
-<div class="quote"><a class="cgPrice pvOfertaSaibaMais" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20Conecta%20Gest%C3%A3o%20PromoVie%20e%20conversar%20sobre%20a%20aplica%C3%A7%C3%A3o%20das%20ferramentas." aria-label="Saiba mais sobre Conecta Gestão PromoVie pelo WhatsApp">Saiba Mais</a><strong class="cgPrice pvOfertaPreco">R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20Conecta%20Gest%C3%A3o%20PromoVie%20e%20conversar%20sobre%20a%20aplica%C3%A7%C3%A3o%20das%20ferramentas.">WhatsApp</a></div>
+<div class="quote"><a class="cgPrice pvOfertaSaibaMais" style="display:block!important" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20Conecta%20Gest%C3%A3o%20PromoVie%20e%20conversar%20sobre%20a%20aplica%C3%A7%C3%A3o%20das%20ferramentas." aria-label="Saiba mais sobre Conecta Gestão PromoVie pelo WhatsApp">Saiba Mais</a><strong class="cgPrice pvOfertaPreco" style="display:none!important">R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20Conecta%20Gest%C3%A3o%20PromoVie%20e%20conversar%20sobre%20a%20aplica%C3%A7%C3%A3o%20das%20ferramentas.">WhatsApp</a></div>
 </div>
 <p class="formatNote noteEnd"> O Conecta Gestão acontece prioritariamente de forma remota, com atendimentos on-line ao vivo. Se houver necessidade de alguma etapa presencial, essa possibilidade pode ser avaliada em conjunto.</p>
 </div>
