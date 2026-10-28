@@ -14,14 +14,17 @@ const base=(env.MEDIQUO_BASE_URL||"").trim().replace(/\/+$/,"");
 const plan=(env.MEDIQUO_TEST_PLAN||"").trim();
 const allowed=new Set((env.ALLOWED_ORIGINS||"").split(",").map(x=>x.trim()).filter(Boolean));
 
-if(!apiKey||!secret||password.length<16||!patientCode||!allowed.size||!base){
-  console.error("Configuração incompleta. Verifique as variáveis de ambiente privadas.");
-  process.exit(1);
+// Permite publicar uma prévia segura e GRATUITA mesmo antes da Médiquo
+// confirmar a URL e as credenciais de homologação. Nenhum token é emitido
+// enquanto a configuração privada não estiver completa.
+const configured=Boolean(apiKey&&secret&&password.length>=16&&patientCode&&allowed.size&&base);
+if(!configured){
+  console.warn("Aguardando configuração privada do ambiente de homologação.");
 }
 if(!Number.isInteger(PORT)||PORT<1||PORT>65535){
   console.error("PORT inválida.");process.exit(1);
 }
-if(!base.startsWith("https://") && !(env.NODE_ENV!=="production" && /^http:\/\/(127\.0\.0\.1|localhost):\d+/.test(base))){
+if(base && !base.startsWith("https://") && !(env.NODE_ENV!=="production" && /^http:\/\/(127\.0\.0\.1|localhost):\d+/.test(base))){
   console.error("A URL da API Médiquo deve usar HTTPS (exceto testes locais).");
   process.exit(1);
 }
@@ -100,13 +103,15 @@ const server=http.createServer(async(req,res)=>{
   if(req.method==="OPTIONS"){res.writeHead(204);res.end();return;}
   const route=(req.url||"").split("?")[0];
   if(req.method==="GET"&&route==="/api/mediquo/health"){
-    return reply(res,200,{status:"ok",mode:"homologacao-restrita"});
+    return reply(res,200,{status:configured?"ok":"aguardando-configuracao",mode:"homologacao-restrita"});
   }
   if(req.method==="GET"&&route==="/api/mediquo/config"){
     // Apenas API Key pública. Nenhuma Secret Key sai deste servidor.
+    if(!configured)return reply(res,503,{error:"Ambiente de testes ainda não configurado."});
     return reply(res,200,{apiKey});
   }
   if(req.method==="POST"&&route==="/api/mediquo/token"){
+    if(!configured)return reply(res,503,{error:"Ambiente de testes ainda não configurado."});
     const ip=req.socket.remoteAddress||"unknown";
     if(limited(ip))return reply(res,429,{error:"Limite de tentativas. Tente mais tarde."});
     try{
