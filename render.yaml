@@ -6,6 +6,7 @@ services:
     name: promovie-mediquo-homologacao
     runtime: node
     plan: free
+    autoDeployTrigger: off
     rootDir: app-teste-novo-2-backend
     buildCommand: npm install --omit=dev
     startCommand: npm start
