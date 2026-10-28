@@ -100,3 +100,40 @@ async function runTest(){
   }
 }
 test("Backend e frontend de homologação: segurança e emissão simulada de sessão",runTest);
+
+
+test("Servidor sem credenciais: prévia segura, sem emissão de token",async()=>{
+  const port=await freePort();
+  const child=spawn(process.execPath,[join(dir,"server.mjs")],{
+    env:{
+      PORT:String(port),
+      NODE_ENV:"production",
+      ALLOWED_ORIGINS:"https://www.promovie.tv.br",
+      MEDIQUO_TEST_PATIENT_CODE:"promovie-homologacao-001"
+    },
+    stdio:"ignore"
+  });
+  const base="http://127.0.0.1:"+port;
+  try{
+    let response=null;
+    for(let i=0;i<50;i++){
+      try{response=await fetch(base+"/api/mediquo/health");break;}catch{}
+      await sleep(100);
+    }
+    assert.ok(response && response.ok,"Prévia deve iniciar mesmo sem as chaves");
+    assert.equal((await response.json()).status,"aguardando-configuracao");
+    const headers={Origin:"https://www.promovie.tv.br"};
+    const config=await fetch(base+"/api/mediquo/config",{headers});
+    assert.equal(config.status,503);
+    assert.deepEqual(await config.json(),{error:"Ambiente de testes ainda não configurado."});
+    const token=await fetch(base+"/api/mediquo/token",{
+      method:"POST",
+      headers:{...headers,"Content-Type":"application/json"},
+      body:JSON.stringify({testPassword:"qualquer"})
+    });
+    assert.equal(token.status,503);
+    assert.equal((await token.json()).error,"Ambiente de testes ainda não configurado.");
+  }finally{
+    child.kill("SIGTERM");
+  }
+});
