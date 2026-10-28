@@ -2745,6 +2745,58 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 #contato .ctaBox .quote .pvOfertaPreco{display:none!important}
 html.pv-ver-preco #contato .ctaBox .quote .pvOfertaSaibaMais{display:none!important}
 html.pv-ver-preco #contato .ctaBox .quote .pvOfertaPreco{display:block!important}
+
+/* Alinhamento do bloco final da Experiência como no Conecta Gestão.
+   Mantém a identidade cromática própria (painel roxo/azul e botão branco). */
+#contato .ctaBox{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:28px!important;
+}
+#contato .ctaBox .quote{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+  min-width:205px!important;
+  max-width:280px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+}
+#contato .ctaBox .quote .pvOfertaSaibaMais{
+  margin:0!important;
+  text-align:center!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+#contato .ctaBox .quote .pvOfertaPreco{text-align:center!important}
+#contato .ctaBox .quote .btn{
+  display:inline-flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  width:auto!important;
+  min-width:205px!important;
+  min-height:52px!important;
+  padding:15px 23px!important;
+  border-radius:999px!important;
+  background:#fff!important;
+  color:var(--purple)!important;
+  -webkit-text-fill-color:var(--purple)!important;
+  text-align:center!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.15)!important;
+}
+#contato .ctaBox .quote .btn:hover{box-shadow:0 13px 31px rgba(0,0,0,.22)!important}
+@media(max-width:760px){
+  #contato .ctaBox{grid-template-columns:1fr!important;gap:20px!important}
+  #contato .ctaBox .quote{width:100%!important;max-width:none!important;min-width:0!important}
+  #contato .ctaBox .quote .btn{width:100%!important}
+}
 </style>
 <script>
 if(new URLSearchParams(window.location.search).has('preco')){
@@ -2835,7 +2887,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="wrap">
 <div class="ctaBox reveal">
 <div><h2>O próximo passo começa pela sua realidade.</h2><p>Gostaríamos de construir uma parceria com você, sua organização ou grupo. Juntos, podemos gerar mais valor e conexão para pessoas e organizações.</p></div>
-<div class="quote"><a class="pvOfertaSaibaMais" style="display:block!important" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie." aria-label="Saiba mais sobre Experiência Estratégica PromoVie pelo WhatsApp">Saiba Mais</a><strong class="pvOfertaPreco" style="display:none!important">R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie.">Solicitar pelo WhatsApp</a></div>
+<div class="quote"><a class="pvOfertaSaibaMais" style="display:block!important" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie." aria-label="Saiba mais sobre Experiência Estratégica PromoVie pelo WhatsApp">Saiba Mais</a><strong class="pvOfertaPreco" style="display:none!important">R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie.">WhatsApp</a></div>
 </div>
 <p class="formatNote noteEnd"> Esta experiência inicial acontece prioritariamente de forma remota, com atendimentos on-line ao vivo. Se houver necessidade de alguma etapa presencial, essa possibilidade pode ser avaliada em conjunto.</p>
 </div>
