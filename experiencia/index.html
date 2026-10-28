@@ -2727,6 +2727,30 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 }
 </style>
 <script src="/assets/js/promovie-navigation.js" defer></script>
+
+<!-- Ofertas PromoVie: apresentação pública sem preço e versão compartilhável pelo link /preco/ -->
+<style id="pv-variacoes-oferta">
+#contato .ctaBox .quote .pvOfertaSaibaMais{
+ display:block!important;
+ color:inherit;
+ text-decoration:none;
+ font-family:var(--font-display);
+ font-size:clamp(1.55rem,3.4vw,2.65rem)!important;
+ font-weight:800;
+ line-height:1.15;
+ white-space:nowrap;
+ margin-bottom:10px;
+}
+#contato .ctaBox .quote .pvOfertaSaibaMais:hover{text-decoration:underline}
+#contato .ctaBox .quote .pvOfertaPreco{display:none!important}
+html.pv-ver-preco #contato .ctaBox .quote .pvOfertaSaibaMais{display:none!important}
+html.pv-ver-preco #contato .ctaBox .quote .pvOfertaPreco{display:block!important}
+</style>
+<script>
+if(new URLSearchParams(window.location.search).has('preco')){
+ document.documentElement.classList.add('pv-ver-preco');
+}
+</script>
 </head>
 <body>
 <div class="page">
@@ -2806,7 +2830,7 @@ a.pvTwelveVisual:focus-visible .pvTwelveCentralPlay{opacity:1;transform:translat
 <div class="wrap">
 <div class="ctaBox reveal">
 <div><h2>O próximo passo começa pela sua realidade.</h2><p>Gostaríamos de construir uma parceria com você, sua organização ou grupo. Juntos, podemos gerar mais valor e conexão para pessoas e organizações.</p></div>
-<div class="quote"><strong>R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie.">Solicitar pelo WhatsApp</a></div>
+<div class="quote"><a class="pvOfertaSaibaMais" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie." aria-label="Saiba mais sobre Experiência Estratégica PromoVie pelo WhatsApp">Saiba Mais</a><strong class="pvOfertaPreco">R$ 333</strong><a class="btn" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Experi%C3%AAncia%20Estrat%C3%A9gica%20PromoVie.">Solicitar pelo WhatsApp</a></div>
 </div>
 <p class="formatNote noteEnd"> Esta experiência inicial acontece prioritariamente de forma remota, com atendimentos on-line ao vivo. Se houver necessidade de alguma etapa presencial, essa possibilidade pode ser avaliada em conjunto.</p>
 </div>
