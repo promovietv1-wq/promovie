@@ -1,3 +1,5 @@
+# Modelo ALTERNATIVO para Render Free: HIBERNA após 15 minutos. NÃO RECOMENDADO para acesso contínuo.
+# Prefira app-teste-novo-2-worker/LEIA-ME.md (Cloudflare Workers Free, sem hibernação por inatividade).
 # PromoVie | TeleSaúde — App Teste Novo 2
 # O Render cria um servidor Node.js de homologação no plano GRATUITO.
 # Não usar com pacientes reais. Nunca armazenar Secret Key ou senhas no GitHub.
