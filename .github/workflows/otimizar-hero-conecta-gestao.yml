@@ -49,13 +49,18 @@ jobs:
                   picture.save(target, 'WEBP', quality=83, method=6)
                   assert target.stat().st_size < original_bytes, 'Nao houve reducao'
                   print(f"WebP: {target.name} {picture.width}x{picture.height} {target.stat().st_size:,} bytes")
+                  if width == 960:
+                      fallback = base / 'hero-conecta-gestao-final-960.jpg'
+                      picture.save(fallback, 'JPEG', quality=82, optimize=True, progressive=True, subsampling=0)
+                      assert fallback.stat().st_size < original_bytes, 'Fallback sem reducao'
+                      print(f"JPEG fallback: {fallback.name} {fallback.stat().st_size:,} bytes")
           PY
 
       - name: Salvar versões leves no GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add conecta-gestao/hero-conecta-gestao-final-480.webp conecta-gestao/hero-conecta-gestao-final-960.webp
+          git add conecta-gestao/hero-conecta-gestao-final-480.webp conecta-gestao/hero-conecta-gestao-final-960.webp conecta-gestao/hero-conecta-gestao-final-960.jpg
           if git diff --cached --quiet; then
             echo "Imagens otimizadas já estão atualizadas"
           else
