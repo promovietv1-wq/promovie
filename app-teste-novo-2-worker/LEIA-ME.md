@@ -8,6 +8,26 @@ A página da PromoVie continua publicada normalmente no GitHub Pages:
 
 O Worker só executa as rotas do backend da **segunda opção** do kit de Pedro/Médiquo: solicitar uma API Key pública, criar/autenticar **um paciente fictício configurado no servidor** e devolver um token ao navegador.
 
+## Endereço próprio: backend.promovie.tv.br (gratuito)
+
+**Endereço escolhido:** `https://backend.promovie.tv.br`. Ele será um **subdomínio**, não uma pasta do GitHub Pages. O site institucional e o App Teste Novo 2 continuam normalmente hospedados no GitHub Pages.
+
+**Pré-requisito para ativar:** a zona DNS `promovie.tv.br` deve estar ativa na sua conta Cloudflare. No plano gratuito, o uso de domínio personalizado exige que os **nameservers** do domínio apontem para a Cloudflare. Antes de trocá-los no Registro.br ou no seu provedor, confira TODOS os registros atuais (A, AAAA, CNAME, MX, TXT, SPF, DKIM, DMARC) para não interromper o site, e-mails ou verificações.
+
+Depois que a zona estiver ativa e o Worker criado a partir do GitHub:
+
+1. No painel Cloudflare, abra **Workers & Pages → promovie-mediquo-teste-2 → Settings → Domains & Routes → Add → Custom Domain**.
+2. Informe `backend.promovie.tv.br`. A Cloudflare cria os registros DNS e o certificado HTTPS automaticamente.
+3. Confirme `https://backend.promovie.tv.br/api/mediquo/health`. Sem credenciais privadas, deve exibir `"aguardando-configuracao"`, como proteção.
+4. No GitHub, ajuste **somente** `const BACKEND_URL=""` no `app-teste-novo-2/index.html` para `const BACKEND_URL="https://backend.promovie.tv.br"`. Isso será feito **depois da publicação confirmada**, para não quebrar o aplicativo.
+5. Depois que o domínio personalizado estiver validado, você pode desativar a rota pública `workers.dev` nas configurações do Worker, se desejar.
+
+**Opção de configuração como código:** o arquivo `wrangler.jsonc` contém a linha `"routes": [{ "pattern": "backend.promovie.tv.br", "custom_domain": true }]` comentada. Ela também pode ser ativada depois que a zona Cloudflare estiver ativa. Nunca ativá-la antes: um deploy no GitHub pode falhar se a Cloudflare não reconhecer o domínio.
+
+**Segurança:** domínio próprio e HTTPS não substituem autenticação individual nem homologação. O Worker atual é exclusivo para teste com paciente fictício; use somente as credenciais de Staging confirmadas por Pedro.
+
+Referências: [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/), [Cloudflare DNS — Full setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/) e [GitHub integration](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/).
+
 ## 1. Publicação GRATUITA pela sua conta GitHub
 
 1. Acesse [Cloudflare Workers](https://dash.cloudflare.com/?to=/:account/workers-and-pages) e crie/entre na **conta gratuita**.
