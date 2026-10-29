@@ -1,0 +1,64 @@
+name: Otimizar imagem principal Conecta Gestao
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'conecta-gestao/hero-conecta-gestao-final.jpg'
+      - '.github/workflows/otimizar-hero-conecta-gestao.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  otimizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Baixar arquivos do site
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar otimizador
+        run: python -m pip install --disable-pip-version-check pillow==11.3.0
+
+      - name: Gerar imagens WebP responsivas sem alterar a foto original
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          base = Path('conecta-gestao')
+          source = base / 'hero-conecta-gestao-final.jpg'
+          assert source.exists(), "Foto original indisponivel"
+          original_bytes = source.stat().st_size
+          with Image.open(source) as img:
+              img.load()
+              print(f"Original: {img.width}x{img.height}, {original_bytes:,} bytes")
+              for width in (480, 960):
+                  picture = img.convert('RGB')
+                  picture.thumbnail((width, width), Image.Resampling.LANCZOS)
+                  target = base / f'hero-conecta-gestao-final-{width}.webp'
+                  picture.save(target, 'WEBP', quality=83, method=6)
+                  assert target.stat().st_size < original_bytes, 'Nao houve reducao'
+                  print(f"WebP: {target.name} {picture.width}x{picture.height} {target.stat().st_size:,} bytes")
+          PY
+
+      - name: Salvar versões leves no GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add conecta-gestao/hero-conecta-gestao-final-480.webp conecta-gestao/hero-conecta-gestao-final-960.webp
+          if git diff --cached --quiet; then
+            echo "Imagens otimizadas já estão atualizadas"
+          else
+            git commit -m "Otimizar foto principal Conecta Gestão em WebP responsivo"
+            git push origin HEAD:main
+          fi
