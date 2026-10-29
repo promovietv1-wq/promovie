@@ -3,6 +3,11 @@
   "name": "promovie-mediquo-teste-2",
   "main": "src/index.mjs",
   "compatibility_date": "2026-10-20",
+  // Domínio definitivo reservado: backend.promovie.tv.br
+  // Só ativar depois de cadastrar e ativar promovie.tv.br na zona DNS Cloudflare:
+  // "routes": [{ "pattern": "backend.promovie.tv.br", "custom_domain": true }],
+  // Enquanto o domínio não estiver ativo, manter a rota comentada para
+  // não interromper o deploy do Worker pelo GitHub.
   "workers_dev": true,
   "vars": {
     "ALLOWED_ORIGINS": "https://www.promovie.tv.br,https://promovie.tv.br",
