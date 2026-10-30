@@ -1,3 +1,4 @@
+import { handleV3 } from "./v3.mjs";
 // PromoVie TeleSaúde — backend Cloudflare Workers (homologação).
 // Alternativa à execução Node.js do kit Médiquo: não hiberna por inatividade.
 // NÃO é autenticação de beneficiários reais. Usa apenas um paciente fictício.
@@ -95,10 +96,14 @@ export default {
       "Access-Control-Allow-Origin": origin,
       "Vary": "Origin",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
+      "Access-Control-Allow-Headers": "Content-Type, Authorization"
     } : {};
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
+    }
+    // Nova integração SDK da Médiquo, isolada das rotas do teste anterior.
+    if (url.pathname.startsWith("/api/mediquo/v3/")) {
+      return handleV3(request, env, cors);
     }
     if (request.method === "GET" && url.pathname === "/api/mediquo/health") {
       return respond(200, {
