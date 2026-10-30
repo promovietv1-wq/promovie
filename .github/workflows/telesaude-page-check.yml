@@ -27,7 +27,7 @@ jobs:
           source=Path('app-teste-novo-2/index.html').read_text()
           js=re.findall(r'<script[^>]*>(.*?)</script>', page, flags=re.DOTALL|re.IGNORECASE)
           assert len(js)>=1, 'Deve haver pelo menos um bloco JavaScript'
-          Path('/tmp/telesaude.js').write_text('\\n;\\n'.join(js))
+          Path('/tmp/telesaude.js').write_text('\n;\n'.join(js))
           assert 'const V3="/api/mediquo/v3"' in page
           assert 'const BACKEND_URL="https://backend.promovie.tv.br"' in page
           assert 'id="test-cpf"' in page
