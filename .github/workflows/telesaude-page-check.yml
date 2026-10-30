@@ -1,0 +1,41 @@
+name: TeleSaude - validar pagina copiada
+on:
+  push:
+    paths:
+      - 'telesaude/index.html'
+      - '.github/workflows/telesaude-page-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validacao:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Extrair e validar JavaScript sem executa-lo
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          page=Path('telesaude/index.html').read_text()
+          source=Path('app-teste-novo-2/index.html').read_text()
+          js=re.findall(r'<script[^>]*>(.*?)</script>', page, flags=re.DOTALL|re.IGNORECASE)
+          assert len(js)==1, 'Deve haver um bloco JavaScript'
+          Path('/tmp/telesaude.js').write_text(js[0])
+          assert 'const V3="/api/mediquo/v3"' in page
+          assert 'const BACKEND_URL="https://backend.promovie.tv.br"' in page
+          assert 'id="test-cpf"' in page
+          assert 'homologacao-pronta' in page
+          assert 'MEDIQUO_V3_SECRET_KEY' not in page
+          assert 'type="password"' in page
+          assert 'phone-zoom-trigger' in page and 'class="hero-heart"' in page
+          assert page.count('class="chat-row"')==source.count('class="chat-row"')==8
+          print('Estrutura visual, integracao v3 e protecao de credenciais verificadas')
+          PY
+          node --check /tmp/telesaude.js
