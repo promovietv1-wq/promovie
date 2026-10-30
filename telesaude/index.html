@@ -800,9 +800,42 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   }
 
   button.addEventListener("click",startWidget);
-  passwordInput.addEventListener("keydown",function(event){
-    if(event.key==="Enter"){event.preventDefault();startWidget();}
+  cpfInput.addEventListener("input",function(){
+    let v=cpfInput.value.replace(/\D/g,"").slice(0,11);
+    v=v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2");
+    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+    cpfInput.value=v;
   });
+  for(const input of [cpfInput,passwordInput]){
+    input.addEventListener("keydown",function(event){
+      if(event.key==="Enter"){event.preventDefault();startWidget();}
+    });
+  }
+  async function checkEnvironment(){
+    button.disabled=true;
+    cpfInput.disabled=true;
+    passwordInput.disabled=true;
+    feedback("Verificando o ambiente de homologação...","info");
+    try{
+      const r=await fetch(BACKEND_URL+V3+"/health",{
+        cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
+      });
+      const body=await getJson(r);
+      ready=Boolean(r.ok&&body.status==="homologacao-pronta");
+      if(ready){
+        button.disabled=false;
+        cpfInput.disabled=false;
+        passwordInput.disabled=false;
+        feedback("Ambiente de homologação disponível para paciente fictício.","info");
+      }else{
+        feedback("Integração em configuração. O atendimento será habilitado após a homologação com a Médiquo.","info");
+      }
+    }catch(e){
+      ready=false;
+      feedback("O servidor de homologação não está acessível. O atendimento permanece indisponível.","error");
+    }
+  }
+  checkEnvironment();
   const zoomTrigger=document.getElementById("phone-zoom-trigger");
   const main=document.querySelector("main.main");
   const installBlock=document.querySelector(".install-block");
