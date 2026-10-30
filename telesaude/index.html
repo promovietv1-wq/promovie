@@ -447,6 +447,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 #sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#44516b;background:#f4f8fe;border:1px solid #dce8f4;border-radius:10px;text-align:center}
 #sdk-entry-status[data-kind="error"]:not([hidden]){color:#8a3440;background:#fff2f2;border-color:#eccbd0}
 #sdk-entry-status[hidden]{display:none}
+.patient-login #test-cpf{margin-bottom:12px}
 
 /* App Teste Novo 2: autenticação de homologação, integrada ao visual existente. */
 .patient-login{margin:0 auto 14px;text-align:left;padding:17px 17px 13px;border:1px solid #e4dff3;border-radius:18px;background:linear-gradient(150deg,#fff,#f8f7fe);box-shadow:0 8px 25px rgba(66,44,121,.06)}
@@ -648,12 +649,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           <span>Acesso identificado</span>
           <small>Homologação</small>
         </div>
+        <label class="patient-login-label" for="test-cpf">CPF do paciente fictício de homologação</label>
+        <input id="test-cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" disabled />
         <label class="patient-login-label" for="test-access-password">Senha da conta de teste</label>
-        <input id="test-access-password" type="password" autocomplete="off"
+        <input id="test-access-password" type="password" autocomplete="off" disabled
                spellcheck="false" placeholder="Digite a senha de homologação" />
-        <p class="patient-login-help">Acesso reservado para testar a autenticação. Não informe CPF ou dados de pacientes reais.</p>
+        <p class="patient-login-help">Acesso reservado à homologação. Não informe dados de beneficiários reais.</p>
       </div>
-      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina com conta">
+      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina com conta" disabled>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
         <span>Acessar telemedicina</span>
       </button>
