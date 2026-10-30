@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="TeleSaúde PromoVie: cuidado, atendimento on-line e acesso individual protegido.">
+<link rel="canonical" href="https://www.promovie.tv.br/telesaude/">
+<link rel="icon" type="image/png" href="/app/icons/favicon-48.png">
+<link rel="apple-touch-icon" href="/app/icons/icon-192.png">
+<title>TeleSaúde | PromoVie</title>
+<style>
+:root{--ink:#1c283c;--muted:#617086;--line:#e2e8f1;--violet:#5425a5;--purple:#4b0c8f;--blue:#317bd0;--grad:linear-gradient(115deg,#4b0c8f 0%,#7334d8 55%,#317bd0 100%)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(160deg,#fbfaff 0%,#f0f5fc 55%,#f8faff 100%);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}
+a{color:var(--violet)}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #8e7cdb;outline-offset:3px}
+.top{background:#fff;border-bottom:1px solid var(--line)}.topin{max-width:1130px;padding:14px 24px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-weight:750;font-size:19px;letter-spacing:-.4px}.brand img{width:46px;height:46px;object-fit:contain}.brand small{display:block;font-weight:500;letter-spacing:0;color:var(--muted);font-size:11px}.topnav{display:flex;gap:20px;align-items:center;font-size:14px}.topnav a{text-decoration:none;color:#46516c;font-weight:600}.topnav a:hover{text-decoration:underline}
+main{max-width:1130px;margin:auto;padding:46px 24px 72px}.lead{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,430px);gap:36px;align-items:start}.eyebrow{color:#663ab4;letter-spacing:.13em;font-size:12px;text-transform:uppercase;font-weight:800}.title{font-size:clamp(40px,6.4vw,72px);line-height:1.05;letter-spacing:-2.7px;margin:12px 0 14px;background:var(--grad);background-clip:text;-webkit-background-clip:text;color:transparent}.lead p{color:#596980;max-width:620px;margin:0 0 16px;font-size:17px}.statement{font-size:14px!important;color:#566983!important;line-height:1.65}.statement strong{color:#2d3850}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}.chip{padding:9px 12px;border:1px solid #d8e2ef;border-radius:999px;background:#fff;font-size:12px;font-weight:700;color:#525b76}
+.access{background:#fff;border:1px solid #e5e9f3;border-radius:23px;padding:27px;box-shadow:0 18px 55px rgba(34,36,95,.09)}.access h2{font-size:23px;line-height:1.25;margin:0 0 9px}.intro{font-size:14px!important;color:#69788f!important;margin-bottom:16px!important}.status{border:1px solid #e2e8f2;background:#f7f9fc;border-radius:12px;padding:11px 13px;font-size:13px;color:#4c5870;margin:16px 0}.status[data-state=error]{background:#fff5f4;border-color:#eed6d5;color:#8d3030}.status[data-state=ready]{background:#f1f9f4;border-color:#c9e4d3;color:#235f45}.access label{font-weight:700;display:block;font-size:13px;margin:15px 0 6px}.access input{width:100%;border:1px solid #cfd9e7;border-radius:11px;padding:13px 14px;font:500 16px/1.3 Inter,system-ui,Arial,sans-serif;background:#fff;color:var(--ink)}.access input::placeholder{color:#8e9aae}.access input:disabled{background:#f5f6fa;color:#8e99a9}.action{border:none;border-radius:12px;background:var(--grad);color:#fff;width:100%;padding:14px;font-size:15px;font-weight:800;cursor:pointer;margin-top:20px;transition:filter .15s}.action:not(:disabled):hover{filter:brightness(1.08)}.action:disabled{opacity:.5;cursor:not-allowed}.help{font-size:12px!important;line-height:1.55;margin:13px 0 0!important;color:#6a778c!important}
+.section{margin-top:58px}.section h2{font-size:27px;letter-spacing:-.7px;margin:0}.section p{margin:6px 0 22px;color:var(--muted);font-size:14px}.offergrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.offer{background:#fff;border:1px solid #e2e8f1;border-radius:17px;padding:18px 17px;min-height:118px}.offer .sphere{display:inline-flex;justify-content:center;align-items:center;border-radius:50%;width:31px;height:31px;margin-bottom:11px;background:#f5efff;color:#642bb7;font-size:16px;font-weight:700}.offer strong{font-size:14px;display:block;line-height:1.3}.offer span{display:block;font-size:12px;color:#788398;margin-top:4px}.support .sphere{background:#6033ac;color:#fff}
+.footer{border-top:1px solid var(--line);color:#748196;text-align:center;font-size:12px;padding:22px 16px;background:#fff}
+@media(max-width:850px){.lead{grid-template-columns:1fr;gap:24px}.lead p{max-width:680px}.offergrid{grid-template-columns:repeat(2,minmax(0,1fr))}.access{max-width:640px}}@media(max-width:520px){main{padding:30px 17px 54px}.topin{padding:11px 17px}.brand{font-size:16px}.brand img{width:40px;height:40px}.topnav{gap:10px;font-size:12px}.title{letter-spacing:-1.8px}.lead p{font-size:15px}.offergrid{gap:10px}.offer{padding:14px;min-height:122px}.access{padding:21px}.section{margin-top:39px}.section h2{font-size:23px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin">
+  <a class="brand" href="/app/" aria-label="PromoVie, página do aplicativo"><img src="/app/assets/coracao-promovie-com-logo.webp" alt="" width="46" height="46"><span>PromoVie<small>Soluções Organizacionais Integradas</small></span></a>
+  <nav class="topnav" aria-label="Navegação"><a href="/app/">Aplicativo</a><a href="/">Site principal</a></nav>
+</div></header>
+<main>
+  <div class="lead">
+    <section aria-labelledby="page-title">
+      <div class="eyebrow">PromoVie · cuidado e conexão</div>
+      <h1 id="page-title" class="title">TeleSaúde</h1>
+      <p>Acesso a telemedicina e orientação profissional, com atenção à privacidade e à continuidade do cuidado.</p>
+      <p class="statement"><strong>Um único ambiente para o primeiro atendimento e os encaminhamentos necessários.</strong> A disponibilidade de cada serviço depende do plano de cada beneficiário.</p>
+      <div class="chips" aria-label="Características"><span class="chip">Identificação individual</span><span class="chip">Atendimento on-line</span><span class="chip">Acesso pelo navegador</span></div>
+    </section>
+    <section class="access" aria-labelledby="access-title">
+      <h2 id="access-title">Acessar atendimento</h2>
+      <p class="intro">Estamos preparando a integração com a Médiquo. Por enquanto, o acesso está restrito a um paciente fictício de homologação.</p>
+      <div id="status" class="status" role="status" aria-live="polite">Verificando a disponibilidade do ambiente de testes...</div>
+      <form id="login" autocomplete="off">
+        <label for="cpf">CPF do paciente de teste</label>
+        <input id="cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" aria-describedby="privacy" disabled required>
+        <label for="password">Senha privada de homologação</label>
+        <input id="password" name="testPassword" type="password" autocomplete="off" maxlength="256" placeholder="Senha de teste" disabled required>
+        <button class="action" id="submit" type="submit" disabled>Acessar TeleSaúde</button>
+      </form>
+      <p id="privacy" class="help">O CPF não é uma senha. O acesso definitivo dos beneficiários exigirá autenticação individual segura antes da liberação do histórico.</p>
+    </section>
+  </div>
+  <section class="section" aria-labelledby="consultas">
+    <h2 id="consultas">Telemedicina e atendimento</h2>
+    <p>Atendimentos previstos na experiência PromoVie, sujeitos à habilitação dos serviços do plano.</p>
+    <div class="offergrid">
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Clínico geral</strong><span>Atendimento on-line 24h</span></div>
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Pediatra</strong><span>Consulta on-line</span></div>
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Médico da família</strong><span>Consulta on-line</span></div>
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Psicologia</strong><span>Atendimento psicológico</span></div>
+    </div>
+  </section>
+  <section class="section support" aria-labelledby="acolhimento">
+    <h2 id="acolhimento">Acolhimento e autocuidado</h2>
+    <p>Informações e orientação para o dia a dia. Os serviços não substituem consultas médicas quando necessárias.</p>
+    <div class="offergrid">
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Nutrição</strong><span>Orientação e informação</span></div>
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Condicionamento físico</strong><span>Orientação e informação</span></div>
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Saúde da mulher</strong><span>Informação e acolhimento</span></div>
+      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Cuidados pet</strong><span>Informações gerais</span></div>
+    </div>
+  </section>
+</main>
+<footer class="footer">PromoVie · Soluções Organizacionais Integradas · Ambiente em homologação</footer>
+<script>
+(function(){
+  'use strict';
+  const BASE='https://backend.promovie.tv.br';
+  const ROUTE='/api/mediquo/v3';
+  const $=id=>document.getElementById(id);
+  const input=$('cpf'),pass=$('password'),button=$('submit'),status=$('status');
+  const setStatus=(msg,state='')=>{status.textContent=msg;status.dataset.state=state;};
+  async function request(path,opts={}){
+    const response=await fetch(BASE+ROUTE+path,{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',...opts});
+    let body={};try{body=await response.json();}catch{}
+    return {response,body};
+  }
+  input.addEventListener('input',()=>{
+    let v=input.value.replace(/\D/g,'').slice(0,11);
+    v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+    input.value=v;
+  });
+  let sdkPromise;
+  function loadSdk(){
+    if(window.MediquoWidget)return Promise.resolve();
+    if(sdkPromise)return sdkPromise;
+    sdkPromise=new Promise((resolve,reject)=>{
+      const s=document.createElement('script');s.src='https://widget.mediquo.com/js/1.0.0/mediquo.js';s.async=true;
+      s.onload=()=>window.MediquoWidget?resolve():reject(new Error('Biblioteca de atendimento indisponível.'));
+      s.onerror=()=>reject(new Error('Não foi possível carregar o módulo de atendimento.'));
+      document.head.appendChild(s);
+    });
+    return sdkPromise;
+  }
+  async function check(){
+    try{
+      const {response,body}=await request('/health');
+      if(response.ok && body.status==='homologacao-pronta'){
+        input.disabled=false;pass.disabled=false;button.disabled=false;
+        setStatus('Ambiente de homologação disponível para paciente de teste.','ready');
+      }else setStatus('Integração em configuração. O atendimento será habilitado após os testes.');
+    }catch{setStatus('Não foi possível consultar o servidor. O acesso permanece indisponível.','error');}
+  }
+  $('login').addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(button.disabled)return;
+    const cpf=input.value.replace(/\D/g,'');
+    if(cpf.length!==11){setStatus('Digite um CPF com 11 dígitos.','error');return;}
+    const password=pass.value;pass.value='';button.disabled=true;setStatus('Validando o acesso de homologação...');
+    try{
+      const c=await request('/config');
+      if(!c.response.ok||!c.body.apiKey)throw Error('Integração ainda não configurada.');
+      const r=await request('/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({document:cpf,testPassword:password})});
+      if(!r.response.ok||!r.body.access_token){
+        if(r.response.status===401||r.response.status===403)throw Error('Acesso de teste não autorizado.');
+        if(r.response.status===429)throw Error('Muitas tentativas. Tente novamente mais tarde.');
+        throw Error('Atendimento de teste ainda indisponível.');
+      }
+      await loadSdk();
+      window.MediquoWidget.init({apiKey:c.body.apiKey,accessToken:r.body.access_token,adapter:'web',environment:'sandbox',show:'always',theme:{locale:'pt',text:{title:'TeleSaúde'},colors:{primary:'#5425a5'}}});
+      window.MediquoWidget.open();
+      input.value='';
+      setStatus('Atendimento de homologação aberto.','ready');
+    }catch(err){setStatus(err.message||'Não foi possível abrir o atendimento.','error');}
+    finally{button.disabled=false;}
+  });
+  check();
+})();
+</script>
+</body>
+</html>
