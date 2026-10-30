@@ -81,6 +81,8 @@ async function vendor(env, path, method, data) {
     signal: AbortSignal.timeout(18000)
   });
   if (!response.ok) return {ok:false,status:response.status};
+  // A API pode concluir PUT /patients sem corpo JSON (204/202).
+  if (method === 'PUT') return {ok:true};
   try { return {ok:true,body:await response.json()}; }
   catch { return {ok:false,status:502}; }
 }
