@@ -729,12 +729,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       feedback("O servidor de autenticação deve usar endereço HTTPS.","error");
       return;
     }
-    const testPassword=passwordInput.value;
-    if(!testPassword){
-      passwordInput.focus();
-      feedback("Informe a senha de homologação para identificar o paciente de teste.","error");
-      return;
-    }
     busy=true;
     button.disabled=true;
     label.textContent="Conectando...";
@@ -745,6 +739,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       if(!configResp.ok)throw new Error("Não foi possível consultar as configurações do servidor.");
       const config=await getJson(configResp);
       if(!config.apiKey)throw new Error("A API Key não está configurada no servidor.");
+      const testPassword=passwordInput.value;
+      if(!testPassword){
+        passwordInput.focus();
+        throw new Error("Informe a senha de homologação privada para o teste.");
+      }
       const tokenResp=await fetch(BACKEND_URL+"/api/mediquo/token",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
