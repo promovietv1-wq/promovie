@@ -90,7 +90,8 @@ async function runTest(){
     assert.equal(records[1].body.code,"paciente-ficticio-001");
     const front=await readFile(join(dir,"../app-teste-novo-2/index.html"),"utf8");
     assert.match(front,/accessToken:token.access_token/);
-    assert.match(front,/const BACKEND_URL=""/);
+    // O front de homologação usa o domínio próprio do Worker já publicado.
+    assert.match(front,/const BACKEND_URL="https:\/\/backend\.promovie\.tv\.br";/);
     assert.match(front,/title:"TeleSaúde"/);
     assert.doesNotMatch(front,/MEDIQUO_SECRET_KEY\s*=\s*["']/);
     assert.match(front,/Acessar telemedicina/);
