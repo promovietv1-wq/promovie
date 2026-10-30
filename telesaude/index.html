@@ -2,141 +2,838 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){
+  "use strict";
+  // Exibe o endereço institucional sem parâmetros de rastreamento na barra do navegador.
+  try{
+    const url=new URL(window.location.href);
+    let changed=false;
+    for(const key of Array.from(url.searchParams.keys())){
+      if(/^utm_/i.test(key)||["v","gclid","fbclid","msclkid"].includes(key.toLowerCase())){
+        url.searchParams.delete(key);
+        changed=true;
+      }
+    }
+    if(changed){
+      window.history.replaceState(window.history.state,"",url.pathname+url.search+url.hash);
+    }
+  }catch(error){}
+})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="TeleSaúde PromoVie: cuidado, atendimento on-line e acesso individual protegido.">
-<link rel="canonical" href="https://www.promovie.tv.br/telesaude/">
-<link rel="icon" type="image/png" href="/app/icons/favicon-48.png">
-<link rel="apple-touch-icon" href="/app/icons/icon-192.png">
-<title>TeleSaúde | PromoVie</title>
+<meta name="description" content="Laboratório PromoVie para testar a integração do Widget Web Médiquo em ambiente de homologação.">
+<link rel="canonical" href="https://www.promovie.tv.br/app-teste-novo-2/">
+<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+<link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
+<link rel="preload" href="/preview-promovie-logo.webp" as="image" type="image/webp">
+<link rel="preload" href="/app/assets/coracao-promovie-com-logo.webp" as="image" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<title>PromoVie | TeleSaúde</title>
 <style>
-:root{--ink:#1c283c;--muted:#617086;--line:#e2e8f1;--violet:#5425a5;--purple:#4b0c8f;--blue:#317bd0;--grad:linear-gradient(115deg,#4b0c8f 0%,#7334d8 55%,#317bd0 100%)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(160deg,#fbfaff 0%,#f0f5fc 55%,#f8faff 100%);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}
-a{color:var(--violet)}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #8e7cdb;outline-offset:3px}
-.top{background:#fff;border-bottom:1px solid var(--line)}.topin{max-width:1130px;padding:14px 24px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-weight:750;font-size:19px;letter-spacing:-.4px}.brand img{width:46px;height:46px;object-fit:contain}.brand small{display:block;font-weight:500;letter-spacing:0;color:var(--muted);font-size:11px}.topnav{display:flex;gap:20px;align-items:center;font-size:14px}.topnav a{text-decoration:none;color:#46516c;font-weight:600}.topnav a:hover{text-decoration:underline}
-main{max-width:1130px;margin:auto;padding:46px 24px 72px}.lead{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,430px);gap:36px;align-items:start}.eyebrow{color:#663ab4;letter-spacing:.13em;font-size:12px;text-transform:uppercase;font-weight:800}.title{font-size:clamp(40px,6.4vw,72px);line-height:1.05;letter-spacing:-2.7px;margin:12px 0 14px;background:var(--grad);background-clip:text;-webkit-background-clip:text;color:transparent}.lead p{color:#596980;max-width:620px;margin:0 0 16px;font-size:17px}.statement{font-size:14px!important;color:#566983!important;line-height:1.65}.statement strong{color:#2d3850}
-.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}.chip{padding:9px 12px;border:1px solid #d8e2ef;border-radius:999px;background:#fff;font-size:12px;font-weight:700;color:#525b76}
-.access{background:#fff;border:1px solid #e5e9f3;border-radius:23px;padding:27px;box-shadow:0 18px 55px rgba(34,36,95,.09)}.access h2{font-size:23px;line-height:1.25;margin:0 0 9px}.intro{font-size:14px!important;color:#69788f!important;margin-bottom:16px!important}.status{border:1px solid #e2e8f2;background:#f7f9fc;border-radius:12px;padding:11px 13px;font-size:13px;color:#4c5870;margin:16px 0}.status[data-state=error]{background:#fff5f4;border-color:#eed6d5;color:#8d3030}.status[data-state=ready]{background:#f1f9f4;border-color:#c9e4d3;color:#235f45}.access label{font-weight:700;display:block;font-size:13px;margin:15px 0 6px}.access input{width:100%;border:1px solid #cfd9e7;border-radius:11px;padding:13px 14px;font:500 16px/1.3 Inter,system-ui,Arial,sans-serif;background:#fff;color:var(--ink)}.access input::placeholder{color:#8e9aae}.access input:disabled{background:#f5f6fa;color:#8e99a9}.action{border:none;border-radius:12px;background:var(--grad);color:#fff;width:100%;padding:14px;font-size:15px;font-weight:800;cursor:pointer;margin-top:20px;transition:filter .15s}.action:not(:disabled):hover{filter:brightness(1.08)}.action:disabled{opacity:.5;cursor:not-allowed}.help{font-size:12px!important;line-height:1.55;margin:13px 0 0!important;color:#6a778c!important}
-.section{margin-top:58px}.section h2{font-size:27px;letter-spacing:-.7px;margin:0}.section p{margin:6px 0 22px;color:var(--muted);font-size:14px}.offergrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.offer{background:#fff;border:1px solid #e2e8f1;border-radius:17px;padding:18px 17px;min-height:118px}.offer .sphere{display:inline-flex;justify-content:center;align-items:center;border-radius:50%;width:31px;height:31px;margin-bottom:11px;background:#f5efff;color:#642bb7;font-size:16px;font-weight:700}.offer strong{font-size:14px;display:block;line-height:1.3}.offer span{display:block;font-size:12px;color:#788398;margin-top:4px}.support .sphere{background:#6033ac;color:#fff}
-.footer{border-top:1px solid var(--line);color:#748196;text-align:center;font-size:12px;padding:22px 16px;background:#fff}
-@media(max-width:850px){.lead{grid-template-columns:1fr;gap:24px}.lead p{max-width:680px}.offergrid{grid-template-columns:repeat(2,minmax(0,1fr))}.access{max-width:640px}}@media(max-width:520px){main{padding:30px 17px 54px}.topin{padding:11px 17px}.brand{font-size:16px}.brand img{width:40px;height:40px}.topnav{gap:10px;font-size:12px}.title{letter-spacing:-1.8px}.lead p{font-size:15px}.offergrid{gap:10px}.offer{padding:14px;min-height:122px}.access{padding:21px}.section{margin-top:39px}.section h2{font-size:23px}}
+:root{
+  --ink:#111827;--muted:#667085;--line:#e7edf6;
+  --purple:#4b0c8f;--violet:#7334d8;--cyan:#00bde8;--pink:#e6008d;
+  --grad:linear-gradient(112deg,#4b0c8f 0%,#7334d8 55%,#00bde8 100%);
+  --font-body:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --font-display:Sora,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+*{box-sizing:border-box}
+html{min-width:320px;scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);font:400 16px/1.55 var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(ellipse 38% 42% at 82% 48%,rgba(115,52,216,.065),transparent 85%),
+    radial-gradient(ellipse 30% 35% at 14% 86%,rgba(0,189,232,.034),transparent 85%),
+    #fff
+}
+img,svg{display:block}
+img{max-width:100%}
+svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}
+.container{width:min(1160px,calc(100% - 66px));margin:0 auto}
+.site-header{
+  height:80px;border-bottom:1px solid rgba(219,222,236,.65);
+  background:rgba(255,255,255,.94);position:relative;z-index:3
+}
+.site-header .container{height:100%;display:flex;align-items:center}
+.site-identity{display:flex;align-items:center;gap:15px;min-width:0}
+.site-brand{display:flex;align-items:center;min-width:0}
+.site-brand img{width:171px;max-height:63px;height:auto;object-fit:contain;object-position:left center}
+.site-globe{
+  display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:50%;
+  border:1px solid rgba(115,52,216,.26);background:#fff;color:var(--purple);text-decoration:none;
+  transition:background-color .22s ease,border-color .22s ease,box-shadow .22s ease,color .22s ease
+}
+.site-globe svg{width:18px;height:18px;stroke-width:1.6}
+.site-globe:hover,.site-globe:focus-visible{
+  background:#f5f2fb;border-color:#baa6db;
+  box-shadow:0 3px 12px rgba(75,12,143,.10);color:#6331ae
+}
+.main{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.96fr);
+  align-items:center;gap:clamp(16px,3.9vw,58px);
+  width:min(1160px,calc(100% - 66px));min-height:calc(100svh - 80px);
+  padding-top:14px;padding-bottom:19px
+}
+.copy{align-self:center;position:relative;z-index:1;max-width:590px;padding-bottom:12px}
+.heart-stage{
+  width:272px;height:251px;display:grid;place-items:center;
+  position:relative;isolation:isolate;margin:0 auto 9px
+}
+.heart-stage::before{
+  content:"";position:absolute;inset:10% 5%;border-radius:50%;z-index:-2;
+  background:radial-gradient(circle,rgba(255,255,255,.94),rgba(219,232,243,.42) 47%,transparent 72%);
+  filter:blur(9px)
+}
+.heart-stage::after{
+  content:"";position:absolute;inset:12%;border-radius:50%;z-index:-1;
+  border:1px solid rgba(115,52,216,.09);
+  box-shadow:0 0 0 22px rgba(115,52,216,.017)
+}
+.hero-heart{
+  width:241px;height:241px;object-fit:contain;position:relative;z-index:1;
+  filter:drop-shadow(0 12px 17px rgba(76,22,126,.12));
+  transition:filter .25s ease;
+  animation:heart-breathe 2.6s ease-in-out infinite;
+  transform-origin:center;will-change:transform
+}
+@keyframes heart-breathe{
+  0%,100%{transform:scale(1)}
+  20%{transform:scale(1.065)}
+  33%{transform:scale(1.025)}
+  48%{transform:scale(1.09)}
+  65%{transform:scale(1)}
+}
+.copy h1{
+  font:700 clamp(43px,4.7vw,66px)/1.09 var(--font-display);
+  letter-spacing:-.064em;margin:0 0 15px;max-width:600px;
+  background:var(--grad);background-clip:text;-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  transition:filter .25s ease
+}
+.copy h1:hover{filter:brightness(1.075)}
+.heart-stage:hover .hero-heart{filter:drop-shadow(0 15px 20px rgba(76,22,126,.17))}
+.copy h1 .gradient{display:block;padding-bottom:5px;-webkit-text-fill-color:inherit;color:inherit}
+.lead{margin:0;font-size:16px;line-height:1.75;color:#5f6b80;max-width:470px}
+.right-col{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;min-width:0;padding:8px 0 0
+}
+.phone-stage{
+  width:100%;min-height:475px;display:flex;justify-content:center;align-items:center;
+  padding:10px 22px 7px;isolation:isolate;position:relative;overflow:visible
+}
+.phone-stage::before{
+  content:"";position:absolute;inset:3% 4%;border-radius:50%;z-index:-2;
+  background:
+    radial-gradient(circle at 43% 48%,rgba(115,52,216,.075),rgba(115,52,216,.025) 40%,transparent 69%);
+  filter:blur(12px)
+}
+.phone-stage::after{
+  content:"";position:absolute;width:455px;max-width:94%;height:455px;border-radius:50%;
+  border:1px solid rgba(115,52,216,.075);z-index:-1;
+  box-shadow:0 0 0 34px rgba(115,52,216,.018)
+}
+.phone{
+  width:239px;height:448px;max-width:100%;flex:none;position:relative;overflow:hidden;
+  border:7px solid #272034;border-radius:43px;background:#fff;
+  box-shadow:0 31px 64px rgba(30,16,55,.21),8px 9px 21px rgba(25,21,52,.11),inset 0 0 0 1px #716784;
+  transform:rotate(-6deg);transform-origin:center;
+  transition:box-shadow .28s ease
+}
+.phone:hover{
+  box-shadow:
+    0 33px 67px rgba(30,16,55,.23),
+    0 8px 22px rgba(25,21,52,.11),
+    0 0 0 1px rgba(115,52,216,.16)
+}
+.phone::before{
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:82px;height:17px;border-radius:0 0 13px 13px;background:#272034;z-index:4
+}
+.phone::after{
+  content:"";position:absolute;inset:2px;border:1px solid rgba(255,255,255,.4);
+  border-radius:35px;pointer-events:none;z-index:5
+}
+.phone-screen{height:100%;display:flex;flex-direction:column;overflow:hidden;background:#fff;position:relative}
+.list-heading{
+  flex:none;display:flex;justify-content:space-between;align-items:center;
+  padding:27px 14px 8px;min-height:57px;
+  background:linear-gradient(180deg,#fdfbff 0%,#fff 100%);
+  border-bottom:1px solid #f4f0f8
+}
+.list-heading strong{font-size:11px;color:#2d2542;font-weight:800;letter-spacing:-.01em}
+.list-heading span{font-size:9px;color:#7a45b8;font-weight:700}
+.chat-list{padding:0 9px;flex:1;display:flex;flex-direction:column;min-height:0}
+.chat-row{
+  flex:1;display:flex;align-items:center;gap:8px;
+  padding:4px 2px;min-height:0;border-bottom:1px solid #f0edf5
+}
+.chat-row:last-child{border-bottom:0}
+.chat-row{transition:background-color .2s ease}
+.chat-row:hover{background-color:#f7f6fb}
+.chat-row img{width:34px;height:34px;flex:none;border-radius:50%;background:#f2eff7;object-fit:cover}
+.chat-info{display:block;flex:1;min-width:0}
+.chat-info strong{display:block;color:#2b2540;font-size:9.4px;line-height:1.25;font-weight:800}
+.chat-info small{display:block;margin-top:4px;color:#8c8399;font-size:7.4px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-live{font-size:8px;font-weight:800;color:#6e30a7;background:#f2e9fc;padding:4px 6px;border-radius:7px}
+.chat-arrow{font-size:18px;color:#aa91bd;padding:0 3px;line-height:1}
+.phone-nav{
+  min-height:40px;flex:none;display:flex;justify-content:space-around;align-items:center;
+  border-top:1px solid #eeeaf4;background:#fff
+}
+.phone-nav span{display:flex;flex-direction:column;align-items:center;gap:2px;color:#9b90a7;font-size:8px;font-weight:650}
+.phone-nav span:first-child{color:#7134b5}
+.phone-nav svg{width:16px;height:16px}
+.install-block{width:min(100%,395px);margin:5px 0 0;text-align:center;z-index:1}
+.install{
+  width:100%;min-height:56px;padding:11px 17px;display:flex;gap:12px;
+  justify-content:center;align-items:center;position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.22);border-radius:16px;color:#fff;
+  background:linear-gradient(112deg,#5a18b6 0%,#7130d7 52%,#5160df 100%);
+  box-shadow:0 12px 25px rgba(91,35,182,.21),inset 0 1px 0 rgba(255,255,255,.17);
+  font-size:13px;font-weight:800;line-height:1.34;text-align:center;
+  transition:box-shadow .25s ease,filter .25s ease,background-color .25s ease
+}
+.install:hover,.install:focus-visible{
+  box-shadow:0 15px 30px rgba(91,35,182,.28),inset 0 1px 0 rgba(255,255,255,.2);
+  filter:brightness(1.08) saturate(1.06)
+}
+.install:active{filter:brightness(.98)}
+.install svg{height:19px;width:19px;flex:none}
+.install span{max-width:277px}
+.site-brand img{transition:filter .25s ease}
+.site-brand img:hover{filter:brightness(1.035)}
+.install-dialog{
+  width:min(490px,calc(100% - 32px));max-height:calc(100dvh - 32px);
+  border:1px solid #e8e4f0;background:#fff;color:var(--ink);position:fixed;
+  padding:37px 28px 34px;border-radius:24px;text-align:center;
+  box-shadow:0 28px 90px rgba(34,21,60,.32);overflow:auto
+}
+.install-dialog::backdrop{background:rgba(21,14,40,.58);backdrop-filter:blur(5px)}
+.dialog-close{position:absolute;right:16px;top:15px;border:0;border-radius:10px;width:35px;height:35px;display:grid;place-items:center;background:#f6f3fa;color:#745a94}
+.dialog-close svg{width:18px;height:18px}
+.dialog-heart{width:128px;height:128px;object-fit:contain;margin:0 auto 21px}
+.install-dialog h2{font:700 clamp(23px,5vw,30px)/1.2 var(--font-display);letter-spacing:-.045em;margin:0 auto 12px;max-width:390px}
+.install-dialog p{font-size:13px;line-height:1.75;color:#667085;margin:0 auto;max-width:355px}
+.install-dialog .dialog-url{display:inline-block;font-size:13px;font-weight:800;color:#5b2d96;background:#f5f0fb;padding:12px 15px;margin:17px auto 0;border-radius:12px;user-select:all}
+
+
+
+/* No celular, a lupa amplia o próprio mockup na página, como na referência. */
+.phone-zoom-trigger{display:none}
+@media(max-width:700px){
+  .phone-zoom-trigger{
+    position:absolute;left:calc(50% + 82px);top:14%;z-index:6;
+    width:42px;height:42px;display:grid;place-items:center;
+    padding:0;border:1px solid rgba(115,52,216,.19);border-radius:50%;
+    color:#622db5;background:rgba(255,255,255,.97);
+    box-shadow:0 5px 19px rgba(45,28,87,.16);
+    cursor:zoom-in;touch-action:manipulation;
+    transition:box-shadow .2s ease,background-color .2s ease
+  }
+  .phone-zoom-trigger:hover,.phone-zoom-trigger:focus-visible{
+    background:#fff;box-shadow:0 6px 22px rgba(45,28,87,.20)
+  }
+  .phone-zoom-trigger svg{width:20px;height:20px;stroke-width:1.8}
+  .phone-zoom-trigger[aria-pressed="true"]{cursor:zoom-out}
+  /* Modo ampliado: CTA no topo, smartphone grande, fundo lilás leve. */
+  /* Modo ampliado: alinhamento central e superfícies consistentes. */
+  /* Zoom mobile: faixa de instalação e superfície lavanda alinhadas de ponta a ponta. */
+  .main.phone-expanded{
+    row-gap:0;padding-top:0;padding-bottom:0;
+    background:#efe5ff;
+  }
+  /* Elimina faixas brancas fora do conteúdo ampliado, inclusive em telas altas. */
+  body:has(.main.phone-expanded){background:#efe5ff}
+  .main.phone-expanded .install-block{
+    width:100vw;max-width:none;justify-self:center;
+    margin:0;z-index:4
+  }
+  .main.phone-expanded .install{
+    width:100%;min-height:56px;font-size:clamp(13px,3.65vw,15px);
+    font-weight:800;border-radius:0;border:0;
+    box-shadow:0 7px 20px rgba(85,31,177,.17)
+  }
+  .main.phone-expanded .install span{max-width:none}
+  .main.phone-expanded .phone-stage{
+    width:100vw;max-width:none;justify-self:center;
+    box-sizing:border-box;position:relative;min-height:0;height:auto;
+    flex-direction:column;gap:0;
+    padding:25px 14px 22px;margin:0;overflow:hidden;
+    border-radius:0;
+    background:linear-gradient(155deg,#f0e5ff 0%,#e6d6fa 55%,#efe5ff 100%)
+  }
+  .main.phone-expanded .phone-stage::before,
+  .main.phone-expanded .phone-stage::after{display:none}
+  .main.phone-expanded .phone{
+    width:min(72vw,295px);height:auto;aspect-ratio:1 / 2.06;
+    border:7px solid #272034;border-radius:43px;
+    transform:none;box-shadow:0 21px 42px rgba(52,30,86,.21)
+  }
+  .main.phone-expanded .phone:hover{
+    transform:none;box-shadow:0 21px 42px rgba(52,30,86,.21)
+  }
+  .main.phone-expanded .phone::before{width:80px;height:17px}
+  .main.phone-expanded .phone::after{border-radius:35px}
+  .main.phone-expanded .list-heading{padding:29px 14px 10px;min-height:62px}
+  .main.phone-expanded .list-heading strong{font-size:clamp(12px,3.7vw,15px)}
+  .main.phone-expanded .chat-list{padding:0 10px}
+  .main.phone-expanded .chat-row{gap:9px;padding:3px 2px}
+  .main.phone-expanded .chat-row img{
+    width:clamp(31px,9.3vw,41px);height:clamp(31px,9.3vw,41px)
+  }
+  .main.phone-expanded .chat-info strong{font-size:clamp(10.5px,3.25vw,12.5px)}
+  .main.phone-expanded .chat-info small{font-size:clamp(8px,2.5vw,10px);margin-top:3px}
+  .main.phone-expanded .chat-live{font-size:10px;padding:4px 7px}
+  .main.phone-expanded .chat-arrow{font-size:20px}
+  .main.phone-expanded .phone-nav{min-height:47px}
+  .main.phone-expanded .phone-nav span{font-size:10px}
+  .main.phone-expanded .phone-nav svg{width:19px;height:19px}
+  .main.phone-expanded .phone-zoom-trigger{
+    left:auto;right:2px;top:16px;
+    width:42px;height:42px;border-color:rgba(115,52,216,.18);
+    box-shadow:0 5px 16px rgba(82,34,153,.15)
+  }
+  .main.phone-expanded .phone-zoom-trigger svg{width:22px;height:22px}
+}
+@media(max-width:370px){
+  .phone-zoom-trigger{left:calc(50% + 77px);width:40px;height:40px}
+  .main.phone-expanded .phone{width:min(70vw,264px)}
+  .main.phone-expanded .phone-zoom-trigger{
+    left:auto;right:1px;top:14px;width:40px;height:40px
+  }
+}
+@media(max-width:700px) and (max-height:670px){
+  .main.phone-expanded .phone-stage{padding:18px 12px 20px}
+  .main.phone-expanded .phone{width:min(70vw,275px)}
+}
+
+@media(max-width:900px){
+  .main{gap:22px;grid-template-columns:minmax(0,1fr) minmax(290px,.9fr)}
+  .copy h1{font-size:clamp(35px,4.9vw,55px)}
+  .heart-stage{width:238px;height:221px}
+  .hero-heart{width:216px;height:216px}
+  .phone-stage{min-height:468px;padding-inline:8px}
+  .phone{width:236px;height:439px}
+}
+@media(max-width:700px){
+  .container{width:calc(100% - 36px)}
+  .site-header{height:62px}
+  .site-brand img{width:139px}
+  .site-identity{gap:10px}
+  .site-globe{width:28px;height:28px}
+  .site-globe svg{width:16px;height:16px}
+  /* CTA vem antes do smartphone, sem sobreposicao */
+  .main{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"copy" "install" "phone";
+    min-height:auto;gap:6px;padding:8px 0 14px
+  }
+  .copy{grid-area:copy;max-width:550px;padding:0}
+  .right-col{display:contents}
+  .heart-stage{width:145px;height:134px;margin:0 auto 3px}
+  .hero-heart{width:138px;height:138px}
+  .copy h1{
+    font-size:clamp(28px,7.65vw,39px);line-height:1.105;
+    margin:0 0 5px;letter-spacing:-.053em
+  }
+  .copy h1 .gradient{padding-bottom:3px}
+  .lead{font-size:12px;line-height:1.4}
+  .install-block{
+    grid-area:install;
+    position:relative;left:auto;bottom:auto;transform:none;
+    z-index:5;align-self:center;justify-self:center;
+    width:min(335px,calc(100vw - 36px));
+    max-width:none;margin:8px auto 7px
+  }
+  .install{
+    font-size:13px;min-height:51px;border-radius:14px;padding:10px 16px;
+    box-shadow:0 12px 27px rgba(91,35,182,.20)
+  }
+  .phone-stage{
+    grid-area:phone;
+    min-height:0;height:auto;
+    padding:4px 12px 8px;margin:0
+  }
+  .phone-stage::after{width:295px;height:295px}
+  /* Escala uniforme: a largura determina a altura, preservando o formato 1:2,06. */
+  .phone{
+    width:clamp(156px,calc((100svh - 346px)/2.06),210px);
+    height:auto;aspect-ratio:1 / 2.06;
+    border-width:5px;border-radius:35px;transform:rotate(-3deg)
+  }
+  .phone:hover{transform:rotate(-3deg)}
+  .phone::before{width:66px;height:13px}
+  .phone::after{border-radius:29px}
+  .list-heading{min-height:43px;padding:23px 10px 5px}
+  .list-heading strong{font-size:10px}
+  .list-heading span{font-size:8px}
+  .chat-list{padding:0 6px}
+  .chat-row{gap:6px;padding:2px 1px}
+  .chat-row img{width:25px;height:25px}
+  .chat-info strong{font-size:8px}
+  .chat-info small{font-size:6.5px;margin-top:2px}
+  .chat-arrow{font-size:15px}
+  .chat-live{font-size:7px;padding:2px 4px}
+  .phone-nav{min-height:35px}
+  .phone-nav svg{width:14px;height:14px}
+  .phone-nav span{font-size:7px}
+}
+@media(max-width:370px){
+  .container{width:calc(100% - 28px)}
+  .site-brand img{width:132px}
+  .copy h1{font-size:clamp(27px,7.7vw,33px)}
+  .heart-stage{width:126px;height:119px}
+  .hero-heart{width:123px;height:123px}
+  .phone-stage{padding-inline:9px}
+  .install-block{width:calc(100vw - 28px)}
+  .chat-row img{width:23px;height:23px}
+}
+@media(max-width:700px) and (max-height:760px){
+  .heart-stage{width:120px;height:112px;margin-bottom:2px}
+  .hero-heart{width:115px;height:115px}
+  .copy h1{font-size:clamp(26px,7.2vw,35px)}
+  .install-block{margin:5px auto 5px}
+  .phone-stage{padding-top:2px;padding-bottom:5px}
+}
+@media(max-width:700px) and (max-height:630px){
+  .heart-stage{width:105px;height:100px}
+  .hero-heart{width:102px;height:102px}
+  .copy h1{font-size:clamp(25px,7vw,31px)}
+  .phone{width:min(156px,calc(100svh / 3.65))}
+  .phone-stage{padding-bottom:4px}
+}
+/* No primeiro quadro mobile, o título usa a tipografia compacta antes usada no zoom.
+   O smartphone mantém exatamente sua largura, altura e proporção. */
+@media(max-width:700px){
+  .copy h1{
+    font:800 clamp(17px,4.5vw,22px)/1.32 var(--font-display);
+    letter-spacing:-.035em;
+    max-width:350px;
+    margin:0 auto 6px;
+    text-align:center;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero-heart{animation:none;will-change:auto}
+  .site-globe,.site-brand img,.phone,.hero-heart,.copy h1,.copy h1 .gradient,.chat-row,.install{transition:none}
+}
+
+/* Versão de maior densidade para o coração, sem o fundo branco do ícone.
+   O WebP original fornece somente o recorte alfa, no mesmo enquadramento
+   de 464px centralizados no ícone de 512px. Layout e animação preservados. */
+.hero-heart{
+  -webkit-mask-image:url("/app/assets/coracao-promovie-com-logo.webp");
+  mask-image:url("/app/assets/coracao-promovie-com-logo.webp");
+  -webkit-mask-size:90.625% 90.625%;
+  mask-size:90.625% 90.625%;
+  -webkit-mask-position:center;
+  mask-position:center;
+  -webkit-mask-repeat:no-repeat;
+  mask-repeat:no-repeat;
+}
+
+/* Feedback aparece somente quando o SDK não consegue abrir. */
+#sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#44516b;background:#f4f8fe;border:1px solid #dce8f4;border-radius:10px;text-align:center}
+#sdk-entry-status[data-kind="error"]:not([hidden]){color:#8a3440;background:#fff2f2;border-color:#eccbd0}
+#sdk-entry-status[hidden]{display:none}
+
+/* App Teste Novo 2: autenticação de homologação, integrada ao visual existente. */
+.patient-login{margin:0 auto 14px;text-align:left;padding:17px 17px 13px;border:1px solid #e4dff3;border-radius:18px;background:linear-gradient(150deg,#fff,#f8f7fe);box-shadow:0 8px 25px rgba(66,44,121,.06)}
+.patient-login-top{display:flex;align-items:center;gap:8px;color:#4b2b80;font-size:12px;font-weight:800;margin-bottom:13px}
+.patient-login-top small{font-size:10px;font-weight:650;margin-left:auto;color:#7d6c98;background:#eee8fb;border-radius:7px;padding:4px 7px}
+.patient-login-dot{width:8px;height:8px;flex:none;background:#17a399;border-radius:50%;box-shadow:0 0 0 4px rgba(23,163,153,.12)}
+.patient-login-label{display:block;margin:0 0 6px;color:#4b4866;font-size:12px;font-weight:750}
+.patient-login input{width:100%;max-width:100%;min-height:47px;display:block;box-sizing:border-box;border:1px solid #d8d5e5;border-radius:11px;color:#34324b;padding:11px 14px;background:#fff;font:500 14px var(--font-body);outline:none}
+.patient-login input:focus{border-color:#8553df;box-shadow:0 0 0 3px rgba(125,74,221,.12)}
+.patient-login-help{font-size:11px;line-height:1.5;color:#817891;text-align:left;margin:9px 0 0}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .patient-login{margin-bottom:13px;padding:16px;border-radius:18px}
+  .main:not(.phone-expanded) .install-block{margin-top:13px}
+  .main.phone-expanded .patient-login{margin:12px 14px;border-radius:17px}
+}
+
+
+/* Ajustes mobile exclusivos do App Teste Novo — preservam a versão desktop e o SDK. */
+@media (max-width:700px){
+  body:has(.main:not(.phone-expanded)){
+    background:radial-gradient(ellipse 90% 30% at 2% 28%,rgba(0,189,232,.075),transparent 75%),
+               radial-gradient(ellipse 80% 30% at 96% 67%,rgba(115,52,216,.075),transparent 75%),#fbfcff;
+  }
+  .site-header{height:70px;box-shadow:0 5px 20px rgba(45,24,81,.045)}
+  .site-header .container{width:calc(100% - 34px)}
+  .site-brand img{width:153px;max-height:55px}
+  .site-identity{gap:12px}
+  .site-globe{width:36px;height:36px;background:#f9f7ff;border-color:rgba(115,52,216,.2)}
+  .site-globe svg{width:18px;height:18px}
+  .main:not(.phone-expanded){
+    width:min(470px,calc(100% - 28px));padding:15px 0 32px;gap:0;
+    grid-template-areas:"copy" "install" "phone";
+    grid-template-columns:minmax(0,1fr);align-items:stretch;min-height:auto;
+  }
+  .main:not(.phone-expanded) .copy{
+    grid-area:copy;isolation:isolate;overflow:hidden;
+    width:100%;max-width:none;margin:0;padding:18px 18px 22px;
+    border:1px solid rgba(220,222,243,.9);border-radius:28px;
+    background:radial-gradient(circle at 50% 6%,rgba(241,226,255,.76),transparent 55%),
+               linear-gradient(153deg,#fff 0%,#fcfaff 60%,#f5fbff 100%);
+    box-shadow:0 11px 36px rgba(70,45,124,.065),inset 0 1px 0 #fff;text-align:center;
+  }
+  .main:not(.phone-expanded) .copy::before{
+    content:"";pointer-events:none;position:absolute;top:-69px;right:-77px;
+    width:212px;height:212px;border-radius:50%;z-index:-1;
+    background:radial-gradient(circle,rgba(0,189,232,.12),transparent 68%);
+  }
+  .main:not(.phone-expanded) .heart-stage{width:176px;height:166px;margin:0 auto 8px}
+  .main:not(.phone-expanded) .heart-stage::before{
+    inset:1% -5%;background:radial-gradient(circle,rgba(244,237,255,.94),
+      rgba(243,237,252,.28) 55%,transparent 76%);filter:blur(11px);
+  }
+  .main:not(.phone-expanded) .heart-stage::after{
+    inset:11%;box-shadow:0 0 0 28px rgba(115,52,216,.024);border-color:rgba(115,52,216,.085);
+  }
+  .main:not(.phone-expanded) .hero-heart{
+    width:160px;height:160px;filter:drop-shadow(0 13px 14px rgba(71,21,129,.13));
+  }
+  .main:not(.phone-expanded) .copy h1{
+    font:800 clamp(27px,7.2vw,35px)/1.16 var(--font-display);
+    letter-spacing:-.052em;max-width:390px;margin:0 auto 11px;text-align:center;
+  }
+  .main:not(.phone-expanded) .copy h1 .gradient{padding-bottom:4px}
+  .main:not(.phone-expanded) .lead{
+    max-width:330px;margin:0 auto;font-size:14.5px;line-height:1.54;
+    letter-spacing:-.006em;color:#59677a;
+  }
+  .main:not(.phone-expanded) .install-block{
+    grid-area:install;width:100%;max-width:none;margin:14px auto 15px;justify-self:stretch;
+  }
+  .main:not(.phone-expanded) .install{
+    min-height:60px;width:100%;border:1px solid rgba(255,255,255,.2);
+    border-radius:19px;padding:13px 20px;font-size:15px;font-weight:800;
+    letter-spacing:-.01em;gap:12px;
+    background:linear-gradient(110deg,#5614a9 0%,#7334d8 58%,#455fd8 100%);
+    box-shadow:0 13px 29px rgba(83,35,174,.23),inset 0 1px 0 rgba(255,255,255,.23);
+  }
+  .main:not(.phone-expanded) .install svg{width:21px;height:21px}
+  .main:not(.phone-expanded) .install span{max-width:none}
+  .main:not(.phone-expanded) .phone-stage{
+    grid-area:phone;width:100%;min-height:0;margin:0;padding:27px 12px 30px;
+    overflow:hidden;border:1px solid rgba(218,211,241,.83);border-radius:28px;
+    background:linear-gradient(145deg,#f9f5ff 0%,#f2f1ff 52%,#f0faff 100%);
+    box-shadow:0 10px 30px rgba(59,36,113,.06),inset 0 1px 0 rgba(255,255,255,.86);
+  }
+  .main:not(.phone-expanded) .phone-stage::before{
+    inset:6% 0;background:radial-gradient(circle at 48% 49%,
+      rgba(115,52,216,.12),rgba(115,52,216,.045) 45%,transparent 72%);
+    filter:blur(14px);
+  }
+  .main:not(.phone-expanded) .phone-stage::after{
+    width:310px;max-width:86%;height:310px;
+    border:1px solid rgba(115,52,216,.075);box-shadow:0 0 0 34px rgba(115,52,216,.023);
+  }
+  .main:not(.phone-expanded) .phone{
+    width:clamp(218px,61vw,256px);height:auto;aspect-ratio:1 / 2.06;
+    border-width:7px;border-radius:42px;transform:rotate(-3deg);
+    box-shadow:0 24px 41px rgba(45,29,83,.2),6px 8px 16px rgba(26,23,49,.075);
+  }
+  .main:not(.phone-expanded) .phone:hover{transform:rotate(-3deg)}
+  .main:not(.phone-expanded) .phone::before{width:78px;height:16px}
+  .main:not(.phone-expanded) .phone::after{border-radius:33px}
+  .main:not(.phone-expanded) .list-heading{min-height:57px;padding:26px 13px 8px}
+  .main:not(.phone-expanded) .list-heading strong{font-size:11.5px}
+  .main:not(.phone-expanded) .chat-list{padding:0 9px}
+  .main:not(.phone-expanded) .chat-row{gap:8px;padding:4px 1px}
+  .main:not(.phone-expanded) .chat-row img{width:31px;height:31px}
+  .main:not(.phone-expanded) .chat-info strong{font-size:9.5px}
+  .main:not(.phone-expanded) .chat-info small{font-size:7.5px;margin-top:3px}
+  .main:not(.phone-expanded) .chat-live{font-size:8px;padding:3px 5px}
+  .main:not(.phone-expanded) .chat-arrow{font-size:18px}
+  .main:not(.phone-expanded) .phone-nav{min-height:43px}
+  .main:not(.phone-expanded) .phone-nav span{font-size:8.5px}
+  .main:not(.phone-expanded) .phone-nav svg{width:17px;height:17px}
+  .main:not(.phone-expanded) .phone-zoom-trigger{
+    top:14px;right:13px;left:auto;width:43px;height:43px;
+    border:1px solid rgba(103,54,174,.19);background:#fff;
+    box-shadow:0 6px 18px rgba(73,40,121,.13);
+  }
+  .main.phone-expanded .copy{display:none}
+  .main.phone-expanded .install-block{margin-top:0}
+}
+@media (max-width:370px){
+  .main:not(.phone-expanded){width:calc(100% - 24px);padding-top:12px}
+  .main:not(.phone-expanded) .copy{padding:14px 12px 20px;border-radius:23px}
+  .main:not(.phone-expanded) .heart-stage{width:145px;height:139px;margin-bottom:6px}
+  .main:not(.phone-expanded) .hero-heart{width:137px;height:137px}
+  .main:not(.phone-expanded) .copy h1{font-size:clamp(25px,7.7vw,28px)}
+  .main:not(.phone-expanded) .lead{font-size:13.5px}
+  .main:not(.phone-expanded) .install{min-height:57px}
+  .main:not(.phone-expanded) .phone-stage{padding:21px 7px 24px;border-radius:24px}
+  .main:not(.phone-expanded) .phone{width:clamp(206px,68vw,238px)}
+}
+@media (max-width:700px) and (max-height:670px){
+  .main:not(.phone-expanded) .heart-stage{width:148px;height:141px;margin-bottom:6px}
+  .main:not(.phone-expanded) .hero-heart{width:139px;height:139px}
+  .main:not(.phone-expanded) .copy{padding-top:15px;padding-bottom:19px}
+  .main:not(.phone-expanded) .copy h1{font-size:clamp(25px,6.7vw,32px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .main:not(.phone-expanded) .hero-heart{animation:none;will-change:auto}
+}
 </style>
 </head>
 <body>
-<header class="top"><div class="topin">
-  <a class="brand" href="/app/" aria-label="PromoVie, página do aplicativo"><img src="/app/assets/coracao-promovie-com-logo.webp" alt="" width="46" height="46"><span>PromoVie<small>Soluções Organizacionais Integradas</small></span></a>
-  <nav class="topnav" aria-label="Navegação"><a href="/app/">Aplicativo</a><a href="/">Site principal</a></nav>
-</div></header>
-<main>
-  <div class="lead">
-    <section aria-labelledby="page-title">
-      <div class="eyebrow">PromoVie · cuidado e conexão</div>
-      <h1 id="page-title" class="title">TeleSaúde</h1>
-      <p>Acesso a telemedicina e orientação profissional, com atenção à privacidade e à continuidade do cuidado.</p>
-      <p class="statement"><strong>Um único ambiente para o primeiro atendimento e os encaminhamentos necessários.</strong> A disponibilidade de cada serviço depende do plano de cada beneficiário.</p>
-      <div class="chips" aria-label="Características"><span class="chip">Identificação individual</span><span class="chip">Atendimento on-line</span><span class="chip">Acesso pelo navegador</span></div>
-    </section>
-    <section class="access" aria-labelledby="access-title">
-      <h2 id="access-title">Acessar atendimento</h2>
-      <p class="intro">Estamos preparando a integração com a Médiquo. Por enquanto, o acesso está restrito a um paciente fictício de homologação.</p>
-      <div id="status" class="status" role="status" aria-live="polite">Verificando a disponibilidade do ambiente de testes...</div>
-      <form id="login" autocomplete="off">
-        <label for="cpf">CPF do paciente de teste</label>
-        <input id="cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" aria-describedby="privacy" disabled required>
-        <label for="password">Senha privada de homologação</label>
-        <input id="password" name="testPassword" type="password" autocomplete="off" maxlength="256" placeholder="Senha de teste" disabled required>
-        <button class="action" id="submit" type="submit" disabled>Acessar TeleSaúde</button>
-      </form>
-      <p id="privacy" class="help">O CPF não é uma senha. O acesso definitivo dos beneficiários exigirá autenticação individual segura antes da liberação do histórico.</p>
-    </section>
+<header class="site-header">
+  <div class="container">
+    <div class="site-identity">
+      <div class="site-brand"><img src="/preview-promovie-logo.webp" width="175" alt="PromoVie | Soluções Organizacionais Integradas" decoding="async" fetchpriority="high"></div>
+      <a class="site-globe" href="/" title="Ir para a página inicial" aria-label="Ir para a página inicial da PromoVie">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-7h6v7"/></svg>
+      </a>
+    </div>
   </div>
-  <section class="section" aria-labelledby="consultas">
-    <h2 id="consultas">Telemedicina e atendimento</h2>
-    <p>Atendimentos previstos na experiência PromoVie, sujeitos à habilitação dos serviços do plano.</p>
-    <div class="offergrid">
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Clínico geral</strong><span>Atendimento on-line 24h</span></div>
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Pediatra</strong><span>Consulta on-line</span></div>
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Médico da família</strong><span>Consulta on-line</span></div>
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Psicologia</strong><span>Atendimento psicológico</span></div>
+</header>
+<main class="container main">
+  <section class="copy" aria-labelledby="hero-title">
+    <div class="heart-stage">
+      <img class="hero-heart" src="/app/icons/heart-512.png" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
     </div>
+    <h1 id="hero-title">Telemedicina e autocuidado <span class="gradient">na palma da sua mão.</span></h1>
+    <p class="lead">Converse com profissionais de saúde, de onde estiver.</p>
   </section>
-  <section class="section support" aria-labelledby="acolhimento">
-    <h2 id="acolhimento">Acolhimento e autocuidado</h2>
-    <p>Informações e orientação para o dia a dia. Os serviços não substituem consultas médicas quando necessárias.</p>
-    <div class="offergrid">
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Nutrição</strong><span>Orientação e informação</span></div>
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Condicionamento físico</strong><span>Orientação e informação</span></div>
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Saúde da mulher</strong><span>Informação e acolhimento</span></div>
-      <div class="offer"><span class="sphere" aria-hidden="true">♥</span><strong>Cuidados pet</strong><span>Informações gerais</span></div>
+  <div class="right-col">
+    <div class="phone-stage">
+      <div class="phone" role="img" aria-label="Ilustração de um smartphone com o aplicativo PromoVie, mostrando as oito especialidades de atendimento">
+        <div class="phone-screen">
+          
+          <div class="list-heading"><strong>Especialidades</strong></div>
+          <div class="chat-list"><div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg" width="36" height="36" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Clínico Geral 24h</strong><small>Orientação médica on-line</small></span><span class="chat-live">24h</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg" width="36" height="36" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Psicólogo</strong><small>Escuta e saúde mental</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg" width="36" height="36" alt="" loading="eager" decoding="async"><span class="chat-info"><strong>Nutricionista</strong><small>Alimentação e equilíbrio</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg" width="36" height="36" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Treinador Físico</strong><small>Atividade física e bem-estar</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg" width="36" height="36" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Ginecologista</strong><small>Cuidado da saúde feminina</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg" width="36" height="36" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Dermatologista</strong><small>Cuidado e saúde da pele</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg" width="36" height="36" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Pediatra</strong><small>Atenção à saúde infantil</small></span><span class="chat-arrow" aria-hidden="true">›</span></div>
+<div class="chat-row"><img src="https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg/v1/fill/w_100,h_100,al_c,q_74,enc_auto/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg" width="36" height="36" alt="" loading="lazy" decoding="async"><span class="chat-info"><strong>Atendimento Pet</strong><small>Orientações para cães e gatos</small></span><span class="chat-arrow" aria-hidden="true">›</span></div></div>
+          
+          <div class="phone-nav" aria-hidden="true">
+            <span><svg viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8c-2 0-3-.4-4-.8L3 21l2-6a8 8 0 1 1 16-4z"/></svg>Conversas</span>
+            <span><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>Início</span>
+            <span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-9 14-9 14 0"/></svg>Perfil</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="phone-zoom-trigger" id="phone-zoom-trigger"
+              aria-label="Ampliar a visualização do aplicativo" aria-pressed="false"
+              title="Ampliar visualização">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="6.5"/>
+          <path d="m16 16 4.5 4.5M10.8 7.9v5.8M7.9 10.8h5.8"/>
+        </svg>
+      </button>
     </div>
-  </section>
+    <div class="install-block">
+      <div class="patient-login">
+        <div class="patient-login-top">
+          <span class="patient-login-dot" aria-hidden="true"></span>
+          <span>Acesso identificado</span>
+          <small>Homologação</small>
+        </div>
+        <label class="patient-login-label" for="test-access-password">Senha da conta de teste</label>
+        <input id="test-access-password" type="password" autocomplete="off"
+               spellcheck="false" placeholder="Digite a senha de homologação" />
+        <p class="patient-login-help">Acesso reservado para testar a autenticação. Não informe CPF ou dados de pacientes reais.</p>
+      </div>
+      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina com conta">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
+        <span>Acessar telemedicina</span>
+      </button>
+      <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
+    </div>
+  </div>
 </main>
-<footer class="footer">PromoVie · Soluções Organizacionais Integradas · Ambiente em homologação</footer>
+
 <script>
 (function(){
-  'use strict';
-  const BASE='https://backend.promovie.tv.br';
-  const ROUTE='/api/mediquo/v3';
-  const $=id=>document.getElementById(id);
-  const input=$('cpf'),pass=$('password'),button=$('submit'),status=$('status');
-  const setStatus=(msg,state='')=>{status.textContent=msg;status.dataset.state=state;};
-  async function request(path,opts={}){
-    const response=await fetch(BASE+ROUTE+path,{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',...opts});
-    let body={};try{body=await response.json();}catch{}
-    return {response,body};
+  "use strict";
+
+  // Segunda opção enviada pela Médiquo: frontend + backend autenticador.
+  // Configurar APENAS a URL pública HTTPS do backend depois da implantação.
+  // Nunca inserir MEDIQUO_SECRET_KEY aqui ou em repositórios públicos.
+  const BACKEND_URL="https://backend.promovie.tv.br";
+  const button=document.getElementById("install-now");
+  const status=document.getElementById("sdk-entry-status");
+  const label=button.querySelector("span");
+  const passwordInput=document.getElementById("test-access-password");
+  const sdkSource="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+  let busy=false;
+  let initialized=false;
+  let sdkPromise=null;
+  let messageTimer=null;
+
+  function feedback(message,kind){
+    if(messageTimer){clearTimeout(messageTimer);messageTimer=null;}
+    status.textContent=message||"";
+    status.hidden=!message;
+    status.dataset.kind=kind||"info";
+    if(message&&kind==="error"){
+      messageTimer=setTimeout(function(){
+        status.hidden=true;
+        status.textContent="";
+        messageTimer=null;
+      },10000);
+    }
   }
-  input.addEventListener('input',()=>{
-    let v=input.value.replace(/\D/g,'').slice(0,11);
-    v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-    input.value=v;
-  });
-  let sdkPromise;
+
   function loadSdk(){
-    if(window.MediquoWidget)return Promise.resolve();
+    if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function"){
+      return Promise.resolve(window.MediquoWidget);
+    }
     if(sdkPromise)return sdkPromise;
-    sdkPromise=new Promise((resolve,reject)=>{
-      const s=document.createElement('script');s.src='https://widget.mediquo.com/js/1.0.0/mediquo.js';s.async=true;
-      s.onload=()=>window.MediquoWidget?resolve():reject(new Error('Biblioteca de atendimento indisponível.'));
-      s.onerror=()=>reject(new Error('Não foi possível carregar o módulo de atendimento.'));
-      document.head.appendChild(s);
-    });
+    sdkPromise=new Promise(function(resolve,reject){
+      const script=document.createElement("script");
+      script.src=sdkSource;
+      script.async=true;
+      const timeout=setTimeout(function(){
+        script.remove();reject(new Error("O SDK não respondeu."));
+      },18000);
+      script.onload=function(){
+        clearTimeout(timeout);
+        if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")resolve(window.MediquoWidget);
+        else reject(new Error("SDK não disponível."));
+      };
+      script.onerror=function(){clearTimeout(timeout);reject(new Error("Não foi possível carregar o SDK."));};
+      document.head.appendChild(script);
+    }).catch(function(e){sdkPromise=null;throw e;});
     return sdkPromise;
   }
-  async function check(){
-    try{
-      const {response,body}=await request('/health');
-      if(response.ok && body.status==='homologacao-pronta'){
-        input.disabled=false;pass.disabled=false;button.disabled=false;
-        setStatus('Ambiente de homologação disponível para paciente de teste.','ready');
-      }else setStatus('Integração em configuração. O atendimento será habilitado após os testes.');
-    }catch{setStatus('Não foi possível consultar o servidor. O acesso permanece indisponível.','error');}
+  async function getJson(response){
+    try{return await response.json();}catch(e){return {};}
   }
-  $('login').addEventListener('submit',async e=>{
-    e.preventDefault();
-    if(button.disabled)return;
-    const cpf=input.value.replace(/\D/g,'');
-    if(cpf.length!==11){setStatus('Digite um CPF com 11 dígitos.','error');return;}
-    const password=pass.value;pass.value='';button.disabled=true;setStatus('Validando o acesso de homologação...');
+  async function startWidget(){
+    if(busy)return;
+    if(!BACKEND_URL){
+      feedback("Esta segunda modalidade precisa da instalação do servidor seguro. A página está preparada, mas ainda não foi conectada ao backend.","error");
+      return;
+    }
+    if(!/^https:\/\//i.test(BACKEND_URL)){
+      feedback("O servidor de autenticação deve usar endereço HTTPS.","error");
+      return;
+    }
+    busy=true;
+    button.disabled=true;
+    label.textContent="Conectando...";
+    feedback("","info");
     try{
-      const c=await request('/config');
-      if(!c.response.ok||!c.body.apiKey)throw Error('Integração ainda não configurada.');
-      const r=await request('/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({document:cpf,testPassword:password})});
-      if(!r.response.ok||!r.body.access_token){
-        if(r.response.status===401||r.response.status===403)throw Error('Acesso de teste não autorizado.');
-        if(r.response.status===429)throw Error('Muitas tentativas. Tente novamente mais tarde.');
-        throw Error('Atendimento de teste ainda indisponível.');
+      const configResp=await fetch(BACKEND_URL+"/api/mediquo/config",{cache:"no-store",credentials:"omit"});
+      if(configResp.status===503)throw new Error("Backend conectado, mas a Médiquo ainda precisa confirmar as credenciais de homologação. Nenhuma senha de teste foi ativada.");
+      if(!configResp.ok)throw new Error("Não foi possível consultar as configurações do servidor.");
+      const config=await getJson(configResp);
+      if(!config.apiKey)throw new Error("A API Key não está configurada no servidor.");
+      const testPassword=passwordInput.value;
+      if(!testPassword){
+        passwordInput.focus();
+        throw new Error("Informe a senha de homologação privada para o teste.");
       }
-      await loadSdk();
-      window.MediquoWidget.init({apiKey:c.body.apiKey,accessToken:r.body.access_token,adapter:'web',environment:'sandbox',show:'always',theme:{locale:'pt',text:{title:'TeleSaúde'},colors:{primary:'#5425a5'}}});
-      window.MediquoWidget.open();
-      input.value='';
-      setStatus('Atendimento de homologação aberto.','ready');
-    }catch(err){setStatus(err.message||'Não foi possível abrir o atendimento.','error');}
-    finally{button.disabled=false;}
+      const tokenResp=await fetch(BACKEND_URL+"/api/mediquo/token",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({testPassword}),
+        cache:"no-store",
+        credentials:"omit",
+        referrerPolicy:"no-referrer"
+      });
+      passwordInput.value="";
+      const token=await getJson(tokenResp);
+      if(tokenResp.status===401)throw new Error("Senha de homologação inválida.");
+      if(tokenResp.status===429)throw new Error("Muitas tentativas. Aguarde antes de tentar novamente.");
+      if(!tokenResp.ok||!token.access_token)throw new Error(token.error||"Não foi possível autenticar o paciente de teste.");
+      const widget=await loadSdk();
+      if(initialized&&typeof widget.destroy==="function"){
+        try{await Promise.resolve(widget.destroy());}catch(e){}
+        initialized=false;
+      }
+      const options={
+        apiKey:config.apiKey,
+        accessToken:token.access_token,
+        show:"always",
+        theme:{
+          text:{title:"TeleSaúde"},
+          colors:{primary:"#4b0c8f"}
+        }
+      };
+      await Promise.resolve(widget.init(options));
+      initialized=true;
+      if(typeof widget.open!=="function")throw new Error("A janela de telemedicina não está disponível.");
+      await Promise.resolve(widget.open());
+      feedback("","info");
+    }catch(e){
+      // Sem dados de autenticação ou detalhes técnicos sensíveis na mensagem.
+      const m=String(e&&e.message||"Erro de conexão.");
+      feedback(m==="Failed to fetch"?"Não foi possível comunicar com o servidor seguro.":m,"error");
+    }finally{
+      passwordInput.value="";
+      busy=false;
+      button.disabled=false;
+      label.textContent="Acessar telemedicina";
+    }
+  }
+
+  button.addEventListener("click",startWidget);
+  passwordInput.addEventListener("keydown",function(event){
+    if(event.key==="Enter"){event.preventDefault();startWidget();}
   });
-  check();
+  const zoomTrigger=document.getElementById("phone-zoom-trigger");
+  const main=document.querySelector("main.main");
+  const installBlock=document.querySelector(".install-block");
+  const zoomIcon=zoomTrigger && zoomTrigger.querySelector("svg path");
+  if(zoomTrigger && main && installBlock && zoomIcon){
+    zoomTrigger.addEventListener("click",function(){
+      if(!window.matchMedia("(max-width:700px)").matches)return;
+      const expanded=main.classList.toggle("phone-expanded");
+      zoomTrigger.setAttribute("aria-pressed",expanded?"true":"false");
+      zoomTrigger.setAttribute(
+        "aria-label",expanded?"Reduzir a visualização do aplicativo":"Ampliar a visualização do aplicativo"
+      );
+      zoomTrigger.title=expanded?"Reduzir visualização":"Ampliar visualização";
+      zoomIcon.setAttribute("d",expanded?"m16 16 4.5 4.5M7.9 10.8h5.8":
+        "m16 16 4.5 4.5M10.8 7.9v5.8M7.9 10.8h5.8");
+      if(expanded){
+        // A imagem de referência começa no botão de instalação, seguido pelo telefone ampliado.
+        window.requestAnimationFrame(function(){
+          installBlock.scrollIntoView({behavior:"instant",block:"start"});
+        });
+      }else{
+        window.requestAnimationFrame(function(){
+          zoomTrigger.scrollIntoView({behavior:"auto",block:"center"});
+        });
+      }
+    });
+    document.addEventListener("keydown",function(event){
+      if(event.key==="Escape" && main.classList.contains("phone-expanded"))zoomTrigger.click();
+    });
+    window.addEventListener("resize",function(){
+      if(!window.matchMedia("(max-width:700px)").matches &&
+         main.classList.contains("phone-expanded")){
+        main.classList.remove("phone-expanded");
+        zoomTrigger.setAttribute("aria-pressed","false");
+        zoomTrigger.setAttribute("aria-label","Ampliar a visualização do aplicativo");
+        zoomTrigger.title="Ampliar visualização";
+        zoomIcon.setAttribute("d","m16 16 4.5 4.5M10.8 7.9v5.8M7.9 10.8h5.8");
+      }
+    });
+  }
 })();
 </script>
+
 </body>
 </html>
