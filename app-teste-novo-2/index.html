@@ -741,6 +741,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     feedback("","info");
     try{
       const configResp=await fetch(BACKEND_URL+"/api/mediquo/config",{cache:"no-store",credentials:"omit"});
+      if(configResp.status===503)throw new Error("Backend conectado, mas a Médiquo ainda precisa confirmar as credenciais de homologação. Nenhuma senha de teste foi ativada.");
       if(!configResp.ok)throw new Error("Não foi possível consultar as configurações do servidor.");
       const config=await getJson(configResp);
       if(!config.apiKey)throw new Error("A API Key não está configurada no servidor.");
