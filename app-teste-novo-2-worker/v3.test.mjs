@@ -78,7 +78,7 @@ test('paciente ativo autenticado apenas depois de CPF e senha corretos',async()=
 });
 
 test('nova página usa domínio próprio e não incorpora segredos',async()=>{
-  const html=await readFile(new URL('../../telesaude/index.html',import.meta.url),'utf8');
+  const html=await readFile(new URL('../telesaude/index.html',import.meta.url),'utf8');
   assert.match(html,/https:\/\/backend\.promovie\.tv\.br/);
   assert.match(html,/Senha privada de homologação/);
   assert.doesNotMatch(html,/MEDIQUO_V3_SECRET_KEY\s*=/);
