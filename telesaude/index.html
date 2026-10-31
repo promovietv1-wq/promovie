@@ -26,7 +26,7 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="Laboratório PromoVie para testar a integração do Widget Web Médiquo em ambiente de homologação.">
-<link rel="canonical" href="https://www.promovie.tv.br/app-teste-novo-2/">
+<link rel="canonical" href="https://www.promovie.tv.br/telesaude/">
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
 <link rel="preload" href="/preview-promovie-logo.webp" as="image" type="image/webp">
@@ -178,7 +178,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   padding:4px 2px;min-height:0;border-bottom:1px solid #f0edf5
 }
 .chat-row:last-child{border-bottom:0}
-.chat-row{transition:background-color .2s ease}
+.chat-row{transition:background-color .2s ease;cursor:pointer}
+.chat-row:focus-visible{outline:2px solid #7334d8;outline-offset:-2px;border-radius:5px}
 .chat-row:hover{background-color:#f7f6fb}
 .chat-row img{width:34px;height:34px;flex:none;border-radius:50%;background:#f2eff7;object-fit:cover}
 .chat-info{display:block;flex:1;min-width:0}
@@ -613,7 +614,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   </section>
   <div class="right-col">
     <div class="phone-stage">
-      <div class="phone" role="img" aria-label="Ilustração de um smartphone com o aplicativo PromoVie, mostrando as oito especialidades de atendimento">
+      <div class="phone" role="group" aria-label="Especialidades da PromoVie. Selecione um serviço para saber como acessar">
         <div class="phone-screen">
           
           <div class="list-heading"><strong>Especialidades</strong></div>
@@ -650,13 +651,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           <small>Homologação</small>
         </div>
         <label class="patient-login-label" for="test-cpf">CPF do paciente fictício de homologação</label>
-        <input id="test-cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" disabled />
+        <input id="test-cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" />
         <label class="patient-login-label" for="test-access-password">Senha da conta de teste</label>
-        <input id="test-access-password" type="password" autocomplete="off" disabled
+        <input id="test-access-password" type="password" autocomplete="off"
                spellcheck="false" placeholder="Digite a senha de homologação" />
         <p class="patient-login-help">Acesso reservado à homologação. Não informe dados de beneficiários reais.</p>
       </div>
-      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina com conta" disabled>
+      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina com conta">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
         <span>Acessar telemedicina</span>
       </button>
@@ -726,7 +727,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     try{return await response.json();}catch(e){return {};}
   }
   async function startWidget(){
-    if(busy||!ready)return;
+    if(busy)return;
+    if(!ready){
+      feedback("Os campos estão disponíveis para teste, mas a consulta ainda não pode ser aberta. A autenticação depende da homologação segura com a Médiquo.","info");
+      return;
+    }
     if(!BACKEND_URL){
       feedback("Esta segunda modalidade precisa da instalação do servidor seguro. A página está preparada, mas ainda não foi conectada ao backend.","error");
       return;
@@ -794,7 +799,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     }finally{
       passwordInput.value="";
       busy=false;
-      button.disabled=!ready;
+      button.disabled=false;
       label.textContent="Acessar telemedicina";
     }
   }
@@ -812,9 +817,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     });
   }
   async function checkEnvironment(){
-    button.disabled=true;
-    cpfInput.disabled=true;
-    passwordInput.disabled=true;
     feedback("Verificando o ambiente de homologação...","info");
     try{
       const r=await fetch(BACKEND_URL+V3+"/health",{
@@ -823,9 +825,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       const body=await getJson(r);
       ready=Boolean(r.ok&&body.status==="homologacao-pronta");
       if(ready){
-        button.disabled=false;
-        cpfInput.disabled=false;
-        passwordInput.disabled=false;
         feedback("Ambiente de homologação disponível para paciente fictício.","info");
       }else{
         feedback("Integração em configuração. O atendimento será habilitado após a homologação com a Médiquo.","info");
@@ -836,6 +835,25 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     }
   }
   checkEnvironment();
+  // A maquete mantém o mesmo visual, mas agora responde a cliques e teclado.
+  // A seleção somente orienta o acesso: a especialidade real é aberta no widget após autenticação.
+  for(const service of document.querySelectorAll(".phone .chat-row")){
+    const serviceName=(service.querySelector(".chat-info strong")||{}).textContent||"serviço";
+    service.setAttribute("role","button");
+    service.setAttribute("tabindex","0");
+    service.setAttribute("aria-label","Como acessar "+serviceName);
+    service.addEventListener("click",function(){
+      feedback("Para acessar "+serviceName+", utilize o formulário de homologação abaixo. O atendimento depende da autenticação na Médiquo.","info");
+      cpfInput.focus({preventScroll:true});
+      document.querySelector(".install-block").scrollIntoView({behavior:"smooth",block:"nearest"});
+    });
+    service.addEventListener("keydown",function(event){
+      if(event.key==="Enter"||event.key===" "){
+        event.preventDefault();
+        service.click();
+      }
+    });
+  }
   const zoomTrigger=document.getElementById("phone-zoom-trigger");
   const main=document.querySelector("main.main");
   const installBlock=document.querySelector(".install-block");
