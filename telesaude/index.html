@@ -448,6 +448,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 #sdk-entry-status:not([hidden]){margin:10px 0 0;padding:9px 12px;font:600 12px/1.5 var(--font-body);color:#44516b;background:#f4f8fe;border:1px solid #dce8f4;border-radius:10px;text-align:center}
 #sdk-entry-status[data-kind="error"]:not([hidden]){color:#8a3440;background:#fff2f2;border-color:#eccbd0}
 #sdk-entry-status[hidden]{display:none}
+/* Janela de retorno do acesso, sem alterar o desenho do aplicativo. */
+.access-result-dialog{
+  box-sizing:border-box;width:min(420px,calc(100vw - 32px));max-width:calc(100vw - 32px);
+  padding:26px 24px 23px;border:1px solid #e4dff3;border-radius:20px;
+  color:#25213b;background:#fff;box-shadow:0 22px 80px rgba(31,17,56,.24);
+  font-family:var(--font-body);text-align:center
+}
+.access-result-dialog::backdrop{background:rgba(28,17,48,.56)}
+.access-result-dialog .access-result-brand{color:#6231a7;font-size:12px;font-weight:800;letter-spacing:.02em}
+.access-result-dialog h2{margin:12px 0 10px;font:700 22px/1.3 var(--font-display)}
+.access-result-dialog p{margin:0 0 19px;color:#55516c;font-size:14px;line-height:1.65}
+.access-result-dialog button{
+  border:0;border-radius:12px;padding:12px 25px;min-height:46px;
+  color:#fff;background:#4b0c8f;font:700 14px var(--font-body)
+}
+.access-result-dialog button:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
 .patient-login #test-cpf{margin-bottom:12px}
 
 /* App Teste Novo 2: autenticação de homologação, integrada ao visual existente. */
@@ -665,6 +681,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     </div>
   </div>
 </main>
+<dialog id="access-result-dialog" class="access-result-dialog" aria-labelledby="access-result-title" aria-describedby="access-result-message">
+  <div class="access-result-brand">PromoVie | TeleSaúde</div>
+  <h2 id="access-result-title">Informações de acesso</h2>
+  <p id="access-result-message"></p>
+  <button type="button" id="access-result-close">Entendi</button>
+</dialog>
 
 <script>
 (function(){
@@ -681,23 +703,29 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   const passwordInput=document.getElementById("test-access-password");
   const cpfInput=document.getElementById("test-cpf");
   const sdkSource="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+  const accessDialog=document.getElementById("access-result-dialog");
+  const accessDialogTitle=document.getElementById("access-result-title");
+  const accessDialogMessage=document.getElementById("access-result-message");
+  const accessDialogClose=document.getElementById("access-result-close");
+  accessDialogClose.addEventListener("click",function(){accessDialog.close();});
   let busy=false;
   let ready=false;
   let initialized=false;
   let sdkPromise=null;
-  let messageTimer=null;
 
   function feedback(message,kind){
-    if(messageTimer){clearTimeout(messageTimer);messageTimer=null;}
     status.textContent=message||"";
     status.hidden=!message;
     status.dataset.kind=kind||"info";
-    if(message&&kind==="error"){
-      messageTimer=setTimeout(function(){
-        status.hidden=true;
-        status.textContent="";
-        messageTimer=null;
-      },10000);
+  }
+  function showAccessResult(title,message,kind){
+    feedback(message,kind||"info");
+    accessDialogTitle.textContent=title;
+    accessDialogMessage.textContent=message;
+    if(typeof accessDialog.showModal==="function"){
+      if(!accessDialog.open)accessDialog.showModal();
+    }else{
+      status.scrollIntoView({behavior:"smooth",block:"center"});
     }
   }
 
@@ -728,20 +756,28 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   }
   async function startWidget(){
     if(busy)return;
+    const cpf=cpfInput.value.replace(/\D/g,"");
+    if(cpf.length!==11){
+      showAccessResult("CPF de teste necessário","Digite os 11 dígitos do CPF fictício de homologação. Não utilize dados de pacientes reais.","error");
+      return;
+    }
+    if(!passwordInput.value){
+      showAccessResult("Senha de teste necessária","Informe a senha privada da conta de homologação para continuar.","error");
+      return;
+    }
     if(!ready){
-      feedback("Os campos estão disponíveis para teste, mas a consulta ainda não pode ser aberta. A autenticação depende da homologação segura com a Médiquo.","info");
+      passwordInput.value="";
+      showAccessResult("TeleSaúde em homologação","O botão respondeu, mas a consulta ainda não pode ser aberta: falta concluir a configuração segura com a Médiquo. Os dados digitados não foram enviados para autenticação.","info");
       return;
     }
     if(!BACKEND_URL){
-      feedback("Esta segunda modalidade precisa da instalação do servidor seguro. A página está preparada, mas ainda não foi conectada ao backend.","error");
+      showAccessResult("Servidor não configurado","O ambiente seguro de autenticação ainda precisa ser conectado.","error");
       return;
     }
     if(!/^https:\/\//i.test(BACKEND_URL)){
-      feedback("O servidor de autenticação deve usar endereço HTTPS.","error");
+      showAccessResult("Conexão não segura","O servidor de autenticação deve usar HTTPS.","error");
       return;
     }
-    const cpf=cpfInput.value.replace(/\D/g,"");
-    if(cpf.length!==11){feedback("Informe o CPF fictício de homologação com 11 dígitos.","error");cpfInput.focus();return;}
     busy=true;
     button.disabled=true;
     label.textContent="Conectando...";
@@ -795,7 +831,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     }catch(e){
       // Sem dados de autenticação ou detalhes técnicos sensíveis na mensagem.
       const m=String(e&&e.message||"Erro de conexão.");
-      feedback(m==="Failed to fetch"?"Não foi possível comunicar com o servidor seguro.":m,"error");
+      showAccessResult("Não foi possível abrir a TeleSaúde",m==="Failed to fetch"?"Não foi possível comunicar com o servidor seguro.":m,"error");
     }finally{
       passwordInput.value="";
       busy=false;
