@@ -5,9 +5,9 @@ Painel privado em /telesaude/gestao/ para registrar, pesquisar e arquivar
 beneficiários, separado da página pública e dos prontuários da Médiquo.
 
 ## Estado atual
-- Código da área administrativa e testes locais simulados preparados.
-- Ainda é necessário criar banco Cloudflare D1 e associar ao Worker.
-- Também é necessário configurar duas novas credenciais privadas na Cloudflare.
+- Painel administrativo publicado e banco Cloudflare D1 `promovie-beneficiarios` conectado.
+- Senha administrativa e chave de criptografia registradas como segredos na Cloudflare.
+- Login, cadastro local, consulta individual à Médiquo e testes públicos de saúde do Worker concluídos.
 - Nenhum dado pessoal é salvo no GitHub.
 - O histórico do antigo portal ID não será importado automaticamente.
 - Nenhuma licença real será cadastrada pela nova funcionalidade até autorização.
@@ -49,8 +49,9 @@ beneficiários, separado da página pública e dos prontuários da Médiquo.
 - Não importa os pacientes cadastrados anteriormente no ID Médiquo.
 - Envio real ao SDK permanece bloqueado (TELESAUDE_V3_WRITE_ENABLED=false).
 - Na primeira liberação, somente o CPF já autorizado será aceito.
-- O pacote do Pedro e a documentação pública apresentam rotas diferentes
-  para inclusão de pacientes: confirmar antes de qualquer cadastro real.
+- **A rota SDK já foi confirmada por Pedro** em 04/11/2026. Para pacientes PromoVie usar `https://sdk.mediquo.com/v1`, `PUT /patients`, `GET /patients/{cpf}` e o fluxo de autenticação SDK do kit. **Não trocar para a API ID baseada em documentação genérica.**
+- Antes da ativação, consultar o registro pelo SDK, manter a escrita bloqueada e só ativar o CPF de teste mediante autorização explícita.
+- Fonte canônica: `CONTRATO-SDK-PEDRO-2026-11-04.md`.
 
 ## Fontes
 - https://developers.cloudflare.com/d1/get-started/
