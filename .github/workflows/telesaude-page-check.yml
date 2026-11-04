@@ -28,10 +28,11 @@ jobs:
           js=re.findall(r'<script[^>]*>(.*?)</script>', page, flags=re.DOTALL|re.IGNORECASE)
           assert len(js)>=1, 'Deve haver pelo menos um bloco JavaScript'
           Path('/tmp/telesaude.js').write_text('\n;\n'.join(js))
-          assert 'const V3="/api/mediquo/v3"' in page
+          assert 'const ACCESS="/api/promovie/access/v1"' in page
           assert 'const BACKEND_URL="https://backend.promovie.tv.br"' in page
-          assert 'id="test-cpf"' in page
-          assert 'homologacao-pronta' in page
+          assert 'id="access-cpf"' in page and 'id="access-code"' in page
+          assert 'Código pessoal de acesso' in page
+          assert 'CPF do paciente fictício' not in page
           assert 'MEDIQUO_V3_SECRET_KEY' not in page
           assert 'type="password"' in page
           assert 'phone-zoom-trigger' in page and 'class="hero-heart"' in page
