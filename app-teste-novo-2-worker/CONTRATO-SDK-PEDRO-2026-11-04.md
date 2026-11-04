@@ -35,3 +35,13 @@ A **integração de pacientes da PromoVie utiliza a API SDK**, não o fluxo de c
 **Em novas tarefas e revisões deste projeto, esta orientação específica de Pedro e o kit SDK V3 são a referência.** A documentação pública de ID, por si só, **não autoriza** a troca dessas rotas. Se houver mudança futura, exigir nova comunicação explícita do fornecedor, registrar a data e preservar este histórico.
 
 Credenciais e dados pessoais ficam somente na Cloudflare/D1. Nenhum segredo, CPF ou token pode entrar no código ou em mensagens públicas.
+
+## Rotina operacional definitiva da PromoVie (após aprovação do modo multiusuário)
+O teste inicial de um único CPF exigiu alternar `TELESAUDE_V3_WRITE_ENABLED` entre `false` e `true` por cautela. **Isso não faz parte da rotina de cada novo cadastro.**
+
+- No modo de operação definitiva, o administrador ativa **uma vez** as permissões de escrita e múltiplos pacientes (`TELESAUDE_V3_WRITE_ENABLED=true` e `PROMOVIE_ADMIN_MULTI_PATIENT_ENABLED=true`) na Cloudflare. Elas permanecem habilitadas enquanto o serviço estiver em produção; não precisam ser alternadas por beneficiário.
+- Só colocar o modo definitivo em produção após validar com a Médiquo a capacidade contratada, como consultar licenças ocupadas/disponíveis, tratamento de cancelamento/suspensão e risco de duplicidade com o portal ID anterior. Não habilitar esses controles apenas por instalar a nova interface.
+- O painel oferece agora **Cadastrar e ativar**: após preencher nome e CPF, o frontend grava no D1, chama uma única vez o envio SDK protegido no Worker e consulta o plano 345. Se o envio ou a confirmação ficarem inconclusivos, o cadastro fica salvo localmente e **não ocorre reenvio automático**.
+- **Salvar apenas** continua disponível para cadastro local sem consumir licença. O painel é responsivo para computadores e celulares.
+- A ativação e as consultas dependem da resposta externa da Médiquo, por isso podem levar alguns segundos. Se a resposta falhar, a operação não deve ser repetida sem primeiro consultar o status do paciente existente.
+- O painel mantém autenticação administrativa e segurança do backend. A interface simplificada não cria acesso público para incluir pacientes.
