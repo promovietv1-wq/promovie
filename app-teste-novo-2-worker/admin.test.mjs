@@ -26,6 +26,7 @@ function database(){
     return {
       bind(...values){a=values;return this;},
       async first(){
+        if(sql==='SELECT 1 AS ok')return {ok:1};
         if(sql.includes('FROM pv_admin_login_attempts'))return attempts.get(a[0])||null;
         if(sql.includes('FROM pv_admin_sessions'))return sessions.get(a[0])?.expires_at>a[1]?sessions.get(a[0]):null;
         if(sql.includes('FROM pv_beneficiarios WHERE cpf_index=?'))return [...people.values()].find(p=>p.cpf_index===a[0])||null;
@@ -164,4 +165,17 @@ test('HTML usa somente login por senha e não contém chaves ou token no navegad
  const sql=await readFile(new URL('./schema-promovie.sql',import.meta.url),'utf8');
  assert.match(sql,/pv_beneficiarios/);
  assert.match(sql,/pv_admin_sessions/);
+});
+
+test('health verifica banco D1 sem credenciais no navegador',async()=>{
+  const db=database();
+  const good=await call(db,'/health');
+  assert.equal(good.status,200);
+  assert.deepEqual((await good.json()).banco,'conectado');
+  const prelogin=await call(db,'/me');
+  assert.equal(prelogin.status,401);
+  assert.equal(db.sessions.size,0);
+  assert.equal(db.people.size,0);
+  const disabled=await call(db,'/health',{}, {PROMOVIE_ADMIN_DATA_KEY:'curta'});
+  assert.equal(disabled.status,503);
 });
