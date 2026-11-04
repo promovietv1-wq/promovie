@@ -1,0 +1,150 @@
+name: TeleSaude - validar identidade visual e responsividade
+on:
+  push:
+    paths:
+      - 'telesaude/gestao/index.html'
+      - 'telesaude/index.html'
+      - '.github/workflows/telesaude-gestao-visual.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  identidade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar marcas, estilos, mobile e estrutura HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import re
+
+          root=Path('.')
+          public=(root/'telesaude/index.html').read_text()
+          app=(root/'app/index.html').read_text()
+          panel=(root/'telesaude/gestao/index.html').read_text()
+          class Parser(HTMLParser):
+            def __init__(self):
+              super().__init__()
+              self.ids=[]
+              self.images=[]
+              self.viewport=False
+              self.forms=[]
+            def handle_starttag(self,tag,attrs):
+              a=dict(attrs)
+              if a.get('id'): self.ids.append(a['id'])
+              if tag=='img': self.images.append(a.get('src',''))
+              if tag=='meta' and a.get('name')=='viewport': self.viewport=True
+              if tag=='form': self.forms.append(a.get('id',''))
+
+          p=Parser();p.feed(panel)
+          assert p.viewport
+          assert len(p.ids)==len(set(p.ids)), 'IDs duplicados'
+          assert 'login-form' in p.forms and 'new-form' in p.forms
+          expected={'login-card','dashboard','record-list','history','logout','selected-status','login-button','banner'}
+          assert expected.issubset(set(p.ids))
+          assert '/preview-promovie-logo.webp' in p.images
+          assert '/app/assets/coracao-promovie-com-logo.webp' in p.images
+          for name in ('preview-promovie-logo.webp','app/assets/coracao-promovie-com-logo.webp','app/icons/apple-touch-coracao-promovie.png'):
+            assert (root/name).is_file(), f'Asset ausente: {name}'
+          for name in ('Inter','Sora','#4b0c8f','#7334d8','#00bde8'):
+            assert name in panel and name in public and name in app
+          assert '@media(max-width:850px)' in panel
+          assert '@media(max-width:650px)' in panel
+          assert '@media(max-width:440px)' in panel
+          assert 'min-width:320px' in panel
+          assert 'grid-template-columns:1fr' in panel
+          assert 'noindex,nofollow' in panel
+          assert "credentials:'include'" in panel
+          assert "id=\"record-list\"" in panel
+          assert 'MEDIQUO_V3_SDK_SECRET_KEY' not in panel
+          assert 'TELESAUDE_V3_SYNC_TOKEN' not in panel
+          print('Identidade, layout responsivo, assets e formulários verificados.')
+          PY
+      - name: Validar sintaxe JavaScript do painel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          h=Path('telesaude/gestao/index.html').read_text()
+          scripts=re.findall(r'<script[^>]*>(.*?)</script>', h, flags=re.S|re.I)
+          assert len(scripts)==1
+          Path('/tmp/gestao-promovie.js').write_text(scripts[0])
+          PY
+          node --check /tmp/gestao-promovie.js
+
+  responsividade-real:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar Chromium para teste do layout
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Validar renderização desktop e mobile
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/pv-server.log 2>&1 &
+          sleep 2
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from 'playwright';
+          import {mkdir} from 'node:fs/promises';
+          const browser=await chromium.launch({headless:true});
+          await mkdir('/tmp/pv-prints',{recursive:true});
+          try{
+            for(const width of [320,360,390,414,768,1024,1440]){
+              const page=await browser.newPage({viewport:{width,height:850},deviceScaleFactor:1,
+                reducedMotion:'reduce'});
+              await page.route('https://backend.promovie.tv.br/**',route=>route.fulfill({
+                status:401,contentType:'application/json',
+                headers:{'Access-Control-Allow-Origin':'https://www.promovie.tv.br',
+                  'Access-Control-Allow-Credentials':'true'},
+                body:JSON.stringify({error:'Sessão de teste, sem acesso a dados reais.'})
+              }));
+              await page.goto('http://127.0.0.1:8765/telesaude/gestao/',{waitUntil:'load'});
+              await page.waitForTimeout(250);
+              assert.equal(await page.locator('#login-card').isVisible(),true);
+              assert.equal(await page.locator('.site-brand img').evaluate(el=>el.naturalWidth>0),true,'Logo não carregou');
+              assert.equal(await page.locator('.login-art img').evaluate(el=>el.naturalWidth>0),true,'Coração não carregou');
+              const login=await page.evaluate(()=>({
+                scroll:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth,
+                font:getComputedStyle(document.body).fontFamily,display:getComputedStyle(document.querySelector('h1')).fontFamily
+              }));
+              assert.ok(login.scroll<=login.viewport+1,'Rolagem horizontal no login em '+width+': '+JSON.stringify(login));
+              assert.match(login.font,/Inter/);
+              assert.match(login.display,/Sora/);
+              await page.screenshot({path:'/tmp/pv-prints/login-'+width+'.png',fullPage:true});
+              await page.evaluate(()=>{
+                document.querySelector('#login-card').hidden=true;
+                document.querySelector('#dashboard').hidden=false;
+              });
+              await page.locator('#add-button').click();
+              assert.equal(await page.locator('#new-form').isVisible(),true);
+              const admin=await page.evaluate(()=>({
+                scroll:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth
+              }));
+              assert.ok(admin.scroll<=admin.viewport+1,'Rolagem horizontal no painel em '+width+': '+JSON.stringify(admin));
+              await page.screenshot({path:'/tmp/pv-prints/painel-'+width+'.png',fullPage:true});
+              console.log('Layout responsivo aprovado:',width+'px');
+              await page.close();
+            }
+          }finally{await browser.close();}
+          JS
+      - name: Guardar capturas para inspeção
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-promovie-telesaude-gestao
+          path: /tmp/pv-prints/
+          if-no-files-found: ignore
