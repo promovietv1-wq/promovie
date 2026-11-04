@@ -3,6 +3,7 @@
   "name": "promovie-mediquo-teste-2",
   "main": "src/index.mjs",
   "compatibility_date": "2026-10-20",
+  "keep_vars": true,
   // O dominio backend.promovie.tv.br ja esta conectado na Cloudflare.
   // Preservar o DNS, o Worker antigo e os registros existentes.
   "d1_databases": [
