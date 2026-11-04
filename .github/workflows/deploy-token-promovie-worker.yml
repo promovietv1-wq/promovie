@@ -1,0 +1,60 @@
+name: Publicar Worker Token PromoVie
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app-teste-novo-2-worker/src/**'
+      - 'app-teste-novo-2-worker/wrangler.jsonc'
+      - 'app-teste-novo-2-worker/package.json'
+      - '.github/workflows/deploy-token-promovie-worker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: promovie-worker-producao
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Executar testes antes de implantar
+        working-directory: app-teste-novo-2-worker
+        run: npm test
+      - name: Verificar credenciais de implantacao
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CF_TOKEN" ] || [ -z "$CF_ACCOUNT" ]; then
+            echo "::error::Worker nao publicado: os segredos CLOUDFLARE_API_TOKEN e/ou CLOUDFLARE_ACCOUNT_ID nao estao configurados no GitHub Actions."
+            echo "As paginas podem estar publicadas, mas o backend anterior continua ativo."
+            exit 1
+          fi
+          echo "Credenciais de implantacao disponiveis, sem revelar os valores."
+      - name: Publicar o Worker existente com variaveis preservadas
+        working-directory: app-teste-novo-2-worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm install --no-audit --no-fund
+          npx wrangler deploy --keep-vars
+      - name: Verificar saude administrativa apos a publicacao
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          const base='https://backend.promovie.tv.br/api/promovie/admin/v1/health';
+          const r=await fetch(base,{headers:{'Cache-Control':'no-cache'},signal:AbortSignal.timeout(15000)});
+          assert.equal(r.status,200,'O backend deve responder via HTTPS');
+          const v=await r.json();
+          assert.equal(v.banco,'conectado');
+          console.log('Worker publicado e D1 conectado sem ler ou enviar dados de beneficiarios.');
+          JS
