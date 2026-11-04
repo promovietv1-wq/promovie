@@ -107,45 +107,6 @@ export async function handleV3(request,env,cors={}){
     if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
     return reply(200,{apiKey:value(env,'MEDIQUO_V3_WIDGET_API_KEY'),environment:'production'},cors);
   }
-  if(path===PREFIX+'/self-enroll'&&method==='POST'){
-    if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
-    if(value(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
-      return reply(503,{error:'Cadastro individual ainda não liberado.'},cors);
-    if(rateLimited(request))return reply(429,{error:'Muitas tentativas. Tente novamente mais tarde.'},cors);
-    try{
-      const input=await jsonInput(request),cpf=digits(input?.document);
-      if(!validCPF(cpf))return reply(400,{error:'Informe um CPF válido.'},cors);
-      if(cpf!==value(env,'TELESAUDE_V3_TEST_CPF')||
-        !await sameSecret(input?.testPassword,value(env,'TELESAUDE_V3_TEST_PASSWORD')))
-        return reply(401,{error:'CPF ou senha não autorizados para a ativação.'},cors);
-      const fullName=safeName(input?.name);
-      if(!fullName||!fullName.includes(' '))
-        return reply(400,{error:'Informe nome e sobrenome.'},cors);
-      const words=fullName.split(' ');
-      const firstName=words.shift();
-      const lastName=words.join(' ');
-      // Antes de criar, confere se já existe, evitando duplicidade e alterações indevidas.
-      const found=await vendor(env,'/patients/'+encodeURIComponent(cpf),'GET');
-      if(found.ok){
-        const patient=unwrapPatient(found.data);
-        if(!patient||digits(patient.code)!==cpf)
-          return reply(409,{error:'Registro existente não corresponde ao CPF autorizado.'},cors);
-        if(patient.unsubscribed_at||String(patient.plan)!==value(env,'MEDIQUO_V3_PLAN'))
-          return reply(409,{error:'Já existe registro com situação ou plano diferente. Não foi alterado.'},cors);
-        return reply(200,{ok:true,status:'ja_cadastrado'},cors);
-      }
-      if(found.status!==404)return reply(502,{error:'Falha ao consultar cadastro. Nenhuma inclusão foi realizada.'},cors);
-      const patient={code:cpf,tax_id:cpf,first_name:firstName,last_name:lastName,
-        plan:value(env,'MEDIQUO_V3_PLAN'),locale:'pt'};
-      const created=await vendor(env,'/patients','PUT',{patients:[patient]});
-      if(!created.ok)return reply(502,{error:'Cadastro não confirmado pela Médiquo. Nenhuma confirmação de licença.'},cors);
-      // PUT é assíncrono no fornecedor. Nunca afirmar ativação sem posterior GET.
-      return reply(202,{ok:true,status:'cadastro_enviado',message:'Cadastro enviado. Aguarde o processamento e tente acessar.'},cors);
-    }catch(e){
-      return reply(e?.code===413?413:e?.code===400?400:502,
-        {error:'Não foi possível concluir o cadastro individual.'},cors);
-    }
-  }
   if(path===PREFIX+'/patients/sync'&&method==='POST'){
     if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
     if(value(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
