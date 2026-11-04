@@ -18,6 +18,8 @@
     "MEDIQUO_V3_PLAN": "345",
     "MEDIQUO_V3_ORIGIN": "SDK",
     "MEDIQUO_V3_BASE_URL": "https://sdk.mediquo.com/v1",
+    // Chave PUBLICA do Widget enviada no kit V3 pelo fornecedor.
+    "MEDIQUO_V3_WIDGET_API_KEY": "HkmxlRZzJ00SlB8U",
     "MEDIQUO_V3_ID_BASE_URL": "https://api-portal.mediquo.com.br",
     // A documentacao publica apresenta duas rotas de token. O modo CPF segue o SDK Overview.
     "MEDIQUO_V3_SDK_AUTH_MODE": "cpf"
