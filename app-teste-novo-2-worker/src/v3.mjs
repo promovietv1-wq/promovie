@@ -1,7 +1,7 @@
 // SDK MediQuo V3 - fluxo fornecido pelo suporte no kit final de 30/10/2026.
-// Habilitacao somente em homologacao, com um unico CPF de teste e senha privada.
+// Liberacao restrita a um CPF autorizado e senha privada durante a primeira ativacao.
 // API de pacientes SDK: PUT/GET /patients e POST /patients/authenticate.
-// Nenhuma credencial, CPF de paciente real ou token de sessao entra no GitHub.
+// Nenhuma credencial, CPF de paciente ou token de sessao entra no GitHub.
 const PREFIX='/api/mediquo/v3';
 const MAX_BODY=4096;
 const ATTEMPTS=new Map();
@@ -62,9 +62,10 @@ function rateLimited(request){
   return ++r.count>8;
 }
 function vendorHeaders(env){
-  // O pacote especifico enviado pelo Pedro usa a Secret Key no header X-API-Key.
-  // Nao confundir com a API Key publica usada somente pelo Widget.
-  return {'Content-Type':'application/json','X-API-Key':value(env,'MEDIQUO_V3_SDK_SECRET_KEY')};
+  // A documentacao oficial exige OS DOIS headers, nunca apenas a Secret Key.
+  return {'Content-Type':'application/json',
+    'X-API-Key':value(env,'MEDIQUO_V3_WIDGET_API_KEY'),
+    'X-Secret-Key':value(env,'MEDIQUO_V3_SDK_SECRET_KEY')};
 }
 async function vendor(env,path,method,data){
   const r=await fetch(sdkBase(env)+path,{method,headers:vendorHeaders(env),
@@ -74,6 +75,22 @@ async function vendor(env,path,method,data){
   if(method==='PUT')return {ok:true,status:r.status};
   try{return {ok:true,data:await r.json(),status:r.status};}
   catch{return {ok:false,status:502};}
+}
+function validCPF(cpf){
+  if(!/^\d{11}$/.test(cpf)||/^(\d)\1{10}$/.test(cpf))return false;
+  for(let length=9;length<=10;length++){
+    let sum=0;
+    for(let i=0;i<length;i++)sum+=Number(cpf[i])*(length+1-i);
+    let digit=(sum*10)%11;
+    if(digit===10)digit=0;
+    if(digit!==Number(cpf[length]))return false;
+  }
+  return true;
+}
+function safeName(name){
+  if(typeof name!=='string')return '';
+  const s=name.trim().replace(/\s+/g,' ');
+  return s.length>=2&&s.length<=100&&!/[\d<>]/.test(s)?s:'';
 }
 function unwrapPatient(data){
   const p=data?.data?.patient||data?.data||data?.patient||data;
@@ -90,6 +107,45 @@ export async function handleV3(request,env,cors={}){
     if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
     return reply(200,{apiKey:value(env,'MEDIQUO_V3_WIDGET_API_KEY'),environment:'production'},cors);
   }
+  if(path===PREFIX+'/self-enroll'&&method==='POST'){
+    if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
+    if(value(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
+      return reply(503,{error:'Cadastro individual ainda não liberado.'},cors);
+    if(rateLimited(request))return reply(429,{error:'Muitas tentativas. Tente novamente mais tarde.'},cors);
+    try{
+      const input=await jsonInput(request),cpf=digits(input?.document);
+      if(!validCPF(cpf))return reply(400,{error:'Informe um CPF válido.'},cors);
+      if(cpf!==value(env,'TELESAUDE_V3_TEST_CPF')||
+        !await sameSecret(input?.testPassword,value(env,'TELESAUDE_V3_TEST_PASSWORD')))
+        return reply(401,{error:'CPF ou senha não autorizados para a ativação.'},cors);
+      const fullName=safeName(input?.name);
+      if(!fullName||!fullName.includes(' '))
+        return reply(400,{error:'Informe nome e sobrenome.'},cors);
+      const words=fullName.split(' ');
+      const firstName=words.shift();
+      const lastName=words.join(' ');
+      // Antes de criar, confere se já existe, evitando duplicidade e alterações indevidas.
+      const found=await vendor(env,'/patients/'+encodeURIComponent(cpf),'GET');
+      if(found.ok){
+        const patient=unwrapPatient(found.data);
+        if(!patient||digits(patient.code)!==cpf)
+          return reply(409,{error:'Registro existente não corresponde ao CPF autorizado.'},cors);
+        if(patient.unsubscribed_at||String(patient.plan)!==value(env,'MEDIQUO_V3_PLAN'))
+          return reply(409,{error:'Já existe registro com situação ou plano diferente. Não foi alterado.'},cors);
+        return reply(200,{ok:true,status:'ja_cadastrado'},cors);
+      }
+      if(found.status!==404)return reply(502,{error:'Falha ao consultar cadastro. Nenhuma inclusão foi realizada.'},cors);
+      const patient={code:cpf,tax_id:cpf,first_name:firstName,last_name:lastName,
+        plan:value(env,'MEDIQUO_V3_PLAN'),locale:'pt'};
+      const created=await vendor(env,'/patients','PUT',{patients:[patient]});
+      if(!created.ok)return reply(502,{error:'Cadastro não confirmado pela Médiquo. Nenhuma confirmação de licença.'},cors);
+      // PUT é assíncrono no fornecedor. Nunca afirmar ativação sem posterior GET.
+      return reply(202,{ok:true,status:'cadastro_enviado',message:'Cadastro enviado. Aguarde o processamento e tente acessar.'},cors);
+    }catch(e){
+      return reply(e?.code===413?413:e?.code===400?400:502,
+        {error:'Não foi possível concluir o cadastro individual.'},cors);
+    }
+  }
   if(path===PREFIX+'/patients/sync'&&method==='POST'){
     if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
     if(value(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
@@ -104,8 +160,11 @@ export async function handleV3(request,env,cors={}){
       const p=list[0],cpf=digits(p.document||p.cpf||p.code);
       if(cpf!==value(env,'TELESAUDE_V3_TEST_CPF')||p.active===false)
         return reply(403,{error:'Paciente não autorizado na homologação.'},cors);
+      const name=safeName(p.name);
+      if(!name||!name.includes(' '))return reply(400,{error:'Nome completo obrigatório.'},cors);
+      const words=name.split(' ');
       const patient={code:cpf,tax_id:cpf,plan:value(env,'MEDIQUO_V3_PLAN'),
-        first_name:'Paciente',last_name:'Homologacao',locale:'pt'};
+        first_name:words.shift(),last_name:words.join(' '),locale:'pt'};
       const r=await vendor(env,'/patients','PUT',{patients:[patient]});
       if(!r.ok)return reply(502,{error:'Não foi possível sincronizar o paciente de teste.'},cors);
       return reply(200,{ok:true,enviados:1},cors);
@@ -119,7 +178,7 @@ export async function handleV3(request,env,cors={}){
     if(rateLimited(request))return reply(429,{error:'Muitas tentativas.'},cors);
     try{
       const input=await jsonInput(request),cpf=digits(input?.document);
-      if(!/^\d{11}$/.test(cpf))return reply(400,{error:'CPF de teste inválido.'},cors);
+      if(!validCPF(cpf))return reply(400,{error:'CPF inválido.'},cors);
       if(cpf!==value(env,'TELESAUDE_V3_TEST_CPF')||
          !await sameSecret(input?.testPassword,value(env,'TELESAUDE_V3_TEST_PASSWORD')))
         return reply(401,{error:'Não autorizado.'},cors);
@@ -132,7 +191,7 @@ export async function handleV3(request,env,cors={}){
       if(!p||p.unsubscribed_at||p.active===false||String(p.plan)!=='345'||
          (p.code!==undefined&&digits(p.code)!==cpf))
         return reply(403,{error:'Paciente de teste sem plano ativo.'},cors);
-      const auth=await vendor(env,'/patients/authenticate','POST',{code:cpf});
+      const auth=await vendor(env,'/patients/authenticate?code='+encodeURIComponent(cpf),'POST');
       const token=auth.data?.access_token||auth.data?.data?.access_token;
       if(!auth.ok||typeof token!=='string'||!token)
         return reply(502,{error:'Não foi possível gerar a sessão SDK.'},cors);

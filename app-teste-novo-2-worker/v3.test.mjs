@@ -31,11 +31,14 @@ function mockVendor(options={}){
     if(u.endsWith('/patients')&&init.method==='PUT'){
       data={};return new Response(JSON.stringify(data),{status:200,headers:{'Content-Type':'application/json'}});
     }
-    if(u.endsWith('/patients/'+cpf))data={
+    if(u.endsWith('/patients/'+cpf)){
+      if(options.missing)return new Response(JSON.stringify({error:'Not found'}),{status:404,headers:{'Content-Type':'application/json'}});
+      data={
       data:{code:cpf,plan:options.plan??'345',
       ...(options.inactive?{unsubscribed_at:'2026-01-01'}:{})}
-    };
-    else if(u.endsWith('/patients/authenticate'))data={access_token:'sessao-ficticia'};
+      };
+    }
+    else if(u.includes('/patients/authenticate?code='))data={access_token:'sessao-ficticia'};
     else throw Error('Endpoint inesperado: '+u);
     return new Response(JSON.stringify(data),{status:200,headers:{'Content-Type':'application/json'}});
   };
@@ -67,7 +70,7 @@ test('CPF sozinho ou senha inválida são bloqueados antes da consulta SDK',asyn
     const a=await call('/session',{method:'POST',body:JSON.stringify({document:cpf})});
     const b=await call('/session',{method:'POST',body:JSON.stringify({document:'12345678901',
       testPassword:env.TELESAUDE_V3_TEST_PASSWORD})});
-    assert.equal(a.status,401);assert.equal(b.status,401);assert.equal(external,0);
+    assert.equal(a.status,401);assert.equal(b.status,400);assert.equal(external,0);
   }finally{globalThis.fetch=original;}
 });
 test('sincronizacao exige habilitacao de escrita e token privado, aceitando apenas CPF ficticio',async()=>{
@@ -83,21 +86,22 @@ test('sincronizacao exige habilitacao de escrita e token privado, aceitando apen
     assert.equal(m.calls.length,0);
   }finally{m.restore();}
 });
-test('kit final: PUT /patients SDK, campo plan 345 e X-API-Key usando Secret Key',async()=>{
+test('kit final: PUT /patients SDK, plano 345 e dois headers de autenticação',async()=>{
   const m=mockVendor();
   try{
     const r=await call('/patients/sync',{
       method:'POST',headers:{Authorization:'Bearer '+env.TELESAUDE_V3_SYNC_TOKEN},
-      body:JSON.stringify({patients:[{document:cpf}]})
+      body:JSON.stringify({patients:[{document:cpf,name:'Marco Polese'}]})
     },{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
     assert.equal(r.status,200);assert.deepEqual(await r.json(),{ok:true,enviados:1});
     assert.equal(m.calls.length,1);
     assert.equal(m.calls[0].url,'https://sdk.mediquo.com/v1/patients');
     assert.equal(m.calls[0].method,'PUT');
-    assert.equal(m.calls[0].headers['X-API-Key'],env.MEDIQUO_V3_SDK_SECRET_KEY);
+    assert.equal(m.calls[0].headers['X-API-Key'],env.MEDIQUO_V3_WIDGET_API_KEY);
+    assert.equal(m.calls[0].headers['X-Secret-Key'],env.MEDIQUO_V3_SDK_SECRET_KEY);
     const body=JSON.parse(m.calls[0].body);
     assert.deepEqual(body,{patients:[{code:cpf,tax_id:cpf,plan:'345',
-      first_name:'Paciente',last_name:'Homologacao',locale:'pt'}]});
+      first_name:'Marco',last_name:'Polese',locale:'pt'}]});
     assert.equal(JSON.stringify(body).includes('clientId'),false);
   }finally{m.restore();}
 });
@@ -110,10 +114,11 @@ test('paciente ativo retorna access_token com fluxo do pacote do Pedro',async()=
     assert.equal(r.status,200);assert.deepEqual(await r.json(),{access_token:'sessao-ficticia'});
     assert.deepEqual(m.calls.map(x=>[x.method,x.url]),[
       ['GET','https://sdk.mediquo.com/v1/patients/'+cpf],
-      ['POST','https://sdk.mediquo.com/v1/patients/authenticate']
+      ['POST','https://sdk.mediquo.com/v1/patients/authenticate?code='+cpf]
     ]);
-    assert.deepEqual(JSON.parse(m.calls[1].body),{code:cpf});
-    assert.equal(m.calls[1].headers['X-API-Key'],env.MEDIQUO_V3_SDK_SECRET_KEY);
+    assert.equal(m.calls[1].body,undefined);
+    assert.equal(m.calls[1].headers['X-API-Key'],env.MEDIQUO_V3_WIDGET_API_KEY);
+    assert.equal(m.calls[1].headers['X-Secret-Key'],env.MEDIQUO_V3_SDK_SECRET_KEY);
   }finally{m.restore();}
 });
 test('plano diferente ou paciente inativo sao bloqueados sem emitir token',async()=>{
@@ -134,4 +139,56 @@ test('pagina oficial preserva a aparencia, oito servicos e backend correto',asyn
   assert.match(html,/senha privada (?:da conta )?de homologação/i);
   assert.equal((html.match(/class="chat-row"/g)||[]).length,8);
   assert.doesNotMatch(html,/MEDIQUO_V3_SDK_SECRET_KEY\s*=/);
+});
+
+test('cadastro individual é bloqueado sem flag, sem senha ou com CPF diferente',async()=>{
+  const m=mockVendor();
+  try{
+    const body=JSON.stringify({document:cpf,name:'Marco Polese',
+      testPassword:env.TELESAUDE_V3_TEST_PASSWORD});
+    assert.equal((await call('/self-enroll',{method:'POST',body})).status,503);
+    const e={...env,TELESAUDE_V3_WRITE_ENABLED:'true'};
+    assert.equal((await call('/self-enroll',{method:'POST',body:JSON.stringify({
+      document:cpf,name:'Marco Polese',testPassword:'senha-incorreta'})},e)).status,401);
+    assert.equal((await call('/self-enroll',{method:'POST',body:JSON.stringify({
+      document:'11111111111',name:'Marco Polese',testPassword:env.TELESAUDE_V3_TEST_PASSWORD})},e)).status,400);
+    assert.equal(m.calls.length,0);
+  }finally{m.restore();}
+});
+test('cadastro individual cria um paciente real somente quando CPF e senha coincidem',async()=>{
+  const m=mockVendor({missing:true});
+  try{
+    const r=await call('/self-enroll',{method:'POST',body:JSON.stringify({
+      document:cpf,name:'Marco Aurélio Polese',
+      testPassword:env.TELESAUDE_V3_TEST_PASSWORD
+    })},{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
+    assert.equal(r.status,202);assert.equal((await r.json()).status,'cadastro_enviado');
+    assert.equal(m.calls.length,2);
+    assert.equal(m.calls[0].method,'GET');
+    assert.equal(m.calls[1].method,'PUT');
+    assert.deepEqual(JSON.parse(m.calls[1].body),{patients:[{
+      code:cpf,tax_id:cpf,first_name:'Marco',last_name:'Aurélio Polese',plan:'345',locale:'pt'
+    }]});
+  }finally{m.restore();}
+});
+test('cadastro individual não sobrescreve pessoa já cadastrada',async()=>{
+  const m=mockVendor();
+  try{
+    const r=await call('/self-enroll',{method:'POST',body:JSON.stringify({
+      document:cpf,name:'Marco Polese',testPassword:env.TELESAUDE_V3_TEST_PASSWORD
+    })},{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
+    assert.equal((await r.json()).status,'ja_cadastrado');
+    assert.equal(m.calls.length,1);
+  }finally{m.restore();}
+});
+
+test('cadastro privado abre em pagina separada e nao grava credenciais no GitHub',async()=>{
+  const html=await readFile(new URL('../telesaude/cadastro/index.html',import.meta.url),'utf8');
+  assert.match(html,/name="viewport"/);
+  assert.match(html,/noindex,nofollow/);
+  assert.match(html,/\/self-enroll/);
+  assert.match(html,/\/session/);
+  assert.match(html,/accessToken:data.access_token/);
+  assert.match(html,/nameField.value/);
+  assert.doesNotMatch(html,/(?:MEDIQUO_V3_SDK_SECRET_KEY\s*=|ENpPu3ZGAuVXEsXQ)/);
 });
