@@ -464,9 +464,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   color:#fff;background:#4b0c8f;font:700 14px var(--font-body)
 }
 .access-result-dialog button:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
-.patient-login #test-cpf{margin-bottom:12px}
+.patient-login #access-cpf{margin-bottom:12px}
 
-/* App Teste Novo 2: autenticação de homologação, integrada ao visual existente. */
+/* Acesso individual Token PromoVie, preservando identidade visual e responsividade. */
 .patient-login{margin:0 auto 14px;text-align:left;padding:17px 17px 13px;border:1px solid #e4dff3;border-radius:18px;background:linear-gradient(150deg,#fff,#f8f7fe);box-shadow:0 8px 25px rgba(66,44,121,.06)}
 .patient-login-top{display:flex;align-items:center;gap:8px;color:#4b2b80;font-size:12px;font-weight:800;margin-bottom:13px}
 .patient-login-top small{font-size:10px;font-weight:650;margin-left:auto;color:#7d6c98;background:#eee8fb;border-radius:7px;padding:4px 7px}
@@ -663,19 +663,19 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       <div class="patient-login">
         <div class="patient-login-top">
           <span class="patient-login-dot" aria-hidden="true"></span>
-          <span>Acesso identificado</span>
-          <small>Homologação</small>
+          <span>Token PromoVie</span>
+          <small>Acesso seguro</small>
         </div>
-        <label class="patient-login-label" for="test-cpf">CPF do paciente fictício de homologação</label>
-        <input id="test-cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" />
-        <label class="patient-login-label" for="test-access-password">Senha da conta de teste</label>
-        <input id="test-access-password" type="password" autocomplete="off"
-               spellcheck="false" placeholder="Digite a senha de homologação" />
-        <p class="patient-login-help">Acesso reservado à homologação. Não informe dados de beneficiários reais.</p>
+        <label class="patient-login-label" for="access-cpf">CPF do beneficiário</label>
+        <input id="access-cpf" type="text" inputmode="numeric" autocomplete="username" maxlength="14" placeholder="000.000.000-00" />
+        <label class="patient-login-label" for="access-code">Código pessoal de acesso</label>
+        <input id="access-code" type="password" autocomplete="off" maxlength="32"
+               spellcheck="false" placeholder="Código fornecido pela PromoVie" />
+        <p class="patient-login-help">Informe o código individual fornecido pela PromoVie. Ele é pessoal e não deve ser compartilhado.</p>
       </div>
-      <button type="button" class="install" id="install-now" aria-label="Acessar telemedicina com conta">
+      <button type="button" class="install" id="install-now" aria-label="Acessar TeleSaúde PromoVie" disabled>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
-        <span>Acessar telemedicina</span>
+        <span>Verificando acesso...</span>
       </button>
       <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
     </div>
@@ -692,26 +692,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 (function(){
   "use strict";
 
-  // Segunda opção enviada pela Médiquo: frontend + backend autenticador.
-  // Configurar APENAS a URL pública HTTPS do backend depois da implantação.
-  // Nunca inserir MEDIQUO_SECRET_KEY aqui ou em repositórios públicos.
+  // O navegador não conhece segredos administrativos nem chaves privadas.
+  // A API publica valida CPF + codigo individual no servidor antes de emitir sessao.
   const BACKEND_URL="https://backend.promovie.tv.br";
-  const V3="/api/mediquo/v3";
+  const ACCESS="/api/promovie/access/v1";
   const button=document.getElementById("install-now");
   const status=document.getElementById("sdk-entry-status");
   const label=button.querySelector("span");
-  const passwordInput=document.getElementById("test-access-password");
-  const cpfInput=document.getElementById("test-cpf");
+  const codeInput=document.getElementById("access-code");
+  const cpfInput=document.getElementById("access-cpf");
   const sdkSource="https://widget.mediquo.com/js/1.0.0/mediquo.js";
   const accessDialog=document.getElementById("access-result-dialog");
   const accessDialogTitle=document.getElementById("access-result-title");
   const accessDialogMessage=document.getElementById("access-result-message");
   const accessDialogClose=document.getElementById("access-result-close");
   accessDialogClose.addEventListener("click",function(){accessDialog.close();});
-  let busy=false;
-  let ready=false;
-  let initialized=false;
-  let sdkPromise=null;
+  let busy=false,ready=false,initialized=false,sdkPromise=null;
 
   function feedback(message,kind){
     status.textContent=message||"";
@@ -728,7 +724,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       status.scrollIntoView({behavior:"smooth",block:"center"});
     }
   }
-
   function loadSdk(){
     if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function"){
       return Promise.resolve(window.MediquoWidget);
@@ -739,108 +734,93 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       script.src=sdkSource;
       script.async=true;
       const timeout=setTimeout(function(){
-        script.remove();reject(new Error("O SDK não respondeu."));
+        script.remove();reject(new Error("O atendimento não respondeu. Tente novamente."));
       },18000);
       script.onload=function(){
         clearTimeout(timeout);
         if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")resolve(window.MediquoWidget);
-        else reject(new Error("SDK não disponível."));
+        else reject(new Error("O atendimento não está disponível neste momento."));
       };
-      script.onerror=function(){clearTimeout(timeout);reject(new Error("Não foi possível carregar o SDK."));};
+      script.onerror=function(){clearTimeout(timeout);reject(new Error("Não foi possível conectar ao atendimento."));};
       document.head.appendChild(script);
     }).catch(function(e){sdkPromise=null;throw e;});
     return sdkPromise;
   }
   async function getJson(response){
-    try{return await response.json();}catch(e){return {};}
+    try{return await response.json();}catch{return {};}
+  }
+  async function checkEnvironment(){
+    try{
+      const r=await fetch(BACKEND_URL+ACCESS+"/health",{
+        cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
+      });
+      const data=await getJson(r);
+      ready=Boolean(r.ok&&data.disponivel===true);
+    }catch{ready=false;}
+    button.disabled=!ready;
+    label.textContent=ready?"Acessar TeleSaúde PromoVie":"Acesso em preparação";
+    feedback(ready?"":"O acesso individual ainda está em preparação. Para receber orientação, entre em contato com a PromoVie.",ready?"info":"info");
   }
   async function startWidget(){
-    if(busy)return;
+    if(busy||!ready)return;
     const cpf=cpfInput.value.replace(/\D/g,"");
+    const codigo=codeInput.value.trim();
     if(cpf.length!==11){
-      showAccessResult("CPF de teste necessário","Digite os 11 dígitos do CPF fictício de homologação. Não utilize dados de pacientes reais.","error");
+      showAccessResult("Informe seu CPF","Digite os 11 números do CPF cadastrado na PromoVie.","error");
+      cpfInput.focus();
       return;
     }
-    if(!passwordInput.value){
-      showAccessResult("Senha de teste necessária","Informe a senha privada da conta de homologação para continuar.","error");
-      return;
-    }
-    if(!ready){
-      passwordInput.value="";
-      showAccessResult("TeleSaúde em homologação","O botão respondeu, mas a consulta ainda não pode ser aberta: falta concluir a configuração segura do Token PromoVie. Os dados digitados não foram enviados para autenticação.","info");
-      return;
-    }
-    if(!BACKEND_URL){
-      showAccessResult("Servidor não configurado","O ambiente seguro de autenticação ainda precisa ser conectado.","error");
-      return;
-    }
-    if(!/^https:\/\//i.test(BACKEND_URL)){
-      showAccessResult("Conexão não segura","O servidor de autenticação deve usar HTTPS.","error");
+    if(!codigo){
+      showAccessResult("Código pessoal necessário","Informe o código individual entregue pela PromoVie.","error");
+      codeInput.focus();
       return;
     }
     busy=true;
     button.disabled=true;
-    label.textContent="Conectando...";
+    label.textContent="Conectando ao atendimento...";
     feedback("","info");
     try{
-      const configResp=await fetch(BACKEND_URL+V3+"/config",{cache:"no-store",credentials:"omit"});
-      if(configResp.status===503)throw new Error("Backend conectado, mas as credenciais do Token PromoVie ainda precisam ser habilitadas. Nenhuma senha de teste foi ativada.");
-      if(!configResp.ok)throw new Error("Não foi possível consultar as configurações do servidor.");
-      const config=await getJson(configResp);
-      if(!config.apiKey)throw new Error("A API Key do Widget não está configurada no servidor.");
-      if(config.environment!=="production")throw new Error("O ambiente do Widget precisa estar configurado como production.");
-      const testPassword=passwordInput.value;
-      if(!testPassword){
-        passwordInput.focus();
-        throw new Error("Informe a senha de homologação privada para o teste.");
-      }
-      const tokenResp=await fetch(BACKEND_URL+V3+"/session",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({document:cpf,testPassword}),
-        cache:"no-store",
-        credentials:"omit",
-        referrerPolicy:"no-referrer"
+      const response=await fetch(BACKEND_URL+ACCESS+"/session",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({cpf,codigo}),
+        cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
-      passwordInput.value="";
-      const token=await getJson(tokenResp);
-      if(tokenResp.status===401||tokenResp.status===403)throw new Error("Paciente fictício ou senha de homologação não autorizado.");
-      if(tokenResp.status===429)throw new Error("Muitas tentativas. Aguarde antes de tentar novamente.");
-      if(!tokenResp.ok||!token.access_token)throw new Error(token.error||"Não foi possível autenticar o paciente de teste.");
+      codeInput.value="";
+      const result=await getJson(response);
+      if(response.status===401)throw new Error("CPF ou código pessoal não autorizado. Confira os dados ou solicite orientação à PromoVie.");
+      if(response.status===429)throw new Error("Muitas tentativas. Tente novamente mais tarde.");
+      if(response.status===503)throw new Error("O atendimento ainda não foi liberado. Procure a PromoVie.");
+      if(!response.ok)throw new Error(result.error||"Não foi possível verificar o acesso.");
+      if(!result.access_token||!result.apiKey||result.environment!=="production")
+        throw new Error("O atendimento não pôde ser iniciado com segurança.");
       const widget=await loadSdk();
       if(initialized&&typeof widget.destroy==="function"){
-        try{await Promise.resolve(widget.destroy());}catch(e){}
+        try{await Promise.resolve(widget.destroy());}catch{}
         initialized=false;
       }
-      const options={
-        apiKey:config.apiKey,
-        accessToken:token.access_token,
+      await Promise.resolve(widget.init({
+        apiKey:result.apiKey,
+        accessToken:result.access_token,
         adapter:"web",
-        environment:config.environment,
+        environment:"production",
         show:"always",
-        theme:{
-          text:{title:"TeleSaúde"},
-          colors:{primary:"#4b0c8f"}
-        }
-      };
-      await Promise.resolve(widget.init(options));
+        theme:{text:{title:"TeleSaúde"},colors:{primary:"#4b0c8f"}}
+      }));
       initialized=true;
-      if(typeof widget.open!=="function")throw new Error("A janela de telemedicina não está disponível.");
+      if(typeof widget.open!=="function")throw new Error("A janela do atendimento não está disponível.");
       await Promise.resolve(widget.open());
-      cpfInput.value="";
       feedback("","info");
-    }catch(e){
-      // Sem dados de autenticação ou detalhes técnicos sensíveis na mensagem.
-      const m=String(e&&e.message||"Erro de conexão.");
-      showAccessResult("Não foi possível abrir a TeleSaúde",m==="Failed to fetch"?"Não foi possível comunicar com o servidor seguro.":m,"error");
+    }catch(error){
+      const message=String(error?.message||"Não foi possível conectar.");
+      showAccessResult("Não foi possível acessar",message==="Failed to fetch"?
+        "Não foi possível comunicar com o serviço. Verifique sua conexão.":message,"error");
     }finally{
-      passwordInput.value="";
+      codeInput.value="";
       busy=false;
-      button.disabled=false;
-      label.textContent="Acessar telemedicina";
+      button.disabled=!ready;
+      label.textContent=ready?"Acessar TeleSaúde PromoVie":"Acesso em preparação";
     }
   }
-
   button.addEventListener("click",startWidget);
   cpfInput.addEventListener("input",function(){
     let v=cpfInput.value.replace(/\D/g,"").slice(0,11);
@@ -848,39 +828,20 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
     cpfInput.value=v;
   });
-  for(const input of [cpfInput,passwordInput]){
+  for(const input of [cpfInput,codeInput]){
     input.addEventListener("keydown",function(event){
       if(event.key==="Enter"){event.preventDefault();startWidget();}
     });
   }
-  async function checkEnvironment(){
-    feedback("Verificando o ambiente de homologação...","info");
-    try{
-      const r=await fetch(BACKEND_URL+V3+"/health",{
-        cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
-      });
-      const body=await getJson(r);
-      ready=Boolean(r.ok&&body.status==="homologacao-pronta");
-      if(ready){
-        feedback("Ambiente de homologação disponível para paciente fictício.","info");
-      }else{
-        feedback("Integração em configuração. O atendimento será habilitado após a homologação do Token PromoVie.","info");
-      }
-    }catch(e){
-      ready=false;
-      feedback("O servidor de homologação não está acessível. O atendimento permanece indisponível.","error");
-    }
-  }
   checkEnvironment();
-  // A maquete mantém o mesmo visual, mas agora responde a cliques e teclado.
-  // A seleção somente orienta o acesso: a especialidade real é aberta no widget após autenticação.
+  // A maquete orienta a escolha; o atendimento real abre apos autenticação.
   for(const service of document.querySelectorAll(".phone .chat-row")){
     const serviceName=(service.querySelector(".chat-info strong")||{}).textContent||"serviço";
     service.setAttribute("role","button");
     service.setAttribute("tabindex","0");
     service.setAttribute("aria-label","Como acessar "+serviceName);
     service.addEventListener("click",function(){
-      feedback("Para acessar "+serviceName+", utilize o formulário de homologação abaixo. O atendimento depende da autenticação pelo Token PromoVie.","info");
+      feedback("Para utilizar "+serviceName+", informe seu CPF e o código pessoal fornecido pela PromoVie.","info");
       cpfInput.focus({preventScroll:true});
       document.querySelector(".install-block").scrollIntoView({behavior:"smooth",block:"nearest"});
     });
