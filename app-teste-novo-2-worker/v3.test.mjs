@@ -141,54 +141,7 @@ test('pagina oficial preserva a aparencia, oito servicos e backend correto',asyn
   assert.doesNotMatch(html,/MEDIQUO_V3_SDK_SECRET_KEY\s*=/);
 });
 
-test('cadastro individual é bloqueado sem flag, sem senha ou com CPF diferente',async()=>{
-  const m=mockVendor();
-  try{
-    const body=JSON.stringify({document:cpf,name:'Marco Polese',
-      testPassword:env.TELESAUDE_V3_TEST_PASSWORD});
-    assert.equal((await call('/self-enroll',{method:'POST',body})).status,503);
-    const e={...env,TELESAUDE_V3_WRITE_ENABLED:'true'};
-    assert.equal((await call('/self-enroll',{method:'POST',body:JSON.stringify({
-      document:cpf,name:'Marco Polese',testPassword:'senha-incorreta'})},e)).status,401);
-    assert.equal((await call('/self-enroll',{method:'POST',body:JSON.stringify({
-      document:'11111111111',name:'Marco Polese',testPassword:env.TELESAUDE_V3_TEST_PASSWORD})},e)).status,400);
-    assert.equal(m.calls.length,0);
-  }finally{m.restore();}
-});
-test('cadastro individual cria um paciente real somente quando CPF e senha coincidem',async()=>{
-  const m=mockVendor({missing:true});
-  try{
-    const r=await call('/self-enroll',{method:'POST',body:JSON.stringify({
-      document:cpf,name:'Marco Aurélio Polese',
-      testPassword:env.TELESAUDE_V3_TEST_PASSWORD
-    })},{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
-    assert.equal(r.status,202);assert.equal((await r.json()).status,'cadastro_enviado');
-    assert.equal(m.calls.length,2);
-    assert.equal(m.calls[0].method,'GET');
-    assert.equal(m.calls[1].method,'PUT');
-    assert.deepEqual(JSON.parse(m.calls[1].body),{patients:[{
-      code:cpf,tax_id:cpf,first_name:'Marco',last_name:'Aurélio Polese',plan:'345',locale:'pt'
-    }]});
-  }finally{m.restore();}
-});
-test('cadastro individual não sobrescreve pessoa já cadastrada',async()=>{
-  const m=mockVendor();
-  try{
-    const r=await call('/self-enroll',{method:'POST',body:JSON.stringify({
-      document:cpf,name:'Marco Polese',testPassword:env.TELESAUDE_V3_TEST_PASSWORD
-    })},{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
-    assert.equal((await r.json()).status,'ja_cadastrado');
-    assert.equal(m.calls.length,1);
-  }finally{m.restore();}
-});
-
-test('cadastro privado abre em pagina separada e nao grava credenciais no GitHub',async()=>{
-  const html=await readFile(new URL('../telesaude/cadastro/index.html',import.meta.url),'utf8');
-  assert.match(html,/name="viewport"/);
-  assert.match(html,/noindex,nofollow/);
-  assert.match(html,/\/self-enroll/);
-  assert.match(html,/\/session/);
-  assert.match(html,/accessToken:data.access_token/);
-  assert.match(html,/nameField.value/);
-  assert.doesNotMatch(html,/(?:MEDIQUO_V3_SDK_SECRET_KEY\s*=|ENpPu3ZGAuVXEsXQ)/);
+test('cadastro individual não é aceito pelo backend da PromoVie',async()=>{
+  const r=await call('/self-enroll',{method:'POST',body:JSON.stringify({document:cpf,name:'Pessoa Teste',testPassword:env.TELESAUDE_V3_TEST_PASSWORD})},{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
+  assert.equal(r.status,404);
 });
