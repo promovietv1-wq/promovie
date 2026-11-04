@@ -20,6 +20,7 @@ function database(){
  const sessions=new Map(),attempts=new Map(),people=new Map(),history=[];
  const d={
   sessions,attempts,people,history,
+  async exec(sql){assert.match(sql,/CREATE TABLE IF NOT EXISTS pv_beneficiarios/);return {count:1,duration:0};},
   prepare(sql){
     let a=[];
     return {
