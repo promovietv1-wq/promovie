@@ -299,7 +299,7 @@
         </div>
         <form id="new-form" hidden autocomplete="off">
           <h2>Novo beneficiário</h2>
-          <p class="muted">Primeiro salvamos o registro no arquivo da PromoVie. Isso não consome uma licença na Médiquo.</p>
+          <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no SDK ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
           <label for="new-name">Nome completo</label>
           <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
           <label for="new-cpf">CPF</label>
@@ -309,7 +309,8 @@
           <label for="new-phone">Telefone com DDD (opcional)</label>
           <input id="new-phone" type="tel" maxlength="20" autocomplete="off" placeholder="(27) 99999-9999">
           <div class="actions" style="margin-top:20px">
-            <button id="save-button" type="submit">Salvar no arquivo</button>
+            <button id="save-activate-button" type="submit">Cadastrar e ativar</button>
+            <button id="save-button" type="submit" class="secondary">Salvar apenas</button>
             <button id="cancel-button" type="button" class="secondary">Cancelar</button>
           </div>
         </form>
@@ -350,7 +351,7 @@
   let page=0,more=false,records=[],selectedId='',busy=false;
   const labels={rascunho:'Rascunho',enviado:'Enviado',ativo:'Ativo',arquivado:'Arquivado'};
   function msg(id,value,kind='info'){const el=$(id);el.hidden=!value;el.dataset.kind=kind;el.textContent=value||'';}
-  function setBusy(v){busy=v;for(const id of ['login-button','save-button','send-button','archive-button','check-button','restore-button'])$(id).disabled=v;}
+  function setBusy(v){busy=v;for(const id of ['login-button','save-activate-button','save-button','send-button','archive-button','check-button','restore-button'])$(id).disabled=v;}
   function date(s){return s?new Date(s).toLocaleString('pt-BR'):'Não informado';}
   async function request(path,{method='GET',body}={}){
     const res=await fetch(API+path,{
@@ -435,16 +436,48 @@
   $('cancel-button').addEventListener('click',()=>toggle('empty'));
   $('new-form').addEventListener('submit',async e=>{
     e.preventDefault();if(busy)return;
+    const activate=e.submitter?.id==='save-activate-button';
     setBusy(true);msg('banner','Salvando no arquivo privado...');
     try{
       const data=await request('/records',{method:'POST',body:{
         nome:$('new-name').value,cpf:$('new-cpf').value,email:$('new-email').value,
         telefone:$('new-phone').value
       }});
-      msg('banner','Beneficiário salvo no arquivo da PromoVie. Nenhuma licença da Médiquo foi utilizada.','ok');
+      const id=encodeURIComponent(data.id);
+      if(!activate){
+        msg('banner','Beneficiário salvo no arquivo da PromoVie. Nenhuma licença da Médiquo foi utilizada.','ok');
+      }else{
+        // O backend verifica a autorização de escrita, o CPF permitido e a duplicidade
+        // antes de enviar qualquer dado. Nunca repetir automaticamente um PUT incerto.
+        msg('banner','Registro salvo. Enviando uma única vez ao SDK Médiquo...');
+        let envioConfirmado=false;
+        try{
+          await request('/records/'+id+'/send',{method:'POST',body:{}});
+          envioConfirmado=true;
+        }catch(err){
+          msg('banner','Registro salvo na PromoVie, mas o envio ao SDK não foi confirmado: '+err.message+
+            ' Não tente cadastrar de novo. Consulte este registro antes de qualquer novo envio.','error');
+        }
+        if(envioConfirmado){
+          msg('banner','Cadastro enviado ao SDK. Conferindo a ativação...');
+          try{
+            const result=await request('/records/'+id+'/verify',{method:'POST',body:{}});
+            if(result.encontrado&&result.ativo){
+              msg('banner','Beneficiário cadastrado e ativo no plano 345 da Médiquo.','ok');
+            }else{
+              msg('banner','Cadastro enviado ao SDK, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Médiquo mais tarde.','info');
+            }
+          }catch(err){
+            msg('banner','Cadastro enviado ao SDK. Não foi possível confirmar a ativação agora: '+
+              err.message+' Use Consultar Médiquo para conferir, sem reenviar o cadastro.','info');
+          }
+        }
+      }
       page=0;await loadPage();await openRecord(data.id);
-    }catch(err){msg('banner',err.message,'error');}
-    finally{setBusy(false);}
+    }catch(err){
+      msg('banner','Não foi possível confirmar o cadastro local: '+err.message+
+        ' Confira a lista antes de tentar cadastrar novamente.','error');
+    }finally{setBusy(false);}
   });
   async function openRecord(id){
     selectedId=id;toggle('detail');$('history').replaceChildren(newElement('li','','Consultando histórico...'));
