@@ -21,3 +21,8 @@ jobs:
       - name: Testes locais sem credenciais reais
         run: npm test
         working-directory: app-teste-novo-2-worker
+      - name: Validar empacotamento Wrangler sem publicar
+        working-directory: app-teste-novo-2-worker
+        run: |
+          npm install --no-audit --no-fund
+          npx wrangler deploy --dry-run
