@@ -1,0 +1,54 @@
+name: Recuperar publicacao Pages pendente
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/recuperar-pages-pendente.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+
+jobs:
+  liberar-apenas-deploy-antigo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Conferir e cancelar somente publicacao antiga travada
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          node --input-type=module <<'JS'
+          const oldCommit='1bdbe87291c802a973b2417f90a3c28c4ed33f48';
+          const url='https://api.github.com/repos/'+process.env.REPO+'/pages/deployments/'+oldCommit;
+          const headers={
+            Accept:'application/vnd.github+json',
+            Authorization:'Bearer '+process.env.GH_TOKEN,
+            'X-GitHub-Api-Version':'2022-11-28',
+            'User-Agent':'PromoVie-Pages-Recovery'
+          };
+          const status=await fetch(url,{headers,signal:AbortSignal.timeout(20000)});
+          const raw=await status.text();
+          console.log('Consulta de publicacao antiga:',status.status);
+          if(!status.ok){
+            console.log('Nao foi possivel inspecionar a publicacao. Sem cancelamento.',raw.slice(0,300));
+            process.exitCode=1;
+          }else{
+            const data=JSON.parse(raw);
+            console.log('Estado antigo:',JSON.stringify(data));
+            if(['succeed','success','failed','error','cancelled','canceled'].includes(String(data.status).toLowerCase())){
+              console.log('Publicacao anterior ja encerrada. Nenhum cancelamento foi necessario.');
+            }else{
+              const res=await fetch(url+'/cancel',{method:'POST',headers,signal:AbortSignal.timeout(20000)});
+              console.log('Cancelamento do deploy antigo:',res.status);
+              if(res.status!==204){
+                const msg=await res.text();
+                console.log('Falha ao cancelar:',msg.slice(0,400));
+                process.exitCode=1;
+              }else{
+                console.log('Deploy antigo cancelado pelo endpoint oficial Pages. Outros deploys preservados.');
+              }
+            }
+          }
+          JS
