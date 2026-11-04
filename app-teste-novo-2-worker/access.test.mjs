@@ -10,7 +10,7 @@ const base={
   PROMOVIE_ADMIN_PASSWORD:'senha-administrativa-ficticia-2026',
   PROMOVIE_ADMIN_DATA_KEY:'chave-ficticia-suficientemente-longa-para-testes',
   TELESAUDE_V3_SYNC_TOKEN:'token-de-homologacao-ficticio-longo',
-  TELESAUDE_V3_ENABLED:'false',
+  PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'false',
   TELESAUDE_V3_WRITE_ENABLED:'false',
   WIDGET_ENVIRONMENT:'production',
   MEDIQUO_V3_PLAN:'345',
@@ -138,13 +138,13 @@ test('beneficiário autenticado gera token SDK somente com CPF, código e plano 
   const code=(await r.json()).codigo;
   const mock=vendorMock();
   try{
-    assert.equal((await call(handleBeneficiaryAccess,db,'/health',{}, {TELESAUDE_V3_ENABLED:'true'})).status,200);
+    assert.equal((await call(handleBeneficiaryAccess,db,'/health',{}, {PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'})).status,200);
     const wrong=await call(handleBeneficiaryAccess,db,'/session',{
-      method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{TELESAUDE_V3_ENABLED:'true'});
+      method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
     assert.equal(wrong.status,401);
     assert.equal(mock.calls.length,0);
     const ok=await call(handleBeneficiaryAccess,db,'/session',{
-      method:'POST',body:{cpf,codigo:code.toLowerCase()}},{TELESAUDE_V3_ENABLED:'true'});
+      method:'POST',body:{cpf,codigo:code.toLowerCase()}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
     assert.equal(ok.status,200);
     const out=await ok.json();
     assert.equal(out.access_token,'token-ficticio-de-sessao');
@@ -162,13 +162,13 @@ test('licença inativa não recebe token e revogação impede novas sessões',as
   const mock=vendorMock({active:false});
   try{
     const r=await call(handleBeneficiaryAccess,db,'/session',{
-      method:'POST',body:{cpf,codigo:code}},{TELESAUDE_V3_ENABLED:'true'});
+      method:'POST',body:{cpf,codigo:code}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
     assert.equal(r.status,403);
     assert.deepEqual(mock.calls.map(x=>x.verb),['GET']);
   }finally{mock.restore();}
   await call(handleAdmin,db,'/records/'+id+'/revoke-access',{method:'POST',cookie,body:{}});
   const after=await call(handleBeneficiaryAccess,db,'/session',{
-    method:'POST',body:{cpf,codigo:code}},{TELESAUDE_V3_ENABLED:'true'});
+    method:'POST',body:{cpf,codigo:code}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
   assert.equal(after.status,401);
 });
 test('bloqueio distribuído no D1 após seis códigos inválidos do mesmo CPF',async()=>{
@@ -176,11 +176,11 @@ test('bloqueio distribuído no D1 após seis códigos inválidos do mesmo CPF',a
   await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
   for(let i=0;i<6;i++){
     const r=await call(handleBeneficiaryAccess,db,'/session',{
-      method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{TELESAUDE_V3_ENABLED:'true'});
+      method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
     assert.equal(r.status,401);
   }
   const blocked=await call(handleBeneficiaryAccess,db,'/session',{
-    method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{TELESAUDE_V3_ENABLED:'true'});
+    method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
   assert.equal(blocked.status,429);
 });
 test('interface pública não contém autenticação fictícia nem chaves privadas',async()=>{
