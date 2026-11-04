@@ -181,3 +181,14 @@ test('cadastro individual não sobrescreve pessoa já cadastrada',async()=>{
     assert.equal(m.calls.length,1);
   }finally{m.restore();}
 });
+
+test('cadastro privado abre em pagina separada e nao grava credenciais no GitHub',async()=>{
+  const html=await readFile(new URL('../telesaude/cadastro/index.html',import.meta.url),'utf8');
+  assert.match(html,/name="viewport"/);
+  assert.match(html,/noindex,nofollow/);
+  assert.match(html,/\/self-enroll/);
+  assert.match(html,/\/session/);
+  assert.match(html,/accessToken:data.access_token/);
+  assert.match(html,/nameField.value/);
+  assert.doesNotMatch(html,/(?:MEDIQUO_V3_SDK_SECRET_KEY\s*=|ENpPu3ZGAuVXEsXQ)/);
+});
