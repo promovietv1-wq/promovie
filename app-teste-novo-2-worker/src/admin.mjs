@@ -191,218 +191,7 @@ export async function handleBeneficiaryAccess(request,env,cors={}){
     const input=await bodyJSON(request);
     const cpf=digits(input?.cpf),code=normalizeCode(input?.codigo);
     if(!validCPF(cpf)||!new RegExp('^['+CODE_ALPHABET+']{20}
-  await db.prepare('INSERT INTO pv_historico(id,beneficiario_id,evento,registrado_em,detalhes) VALUES(?,?,?,?,?)')
-    .bind(crypto.randomUUID(),id,event,new Date().toISOString(),detail).run();
-}
-async function attemptKey(request,env){
-  const ip=request.headers.get('CF-Connecting-IP')||'unknown';
-  return digestHex('ip|'+ip+'|'+val(env,'TELESAUDE_V3_SYNC_TOKEN'));
-}
-async function login(request,env,cors,obj){
-  const db=d1(env),key=await attemptKey(request,env);
-  const now=Math.floor(Date.now()/1000);
-  const attempt=await db.prepare('SELECT attempts,expires_at FROM pv_admin_login_attempts WHERE actor_hash=?')
-    .bind(key).first();
-  if(attempt&&attempt.expires_at>now&&attempt.attempts>=6)
-    return reply(429,{error:'Muitas tentativas. Acesso temporariamente bloqueado.'},cors);
-  if(!await equals(obj?.senha,val(env,'PROMOVIE_ADMIN_PASSWORD'))){
-    const attempts=attempt?.expires_at>now?attempt.attempts+1:1;
-    await db.prepare('INSERT INTO pv_admin_login_attempts(actor_hash,attempts,expires_at) VALUES(?,?,?) ON CONFLICT(actor_hash) DO UPDATE SET attempts=excluded.attempts,expires_at=excluded.expires_at')
-      .bind(key,attempts,now+900).run();
-    return reply(401,{error:'Senha administrativa incorreta.'},cors);
-  }
-  await db.prepare('DELETE FROM pv_admin_login_attempts WHERE actor_hash=?').bind(key).run();
-  const token=b64(crypto.getRandomValues(new Uint8Array(32)));
-  const hash=await digestHex('session|'+token+'|'+val(env,'TELESAUDE_V3_SYNC_TOKEN'));
-  await db.prepare('INSERT INTO pv_admin_sessions(token_hash,created_at,expires_at) VALUES(?,?,?)')
-    .bind(hash,new Date().toISOString(),now+SESSION_TTL).run();
-  return reply(200,{ok:true,expira_em_segundos:SESSION_TTL},
-    {...cors,'Set-Cookie':cookieHeader(token,SESSION_TTL)});
-}
-function sdkBase(env){
-  try{
-    const u=new URL(val(env,'MEDIQUO_V3_BASE_URL'));
-    if(u.protocol!=='https:'||u.hostname!=='sdk.mediquo.com'||
-      u.pathname.replace(/\/+$/,'')!=='/v1'||u.port||u.username||u.password||u.hash||u.search)return '';
-    return u.href.replace(/\/+$/,'');
-  }catch{return '';}
-}
-async function sdk(env,verb,path,body){
-  if(!sdkBase(env)||!val(env,'MEDIQUO_V3_WIDGET_API_KEY')||!val(env,'MEDIQUO_V3_SDK_SECRET_KEY'))return {ok:false,status:503};
-  const resp=await fetch(sdkBase(env)+path,{
-    method:verb,headers:{'Content-Type':'application/json',
-      'X-API-Key':val(env,'MEDIQUO_V3_WIDGET_API_KEY'),
-      'X-Secret-Key':val(env,'MEDIQUO_V3_SDK_SECRET_KEY')},
-    ...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(18000)
-  });
-  if(!resp.ok)return {ok:false,status:resp.status};
-  if(verb==='PUT')return {ok:true,status:resp.status};
-  try{return {ok:true,data:await resp.json(),status:resp.status};}
-  catch{return {ok:false,status:502};}
-}
-function patientFromSDK(data){
-  const p=data?.data?.patient||data?.data||data?.patient||data;
-  return p&&typeof p==='object'&&!Array.isArray(p)?p:null;
-}
-function safeRow(row,item,detail=false){
-  return {id:row.id,nome:item.nome,
-    cpf:detail?item.cpf:('***.***.***-'+item.cpf.slice(-2)),
-    email:detail?item.email:null,telefone:detail?item.telefone:null,
-    situacao:row.situacao,plano:row.plano,
-    criado_em:row.criado_em,atualizado_em:row.atualizado_em,
-    enviado_em:row.enviado_em,arquivado_em:row.arquivado_em};
-}
-async function oneRecord(env,id){
-  const row=await d1(env).prepare('SELECT * FROM pv_beneficiarios WHERE id=?').bind(id).first();
-  return row?{row,item:await decrypt(env,row.dados_criptografados)}:null;
-}
-export async function handleAdmin(request,env,cors={}){
-  const path=new URL(request.url).pathname;
-  const method=request.method;
-  const baseCors={...cors,'Access-Control-Allow-Credentials':'true'};
-  // Nunca atender requisições de alteração sem origem explícita e autorizada.
-  if(method!=='GET'&&!originAllowed(request,env))
-    return reply(403,{error:'Origem administrativa não autorizada.'},baseCors);
-  if(!available(env))return reply(503,{error:'Painel ainda não configurado. É necessário associar o banco D1 e definir as duas credenciais administrativas.'},baseCors);
-  if(path===PREFIX+'/health'&&method==='GET'){
-    try{
-      const ok=await d1(env).prepare('SELECT 1 AS ok').first();
-      if(ok?.ok!==1)throw Error('D1 falhou');
-      return reply(200,{ok:true,banco:'conectado',credenciais:'configuradas',cadastro_real_habilitado:val(env,'TELESAUDE_V3_WRITE_ENABLED')==='true'},baseCors);
-    }catch{
-      return reply(503,{ok:false,error:'Banco administrativo indisponível.'},baseCors);
-    }
-  }
-  if(!tokenFromCookie(request) && method==='GET'){
-    return reply(401,{error:'Faça login para acessar o painel.'},baseCors);
-  }
-
-  try{
-    if(path===PREFIX+'/login'&&method==='POST'){
-      const obj=await bodyJSON(request);
-      // Inicializa tabelas mesmo antes de uma primeira tentativa incorreta,
-      // evitando falha 500 quando a senha de acesso ainda não foi validada.
-      await ensureSchema(env);
-      return login(request,env,baseCors,obj);
-    }
-    if(!(await session(request,env)))return reply(401,{error:'Faça login para acessar o painel.'},baseCors);
-    const db=d1(env),url=new URL(request.url);
-    if(path===PREFIX+'/me'&&method==='GET')return reply(200,{ok:true},baseCors);
-    if(path===PREFIX+'/logout'&&method==='POST'){
-      const t=tokenFromCookie(request);
-      if(t){
-        const hash=await digestHex('session|'+t+'|'+val(env,'TELESAUDE_V3_SYNC_TOKEN'));
-        await db.prepare('DELETE FROM pv_admin_sessions WHERE token_hash=?').bind(hash).run();
-      }
-      return reply(200,{ok:true},{...baseCors,'Set-Cookie':cookieHeader('',0)});
-    }
-    if(path===PREFIX+'/records'&&method==='GET'){
-      const page=Math.max(0,Math.min(1000,parseInt(url.searchParams.get('page')||'0',10)||0));
-      const limit=50;
-      const dbRows=await db.prepare('SELECT * FROM pv_beneficiarios ORDER BY criado_em DESC LIMIT ? OFFSET ?')
-        .bind(limit+1,page*limit).all();
-      const rows=dbRows.results||[];
-      const records=await Promise.all(rows.slice(0,limit).map(async r=>safeRow(r,await decrypt(env,r.dados_criptografados))));
-      return reply(200,{registros:records,pagina:page,mais:rows.length>limit},baseCors);
-    }
-    if(path===PREFIX+'/records'&&method==='POST'){
-      const data=validateData(await bodyJSON(request));
-      if(!data)return reply(400,{error:'Verifique CPF, nome completo e contatos.'},baseCors);
-      const idx=await indexCPF(env,data.cpf);
-      const exists=await db.prepare('SELECT id FROM pv_beneficiarios WHERE cpf_index=?').bind(idx).first();
-      if(exists)return reply(409,{error:'Esse CPF já está cadastrado no arquivo da PromoVie.'},baseCors);
-      const id=crypto.randomUUID(),now=new Date().toISOString();
-      const encrypted=await encrypt(env,data);
-      await db.prepare('INSERT INTO pv_beneficiarios(id,cpf_index,cpf_hint,dados_criptografados,situacao,plano,criado_em,atualizado_em) VALUES(?,?,?,?,?,?,?,?)')
-        .bind(id,idx,data.cpf.slice(-2),encrypted,'rascunho','345',now,now).run();
-      await appendLog(db,id,'cadastro_local','Registro criado sem consumo de licença');
-      return reply(201,{ok:true,id,situacao:'rascunho'},baseCors);
-    }
-    const match=path.match(/^\/api\/promovie\/admin\/v1\/records\/([a-f0-9-]{36})(?:\/(verify|send|archive|restore|history|access-code|revoke-access))?$/);
-    if(!match)return reply(404,{error:'Rota inexistente.'},baseCors);
-    const rec=await oneRecord(env,match[1]);if(!rec)return reply(404,{error:'Beneficiário não encontrado.'},baseCors);
-    const {row,item}=rec,action=match[2];
-    if(method==='GET'&&!action)return reply(200,{registro:safeRow(row,item,true)},baseCors);
-    if(method==='GET'&&action==='history'){
-      const logs=await db.prepare('SELECT evento,registrado_em,detalhes FROM pv_historico WHERE beneficiario_id=? ORDER BY registrado_em DESC LIMIT 100')
-        .bind(row.id).all();
-      return reply(200,{historico:logs.results||[]},baseCors);
-    }
-    if(method==='POST'&&(action==='access-code'||action==='revoke-access')){
-      if(row.situacao!=='ativo')return reply(409,{error:'Somente beneficiários ativos podem receber ou revogar um código pessoal.'},baseCors);
-      await ensureAccessSchema(env);
-      if(action==='revoke-access'){
-        await db.prepare('DELETE FROM pv_access_codes WHERE beneficiario_id=?').bind(row.id).run();
-        await appendLog(db,row.id,'codigo_revogado','Acesso pessoal revogado pela administração');
-        return reply(200,{ok:true,informacao:'Código pessoal revogado. O beneficiário não poderá iniciar novas sessões.'},baseCors);
-      }
-      // Um código novo invalida imediatamente o anterior. Somente exibido nesta resposta HTTPS.
-      const code=newPersonalCode();
-      const hash=await accessHash(env,row.cpf_index,normalizeCode(code));
-      const now=new Date().toISOString();
-      await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
-        .bind(row.id,hash,now).run();
-      await appendLog(db,row.id,'codigo_gerado','Código pessoal criado sem armazenar o valor em texto');
-      return reply(200,{ok:true,codigo:code,informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
-    }
-    if(method==='POST'&&action==='archive'&&row.situacao!=='arquivado'){
-      await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')
-        .bind(row.situacao,'arquivado',new Date().toISOString(),new Date().toISOString(),row.id).run();
-      await appendLog(db,row.id,'arquivado','Somente arquivo local, sem suspender licença na Médiquo');
-      return reply(200,{ok:true,explicacao:'Registro arquivado no painel. A licença do Token PromoVie NÃO foi suspensa.'},baseCors);
-    }
-    if(method==='POST'&&action==='restore'&&row.situacao==='arquivado'){
-      const status=['rascunho','enviado','ativo'].includes(row.situacao_anterior)?row.situacao_anterior:'rascunho';
-      await db.prepare('UPDATE pv_beneficiarios SET situacao=?,situacao_anterior=NULL,arquivado_em=NULL,atualizado_em=? WHERE id=?')
-        .bind(status,new Date().toISOString(),row.id).run();
-      await appendLog(db,row.id,'restaurado','Retorno ao arquivo ativo');
-      return reply(200,{ok:true,situacao:status},baseCors);
-    }
-    if(method==='POST'&&action==='verify'){
-      const r=await sdk(env,'GET','/patients/'+encodeURIComponent(item.cpf));
-      if(r.status===404)return reply(200,{encontrado:false,informacao:'CPF ainda não encontrado no Token PromoVie.'},baseCors);
-      if(!r.ok)return reply(502,{error:'A consulta ao Token PromoVie falhou.'},baseCors);
-      const p=patientFromSDK(r.data);
-      if(!p||p.code!==undefined&&digits(p.code)!==item.cpf)
-        return reply(502,{error:'Dados inesperados na consulta ao Token PromoVie.'},baseCors);
-      const ativo=p.active!==false&&!p.unsubscribed_at&&String(p.plan)==='345';
-      if(row.situacao!=='arquivado'&&ativo){
-        await db.prepare('UPDATE pv_beneficiarios SET situacao=?,atualizado_em=? WHERE id=?')
-          .bind('ativo',new Date().toISOString(),row.id).run();
-        await appendLog(db,row.id,'confirmado','Médiquo informou plano ativo 345');
-      }
-      return reply(200,{encontrado:true,ativo,plano:String(p.plan||'')},baseCors);
-    }
-    if(method==='POST'&&action==='send'){
-      if(row.situacao==='arquivado')return reply(409,{error:'Restaure o registro antes de tentar cadastrar.'},baseCors);
-      if(val(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
-        return reply(503,{error:'Envio real bloqueado até liberação controlada na Cloudflare.'},baseCors);
-      if(item.cpf!==val(env,'TELESAUDE_V3_TEST_CPF') &&
-         val(env,'PROMOVIE_ADMIN_MULTI_PATIENT_ENABLED')!=='true')
-        return reply(403,{error:'Primeira ativação restrita ao CPF autorizado.'},baseCors);
-      const exists=await sdk(env,'GET','/patients/'+encodeURIComponent(item.cpf));
-      if(exists.ok)return reply(409,{error:'CPF já existe no Token PromoVie. Verifique o cadastro; nenhum novo registro foi enviado.'},baseCors);
-      if(exists.status!==404)return reply(502,{error:'Não foi possível verificar duplicidade no Token PromoVie.'},baseCors);
-      const names=item.nome.split(' ');
-      const patient={code:item.cpf,tax_id:item.cpf,first_name:names.shift(),
-        last_name:names.join(' '),plan:'345',locale:'pt'};
-      if(item.email)patient.email=item.email;
-      if(item.telefone)patient.phone=item.telefone;
-      const sent=await sdk(env,'PUT','/patients',{patients:[patient]});
-      if(!sent.ok)return reply(502,{error:'O Token PromoVie não confirmou o envio. Consulte antes de repetir.'},baseCors);
-      const now=new Date().toISOString();
-      await db.prepare('UPDATE pv_beneficiarios SET situacao=?,enviado_em=?,atualizado_em=? WHERE id=?')
-        .bind('enviado',now,now,row.id).run();
-      await appendLog(db,row.id,'enviado','Cadastro enviado ao SDK; aguardando confirmação da licença');
-      return reply(202,{ok:true,informacao:'Cadastro enviado. Use Verificar para confirmar o plano ativo.'},baseCors);
-    }
-    return reply(405,{error:'Operação não permitida para a situação do registro.'},baseCors);
-  }catch(e){
-    const status=[400,413,415].includes(e?.status)?e.status:500;
-    return reply(status,{error:status===500?'Não foi possível concluir a operação. Confira a configuração do banco D1.':'Requisição inválida.'},baseCors);
-  }
-}
-).test(code))
+$').test(code))
       return reply(401,{error:'CPF ou código de acesso não autorizado.'},cors);
     await ensureAccessSchema(env);
     const idx=await indexCPF(env,cpf);
@@ -570,7 +359,7 @@ export async function handleAdmin(request,env,cors={}){
       await appendLog(db,id,'cadastro_local','Registro criado sem consumo de licença');
       return reply(201,{ok:true,id,situacao:'rascunho'},baseCors);
     }
-    const match=path.match(/^\/api\/promovie\/admin\/v1\/records\/([a-f0-9-]{36})(?:\/(verify|send|archive|restore|history))?$/);
+    const match=path.match(/^\/api\/promovie\/admin\/v1\/records\/([a-f0-9-]{36})(?:\/(verify|send|archive|restore|history|access-code|revoke-access))?$/);
     if(!match)return reply(404,{error:'Rota inexistente.'},baseCors);
     const rec=await oneRecord(env,match[1]);if(!rec)return reply(404,{error:'Beneficiário não encontrado.'},baseCors);
     const {row,item}=rec,action=match[2];
@@ -579,6 +368,23 @@ export async function handleAdmin(request,env,cors={}){
       const logs=await db.prepare('SELECT evento,registrado_em,detalhes FROM pv_historico WHERE beneficiario_id=? ORDER BY registrado_em DESC LIMIT 100')
         .bind(row.id).all();
       return reply(200,{historico:logs.results||[]},baseCors);
+    }
+    if(method==='POST'&&(action==='access-code'||action==='revoke-access')){
+      if(row.situacao!=='ativo')return reply(409,{error:'Somente beneficiários ativos podem receber ou revogar um código pessoal.'},baseCors);
+      await ensureAccessSchema(env);
+      if(action==='revoke-access'){
+        await db.prepare('DELETE FROM pv_access_codes WHERE beneficiario_id=?').bind(row.id).run();
+        await appendLog(db,row.id,'codigo_revogado','Acesso pessoal revogado pela administração');
+        return reply(200,{ok:true,informacao:'Código pessoal revogado. O beneficiário não poderá iniciar novas sessões.'},baseCors);
+      }
+      // Um código novo invalida imediatamente o anterior. Somente exibido nesta resposta HTTPS.
+      const code=newPersonalCode();
+      const hash=await accessHash(env,row.cpf_index,normalizeCode(code));
+      const now=new Date().toISOString();
+      await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
+        .bind(row.id,hash,now).run();
+      await appendLog(db,row.id,'codigo_gerado','Código pessoal criado sem armazenar o valor em texto');
+      return reply(200,{ok:true,codigo:code,informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
     }
     if(method==='POST'&&action==='archive'&&row.situacao!=='arquivado'){
       await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')
