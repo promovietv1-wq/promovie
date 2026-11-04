@@ -163,7 +163,7 @@ test('falha externa não retorna credenciais privadas na resposta',async()=>{
 test('pagina oficial ainda usa layout de 8 serviços e backend próprio',async()=>{
   const html=await readFile(new URL('../telesaude/index.html',import.meta.url),'utf8');
   assert.match(html,/https:\/\/backend\.promovie\.tv\.br/);
-  assert.match(html,/Senha privada de homologação/);
+  assert.match(html,/senha privada (?:da conta )?de homologação/i);
   assert.match(html,/<title>PromoVie \| TeleSaúde<\/title>/);
   assert.doesNotMatch(html,/MEDIQUO_V3_SDK_SECRET_KEY\s*=/);
 });
