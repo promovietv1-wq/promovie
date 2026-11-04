@@ -179,3 +179,59 @@ test('health verifica banco D1 sem credenciais no navegador',async()=>{
   const disabled=await call(db,'/health',{}, {PROMOVIE_ADMIN_DATA_KEY:'curta'});
   assert.equal(disabled.status,503);
 });
+
+test('Fluxo Pedro: GET de CPF, PUT de paciente no SDK V3 e GET de confirmação do plano 345',async()=>{
+  const db=database(),{cookie}=await login(db);
+  const created=await call(db,'/records',{method:'POST',cookie,body:{
+    nome:'Pessoa Fictícia',cpf,email:'paciente.ficticio@example.com',telefone:'27988888888'
+  }});
+  assert.equal(created.status,201);
+  const id=(await created.json()).id;
+  const before=globalThis.fetch,calls=[];
+  globalThis.fetch=async(url,options)=>{
+    const dest=String(url);calls.push({url:dest,verb:options.method,headers:options.headers,body:options.body});
+    assert.ok(dest.startsWith('https://sdk.mediquo.com/v1/'), 'Apenas a API SDK v3 e autorizada');
+    if(options.method==='GET'&&dest.endsWith('/patients/'+cpf)){
+      const exists=calls.some(x=>x.verb==='PUT');
+      return new Response(exists?JSON.stringify({patient:{code:cpf,plan:'345',active:true}}):'{}',
+        {status:exists?200:404,headers:{'Content-Type':'application/json'}});
+    }
+    if(options.method==='PUT'&&dest.endsWith('/patients')){
+      const req=JSON.parse(options.body);
+      assert.equal(req.patients.length,1);
+      const p=req.patients[0];
+      assert.equal(p.plan,'345');
+      assert.equal(p.code,cpf);
+      assert.equal(p.tax_id,cpf);
+      assert.equal(p.first_name,'Pessoa');
+      assert.equal(p.last_name,'Fictícia');
+      assert.equal(options.headers['X-API-Key'],envConfig.MEDIQUO_V3_WIDGET_API_KEY);
+      assert.equal(options.headers['X-Secret-Key'],envConfig.MEDIQUO_V3_SDK_SECRET_KEY);
+      return new Response(null,{status:204});
+    }
+    throw Error('Endpoint externo inesperado: '+dest);
+  };
+  try{
+    const sent=await call(db,'/records/'+id+'/send',{method:'POST',cookie,body:{}},
+      {TELESAUDE_V3_WRITE_ENABLED:'true'});
+    assert.equal(sent.status,202);
+    assert.equal(db.people.get(id).situacao,'enviado');
+    assert.deepEqual(calls.map(x=>x.verb),['GET','PUT']);
+    const check=await call(db,'/records/'+id+'/verify',{method:'POST',cookie,body:{}});
+    assert.equal(check.status,200);
+    assert.equal((await check.json()).ativo,true);
+    assert.equal(db.people.get(id).situacao,'ativo');
+    assert.deepEqual(calls.map(x=>x.verb),['GET','PUT','GET']);
+  } finally {globalThis.fetch=before;}
+});
+
+test('Nunca enviar outro CPF ao SDK, mesmo com gravação de um paciente liberada',async()=>{
+  const db=database(),{cookie}=await login(db);
+  const other='11144477735';
+  const created=await call(db,'/records',{method:'POST',cookie,body:{nome:'Outra Pessoa',cpf:other}});
+  assert.equal(created.status,201);
+  const sent=await call(db,'/records/'+(await created.json()).id+'/send',
+     {method:'POST',cookie,body:{}},{TELESAUDE_V3_WRITE_ENABLED:'true'});
+  assert.equal(sent.status,403);
+  assert.equal(db.people.size,1);
+});
