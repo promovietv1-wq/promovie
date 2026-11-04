@@ -136,7 +136,8 @@ test('pagina oficial preserva a aparencia, oito servicos e backend correto',asyn
   const html=await readFile(new URL('../telesaude/index.html',import.meta.url),'utf8');
   assert.match(html,/<title>PromoVie \| TeleSaúde<\/title>/);
   assert.match(html,/https:\/\/backend\.promovie\.tv\.br/);
-  assert.match(html,/senha privada (?:da conta )?de homologação/i);
+  assert.match(html,/Código pessoal de acesso/i);
+  assert.doesNotMatch(html,/senha privada (?:da conta )?de homologação/i);
   assert.equal((html.match(/class="chat-row"/g)||[]).length,8);
   assert.doesNotMatch(html,/MEDIQUO_V3_SDK_SECRET_KEY\s*=/);
 });
