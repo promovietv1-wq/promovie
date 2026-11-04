@@ -262,5 +262,5 @@ test('identidade Token PromoVie preserva integração SDK e não exibe a marca d
  assert.doesNotMatch(html,/>[^<]*M[eé]diquo[^<]*</i);
  assert.match(publicHtml,/Token PromoVie/);
  // Rotas internas e nomes de variáveis técnicas são deliberadamente preservados.
- assert.match(publicHtml,/api\/mediquo\/v3/);
+ assert.match(publicHtml,/api\/promovie\/access\/v1/);
 });

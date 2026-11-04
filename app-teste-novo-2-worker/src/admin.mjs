@@ -139,6 +139,97 @@ async function session(request,env){
 function cookieHeader(value,maxAge){
   return COOKIE+'='+value+'; Path=/; Max-Age='+maxAge+'; Secure; HttpOnly; SameSite=Strict';
 }
+// Códigos pessoais separados da senha administrativa. A tabela e criada
+// sob demanda sem alterar a estrutura nem os registros existentes.
+let accessSchemaReady=false;
+async function ensureAccessSchema(env){
+  if(accessSchemaReady)return;
+  const statements=[
+    "CREATE TABLE IF NOT EXISTS pv_access_codes (beneficiario_id TEXT PRIMARY KEY, code_hash TEXT NOT NULL, criado_em TEXT NOT NULL, FOREIGN KEY(beneficiario_id) REFERENCES pv_beneficiarios(id));",
+    "CREATE TABLE IF NOT EXISTS pv_access_attempts (actor_hash TEXT PRIMARY KEY, attempts INTEGER NOT NULL, expires_at INTEGER NOT NULL);"
+  ];
+  await d1(env).exec(statements.join('\n'));
+  accessSchemaReady=true;
+}
+const CODE_ALPHABET='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newPersonalCode(){
+  const random=crypto.getRandomValues(new Uint8Array(20));
+  const value=[...random].map(x=>CODE_ALPHABET[x&31]).join('');
+  return value.match(/.{1,5}/g).join('-');
+}
+function normalizeCode(x){
+  return typeof x==='string'?x.trim().toUpperCase().replace(/[\s-]/g,''):'';
+}
+async function accessHash(env,cpfIndex,code){
+  const pepper=await crypto.subtle.digest('SHA-256',enc.encode('PromoVie|CodigoAcesso|v1|'+val(env,'PROMOVIE_ADMIN_DATA_KEY')));
+  const hmacKey=await crypto.subtle.importKey('raw',pepper,{name:'HMAC',hash:'SHA-256'},false,['sign']);
+  const signed=await crypto.subtle.sign('HMAC',hmacKey,enc.encode(cpfIndex+'|'+code));
+  return [...new Uint8Array(signed)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function accessConfigured(env){
+  return available(env)&&val(env,'PROMOVIE_BENEFICIARY_ACCESS_ENABLED')==='true'&&
+    val(env,'WIDGET_ENVIRONMENT')==='production'&&
+    val(env,'MEDIQUO_V3_PLAN')==='345'&&
+    !!sdkBase(env)&&
+    !!val(env,'MEDIQUO_V3_WIDGET_API_KEY')&&
+    !!val(env,'MEDIQUO_V3_SDK_SECRET_KEY');
+}
+async function unsuccessfulAccess(db,actorHash,attempts,expiresAt){
+  await db.prepare('INSERT INTO pv_access_attempts(actor_hash,attempts,expires_at) VALUES(?,?,?) ON CONFLICT(actor_hash) DO UPDATE SET attempts=excluded.attempts,expires_at=excluded.expires_at')
+    .bind(actorHash,attempts,expiresAt).run();
+}
+export async function handleBeneficiaryAccess(request,env,cors={}){
+  const path=new URL(request.url).pathname,method=request.method;
+  const base='/api/promovie/access/v1';
+  // Origem explicita obrigatoria: nao aceitar invocacoes de outros sites.
+  if(!originAllowed(request,env))return reply(403,{error:'Origem não autorizada.'},cors);
+  if(path===base+'/health'&&method==='GET')
+    return reply(200,{disponivel:accessConfigured(env)},cors);
+  if(path!==base+'/session'||method!=='POST')return reply(404,{error:'Rota inexistente.'},cors);
+  if(!accessConfigured(env))return reply(503,{error:'O acesso ao atendimento ainda não está liberado.'},cors);
+  try{
+    const input=await bodyJSON(request);
+    const cpf=digits(input?.cpf),code=normalizeCode(input?.codigo);
+    if(!validCPF(cpf)||!new RegExp('^['+CODE_ALPHABET+']{20}$').test(code))
+      return reply(401,{error:'CPF ou código de acesso não autorizado.'},cors);
+    await ensureAccessSchema(env);
+    const idx=await indexCPF(env,cpf);
+    const db=d1(env),actor=await digestHex('pv-access-attempt|'+idx+'|'+val(env,'TELESAUDE_V3_SYNC_TOKEN'));
+    const now=Math.floor(Date.now()/1000);
+    const previous=await db.prepare('SELECT attempts,expires_at FROM pv_access_attempts WHERE actor_hash=?')
+      .bind(actor).first();
+    if(previous?.expires_at>now&&previous.attempts>=6)
+      return reply(429,{error:'Acesso temporariamente bloqueado após várias tentativas. Tente mais tarde.'},cors);
+    const record=await db.prepare("SELECT b.id,c.code_hash FROM pv_beneficiarios b JOIN pv_access_codes c ON c.beneficiario_id=b.id WHERE b.cpf_index=? AND b.situacao='ativo'")
+      .bind(idx).first();
+    const match=record&&await equals(await accessHash(env,idx,code),record.code_hash);
+    if(!match){
+      const attempts=previous?.expires_at>now?previous.attempts+1:1;
+      await unsuccessfulAccess(db,actor,attempts,now+900);
+      return reply(401,{error:'CPF ou código de acesso não autorizado.'},cors);
+    }
+    // Revalidar com o fornecedor antes de emitir token, inclusive para licenças suspensas.
+    const found=await sdk(env,'GET','/patients/'+encodeURIComponent(cpf));
+    if(!found.ok){
+      if(found.status===404)return reply(403,{error:'Cadastro sem acesso ativo. Procure a PromoVie.'},cors);
+      return reply(502,{error:'Não foi possível validar a situação do atendimento.'},cors);
+    }
+    const patient=patientFromSDK(found.data);
+    if(!patient||patient.active===false||patient.unsubscribed_at||
+       String(patient.plan)!=='345'||patient.code!==undefined&&digits(patient.code)!==cpf)
+      return reply(403,{error:'Cadastro sem acesso ativo. Procure a PromoVie.'},cors);
+    const auth=await sdk(env,'POST','/patients/authenticate?code='+encodeURIComponent(cpf));
+    const token=auth.data?.access_token||auth.data?.data?.access_token;
+    if(!auth.ok||typeof token!=='string'||!token)
+      return reply(502,{error:'Não foi possível iniciar o atendimento agora.'},cors);
+    await db.prepare('DELETE FROM pv_access_attempts WHERE actor_hash=?').bind(actor).run();
+    return reply(200,{access_token:token,apiKey:val(env,'MEDIQUO_V3_WIDGET_API_KEY'),environment:'production'},cors);
+  }catch(e){
+    const status=[400,413,415].includes(e?.status)?e.status:502;
+    return reply(status,{error:'Não foi possível concluir a autenticação.'},cors);
+  }
+}
+
 async function appendLog(db,id,event,detail=''){
   await db.prepare('INSERT INTO pv_historico(id,beneficiario_id,evento,registrado_em,detalhes) VALUES(?,?,?,?,?)')
     .bind(crypto.randomUUID(),id,event,new Date().toISOString(),detail).run();
@@ -267,7 +358,7 @@ export async function handleAdmin(request,env,cors={}){
       await appendLog(db,id,'cadastro_local','Registro criado sem consumo de licença');
       return reply(201,{ok:true,id,situacao:'rascunho'},baseCors);
     }
-    const match=path.match(/^\/api\/promovie\/admin\/v1\/records\/([a-f0-9-]{36})(?:\/(verify|send|archive|restore|history))?$/);
+    const match=path.match(/^\/api\/promovie\/admin\/v1\/records\/([a-f0-9-]{36})(?:\/(verify|send|archive|restore|history|access-code|revoke-access))?$/);
     if(!match)return reply(404,{error:'Rota inexistente.'},baseCors);
     const rec=await oneRecord(env,match[1]);if(!rec)return reply(404,{error:'Beneficiário não encontrado.'},baseCors);
     const {row,item}=rec,action=match[2];
@@ -276,6 +367,23 @@ export async function handleAdmin(request,env,cors={}){
       const logs=await db.prepare('SELECT evento,registrado_em,detalhes FROM pv_historico WHERE beneficiario_id=? ORDER BY registrado_em DESC LIMIT 100')
         .bind(row.id).all();
       return reply(200,{historico:logs.results||[]},baseCors);
+    }
+    if(method==='POST'&&(action==='access-code'||action==='revoke-access')){
+      if(row.situacao!=='ativo')return reply(409,{error:'Somente beneficiários ativos podem receber ou revogar um código pessoal.'},baseCors);
+      await ensureAccessSchema(env);
+      if(action==='revoke-access'){
+        await db.prepare('DELETE FROM pv_access_codes WHERE beneficiario_id=?').bind(row.id).run();
+        await appendLog(db,row.id,'codigo_revogado','Acesso pessoal revogado pela administração');
+        return reply(200,{ok:true,informacao:'Código pessoal revogado. O beneficiário não poderá iniciar novas sessões.'},baseCors);
+      }
+      // Um código novo invalida imediatamente o anterior. Somente exibido nesta resposta HTTPS.
+      const code=newPersonalCode();
+      const hash=await accessHash(env,row.cpf_index,normalizeCode(code));
+      const now=new Date().toISOString();
+      await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
+        .bind(row.id,hash,now).run();
+      await appendLog(db,row.id,'codigo_gerado','Código pessoal criado sem armazenar o valor em texto');
+      return reply(200,{ok:true,codigo:code,informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
     }
     if(method==='POST'&&action==='archive'&&row.situacao!=='arquivado'){
       await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')

@@ -230,6 +230,13 @@
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
   }
+.access-code-dialog{width:min(450px,calc(100% - 32px));border:1px solid #e7e0f1;border-radius:23px;padding:26px;background:#fff;color:#252139;box-shadow:0 22px 70px #1b143455;font-family:var(--font-body)}
+.access-code-dialog::backdrop{background:rgba(22,13,42,.65);backdrop-filter:blur(4px)}
+.access-code-dialog h2{font:700 22px var(--font-display);margin:0 0 11px;color:#4b0c8f}
+.access-code-dialog p{color:#626071;font-size:13px;line-height:1.7}
+.access-code-dialog code{display:block;overflow-wrap:anywhere;text-align:center;letter-spacing:2px;font:750 clamp(15px,3.7vw,20px)/1.65 ui-monospace,monospace;border:1px dashed #bcabd9;border-radius:13px;background:#f7f4fe;padding:14px 8px;margin:16px 0}
+.access-code-dialog .actions{display:flex;gap:10px;flex-wrap:wrap}
+.access-code-dialog button{min-height:42px}
 </style>
 </head>
 <body>
@@ -329,6 +336,8 @@
             <button id="send-button" class="small" type="button">Ativar Token PromoVie</button>
             <button id="archive-button" class="danger small" type="button">Arquivar</button>
             <button id="restore-button" class="secondary small" type="button" hidden>Restaurar</button>
+            <button id="generate-access-button" class="secondary small" type="button" hidden>Gerar código pessoal</button>
+            <button id="revoke-access-button" class="ghost small" type="button" hidden>Revogar código</button>
           </div>
           <hr class="divider">
           <h3>Histórico administrativo</h3>
@@ -343,6 +352,15 @@
     <a href="/telesaude/">Voltar à TeleSaúde</a>.
   </footer>
 </main>
+<dialog id="access-code-dialog" class="access-code-dialog" aria-labelledby="access-code-title">
+  <h2 id="access-code-title">Código pessoal gerado</h2>
+  <p>Entregue este código somente ao beneficiário. Ele é individual e substitui qualquer código anterior. Após fechar esta janela, não será possível visualizá-lo novamente.</p>
+  <code id="generated-access-code" aria-label="Código pessoal de acesso"></code>
+  <div class="actions">
+    <button id="copy-access-code" type="button">Copiar código</button>
+    <button id="close-access-code" class="secondary" type="button">Fechar</button>
+  </div>
+</dialog>
 <script>
 (() => {
   'use strict';
@@ -351,7 +369,7 @@
   let page=0,more=false,records=[],selectedId='',busy=false;
   const labels={rascunho:'Rascunho',enviado:'Enviado',ativo:'Ativo',arquivado:'Arquivado'};
   function msg(id,value,kind='info'){const el=$(id);el.hidden=!value;el.dataset.kind=kind;el.textContent=value||'';}
-  function setBusy(v){busy=v;for(const id of ['login-button','save-activate-button','save-button','send-button','archive-button','check-button','restore-button'])$(id).disabled=v;}
+  function setBusy(v){busy=v;for(const id of ['login-button','save-activate-button','save-button','send-button','archive-button','check-button','restore-button','generate-access-button','revoke-access-button'])$(id).disabled=v;}
   function date(s){return s?new Date(s).toLocaleString('pt-BR'):'Não informado';}
   async function request(path,{method='GET',body}={}){
     const res=await fetch(API+path,{
@@ -464,6 +482,18 @@
             const result=await request('/records/'+id+'/verify',{method:'POST',body:{}});
             if(result.encontrado&&result.ativo){
               msg('banner','Beneficiário cadastrado e ativo no plano 345 do Token PromoVie.','ok');
+              // Uma unica ativacao seguida de codigo pessoal, sem novo envio ao SDK.
+              try{
+                const personal=await request('/records/'+id+'/access-code',{method:'POST',body:{}});
+                personalCode=String(personal.codigo||'');
+                if(!personalCode)throw Error('O código pessoal não foi disponibilizado.');
+                $('generated-access-code').textContent=personalCode;
+                $('copy-access-code').textContent='Copiar código';
+                $('access-code-dialog').showModal();
+                msg('banner','Beneficiário ativo. Copie o código pessoal para entregar ao titular.','ok');
+              }catch{
+                msg('banner','Beneficiário ativo. Para entregar o acesso, abra o cadastro e selecione Gerar código pessoal.','info');
+              }
             }else{
               msg('banner','Cadastro enviado ao Token PromoVie, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
             }
@@ -498,6 +528,8 @@
       $('archive-button').hidden=r.situacao==='arquivado';
       $('restore-button').hidden=r.situacao!=='arquivado';
       $('check-button').hidden=r.situacao==='arquivado';
+      $('generate-access-button').hidden=r.situacao!=='ativo';
+      $('revoke-access-button').hidden=r.situacao!=='ativo';
       const hist=await request('/records/'+encodeURIComponent(id)+'/history');
       if(selectedId!==id)return;
       $('history').replaceChildren();
@@ -523,6 +555,51 @@
     }catch(e){msg('banner',e.message,'error');}
     finally{setBusy(false);}
   }
+  const personalDialog=$('access-code-dialog');
+  let personalCode='';
+  function closePersonalCode(){
+    personalCode='';
+    $('generated-access-code').textContent='';
+    if(personalDialog.open)personalDialog.close();
+  }
+  $('close-access-code').addEventListener('click',closePersonalCode);
+  personalDialog.addEventListener('close',()=>{personalCode='';$('generated-access-code').textContent='';});
+  $('copy-access-code').addEventListener('click',async()=>{
+    if(!personalCode)return;
+    try{
+      await navigator.clipboard.writeText(personalCode);
+      $('copy-access-code').textContent='Copiado';
+    }catch{
+      $('copy-access-code').textContent='Selecione o código acima para copiar';
+    }
+  });
+  $('generate-access-button').addEventListener('click',async()=>{
+    if(!selectedId||busy)return;
+    if(!confirm('Gerar um código pessoal para este beneficiário? O código anterior, se houver, deixará de funcionar.'))return;
+    setBusy(true);msg('banner','Gerando código pessoal de acesso...');
+    try{
+      const result=await request('/records/'+encodeURIComponent(selectedId)+'/access-code',{method:'POST',body:{}});
+      personalCode=String(result.codigo||'');
+      if(!personalCode)throw Error('O servidor não retornou o código pessoal.');
+      $('generated-access-code').textContent=personalCode;
+      $('copy-access-code').textContent='Copiar código';
+      personalDialog.showModal();
+      msg('banner','Código pessoal gerado. Copie agora e entregue ao beneficiário de forma segura.','ok');
+      await openRecord(selectedId);
+    }catch(err){msg('banner',err.message,'error');}
+    finally{setBusy(false);}
+  });
+  $('revoke-access-button').addEventListener('click',async()=>{
+    if(!selectedId||busy)return;
+    if(!confirm('Revogar o código pessoal deste beneficiário? Novas entradas serão bloqueadas até gerar outro código.'))return;
+    setBusy(true);
+    try{
+      await request('/records/'+encodeURIComponent(selectedId)+'/revoke-access',{method:'POST',body:{}});
+      msg('banner','Código pessoal revogado. Novas entradas ficam bloqueadas.','ok');
+      await openRecord(selectedId);
+    }catch(err){msg('banner',err.message,'error');}
+    finally{setBusy(false);}
+  });
   $('check-button').addEventListener('click',()=>change('verify'));
   $('send-button').addEventListener('click',()=>change('send','Confirma o envio deste cadastro real para o Token PromoVie? Isso poderá utilizar uma licença do seu pacote. A operação só será permitida após a liberação técnica.'));
   $('archive-button').addEventListener('click',()=>change('archive','Deseja arquivar este registro SOMENTE na PromoVie? Isso NÃO cancela nem suspende a licença do Token PromoVie.'));
