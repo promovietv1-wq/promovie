@@ -1,5 +1,5 @@
 import { handleV3 } from "./v3.mjs";
-import { handleAdmin } from "./admin.mjs";
+import { handleAdmin, handleBeneficiaryAccess } from "./admin.mjs";
 // PromoVie TeleSaúde — backend Cloudflare Workers (homologação).
 // Alternativa à execução Node.js do kit Médiquo: não hiberna por inatividade.
 // NÃO é autenticação de beneficiários reais. Usa apenas um paciente fictício.
@@ -104,6 +104,11 @@ export default {
     }
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
+    }
+    // Acesso pessoal, com CPF + código individual emitido pelo painel.
+    // Nenhuma credencial administrativa ou chave privada é enviada ao browser.
+    if (url.pathname.startsWith("/api/promovie/access/v1/")) {
+      return handleBeneficiaryAccess(request, env, cors);
     }
     // Portal administrativo: login e D1, isolado dos pacientes e do Widget.
     if (url.pathname.startsWith("/api/promovie/admin/v1/")) {
