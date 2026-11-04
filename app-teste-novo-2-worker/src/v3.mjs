@@ -107,6 +107,77 @@ export async function handleV3(request,env,cors={}){
     if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
     return reply(200,{apiKey:value(env,'MEDIQUO_V3_WIDGET_API_KEY'),environment:'production'},cors);
   }
+  // Gestão restrita ao operador da PromoVie. Inicialmente, um único CPF autorizado.
+  // Em nenhuma hipótese o formulário público de atendimento cadastra pacientes.
+  if(method==='POST'&&(path===PREFIX+'/admin/patients/lookup'||
+                      path===PREFIX+'/admin/patients/register')){
+    if(rateLimited(request))return reply(429,{error:'Muitas tentativas. Aguarde.'},cors);
+    const adminToken=request.headers.get('Authorization')||'';
+    if(!value(env,'TELESAUDE_V3_SYNC_TOKEN')||
+      !await sameSecret(adminToken.startsWith('Bearer ')?adminToken.slice(7):'',
+                        value(env,'TELESAUDE_V3_SYNC_TOKEN')))
+      return reply(401,{error:'Acesso administrativo não autorizado.'},cors);
+    if(!value(env,'MEDIQUO_V3_WIDGET_API_KEY')||
+       !value(env,'MEDIQUO_V3_SDK_SECRET_KEY')||
+       !sdkBase(env)||value(env,'MEDIQUO_V3_PLAN')!=='345')
+      return reply(503,{error:'Integração com a Médiquo ainda não configurada.'},cors);
+    try{
+      const input=await jsonInput(request);
+      const cpf=digits(input?.document);
+      if(!validCPF(cpf))return reply(400,{error:'Informe um CPF válido.'},cors);
+      // A primeira etapa NUNCA pode cadastrar/consultar CPFs arbitrários.
+      if(cpf!==value(env,'TELESAUDE_V3_TEST_CPF'))
+        return reply(403,{error:'CPF ainda não autorizado para a primeira ativação.'},cors);
+      if(path===PREFIX+'/admin/patients/lookup'){
+        const r=await vendor(env,'/patients/'+encodeURIComponent(cpf),'GET');
+        if(r.status===404)return reply(200,{found:false},cors);
+        if(!r.ok)return reply(502,{error:'Não foi possível consultar o paciente na Médiquo.'},cors);
+        const p=unwrapPatient(r.data);
+        if(!p||((p.code!==undefined)&&digits(p.code)!==cpf))
+          return reply(502,{error:'Resposta inesperada da Médiquo.'},cors);
+        return reply(200,{found:true,active:!p.unsubscribed_at&&
+          p.active!==false&&String(p.plan||'')==='345',
+          name:typeof p.first_name==='string'&&typeof p.last_name==='string'
+            ? (p.first_name+' '+p.last_name).trim():null,
+          plan:String(p.plan||'')},cors);
+      }
+      if(value(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
+        return reply(503,{error:'Cadastro ainda bloqueado. A consulta permanece disponível.'},cors);
+      if(!await sameSecret(input?.testPassword,value(env,'TELESAUDE_V3_TEST_PASSWORD')))
+        return reply(401,{error:'Senha de autorização inválida.'},cors);
+      const name=safeName(input?.name);
+      if(!name||name.split(' ').length<2)
+        return reply(400,{error:'Informe nome completo e sobrenome.'},cors);
+      const existing=await vendor(env,'/patients/'+encodeURIComponent(cpf),'GET');
+      if(existing.ok)
+        return reply(409,{error:'CPF já consta na Médiquo. Consulte antes de alterar a licença.'},cors);
+      if(existing.status!==404)
+        return reply(502,{error:'Não foi possível verificar se já existe cadastro. Nenhuma inclusão efetuada.'},cors);
+      const parts=name.split(' ');
+      const patient={code:cpf,tax_id:cpf,first_name:parts.shift(),
+        last_name:parts.join(' '),plan:'345',locale:'pt'};
+      if(input.email){
+        if(typeof input.email!=='string'||input.email.length>180||
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email))
+          return reply(400,{error:'E-mail inválido.'},cors);
+        patient.email=input.email.trim();
+      }
+      if(input.phone){
+        const phone=digits(input.phone);
+        if(phone.length!==10&&phone.length!==11)
+          return reply(400,{error:'Telefone inválido.'},cors);
+        patient.phone=phone;
+      }
+      const saved=await vendor(env,'/patients','PUT',{patients:[patient]});
+      if(!saved.ok)
+        return reply(502,{error:'A Médiquo não confirmou o envio do cadastro.'},cors);
+      return reply(202,{ok:true,status:'enviado',
+        message:'Cadastro enviado à Médiquo. Consulte novamente para confirmar ativação.'},cors);
+    }catch(e){
+      return reply(e?.code===413?413:e?.code===400?400:502,
+        {error:'Não foi possível processar a operação administrativa.'},cors);
+    }
+  }
   if(path===PREFIX+'/patients/sync'&&method==='POST'){
     if(!configured)return reply(503,{error:'Integração em configuração.'},cors);
     if(value(env,'TELESAUDE_V3_WRITE_ENABLED')!=='true')
