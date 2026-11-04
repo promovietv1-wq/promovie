@@ -190,8 +190,7 @@ export async function handleBeneficiaryAccess(request,env,cors={}){
   try{
     const input=await bodyJSON(request);
     const cpf=digits(input?.cpf),code=normalizeCode(input?.codigo);
-    if(!validCPF(cpf)||!new RegExp('^['+CODE_ALPHABET+']{20}
-$').test(code))
+    if(!validCPF(cpf)||!new RegExp('^['+CODE_ALPHABET+']{20}$').test(code))
       return reply(401,{error:'CPF ou código de acesso não autorizado.'},cors);
     await ensureAccessSchema(env);
     const idx=await indexCPF(env,cpf);
