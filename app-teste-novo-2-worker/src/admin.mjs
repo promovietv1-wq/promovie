@@ -211,6 +211,19 @@ export async function handleAdmin(request,env,cors={}){
   if(method!=='GET'&&!originAllowed(request,env))
     return reply(403,{error:'Origem administrativa não autorizada.'},baseCors);
   if(!available(env))return reply(503,{error:'Painel ainda não configurado. É necessário associar o banco D1 e definir as duas credenciais administrativas.'},baseCors);
+  if(path===PREFIX+'/health'&&method==='GET'){
+    try{
+      const ok=await d1(env).prepare('SELECT 1 AS ok').first();
+      if(ok?.ok!==1)throw Error('D1 falhou');
+      return reply(200,{ok:true,banco:'conectado',credenciais:'configuradas',cadastro_real_habilitado:val(env,'TELESAUDE_V3_WRITE_ENABLED')==='true'},baseCors);
+    }catch{
+      return reply(503,{ok:false,error:'Banco administrativo indisponível.'},baseCors);
+    }
+  }
+  if(!tokenFromCookie(request) && method==='GET'){
+    return reply(401,{error:'Faça login para acessar o painel.'},baseCors);
+  }
+
   try{
     if(path===PREFIX+'/login'&&method==='POST'){
       const obj=await bodyJSON(request);
