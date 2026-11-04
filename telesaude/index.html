@@ -25,7 +25,7 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Laboratório PromoVie para testar a integração do Widget Web Médiquo em ambiente de homologação.">
+<meta name="description" content="TeleSaúde PromoVie: acesso ao Token PromoVie e aos serviços de atendimento online.">
 <link rel="canonical" href="https://www.promovie.tv.br/telesaude/">
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
@@ -767,7 +767,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     }
     if(!ready){
       passwordInput.value="";
-      showAccessResult("TeleSaúde em homologação","O botão respondeu, mas a consulta ainda não pode ser aberta: falta concluir a configuração segura com a Médiquo. Os dados digitados não foram enviados para autenticação.","info");
+      showAccessResult("TeleSaúde em homologação","O botão respondeu, mas a consulta ainda não pode ser aberta: falta concluir a configuração segura do Token PromoVie. Os dados digitados não foram enviados para autenticação.","info");
       return;
     }
     if(!BACKEND_URL){
@@ -784,7 +784,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     feedback("","info");
     try{
       const configResp=await fetch(BACKEND_URL+V3+"/config",{cache:"no-store",credentials:"omit"});
-      if(configResp.status===503)throw new Error("Backend conectado, mas a Médiquo ainda precisa confirmar as credenciais de homologação. Nenhuma senha de teste foi ativada.");
+      if(configResp.status===503)throw new Error("Backend conectado, mas as credenciais do Token PromoVie ainda precisam ser habilitadas. Nenhuma senha de teste foi ativada.");
       if(!configResp.ok)throw new Error("Não foi possível consultar as configurações do servidor.");
       const config=await getJson(configResp);
       if(!config.apiKey)throw new Error("A API Key do Widget não está configurada no servidor.");
@@ -864,7 +864,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       if(ready){
         feedback("Ambiente de homologação disponível para paciente fictício.","info");
       }else{
-        feedback("Integração em configuração. O atendimento será habilitado após a homologação com a Médiquo.","info");
+        feedback("Integração em configuração. O atendimento será habilitado após a homologação do Token PromoVie.","info");
       }
     }catch(e){
       ready=false;
@@ -880,7 +880,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     service.setAttribute("tabindex","0");
     service.setAttribute("aria-label","Como acessar "+serviceName);
     service.addEventListener("click",function(){
-      feedback("Para acessar "+serviceName+", utilize o formulário de homologação abaixo. O atendimento depende da autenticação na Médiquo.","info");
+      feedback("Para acessar "+serviceName+", utilize o formulário de homologação abaixo. O atendimento depende da autenticação pelo Token PromoVie.","info");
       cpfInput.focus({preventScroll:true});
       document.querySelector(".install-block").scrollIntoView({behavior:"smooth",block:"nearest"});
     });

@@ -261,7 +261,7 @@
       <input type="password" id="admin-password" minlength="16" autocomplete="current-password" required placeholder="Digite sua senha do painel">
       <button type="submit" id="login-button">Entrar com segurança</button>
     </form>
-    <p class="muted form-note">Acesso restrito à administração PromoVie. Utilize somente sua senha administrativa, nunca as chaves da Médiquo.</p>
+    <p class="muted form-note">Acesso restrito à administração PromoVie. Utilize somente sua senha administrativa, nunca as chaves do Token PromoVie.</p>
     <div id="login-status" class="notice" role="status" aria-live="polite" hidden></div>
   </section>
 
@@ -299,7 +299,7 @@
         </div>
         <form id="new-form" hidden autocomplete="off">
           <h2>Novo beneficiário</h2>
-          <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no SDK ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
+          <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no Token PromoVie ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
           <label for="new-name">Nome completo</label>
           <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
           <label for="new-cpf">CPF</label>
@@ -322,18 +322,18 @@
             <div><dt>E-mail</dt><dd id="detail-email"></dd></div>
             <div><dt>Telefone</dt><dd id="detail-phone"></dd></div>
             <div><dt>Incluído em</dt><dd id="detail-created"></dd></div>
-            <div><dt>Enviado à Médiquo</dt><dd id="detail-sent"></dd></div>
+            <div><dt>Enviado ao Token PromoVie</dt><dd id="detail-sent"></dd></div>
           </dl>
           <div class="actions">
-            <button id="check-button" class="ghost small" type="button">Consultar Médiquo</button>
-            <button id="send-button" class="small" type="button">Enviar ao SDK</button>
+            <button id="check-button" class="ghost small" type="button">Consultar Token PromoVie</button>
+            <button id="send-button" class="small" type="button">Ativar Token PromoVie</button>
             <button id="archive-button" class="danger small" type="button">Arquivar</button>
             <button id="restore-button" class="secondary small" type="button" hidden>Restaurar</button>
           </div>
           <hr class="divider">
           <h3>Histórico administrativo</h3>
           <ol id="history" class="history"><li>Carregando...</li></ol>
-          <p class="muted">Arquivar aqui não suspende nem cancela uma licença na Médiquo. O envio de um cadastro depende de confirmação da API e da liberação de escrita.</p>
+          <p class="muted">Arquivar aqui não suspende nem cancela uma licença no Token PromoVie. O envio de um cadastro depende de confirmação da API e da liberação de escrita.</p>
         </div>
       </section>
     </div>
@@ -361,7 +361,7 @@
     });
     const data=await res.json().catch(()=>({}));
     if(res.status===401&&path!=='/login'){showLogin();throw Error(path==='/me'?'Faça login para acessar o painel.':'Sua sessão terminou. Entre novamente.');}
-    if(!res.ok)throw Error(data.error||'Operação indisponível. Tente novamente.');
+    if(!res.ok)throw Error(String(data.error||'Operação indisponível. Tente novamente.').replace(/m[eé]diquo/gi,'Token PromoVie'));
     return data;
   }
   function showLogin(){
@@ -445,31 +445,31 @@
       }});
       const id=encodeURIComponent(data.id);
       if(!activate){
-        msg('banner','Beneficiário salvo no arquivo da PromoVie. Nenhuma licença da Médiquo foi utilizada.','ok');
+        msg('banner','Beneficiário salvo no arquivo da PromoVie. Nenhuma licença do Token PromoVie foi utilizada.','ok');
       }else{
         // O backend verifica a autorização de escrita, o CPF permitido e a duplicidade
         // antes de enviar qualquer dado. Nunca repetir automaticamente um PUT incerto.
-        msg('banner','Registro salvo. Enviando uma única vez ao SDK Médiquo...');
+        msg('banner','Registro salvo. Enviando uma única vez ao Token PromoVie...');
         let envioConfirmado=false;
         try{
           await request('/records/'+id+'/send',{method:'POST',body:{}});
           envioConfirmado=true;
         }catch(err){
-          msg('banner','Registro salvo na PromoVie, mas o envio ao SDK não foi confirmado: '+err.message+
+          msg('banner','Registro salvo na PromoVie, mas o envio ao Token PromoVie não foi confirmado: '+err.message+
             ' Não tente cadastrar de novo. Consulte este registro antes de qualquer novo envio.','error');
         }
         if(envioConfirmado){
-          msg('banner','Cadastro enviado ao SDK. Conferindo a ativação...');
+          msg('banner','Cadastro enviado ao Token PromoVie. Conferindo a ativação...');
           try{
             const result=await request('/records/'+id+'/verify',{method:'POST',body:{}});
             if(result.encontrado&&result.ativo){
-              msg('banner','Beneficiário cadastrado e ativo no plano 345 da Médiquo.','ok');
+              msg('banner','Beneficiário cadastrado e ativo no plano 345 do Token PromoVie.','ok');
             }else{
-              msg('banner','Cadastro enviado ao SDK, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Médiquo mais tarde.','info');
+              msg('banner','Cadastro enviado ao Token PromoVie, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
             }
           }catch(err){
-            msg('banner','Cadastro enviado ao SDK. Não foi possível confirmar a ativação agora: '+
-              err.message+' Use Consultar Médiquo para conferir, sem reenviar o cadastro.','info');
+            msg('banner','Cadastro enviado ao Token PromoVie. Não foi possível confirmar a ativação agora: '+
+              err.message+' Use Consultar Token PromoVie para conferir, sem reenviar o cadastro.','info');
           }
         }
       }
@@ -503,7 +503,7 @@
       $('history').replaceChildren();
       if(!hist.historico?.length)$('history').append(newElement('li','','Nenhum evento.'));
       for(const ev of hist.historico){
-        const description=ev.evento.replace(/_/g,' ')+' | '+date(ev.registrado_em)+(ev.detalhes?' | '+ev.detalhes:'');
+        const description=(ev.evento.replace(/_/g,' ')+' | '+date(ev.registrado_em)+(ev.detalhes?' | '+ev.detalhes:'')).replace(/m[eé]diquo/gi,'Token PromoVie');
         $('history').append(newElement('li','',description));
       }
     }catch(e){msg('banner',e.message,'error');}
@@ -514,18 +514,18 @@
     const id=selectedId;setBusy(true);msg('banner','Processando operação...');
     try{
       const out=await request('/records/'+encodeURIComponent(id)+'/'+action,{method:'POST',body:{}});
-      let message=out.informacao||out.explicacao||'Alteração registrada.';
+      let message=String(out.informacao||out.explicacao||'Alteração registrada.').replace(/m[eé]diquo/gi,'Token PromoVie');
       if(action==='verify'){
         message=out.encontrado?(out.ativo?'Paciente ativo no plano 345.':'Cadastro encontrado, mas o plano 345 não foi confirmado.'):
-          'O CPF ainda não foi encontrado na Médiquo.';
+          'O CPF ainda não foi encontrado no Token PromoVie.';
       }
       msg('banner',message,'ok');await loadPage();await openRecord(id);
     }catch(e){msg('banner',e.message,'error');}
     finally{setBusy(false);}
   }
   $('check-button').addEventListener('click',()=>change('verify'));
-  $('send-button').addEventListener('click',()=>change('send','Confirma o envio deste cadastro real para a Médiquo? Isso poderá utilizar uma licença do seu pacote. A operação só será permitida após a liberação técnica.'));
-  $('archive-button').addEventListener('click',()=>change('archive','Deseja arquivar este registro SOMENTE na PromoVie? Isso NÃO cancela nem suspende a licença da Médiquo.'));
+  $('send-button').addEventListener('click',()=>change('send','Confirma o envio deste cadastro real para o Token PromoVie? Isso poderá utilizar uma licença do seu pacote. A operação só será permitida após a liberação técnica.'));
+  $('archive-button').addEventListener('click',()=>change('archive','Deseja arquivar este registro SOMENTE na PromoVie? Isso NÃO cancela nem suspende a licença do Token PromoVie.'));
   $('restore-button').addEventListener('click',()=>change('restore'));
   $('refresh').addEventListener('click',loadPage);
   $('previous').addEventListener('click',()=>{if(page>0){page--;loadPage();}});

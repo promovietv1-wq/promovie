@@ -281,7 +281,7 @@ export async function handleAdmin(request,env,cors={}){
       await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')
         .bind(row.situacao,'arquivado',new Date().toISOString(),new Date().toISOString(),row.id).run();
       await appendLog(db,row.id,'arquivado','Somente arquivo local, sem suspender licença na Médiquo');
-      return reply(200,{ok:true,explicacao:'Registro arquivado no painel. A licença da Médiquo NÃO foi suspensa.'},baseCors);
+      return reply(200,{ok:true,explicacao:'Registro arquivado no painel. A licença do Token PromoVie NÃO foi suspensa.'},baseCors);
     }
     if(method==='POST'&&action==='restore'&&row.situacao==='arquivado'){
       const status=['rascunho','enviado','ativo'].includes(row.situacao_anterior)?row.situacao_anterior:'rascunho';
@@ -292,11 +292,11 @@ export async function handleAdmin(request,env,cors={}){
     }
     if(method==='POST'&&action==='verify'){
       const r=await sdk(env,'GET','/patients/'+encodeURIComponent(item.cpf));
-      if(r.status===404)return reply(200,{encontrado:false,informacao:'CPF ainda não encontrado na Médiquo.'},baseCors);
-      if(!r.ok)return reply(502,{error:'A consulta à Médiquo falhou.'},baseCors);
+      if(r.status===404)return reply(200,{encontrado:false,informacao:'CPF ainda não encontrado no Token PromoVie.'},baseCors);
+      if(!r.ok)return reply(502,{error:'A consulta ao Token PromoVie falhou.'},baseCors);
       const p=patientFromSDK(r.data);
       if(!p||p.code!==undefined&&digits(p.code)!==item.cpf)
-        return reply(502,{error:'Dados inesperados na consulta à Médiquo.'},baseCors);
+        return reply(502,{error:'Dados inesperados na consulta ao Token PromoVie.'},baseCors);
       const ativo=p.active!==false&&!p.unsubscribed_at&&String(p.plan)==='345';
       if(row.situacao!=='arquivado'&&ativo){
         await db.prepare('UPDATE pv_beneficiarios SET situacao=?,atualizado_em=? WHERE id=?')
@@ -313,15 +313,15 @@ export async function handleAdmin(request,env,cors={}){
          val(env,'PROMOVIE_ADMIN_MULTI_PATIENT_ENABLED')!=='true')
         return reply(403,{error:'Primeira ativação restrita ao CPF autorizado.'},baseCors);
       const exists=await sdk(env,'GET','/patients/'+encodeURIComponent(item.cpf));
-      if(exists.ok)return reply(409,{error:'CPF já existe na Médiquo. Verifique o cadastro; nenhum novo registro foi enviado.'},baseCors);
-      if(exists.status!==404)return reply(502,{error:'Não foi possível verificar duplicidade na Médiquo.'},baseCors);
+      if(exists.ok)return reply(409,{error:'CPF já existe no Token PromoVie. Verifique o cadastro; nenhum novo registro foi enviado.'},baseCors);
+      if(exists.status!==404)return reply(502,{error:'Não foi possível verificar duplicidade no Token PromoVie.'},baseCors);
       const names=item.nome.split(' ');
       const patient={code:item.cpf,tax_id:item.cpf,first_name:names.shift(),
         last_name:names.join(' '),plan:'345',locale:'pt'};
       if(item.email)patient.email=item.email;
       if(item.telefone)patient.phone=item.telefone;
       const sent=await sdk(env,'PUT','/patients',{patients:[patient]});
-      if(!sent.ok)return reply(502,{error:'A Médiquo não confirmou o envio. Consulte antes de repetir.'},baseCors);
+      if(!sent.ok)return reply(502,{error:'O Token PromoVie não confirmou o envio. Consulte antes de repetir.'},baseCors);
       const now=new Date().toISOString();
       await db.prepare('UPDATE pv_beneficiarios SET situacao=?,enviado_em=?,atualizado_em=? WHERE id=?')
         .bind('enviado',now,now,row.id).run();

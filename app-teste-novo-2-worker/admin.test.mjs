@@ -244,9 +244,23 @@ test('formulário permite ativação assistida em um clique, sem repetição do 
   assert.match(html,/envioConfirmado=true/);
   assert.match(html,/if\(envioConfirmado\)/);
   assert.match(html,/Não tente cadastrar de novo/);
-  assert.match(html,/Use Consultar Médiquo para conferir, sem reenviar o cadastro/);
+  assert.match(html,/Use Consultar Token PromoVie para conferir, sem reenviar o cadastro/);
   assert.match(html,/beneficiário cadastrado e ativo|Beneficiário cadastrado e ativo/);
   // O fluxo PUT do fornecedor permanece exclusivamente no backend e condicionado
   // aos controles do servidor, nunca fica exposto no HTML.
   assert.doesNotMatch(html,/X-Secret-Key|MEDIQUO_V3_SDK_SECRET_KEY/);
+});
+
+
+test('identidade Token PromoVie preserva integração SDK e não exibe a marca do provedor no painel',async()=>{
+ const html=await readFile(new URL('../telesaude/gestao/index.html',import.meta.url),'utf8');
+ const publicHtml=await readFile(new URL('../telesaude/index.html',import.meta.url),'utf8');
+ assert.match(html,/Consultar Token PromoVie<\/button>/);
+ assert.match(html,/Ativar Token PromoVie<\/button>/);
+ assert.match(html,/Enviado ao Token PromoVie<\/dt>/);
+ assert.match(html,/replace\(\/m\[eé\]diquo\/gi,'Token PromoVie'\)/);
+ assert.doesNotMatch(html,/>[^<]*M[eé]diquo[^<]*</i);
+ assert.match(publicHtml,/Token PromoVie/);
+ // Rotas internas e nomes de variáveis técnicas são deliberadamente preservados.
+ assert.match(publicHtml,/api\/mediquo\/v3/);
 });

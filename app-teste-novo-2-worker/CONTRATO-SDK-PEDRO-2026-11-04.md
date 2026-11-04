@@ -45,3 +45,12 @@ O teste inicial de um único CPF exigiu alternar `TELESAUDE_V3_WRITE_ENABLED` en
 - **Salvar apenas** continua disponível para cadastro local sem consumir licença. O painel é responsivo para computadores e celulares.
 - A ativação e as consultas dependem da resposta externa da Médiquo, por isso podem levar alguns segundos. Se a resposta falhar, a operação não deve ser repetida sem primeiro consultar o status do paciente existente.
 - O painel mantém autenticação administrativa e segurança do backend. A interface simplificada não cria acesso público para incluir pacientes.
+
+## Nomenclatura e identidade externa da PromoVie (04/11/2026)
+Por orientação do gestor, **todas as interfaces, botões, mensagens de atendimento e textos voltados ao beneficiário/administrador devem usar a denominação “Token PromoVie”** para o serviço integrado, e **não o nome comercial do fornecedor**. Exemplos:
+- “Consultar Token PromoVie” para a consulta do cadastro e da situação de ativação;
+- “Ativar Token PromoVie” para o envio manual de um beneficiário já salvo;
+- “Cadastrar e ativar” na experiência principal de inclusão;
+- “Enviado ao Token PromoVie”, “Token PromoVie ativo” em status e mensagens.
+
+Esta é uma **regra de nomenclatura de interface**, não uma migração de tecnologia nem alteração de titularidade dos cuidados clínicos. **Preservar** os endereços, variáveis, identificadores técnicos, autenticação e rotas do SDK V3 confirmados por Pedro, além da identificação real do fornecedor nos registros contratuais, auditoria técnica e avisos legais em que for obrigatória. Não substituir nomes em endpoints/URLs, não alterar chaves nem renomear módulos técnicos. Em novos componentes de UI, usar “Token PromoVie” desde o início.

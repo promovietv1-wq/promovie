@@ -120,7 +120,7 @@ export async function handleV3(request,env,cors={}){
     if(!value(env,'MEDIQUO_V3_WIDGET_API_KEY')||
        !value(env,'MEDIQUO_V3_SDK_SECRET_KEY')||
        !sdkBase(env)||value(env,'MEDIQUO_V3_PLAN')!=='345')
-      return reply(503,{error:'Integração com a Médiquo ainda não configurada.'},cors);
+      return reply(503,{error:'Integração do Token PromoVie ainda não configurada.'},cors);
     try{
       const input=await jsonInput(request);
       const cpf=digits(input?.document);
@@ -131,10 +131,10 @@ export async function handleV3(request,env,cors={}){
       if(path===PREFIX+'/admin/patients/lookup'){
         const r=await vendor(env,'/patients/'+encodeURIComponent(cpf),'GET');
         if(r.status===404)return reply(200,{found:false},cors);
-        if(!r.ok)return reply(502,{error:'Não foi possível consultar o paciente na Médiquo.'},cors);
+        if(!r.ok)return reply(502,{error:'Não foi possível consultar o paciente no Token PromoVie.'},cors);
         const p=unwrapPatient(r.data);
         if(!p||((p.code!==undefined)&&digits(p.code)!==cpf))
-          return reply(502,{error:'Resposta inesperada da Médiquo.'},cors);
+          return reply(502,{error:'Resposta inesperada do Token PromoVie.'},cors);
         return reply(200,{found:true,active:!p.unsubscribed_at&&
           p.active!==false&&String(p.plan||'')==='345',
           name:typeof p.first_name==='string'&&typeof p.last_name==='string'
@@ -150,7 +150,7 @@ export async function handleV3(request,env,cors={}){
         return reply(400,{error:'Informe nome completo e sobrenome.'},cors);
       const existing=await vendor(env,'/patients/'+encodeURIComponent(cpf),'GET');
       if(existing.ok)
-        return reply(409,{error:'CPF já consta na Médiquo. Consulte antes de alterar a licença.'},cors);
+        return reply(409,{error:'CPF já consta no Token PromoVie. Consulte antes de alterar a licença.'},cors);
       if(existing.status!==404)
         return reply(502,{error:'Não foi possível verificar se já existe cadastro. Nenhuma inclusão efetuada.'},cors);
       const parts=name.split(' ');
@@ -170,9 +170,9 @@ export async function handleV3(request,env,cors={}){
       }
       const saved=await vendor(env,'/patients','PUT',{patients:[patient]});
       if(!saved.ok)
-        return reply(502,{error:'A Médiquo não confirmou o envio do cadastro.'},cors);
+        return reply(502,{error:'O Token PromoVie não confirmou o envio do cadastro.'},cors);
       return reply(202,{ok:true,status:'enviado',
-        message:'Cadastro enviado à Médiquo. Consulte novamente para confirmar ativação.'},cors);
+        message:'Cadastro enviado ao Token PromoVie. Consulte novamente para confirmar ativação.'},cors);
     }catch(e){
       return reply(e?.code===413?413:e?.code===400?400:502,
         {error:'Não foi possível processar a operação administrativa.'},cors);
