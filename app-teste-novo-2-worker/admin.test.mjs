@@ -235,3 +235,18 @@ test('Nunca enviar outro CPF ao SDK, mesmo com gravação de um paciente liberad
   assert.equal(sent.status,403);
   assert.equal(db.people.size,1);
 });
+
+test('formulário permite ativação assistida em um clique, sem repetição do PUT, com salvamento local alternativo',async()=>{
+  const html=await readFile(new URL('../telesaude/gestao/index.html',import.meta.url),'utf8');
+  assert.match(html,/id="save-activate-button" type="submit"/);
+  assert.match(html,/id="save-button" type="submit" class="secondary"/);
+  assert.match(html,/const activate=e\.submitter\?\.id==='save-activate-button'/);
+  assert.match(html,/envioConfirmado=true/);
+  assert.match(html,/if\(envioConfirmado\)/);
+  assert.match(html,/Não tente cadastrar de novo/);
+  assert.match(html,/Use Consultar Médiquo para conferir, sem reenviar o cadastro/);
+  assert.match(html,/beneficiário cadastrado e ativo|Beneficiário cadastrado e ativo/);
+  // O fluxo PUT do fornecedor permanece exclusivamente no backend e condicionado
+  // aos controles do servidor, nunca fica exposto no HTML.
+  assert.doesNotMatch(html,/X-Secret-Key|MEDIQUO_V3_SDK_SECRET_KEY/);
+});
