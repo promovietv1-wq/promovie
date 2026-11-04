@@ -4,94 +4,278 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Área administrativa protegida de beneficiários da TeleSaúde PromoVie.">
+  <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+  <link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
   <title>Gestão de beneficiários | PromoVie TeleSaúde</title>
   <style>
-    :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-      color:#19213a;background:#f5f6fb;font-synthesis:none}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at top right,#ece7fc,transparent 38%),#f6f7fb}
-    main{max-width:1040px;margin:0 auto;padding:28px 18px 65px}
-    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:4px 0 17px}
-    .brand{font-size:20px;font-weight:850;color:#3e248d;text-decoration:none}
-    .top-right{display:flex;gap:12px;align-items:center}
-    a{color:#4c319c}
-    h1{font-size:clamp(24px,4vw,32px);color:#302177;margin:0 0 7px;letter-spacing:-.5px}
-    h2{font-size:19px;color:#302177;margin:0 0 12px}
-    h3{font-size:16px;margin:0}
-    p{color:#586179;line-height:1.5;margin:8px 0 15px}
-    .subtitle{font-size:14px}
-    .card{background:#fff;border:1px solid #e5e7f0;border-radius:17px;padding:25px;
-      box-shadow:0 8px 30px rgba(35,27,83,.045)}
-    .login{max-width:490px;margin:42px auto 0}
-    label{font-size:13px;font-weight:740;color:#333a57;display:block;margin:14px 0 6px}
-    input{font:inherit;color:#19213a;background:#fff;width:100%;border:1px solid #aeb5c9;border-radius:10px;padding:12px 13px;min-height:44px}
-    input:focus-visible,button:focus-visible{outline:2px solid #6955cd;outline-offset:2px}
-    button{background:#463093;color:#fff;border:0;border-radius:10px;padding:12px 15px;font:inherit;font-weight:720;cursor:pointer}
-    button.ghost{color:#40358a;background:#eeeafa}
-    button.secondary{color:#34385a;background:#e9edf6}
-    button.danger{color:#922a42;background:#fff0f0}
-    button.small{padding:8px 12px;font-size:13px}
-    button:disabled{opacity:.45;cursor:not-allowed}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .muted{font-size:13px;color:#70788b}
-    .info{background:#f2f3fe;border-radius:10px;padding:12px 14px;border:1px solid #e0e2fb;font-size:13px}
-    .notice{margin:14px 0;padding:13px 16px;border-radius:12px;background:#eef2fc;color:#293d72;line-height:1.5;white-space:pre-wrap}
-    .notice[data-kind="error"]{background:#fff0ed;color:#8b2830}
-    .notice[data-kind="ok"]{background:#e9f7f0;color:#19573f}
-    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:17px 0}
-    .toolbar input{max-width:310px}
-    .columns{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:18px}
-    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-    .record-list{display:flex;flex-direction:column;gap:9px;margin-top:17px}
-    .record{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;
-      background:#fff;border:1px solid #e3e7f0;border-radius:11px;padding:14px;text-align:left;color:#19213a}
-    .record:hover{background:#f7f5ff}
-    .record strong{display:block;line-height:1.4}
-    .record small{display:block;color:#70788b;margin-top:4px}
-    .tag{border-radius:24px;background:#e9ecf7;color:#4c536d;font-size:12px;font-weight:750;padding:5px 10px;white-space:nowrap}
-    .tag[data-type="ativo"]{background:#e6f6ed;color:#276349}
-    .tag[data-type="enviado"]{background:#fff3dd;color:#7b581d}
-    .tag[data-type="arquivado"]{background:#f3eaed;color:#7b4455}
-    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0 20px}
-    .detail-grid dt{font-size:12px;color:#70788b;margin:0 0 4px}
-    .detail-grid dd{font-size:14px;overflow-wrap:anywhere;margin:0;font-weight:660}
-    .history{padding:0 0 0 18px;font-size:13px;line-height:1.7;color:#586179}
-    .history li{margin-bottom:7px}
-    .divider{border:0;border-top:1px solid #e7e9f0;margin:22px 0}
-    [hidden]{display:none!important}
-    .empty{padding:28px 16px;color:#71788c;text-align:center}
-    footer{font-size:13px;color:#727a8d;margin-top:22px;line-height:1.5}
-    @media(max-width:800px){.columns{grid-template-columns:1fr}}
-    @media(max-width:540px){main{padding:20px 12px 50px}.card{padding:18px}.top{align-items:flex-start;flex-direction:column}
-      .actions button{flex:1}.detail-grid{grid-template-columns:1fr 1fr;gap:14px}.toolbar input{max-width:none}}
-  </style>
+  /* Identidade visual oficial PromoVie: Inter, Sora, gradiente violeta/ciano e logo original. */
+  :root {
+    --ink:#111827;--muted:#667085;--line:#e7edf6;
+    --purple:#4b0c8f;--violet:#7334d8;--cyan:#00bde8;--pink:#e6008d;
+    --grad:linear-gradient(112deg,#4b0c8f 0%,#7334d8 55%,#00bde8 100%);
+    --font-body:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    --font-display:Sora,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color-scheme:light;font-synthesis:none
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{min-width:320px;scroll-behavior:smooth}
+  body{
+    margin:0;min-height:100svh;color:var(--ink);
+    font:400 15px/1.6 var(--font-body);-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse 34% 35% at 92% 10%,rgba(115,52,216,.075),transparent 90%),
+      radial-gradient(ellipse 32% 40% at 3% 83%,rgba(0,189,232,.065),transparent 90%),
+      #fff
+  }
+  img,svg{display:block;max-width:100%}
+  a{color:var(--purple);text-decoration:none}
+  button,input{font:inherit}
+  button{border:0;cursor:pointer;touch-action:manipulation;min-height:44px}
+  a:focus-visible,button:focus-visible,input:focus-visible{
+    outline:3px solid var(--cyan);outline-offset:3px
+  }
+  [hidden]{display:none!important}
+  .site-header{
+    background:rgba(255,255,255,.96);border-bottom:1px solid rgba(219,222,236,.7);
+    box-shadow:0 4px 22px rgba(65,40,91,.035)
+  }
+  .site-header-inner{
+    width:min(1160px,calc(100% - 48px));min-height:80px;margin:auto;
+    display:flex;align-items:center;justify-content:space-between;gap:18px
+  }
+  .site-brand{display:flex;align-items:center;min-width:0;flex-shrink:0}
+  .site-brand img{width:171px;max-height:63px;height:auto;object-fit:contain;object-position:left}
+  .site-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .site-nav a{
+    font-size:13px;font-weight:700;color:#5d507f;border:1px solid #e9e4f4;
+    padding:9px 13px;border-radius:999px;white-space:nowrap;
+    transition:background .2s ease,border-color .2s ease
+  }
+  .site-nav a:hover{background:#f5f0fd;border-color:#d4c5ec}
+  .site-nav .nav-current{background:#f6f1fe;color:var(--purple)}
+  .site-nav #logout{min-height:38px;padding:7px 13px}
+  main{width:min(1160px,calc(100% - 48px));margin:0 auto;padding:37px 0 47px}
+  .eyebrow{
+    color:#6937af;font-size:11px;font-weight:800;letter-spacing:.13em;
+    text-transform:uppercase;margin:0 0 7px
+  }
+  h1,h2,h3{font-family:var(--font-display);letter-spacing:-.042em}
+  h1{
+    font-size:clamp(28px,3.6vw,42px);font-weight:700;line-height:1.19;
+    margin:0 0 12px;color:var(--purple)
+  }
+  h1.gradient{
+    background:var(--grad);background-clip:text;-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent
+  }
+  h2{font-size:clamp(17px,2vw,20px);line-height:1.3;margin:0 0 10px;color:#352059}
+  h3{font-size:15px;margin:0 0 9px;color:#352059}
+  p{margin:8px 0 15px;color:#667085;line-height:1.7}
+  .subtitle{font-size:14px;max-width:650px}
+  .muted{color:#6a7588;font-size:13px;line-height:1.65}
+  .card{
+    position:relative;background:rgba(255,255,255,.98);
+    border:1px solid #e8edf6;border-radius:24px;padding:25px;
+    box-shadow:0 14px 45px rgba(75,12,143,.055),0 3px 14px rgba(42,58,92,.028);
+    min-width:0
+  }
+  .login{
+    max-width:540px;margin:clamp(15px,4vh,46px) auto 26px;
+    padding:clamp(24px,4vw,39px)
+  }
+  .login-art{
+    display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:10px
+  }
+  .login-art img{
+    width:96px;height:96px;object-fit:contain;flex-shrink:0;
+    filter:drop-shadow(0 9px 15px rgba(76,22,126,.13))
+  }
+  .login h1{font-size:clamp(27px,5.5vw,35px)}
+  .login .intro{font-size:14px;margin:8px 0 22px;max-width:450px}
+  .form-note{border-top:1px solid var(--line);margin:21px 0 0;padding-top:15px}
+  label{display:block;margin:15px 0 7px;font-size:13px;font-weight:750;color:#394158}
+  input{
+    width:100%;min-width:0;min-height:47px;padding:12px 14px;
+    border:1px solid #d6dfed;border-radius:13px;background:#fff;color:#15243c;
+    transition:border-color .2s,box-shadow .2s
+  }
+  input::placeholder{color:#8a94a7;opacity:1}
+  input:focus{border-color:#9166d7;box-shadow:0 0 0 3px rgba(115,52,216,.10);outline:none}
+  input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  button{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:10px 17px;border-radius:13px;
+    background:var(--grad);color:#fff;font-weight:750;
+    box-shadow:0 8px 20px rgba(90,34,147,.13);
+    transition:transform .18s,filter .18s,box-shadow .18s
+  }
+  button:hover:not(:disabled){filter:brightness(1.045);box-shadow:0 10px 23px rgba(90,34,147,.18)}
+  button:active:not(:disabled){transform:translateY(1px)}
+  button.ghost{background:#f2eefb;color:var(--purple);box-shadow:none}
+  button.secondary{background:#f5f7fc;color:#4e5870;border:1px solid #e3e9f2;box-shadow:none}
+  button.danger{background:#fff2f2;color:#9d3d52;border:1px solid #f0dadd;box-shadow:none}
+  button.small{padding:9px 13px;font-size:13px;min-height:40px}
+  button:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
+  .actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  #login-button{width:100%;min-height:49px;margin-top:19px}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .panel-head>div{min-width:0}
+  .dashboard-hero{
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+    padding:0 0 6px;border-bottom:1px solid var(--line)
+  }
+  .dashboard-hero .panel-head{flex:1}
+  .dashboard-hero-image{height:115px;width:115px;object-fit:contain;flex-shrink:0;
+    filter:drop-shadow(0 8px 16px rgba(76,22,126,.12))}
+  .dashboard-hero h1{margin-bottom:4px}
+  .dashboard-hero .subtitle{margin:4px 0 18px}
+  .toolbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;margin:22px 0 17px
+  }
+  .toolbar input{flex:1 1 280px;max-width:395px}
+  .columns{
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+    align-items:start;gap:20px
+  }
+  .columns .card{min-height:255px}
+  .record-list{display:flex;flex-direction:column;gap:9px;margin-top:15px}
+  button.record{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+    background:#fbfcff;color:var(--ink);border:1px solid #e6eaf4;
+    border-radius:14px;padding:13px 15px;text-align:left;box-shadow:none;
+    font-weight:400;min-width:0
+  }
+  button.record:hover{background:#f7f3fe;border-color:#dbd0f0;box-shadow:none}
+  .record>div{min-width:0;overflow-wrap:anywhere}
+  .record strong{display:block;font-size:14px;line-height:1.35;color:#293146;font-weight:750}
+  .record small{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+  .tag{
+    flex-shrink:0;border-radius:999px;background:#f0eef7;color:#615276;
+    font-size:11px;font-weight:800;padding:5px 10px;white-space:nowrap
+  }
+  .tag[data-type="ativo"]{background:#e6f7ed;color:#24724a}
+  .tag[data-type="enviado"]{background:#fff3dc;color:#825d1b}
+  .tag[data-type="arquivado"]{background:#f5e9ec;color:#874553}
+  .detail-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px 20px;margin:19px 0 23px
+  }
+  .detail-grid dt{font-size:12px;color:var(--muted);margin:0 0 5px}
+  .detail-grid dd{font-size:14px;margin:0;font-weight:700;color:#26334b;overflow-wrap:anywhere}
+  .info{
+    background:#f5f2fc;border:1px solid #e8dff8;
+    color:#574b70;border-radius:13px;padding:13px 15px;font-size:13px
+  }
+  .notice{
+    margin:15px 0;padding:13px 16px;border:1px solid #e1e6f6;
+    border-radius:13px;background:#f2f6fe;color:#334b72;
+    font-size:13px;white-space:pre-wrap;line-height:1.65;
+    overflow-wrap:anywhere
+  }
+  .notice[data-kind="error"]{background:#fff1ef;color:#87383c;border-color:#f4dad7}
+  .notice[data-kind="ok"]{background:#eff9f4;color:#225b42;border-color:#d5ecdf}
+  .empty{font-size:14px;color:#69798d;text-align:center;padding:26px 12px}
+  .history{padding:0 0 0 19px;font-size:13px;color:#637084;line-height:1.8}
+  .history li{padding:0 0 7px 2px;overflow-wrap:anywhere}
+  .divider{border:0;border-top:1px solid var(--line);margin:23px 0}
+  #record-detail .actions{margin-bottom:8px}
+  .footer{border-top:1px solid var(--line);margin-top:35px;padding:23px 0 8px;
+    font-size:12px;color:#7a8191;line-height:1.7;text-align:center}
+  .footer a{font-weight:750}
+  @media(max-width:850px){
+    .columns{grid-template-columns:1fr;gap:16px}
+    .columns .card{min-height:0}
+    .dashboard-hero-image{width:95px;height:95px}
+  }
+  @media(max-width:650px){
+    .site-header-inner{width:calc(100% - 28px);min-height:69px;gap:8px}
+    .site-brand img{width:143px;max-height:54px}
+    .site-nav{gap:6px}
+    .site-nav a{font-size:12px;padding:7px 10px}
+    main{width:calc(100% - 28px);padding:19px 0 32px}
+    .login{margin:22px auto 12px}
+    .dashboard-hero-image{width:75px;height:75px}
+    .dashboard-hero{align-items:flex-start;gap:6px}
+    .dashboard-hero .panel-head{gap:10px}
+    .dashboard-hero .panel-head>div{flex-basis:100%}
+    .dashboard-hero .subtitle{margin-bottom:12px}
+    .toolbar{margin:18px 0 14px}
+    .toolbar input{flex-basis:100%;max-width:none}
+  }
+  @media(max-width:440px){
+    .site-header-inner{flex-wrap:wrap;justify-content:center;padding:9px 0}
+    .site-nav{justify-content:center}
+    .site-brand img{width:140px}
+    .card{padding:19px;border-radius:20px}
+    .login{padding:22px}
+    .login-art img{width:78px;height:78px}
+    .dashboard-hero{gap:4px}
+    .dashboard-hero-image{width:61px;height:61px}
+    .dashboard-hero .panel-head{flex:1 1 220px}
+    .dashboard-hero .panel-head>div{flex-basis:100%}
+    .detail-grid{gap:13px 12px}
+    .record{gap:8px}
+    .record strong{font-size:13px}
+    .tag{font-size:10px;padding:4px 8px}
+    #record-detail .actions button{flex:1 1 auto}
+    #new-form .actions button{flex:1 1 125px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
 </head>
 <body>
-<main>
-  <header class="top">
-    <a class="brand" href="/telesaude/">PromoVie | TeleSaúde</a>
-    <div class="top-right">
-      <span class="muted">Administração de beneficiários</span>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-brand" href="/telesaude/" aria-label="PromoVie, voltar à TeleSaúde">
+      <img src="/preview-promovie-logo.webp" width="171" height="63" alt="PromoVie | Soluções Organizacionais Integradas" decoding="async">
+    </a>
+    <nav class="site-nav" aria-label="Navegação TeleSaúde">
+      <a href="/telesaude/">TeleSaúde</a>
+      <a href="/telesaude/gestao/" class="nav-current" aria-current="page">Gestão</a>
       <button id="logout" class="secondary small" type="button" hidden>Sair</button>
-    </div>
-  </header>
+    </nav>
+  </div>
+</header>
+<main>
 
   <section id="login-card" class="card login">
-    <h1>Entrar no painel</h1>
-    <p>Consulte os beneficiários cadastrados, acompanhe o status de cada licença e mantenha o histórico administrativo da PromoVie.</p>
+    <div class="login-art">
+      <div>
+        <div class="eyebrow">TeleSaúde PromoVie</div>
+        <h1 class="gradient">Entrar no painel</h1>
+      </div>
+      <img src="/app/assets/coracao-promovie-com-logo.webp" alt="" width="96" height="96" decoding="async">
+    </div>
+    <p class="intro">Acompanhe os beneficiários, consulte informações administrativas e mantenha o histórico dos registros em um só lugar.</p>
     <form id="login-form" autocomplete="off">
       <label for="admin-password">Senha administrativa</label>
       <input type="password" id="admin-password" minlength="16" autocomplete="current-password" required placeholder="Digite sua senha do painel">
-      <div style="margin-top:18px"><button style="width:100%" type="submit" id="login-button">Entrar com segurança</button></div>
+      <button type="submit" id="login-button">Entrar com segurança</button>
     </form>
-    <p class="muted">Este painel exige senha própria. Não use suas chaves da Médiquo nem o token técnico da Cloudflare aqui.</p>
+    <p class="muted form-note">Acesso restrito à administração PromoVie. Utilize somente sua senha administrativa, nunca as chaves da Médiquo.</p>
     <div id="login-status" class="notice" role="status" aria-live="polite" hidden></div>
   </section>
 
   <section id="dashboard" hidden>
-    <div class="panel-head">
-      <div><h1>Beneficiários</h1><p class="subtitle">Registros administrativos protegidos, independentes do histórico clínico.</p></div>
-      <button id="add-button">+ Novo beneficiário</button>
+    <div class="dashboard-hero">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">TeleSaúde PromoVie | Gestão</div>
+          <h1 class="gradient">Beneficiários</h1>
+          <p class="subtitle">Cadastro, acompanhamento e histórico administrativo em um ambiente organizado e protegido.</p>
+        </div>
+        <button id="add-button" type="button">+ Novo beneficiário</button>
+      </div>
+      <img class="dashboard-hero-image" src="/app/assets/coracao-promovie-com-logo.webp" alt="" width="115" height="115" loading="lazy" decoding="async">
     </div>
     <div id="banner" class="notice" role="status" aria-live="polite" hidden></div>
     <div class="toolbar">
@@ -153,7 +337,10 @@
       </section>
     </div>
   </section>
-  <footer>PromoVie | Gestão organizacional de TeleSaúde. Acesso restrito. Os prontuários e atendimentos permanecem sob responsabilidade da plataforma de saúde.</footer>
+  <footer class="footer">PromoVie | Soluções Organizacionais Integradas<br>
+    Gestão administrativa de TeleSaúde. Prontuários e atendimentos permanecem na plataforma de saúde.
+    <a href="/telesaude/">Voltar à TeleSaúde</a>.
+  </footer>
 </main>
 <script>
 (() => {
