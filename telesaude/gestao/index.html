@@ -212,8 +212,10 @@
   function renderList(){
     const el=$('record-list');el.replaceChildren();
     const query=$('search').value.trim().toLocaleLowerCase('pt-BR');
-    const filtered=records.filter(r=>(r.nome||'').toLocaleLowerCase('pt-BR').includes(query)||
-      (r.cpf||'').replace(/\D/g,'').endsWith(query.replace(/\D/g,''))&&!!query);
+    const cpfQuery=query.replace(/\D/g,'');
+    const filtered=records.filter(r=>!query||
+      (r.nome||'').toLocaleLowerCase('pt-BR').includes(query)||
+      (cpfQuery.length>=2&&(r.cpf||'').replace(/\D/g,'').endsWith(cpfQuery)));
     $('count').textContent=filtered.length+' nesta página';
     $('page-label').textContent='Página '+(page+1);
     $('previous').disabled=page===0;$('next').disabled=!more;
