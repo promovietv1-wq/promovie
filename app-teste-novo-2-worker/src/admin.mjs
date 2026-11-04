@@ -214,7 +214,9 @@ export async function handleAdmin(request,env,cors={}){
   try{
     if(path===PREFIX+'/login'&&method==='POST'){
       const obj=await bodyJSON(request);
-      if(await equals(obj?.senha,val(env,'PROMOVIE_ADMIN_PASSWORD')))await ensureSchema(env);
+      // Inicializa tabelas mesmo antes de uma primeira tentativa incorreta,
+      // evitando falha 500 quando a senha de acesso ainda não foi validada.
+      await ensureSchema(env);
       return login(request,env,baseCors,obj);
     }
     if(!(await session(request,env)))return reply(401,{error:'Faça login para acessar o painel.'},baseCors);
