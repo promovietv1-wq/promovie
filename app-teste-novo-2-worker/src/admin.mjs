@@ -167,7 +167,7 @@ async function accessHash(env,cpfIndex,code){
   return [...new Uint8Array(signed)].map(x=>x.toString(16).padStart(2,'0')).join('');
 }
 function accessConfigured(env){
-  return available(env)&&val(env,'TELESAUDE_V3_ENABLED')==='true'&&
+  return available(env)&&val(env,'PROMOVIE_BENEFICIARY_ACCESS_ENABLED')==='true'&&
     val(env,'WIDGET_ENVIRONMENT')==='production'&&
     val(env,'MEDIQUO_V3_PLAN')==='345'&&
     !!sdkBase(env)&&
