@@ -1,0 +1,52 @@
+name: Verificar producao - Gestao TeleSaude PromoVie
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app-teste-novo-2-worker/src/admin.mjs'
+      - 'telesaude/gestao/index.html'
+      - '.github/workflows/promovie-admin-live-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testar rotas reais sem acesso administrativo nem dados pessoais
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          async function req(url) {
+            const response = await fetch(url, {redirect: 'follow', signal:AbortSignal.timeout(20000),
+              headers:{'Cache-Control':'no-cache','User-Agent':'PromoVie-Deployment-Health-Check/1.0'}});
+            return {status:response.status,html:await response.text()};
+          }
+          const health = await req('https://backend.promovie.tv.br/api/promovie/admin/v1/health');
+          console.log('Saude do painel:',health.status);
+          assert.equal(health.status,200,'D1, segredos e Worker precisam estar configurados');
+          const state=JSON.parse(health.html);
+          assert.equal(state.ok,true);
+          assert.equal(state.banco,'conectado');
+          assert.equal(state.cadastro_real_habilitado,false,'Nao habilitar cadastros reais nesta etapa');
+          const guest=await req('https://backend.promovie.tv.br/api/promovie/admin/v1/me');
+          console.log('Acesso anonimo ao painel:',guest.status);
+          assert.equal(guest.status,401,'Dados administrativos devem estar restritos');
+          const page=await req('https://www.promovie.tv.br/telesaude/gestao/');
+          console.log('Pagina de gestao:',page.status);
+          assert.equal(page.status,200);
+          assert.match(page.html,/id="login-form"/);
+          assert.match(page.html,/id="record-list"/);
+          assert.doesNotMatch(page.html,/TELESAUDE_V3_SYNC_TOKEN/);
+          const home=await req('https://www.promovie.tv.br/');
+          const app=await req('https://www.promovie.tv.br/app/');
+          console.log('Home e App:',home.status,app.status);
+          assert.equal(home.status,200);assert.equal(app.status,200);
+          console.log('Verificacao publica concluida sem ler/escrever cadastros ou segredos.');
+          JS
