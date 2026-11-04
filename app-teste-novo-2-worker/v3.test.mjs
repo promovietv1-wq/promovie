@@ -145,3 +145,62 @@ test('cadastro individual não é aceito pelo backend da PromoVie',async()=>{
   const r=await call('/self-enroll',{method:'POST',body:JSON.stringify({document:cpf,name:'Pessoa Teste',testPassword:env.TELESAUDE_V3_TEST_PASSWORD})},{...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
   assert.equal(r.status,404);
 });
+
+test('área administrativa exige token para consultar e nunca aceita outro CPF',async()=>{
+  const m=mockVendor();
+  try{
+    const noToken=await call('/admin/patients/lookup',{method:'POST',body:JSON.stringify({document:cpf})});
+    assert.equal(noToken.status,401);
+    const headers={Authorization:'Bearer '+env.TELESAUDE_V3_SYNC_TOKEN};
+    const wrong=await call('/admin/patients/lookup',{method:'POST',headers,
+      body:JSON.stringify({document:'11144477735'})});
+    assert.equal(wrong.status,403);
+    assert.equal(m.calls.length,0);
+    const found=await call('/admin/patients/lookup',{method:'POST',headers,
+      body:JSON.stringify({document:cpf})});
+    assert.equal(found.status,200);
+    assert.equal((await found.json()).active,true);
+    assert.equal(m.calls.length,1);
+  }finally{m.restore();}
+});
+test('área administrativa bloqueia escrita e cadastro duplicado',async()=>{
+  const m=mockVendor();
+  const auth={Authorization:'Bearer '+env.TELESAUDE_V3_SYNC_TOKEN};
+  const body=JSON.stringify({document:cpf,name:'Pessoa De Teste',
+    testPassword:env.TELESAUDE_V3_TEST_PASSWORD});
+  try{
+    const blocked=await call('/admin/patients/register',{method:'POST',headers:auth,body});
+    assert.equal(blocked.status,503);
+    assert.equal(m.calls.length,0);
+    const duplicate=await call('/admin/patients/register',{method:'POST',headers:auth,body},
+      {...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
+    assert.equal(duplicate.status,409);
+    assert.equal(m.calls.length,1);
+  }finally{m.restore();}
+});
+test('área administrativa envia no máximo um paciente autorizado quando escrita for liberada',async()=>{
+  const m=mockVendor({missing:true});
+  const auth={Authorization:'Bearer '+env.TELESAUDE_V3_SYNC_TOKEN};
+  const body=JSON.stringify({document:cpf,name:'Pessoa De Teste',phone:'27999999999',
+    testPassword:env.TELESAUDE_V3_TEST_PASSWORD});
+  try{
+    const r=await call('/admin/patients/register',{method:'POST',headers:auth,body},
+      {...env,TELESAUDE_V3_WRITE_ENABLED:'true'});
+    assert.equal(r.status,202);
+    assert.equal((await r.json()).status,'enviado');
+    assert.equal(m.calls.length,2);
+    assert.equal(m.calls[1].method,'PUT');
+    const data=JSON.parse(m.calls[1].body);
+    assert.deepEqual(data.patients,[{code:cpf,tax_id:cpf,first_name:'Pessoa',
+      last_name:'De Teste',plan:'345',locale:'pt',phone:'27999999999'}]);
+    assert.equal(m.calls[1].headers['X-Secret-Key'],env.MEDIQUO_V3_SDK_SECRET_KEY);
+  }finally{m.restore();}
+});
+test('página de gestão é separada do atendimento, sem credenciais e sem indexação',async()=>{
+  const html=await readFile(new URL('../telesaude/gestao/index.html',import.meta.url),'utf8');
+  assert.match(html,/noindex,nofollow/);
+  assert.match(html,/\/admin\/patients\//);
+  assert.match(html,/TELESAUDE_V3_SYNC_TOKEN/);
+  assert.doesNotMatch(html,/ENpPu3ZGAuVXEsXQ/);
+  assert.doesNotMatch(html,/MEDIQUO_V3_SDK_SECRET_KEY\s*=/);
+});
