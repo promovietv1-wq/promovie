@@ -21,6 +21,34 @@ function available(env){
     val(env,'TELESAUDE_V3_SYNC_TOKEN').length>=24;
 }
 function d1(env){return env.PROMOVIE_BENEFICIARIOS_DB;}
+
+let schemaReady=false;
+async function ensureSchema(env){
+  if(schemaReady)return;
+  const db=d1(env);
+  // Inicialização idempotente, somente após validar a senha do administrador.
+  await db.exec(
+    "CREATE TABLE IF NOT EXISTS pv_admin_sessions ("+
+      "token_hash TEXT PRIMARY KEY, created_at TEXT NOT NULL, expires_at INTEGER NOT NULL);"+
+    "CREATE INDEX IF NOT EXISTS idx_pv_sessions_exp ON pv_admin_sessions(expires_at);"+
+    "CREATE TABLE IF NOT EXISTS pv_admin_login_attempts ("+
+      "actor_hash TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, expires_at INTEGER NOT NULL);"+
+    "CREATE TABLE IF NOT EXISTS pv_beneficiarios ("+
+      "id TEXT PRIMARY KEY, cpf_index TEXT NOT NULL UNIQUE, cpf_hint TEXT NOT NULL,"+
+      "dados_criptografados TEXT NOT NULL, situacao TEXT NOT NULL DEFAULT 'rascunho'"+
+      " CHECK(situacao IN ('rascunho','enviado','ativo','arquivado')),"+
+      "situacao_anterior TEXT, plano TEXT NOT NULL DEFAULT '345', criado_em TEXT NOT NULL,"+
+      "atualizado_em TEXT NOT NULL, enviado_em TEXT, arquivado_em TEXT);"+
+    "CREATE INDEX IF NOT EXISTS idx_pv_beneficiarios_situacao ON pv_beneficiarios(situacao);"+
+    "CREATE TABLE IF NOT EXISTS pv_historico ("+
+      "id TEXT PRIMARY KEY, beneficiario_id TEXT NOT NULL, evento TEXT NOT NULL,"+
+      "registrado_em TEXT NOT NULL, detalhes TEXT,"+
+      "FOREIGN KEY (beneficiario_id) REFERENCES pv_beneficiarios(id));"+
+    "CREATE INDEX IF NOT EXISTS idx_pv_historico_ref ON pv_historico(beneficiario_id,registrado_em);"
+  );
+  schemaReady=true;
+}
+
 function originAllowed(request,env){
   const o=request.headers.get('Origin')||'';
   return val(env,'ALLOWED_ORIGINS').split(',').map(s=>s.trim()).includes(o);
@@ -117,14 +145,13 @@ async function attemptKey(request,env){
   const ip=request.headers.get('CF-Connecting-IP')||'unknown';
   return digestHex('ip|'+ip+'|'+val(env,'TELESAUDE_V3_SYNC_TOKEN'));
 }
-async function login(request,env,cors){
+async function login(request,env,cors,obj){
   const db=d1(env),key=await attemptKey(request,env);
   const now=Math.floor(Date.now()/1000);
   const attempt=await db.prepare('SELECT attempts,expires_at FROM pv_admin_login_attempts WHERE actor_hash=?')
     .bind(key).first();
   if(attempt&&attempt.expires_at>now&&attempt.attempts>=6)
     return reply(429,{error:'Muitas tentativas. Acesso temporariamente bloqueado.'},cors);
-  const obj=await bodyJSON(request);
   if(!await equals(obj?.senha,val(env,'PROMOVIE_ADMIN_PASSWORD'))){
     const attempts=attempt?.expires_at>now?attempt.attempts+1:1;
     await db.prepare('INSERT INTO pv_admin_login_attempts(actor_hash,attempts,expires_at) VALUES(?,?,?) ON CONFLICT(actor_hash) DO UPDATE SET attempts=excluded.attempts,expires_at=excluded.expires_at')
@@ -185,7 +212,11 @@ export async function handleAdmin(request,env,cors={}){
     return reply(403,{error:'Origem administrativa não autorizada.'},baseCors);
   if(!available(env))return reply(503,{error:'Painel ainda não configurado. É necessário associar o banco D1 e definir as duas credenciais administrativas.'},baseCors);
   try{
-    if(path===PREFIX+'/login'&&method==='POST')return login(request,env,baseCors);
+    if(path===PREFIX+'/login'&&method==='POST'){
+      const obj=await bodyJSON(request);
+      if(await equals(obj?.senha,val(env,'PROMOVIE_ADMIN_PASSWORD')))await ensureSchema(env);
+      return login(request,env,baseCors,obj);
+    }
     if(!(await session(request,env)))return reply(401,{error:'Faça login para acessar o painel.'},baseCors);
     const db=d1(env),url=new URL(request.url);
     if(path===PREFIX+'/me'&&method==='GET')return reply(200,{ok:true},baseCors);
