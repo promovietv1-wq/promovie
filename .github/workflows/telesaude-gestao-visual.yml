@@ -79,3 +79,72 @@ jobs:
           Path('/tmp/gestao-promovie.js').write_text(scripts[0])
           PY
           node --check /tmp/gestao-promovie.js
+
+  responsividade-real:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar Chromium para teste do layout
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Validar renderização desktop e mobile
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/pv-server.log 2>&1 &
+          sleep 2
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from 'playwright';
+          import {mkdir} from 'node:fs/promises';
+          const browser=await chromium.launch({headless:true});
+          await mkdir('/tmp/pv-prints',{recursive:true});
+          try{
+            for(const width of [320,360,390,414,768,1024,1440]){
+              const page=await browser.newPage({viewport:{width,height:850},deviceScaleFactor:1,
+                reducedMotion:'reduce'});
+              await page.route('https://backend.promovie.tv.br/**',route=>route.fulfill({
+                status:401,contentType:'application/json',
+                headers:{'Access-Control-Allow-Origin':'https://www.promovie.tv.br',
+                  'Access-Control-Allow-Credentials':'true'},
+                body:JSON.stringify({error:'Sessão de teste, sem acesso a dados reais.'})
+              }));
+              await page.goto('http://127.0.0.1:8765/telesaude/gestao/',{waitUntil:'load'});
+              await page.waitForTimeout(250);
+              assert.equal(await page.locator('#login-card').isVisible(),true);
+              assert.equal(await page.locator('.site-brand img').evaluate(el=>el.naturalWidth>0),true,'Logo não carregou');
+              assert.equal(await page.locator('.login-art img').evaluate(el=>el.naturalWidth>0),true,'Coração não carregou');
+              const login=await page.evaluate(()=>({
+                scroll:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth,
+                font:getComputedStyle(document.body).fontFamily,display:getComputedStyle(document.querySelector('h1')).fontFamily
+              }));
+              assert.ok(login.scroll<=login.viewport+1,'Rolagem horizontal no login em '+width+': '+JSON.stringify(login));
+              assert.match(login.font,/Inter/);
+              assert.match(login.display,/Sora/);
+              await page.screenshot({path:'/tmp/pv-prints/login-'+width+'.png',fullPage:true});
+              await page.evaluate(()=>{
+                document.querySelector('#login-card').hidden=true;
+                document.querySelector('#dashboard').hidden=false;
+              });
+              await page.locator('#add-button').click();
+              assert.equal(await page.locator('#new-form').isVisible(),true);
+              const admin=await page.evaluate(()=>({
+                scroll:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth
+              }));
+              assert.ok(admin.scroll<=admin.viewport+1,'Rolagem horizontal no painel em '+width+': '+JSON.stringify(admin));
+              await page.screenshot({path:'/tmp/pv-prints/painel-'+width+'.png',fullPage:true});
+              console.log('Layout responsivo aprovado:',width+'px');
+              await page.close();
+            }
+          }finally{await browser.close();}
+          JS
+      - name: Guardar capturas para inspeção
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-promovie-telesaude-gestao
+          path: /tmp/pv-prints/
+          if-no-files-found: ignore
