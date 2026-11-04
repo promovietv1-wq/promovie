@@ -207,7 +207,7 @@ test('Fluxo Pedro: GET de CPF, PUT de paciente no SDK V3 e GET de confirmação 
       assert.equal(p.last_name,'Fictícia');
       assert.equal(options.headers['X-API-Key'],envConfig.MEDIQUO_V3_WIDGET_API_KEY);
       assert.equal(options.headers['X-Secret-Key'],envConfig.MEDIQUO_V3_SDK_SECRET_KEY);
-      return new Response('',{status:204});
+      return new Response(null,{status:204});
     }
     throw Error('Endpoint externo inesperado: '+dest);
   };
