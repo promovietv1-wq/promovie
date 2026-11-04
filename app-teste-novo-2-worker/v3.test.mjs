@@ -70,7 +70,7 @@ test('CPF sozinho ou senha inválida são bloqueados antes da consulta SDK',asyn
     const a=await call('/session',{method:'POST',body:JSON.stringify({document:cpf})});
     const b=await call('/session',{method:'POST',body:JSON.stringify({document:'12345678901',
       testPassword:env.TELESAUDE_V3_TEST_PASSWORD})});
-    assert.equal(a.status,401);assert.equal(b.status,401);assert.equal(external,0);
+    assert.equal(a.status,401);assert.equal(b.status,400);assert.equal(external,0);
   }finally{globalThis.fetch=original;}
 });
 test('sincronizacao exige habilitacao de escrita e token privado, aceitando apenas CPF ficticio',async()=>{
