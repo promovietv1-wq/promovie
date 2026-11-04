@@ -5,6 +5,13 @@
   "compatibility_date": "2026-10-20",
   // O dominio backend.promovie.tv.br ja esta conectado na Cloudflare.
   // Preservar o DNS, o Worker antigo e os registros existentes.
+  "d1_databases": [
+    {
+      "binding": "PROMOVIE_BENEFICIARIOS_DB",
+      "database_name": "promovie-beneficiarios",
+      "database_id": "a11f2e06-28c2-4582-ba40-7a3c7f43af4a"
+    }
+  ],
   "workers_dev": true,
   "vars": {
     "ALLOWED_ORIGINS": "https://www.promovie.tv.br,https://promovie.tv.br",

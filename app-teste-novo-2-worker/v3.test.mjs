@@ -199,8 +199,9 @@ test('área administrativa envia no máximo um paciente autorizado quando escrit
 test('página de gestão é separada do atendimento, sem credenciais e sem indexação',async()=>{
   const html=await readFile(new URL('../telesaude/gestao/index.html',import.meta.url),'utf8');
   assert.match(html,/noindex,nofollow/);
-  assert.match(html,/\/admin\/patients\//);
-  assert.match(html,/TELESAUDE_V3_SYNC_TOKEN/);
+  assert.match(html,/\/api\/promovie\/admin\/v1/);
+  assert.match(html,/id="login-form"/);
+  assert.doesNotMatch(html,/id="token"/);
   assert.doesNotMatch(html,/ENpPu3ZGAuVXEsXQ/);
   assert.doesNotMatch(html,/MEDIQUO_V3_SDK_SECRET_KEY\s*=/);
 });
