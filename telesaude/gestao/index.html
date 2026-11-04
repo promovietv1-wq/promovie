@@ -482,6 +482,18 @@
             const result=await request('/records/'+id+'/verify',{method:'POST',body:{}});
             if(result.encontrado&&result.ativo){
               msg('banner','Beneficiário cadastrado e ativo no plano 345 do Token PromoVie.','ok');
+              // Uma unica ativacao seguida de codigo pessoal, sem novo envio ao SDK.
+              try{
+                const personal=await request('/records/'+id+'/access-code',{method:'POST',body:{}});
+                personalCode=String(personal.codigo||'');
+                if(!personalCode)throw Error('O código pessoal não foi disponibilizado.');
+                $('generated-access-code').textContent=personalCode;
+                $('copy-access-code').textContent='Copiar código';
+                $('access-code-dialog').showModal();
+                msg('banner','Beneficiário ativo. Copie o código pessoal para entregar ao titular.','ok');
+              }catch{
+                msg('banner','Beneficiário ativo. Para entregar o acesso, abra o cadastro e selecione Gerar código pessoal.','info');
+              }
             }else{
               msg('banner','Cadastro enviado ao Token PromoVie, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
             }
