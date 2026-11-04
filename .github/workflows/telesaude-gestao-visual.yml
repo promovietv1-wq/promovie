@@ -1,0 +1,81 @@
+name: TeleSaude - validar identidade visual e responsividade
+on:
+  push:
+    paths:
+      - 'telesaude/gestao/index.html'
+      - 'telesaude/index.html'
+      - '.github/workflows/telesaude-gestao-visual.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  identidade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar marcas, estilos, mobile e estrutura HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import re
+
+          root=Path('.')
+          public=(root/'telesaude/index.html').read_text()
+          app=(root/'app/index.html').read_text()
+          panel=(root/'telesaude/gestao/index.html').read_text()
+          class Parser(HTMLParser):
+            def __init__(self):
+              super().__init__()
+              self.ids=[]
+              self.images=[]
+              self.viewport=False
+              self.forms=[]
+            def handle_starttag(self,tag,attrs):
+              a=dict(attrs)
+              if a.get('id'): self.ids.append(a['id'])
+              if tag=='img': self.images.append(a.get('src',''))
+              if tag=='meta' and a.get('name')=='viewport': self.viewport=True
+              if tag=='form': self.forms.append(a.get('id',''))
+
+          p=Parser();p.feed(panel)
+          assert p.viewport
+          assert len(p.ids)==len(set(p.ids)), 'IDs duplicados'
+          assert 'login-form' in p.forms and 'new-form' in p.forms
+          expected={'login-card','dashboard','record-list','history','logout','selected-status','login-button','banner'}
+          assert expected.issubset(set(p.ids))
+          assert '/preview-promovie-logo.webp' in p.images
+          assert '/app/assets/coracao-promovie-com-logo.webp' in p.images
+          for name in ('preview-promovie-logo.webp','app/assets/coracao-promovie-com-logo.webp','app/icons/apple-touch-coracao-promovie.png'):
+            assert (root/name).is_file(), f'Asset ausente: {name}'
+          for name in ('Inter','Sora','#4b0c8f','#7334d8','#00bde8'):
+            assert name in panel and name in public and name in app
+          assert '@media(max-width:850px)' in panel
+          assert '@media(max-width:650px)' in panel
+          assert '@media(max-width:440px)' in panel
+          assert 'min-width:320px' in panel
+          assert 'grid-template-columns:1fr' in panel
+          assert 'noindex,nofollow' in panel
+          assert "credentials:'include'" in panel
+          assert "id=\"record-list\"" in panel
+          assert 'MEDIQUO_V3_SDK_SECRET_KEY' not in panel
+          assert 'TELESAUDE_V3_SYNC_TOKEN' not in panel
+          print('Identidade, layout responsivo, assets e formulários verificados.')
+          PY
+      - name: Validar sintaxe JavaScript do painel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          h=Path('telesaude/gestao/index.html').read_text()
+          scripts=re.findall(r'<script[^>]*>(.*?)</script>', h, flags=re.S|re.I)
+          assert len(scripts)==1
+          Path('/tmp/gestao-promovie.js').write_text(scripts[0])
+          PY
+          node --check /tmp/gestao-promovie.js
