@@ -99,6 +99,9 @@ export default {
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization"
     } : {};
+    if (url.pathname.startsWith("/api/promovie/admin/v1/") && origin && origins.has(origin)) {
+      cors["Access-Control-Allow-Credentials"] = "true";
+    }
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
     }
