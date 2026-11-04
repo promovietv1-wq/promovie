@@ -787,7 +787,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       if(configResp.status===503)throw new Error("Backend conectado, mas a Médiquo ainda precisa confirmar as credenciais de homologação. Nenhuma senha de teste foi ativada.");
       if(!configResp.ok)throw new Error("Não foi possível consultar as configurações do servidor.");
       const config=await getJson(configResp);
-      if(!config.apiKey)throw new Error("A API Key não está configurada no servidor.");
+      if(!config.apiKey)throw new Error("A API Key do Widget não está configurada no servidor.");
+      if(config.environment!=="production")throw new Error("O ambiente do Widget precisa estar configurado como production.");
       const testPassword=passwordInput.value;
       if(!testPassword){
         passwordInput.focus();
@@ -815,7 +816,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         apiKey:config.apiKey,
         accessToken:token.access_token,
         adapter:"web",
-        environment:"sandbox",
+        environment:config.environment,
         show:"always",
         theme:{
           text:{title:"TeleSaúde"},
