@@ -172,7 +172,7 @@
       ...(body?{body:JSON.stringify(body)}:{})
     });
     const data=await res.json().catch(()=>({}));
-    if(res.status===401&&path!=='/login'){showLogin();throw Error('Sua sessão terminou. Entre novamente.');}
+    if(res.status===401&&path!=='/login'){showLogin();throw Error(path==='/me'?'Faça login para acessar o painel.':'Sua sessão terminou. Entre novamente.');}
     if(!res.ok)throw Error(data.error||'Operação indisponível. Tente novamente.');
     return data;
   }
