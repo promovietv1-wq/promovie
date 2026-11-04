@@ -299,7 +299,7 @@
         </div>
         <form id="new-form" hidden autocomplete="off">
           <h2>Novo beneficiário</h2>
-          <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no SDK ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
+          <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no Token PromoVie ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
           <label for="new-name">Nome completo</label>
           <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
           <label for="new-cpf">CPF</label>
@@ -455,20 +455,20 @@
           await request('/records/'+id+'/send',{method:'POST',body:{}});
           envioConfirmado=true;
         }catch(err){
-          msg('banner','Registro salvo na PromoVie, mas o envio ao SDK não foi confirmado: '+err.message+
+          msg('banner','Registro salvo na PromoVie, mas o envio ao Token PromoVie não foi confirmado: '+err.message+
             ' Não tente cadastrar de novo. Consulte este registro antes de qualquer novo envio.','error');
         }
         if(envioConfirmado){
-          msg('banner','Cadastro enviado ao SDK. Conferindo a ativação...');
+          msg('banner','Cadastro enviado ao Token PromoVie. Conferindo a ativação...');
           try{
             const result=await request('/records/'+id+'/verify',{method:'POST',body:{}});
             if(result.encontrado&&result.ativo){
               msg('banner','Beneficiário cadastrado e ativo no plano 345 do Token PromoVie.','ok');
             }else{
-              msg('banner','Cadastro enviado ao SDK, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
+              msg('banner','Cadastro enviado ao Token PromoVie, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
             }
           }catch(err){
-            msg('banner','Cadastro enviado ao SDK. Não foi possível confirmar a ativação agora: '+
+            msg('banner','Cadastro enviado ao Token PromoVie. Não foi possível confirmar a ativação agora: '+
               err.message+' Use Consultar Token PromoVie para conferir, sem reenviar o cadastro.','info');
           }
         }
@@ -524,7 +524,7 @@
     finally{setBusy(false);}
   }
   $('check-button').addEventListener('click',()=>change('verify'));
-  $('send-button').addEventListener('click',()=>change('send','Confirma o envio deste cadastro real para a Médiquo? Isso poderá utilizar uma licença do seu pacote. A operação só será permitida após a liberação técnica.'));
+  $('send-button').addEventListener('click',()=>change('send','Confirma o envio deste cadastro real para o Token PromoVie? Isso poderá utilizar uma licença do seu pacote. A operação só será permitida após a liberação técnica.'));
   $('archive-button').addEventListener('click',()=>change('archive','Deseja arquivar este registro SOMENTE na PromoVie? Isso NÃO cancela nem suspende a licença do Token PromoVie.'));
   $('restore-button').addEventListener('click',()=>change('restore'));
   $('refresh').addEventListener('click',loadPage);
