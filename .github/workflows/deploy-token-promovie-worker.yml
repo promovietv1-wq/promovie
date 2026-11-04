@@ -56,5 +56,11 @@ jobs:
           assert.equal(r.status,200,'O backend deve responder via HTTPS');
           const v=await r.json();
           assert.equal(v.banco,'conectado');
-          console.log('Worker publicado e D1 conectado sem ler ou enviar dados de beneficiarios.');
+          const access=await fetch('https://backend.promovie.tv.br/api/promovie/access/v1/health',{
+            headers:{Origin:'https://www.promovie.tv.br','Cache-Control':'no-cache'},signal:AbortSignal.timeout(15000)
+          });
+          assert.equal(access.status,200,'O endpoint de acesso pessoal deve estar ativo');
+          const state=await access.json();
+          assert.equal(state.disponivel,true,'O novo acesso pessoal precisa estar configurado');
+          console.log('Worker, D1 e acesso individual conectados, sem consultar dados de beneficiarios.');
           JS
