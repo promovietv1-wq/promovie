@@ -1,48 +1,99 @@
-# TeleSaúde PromoVie: integração Médiquo v3
+# TeleSaúde PromoVie | SDK Médiquo V3, plano 345
 
-Página pública: `https://www.promovie.tv.br/telesaude/`.
-Backend existente: `https://backend.promovie.tv.br` (Worker `promovie-mediquo-teste-2`).
+Página: https://www.promovie.tv.br/telesaude/
+Backend existente: https://backend.promovie.tv.br
+Worker: `promovie-mediquo-teste-2`
 
-**Não alterar o DNS, o site principal nem a integração antiga.** As novas rotas são isoladas em `/api/mediquo/v3/*` e ficam desativadas por padrão.
+**Importante:** esta versão foi preparada em uma branch de homologação. O site principal, o PWA /app, o DNS e as rotas antigas devem permanecer inalterados. Não utilizar beneficiários reais nesta fase.
 
-## Rotas novas
+## Informações confirmadas por Pedro em 04/11/2026
 
-| Rota | Método | Descrição |
-| --- | --- | --- |
-| `/api/mediquo/v3/health` | GET | Indica se a homologação está configurada |
-| `/api/mediquo/v3/config` | GET | Retorna apenas a API Key pública e ambiente sandbox quando habilitado |
-| `/api/mediquo/v3/patients/sync` | POST | Cadastra **somente o paciente fictício autorizado**, com token secreto no header Authorization |
-| `/api/mediquo/v3/session` | POST | Exige CPF do paciente fictício **e** senha de homologação privada, consulta situação do paciente e solicita token à Médiquo |
+- Plano indicado para os pacientes SDK: `345`.
+- Base da SDK API: `https://sdk.mediquo.com/v1`.
+- Widget: `environment: "production"`, inclusive para a homologação solicitada.
+- Os pacientes SDK ainda não aparecem no portal ID.
+- Cadastro e administração por API; o portal ID antigo não é um painel de gestão de pacientes SDK.
 
-## Configuração no Cloudflare Worker (sem colocar segredos no GitHub)
+**Segredos enviados por e-mail:** Pedro enviou chaves denominadas "Parceiro" e "Cliente". Não foram copiadas para o repositório. A mensagem não identifica inequivocamente qual valor usar como `x-api-key` e qual usar como `x-secret-key` na SDK API. Pedir mapeamento seguro e rotação antes da utilização definitiva. Nunca colocar credenciais em Issues, PRs, HTML ou arquivos versionados.
 
-1. Confirmar com Pedro o **nome exato do plano**, a **API Key do novo cliente** e se a URL `https://sdk.mediquo.com/v1` corresponde à homologação com a nova chave. A chave antiga não serve para o cliente novo.
-2. Pedir a rotação da **Secret Key** enviada por e-mail. Depois, adicionar a nova chave diretamente como secret do Worker.
-3. Configurar no painel do Worker as variáveis/segredos listados abaixo, sem substituir indevidamente variáveis utilizadas pelo teste anterior.
+## Duas APIs diferentes (documentação do fornecedor)
 
-**Variáveis não secretas:**
-- `TELESAUDE_V3_ENABLED`: `false` até concluir a configuração; posteriormente `true` apenas para teste restrito.
-- `WIDGET_ENVIRONMENT`: `sandbox`.
-- `MEDIQUO_V3_API_KEY`: a API Key pública **do cliente novo**. Cadastrar no painel do Worker, não no HTML.
-- `MEDIQUO_V3_PLAN`: nome exato do plano, a confirmar com Pedro.
-- `MEDIQUO_V3_BASE_URL`: URL da API confirmada para homologação, sem barra final.
+1. **API ID:** `https://api-portal.mediquo.com.br`
+   - `POST /auth/login` com e-mail e senha administrativa, devolve token Bearer
+   - `GET /patients?index=CPF` para consultar pacientes
+   - `POST /patients` para cadastrar, com `documentNumber`, `name`, `clientId`, `planId`, `origin`
+2. **API SDK:** `https://sdk.mediquo.com/v1`
+   - O guia SDK Overview e o guia Widget descrevem `POST /patients/authenticate?code=CPF` com os headers `x-api-key` e `x-secret-key`, devolvendo `access_token`.
+   - O guia SDK API também documenta `POST /patients/{licenceId}/token` com os mesmos headers, devolvendo `token`. Nosso backend permite os dois modos sob configuração privada, mas o padrão é `cpf`, sem abrir acesso real.
+3. **Widget Web:** `https://widget.mediquo.com/js/1.0.0/mediquo.js`, inicializa com `apiKey` específica do Widget e `accessToken` da sessão.
 
-**Segredos, nunca versionar em repositórios nem inserir no navegador:**
-- `MEDIQUO_V3_SECRET_KEY`: chave privada substituta da Médiquo.
-- `TELESAUDE_V3_TEST_PASSWORD`: senha forte de homologação, mínimo de 16 caracteres.
-- `TELESAUDE_V3_SYNC_TOKEN`: token forte para sincronização, mínimo de 24 caracteres.
-- `TELESAUDE_V3_TEST_CPF`: identificador fictício de 11 dígitos usado apenas nos testes (manter privado no painel).
+Documentação:
+- https://documentacao.mediquo.com.br/patients.html
+- https://documentacao.mediquo.com.br/sdk-overview.html
+- https://documentacao.mediquo.com.br/sdk-api.html
+- https://documentacao.mediquo.com.br/sdk-widget.html
 
-4. Com as variáveis confirmadas e com `TELESAUDE_V3_ENABLED=true`, conferir `GET /api/mediquo/v3/health` e enviar **um único beneficiário fictício** com `POST /api/mediquo/v3/patients/sync`, autenticado por `Authorization: Bearer <token privado>`.
-5. Testar a página com CPF fictício + senha privada. Confirmar que CPF não autorizado é bloqueado e que os oito serviços aparecem conforme o plano.
-6. **Não habilitar beneficiários reais nem remover os bloqueios por CPF/teste** até existir autenticação individual segura, gestão de licenças e avaliação de proteção de dados.
+## Alterações feitas na branch
 
-## Por que não copiar integralmente o backend do fornecedor?
+- Rota `/api/mediquo/v3/patients/sync`: cadastro **somente de um CPF fictício** na API ID, via POST /patients, exigindo token privado e liberação explícita para gravação.
+- Rota `/api/mediquo/v3/session`: após CPF de teste + senha privada, consulta paciente ativo na API ID e gera token de sessão na API SDK, bloqueando pacientes ausentes/inativos ou de plano/cliente diferentes.
+- Rota `/api/mediquo/v3/config`: só retorna chave destinada ao frontend do Widget, nunca as credenciais do ID ou SDK server-side.
+- Rota `/api/mediquo/v3/health`: informa configuração, sem incluir segredos.
+- Página TeleSaúde: usa `production` conforme resposta de Pedro, sem alterar o layout.
+- Testes simulados garantem que CPF sozinho não autoriza sessão e que `TELESAUDE_V3_WRITE_ENABLED=false` impede cadastro.
 
-O pacote v3 da Médiquo autentica qualquer CPF ativo sem verificar se o visitante é o titular. Essa condição pode expor dados de saúde e históricos. Por isso, a rota pública desta versão só permite **um CPF fictício configurado no próprio Worker** e exige senha privada de homologação. O acesso para beneficiários reais requer login individual com verificação de identidade, controles contra abuso e gestão de licenças.
+## Variáveis públicas (Cloudflare Worker, não cadastrar segredos em vars)
 
-## Compatibilidade e segurança
+O arquivo `wrangler.jsonc` já registra as variáveis públicas confirmadas. As necessárias:
 
-O código original do teste `/api/mediquo/health`, `/api/mediquo/config` e `/api/mediquo/token` foi preservado. As novas rotas não substituem esses caminhos. A publicação da página não ativa o atendimento automaticamente.
+- `TELESAUDE_V3_ENABLED=false` por padrão. Habilitar `true` somente para teste privado e após confirmar todas as credenciais.
+- `TELESAUDE_V3_WRITE_ENABLED=false` por padrão. Habilitar `true` **só durante um cadastro fictício expressamente autorizado**, depois retornar a `false`.
+- `WIDGET_ENVIRONMENT=production`.
+- `MEDIQUO_V3_BASE_URL=https://sdk.mediquo.com/v1`.
+- `MEDIQUO_V3_ID_BASE_URL=https://api-portal.mediquo.com.br`.
+- `MEDIQUO_V3_PLAN=345`.
+- `MEDIQUO_V3_ORIGIN=SDK`: usado na comunicação inicial da Médiquo em 16/10; é necessário confirmar que vale para o cliente novo.
+- `MEDIQUO_V3_SDK_AUTH_MODE=cpf` (ou `licence` se Pedro confirmar a rota por licença).
+- `MEDIQUO_V3_CLIENT_ID`: **ainda falta receber/confirmar** o ID numérico do novo cliente. Não confundir com o Partner ID 108 nem o antigo Plan ID 219.
+- `MEDIQUO_V3_WIDGET_API_KEY`: chave do Widget, fornecida pela Médiquo para exposição ao navegador. Não confundir com as credenciais privadas da SDK API.
 
-Os testes automatizados ficam em `test.mjs` e `v3.test.mjs` e rodam no fluxo `App Teste Novo 2 - Cloudflare Worker (simulado)`.
+## Secrets obrigatórios (somente no painel Cloudflare)
+
+- `MEDIQUO_V3_SDK_API_KEY`: API key **do backend SDK**.
+- `MEDIQUO_V3_SDK_SECRET_KEY`: secret key **do backend SDK**.
+- `MEDIQUO_V3_ID_EMAIL`: usuário administrativo que pode consultar/cadastrar pacientes do cliente correto.
+- `MEDIQUO_V3_ID_PASSWORD`: senha administrativa respectiva.
+- `TELESAUDE_V3_TEST_PASSWORD`: senha de homologação com pelo menos 16 caracteres.
+- `TELESAUDE_V3_SYNC_TOKEN`: token de sincronização com pelo menos 24 caracteres.
+- `TELESAUDE_V3_TEST_CPF`: CPF exclusivamente fictício autorizado para teste, 11 dígitos.
+
+É importante usar configuração de secrets no painel Cloudflare; não armazenar senhas ou chaves no GitHub. Não publicar o conteúdo dos secrets em conversas ou logs.
+
+## Para passar da preparação ao teste efetivo
+
+1. Confirmar com Pedro o **clientId do novo cliente**, a validade de `origin=SDK`, a atribuição de cada chave e se a autenticação correta é por CPF ou por `licenceId`.
+2. Obter acesso válido para a API ID e configurar os secrets de modo seguro no Cloudflare.
+3. Confirmar com ele que o cadastro de **um único paciente fictício** no plano 345 pode ser feito no ambiente indicado sem produzir acesso real, notificações ou efeitos operacionais indesejados.
+4. Publicar e configurar o Worker v3 apenas após os passos anteriores. Testar `/health`, que deve retornar `homologacao-pronta` com os secrets configurados.
+5. Habilitar a permissão de cadastro apenas durante o teste. Cadastrar um CPF fictício autorizado por chamada `POST /api/mediquo/v3/patients/sync`, depois voltar `WRITE_ENABLED=false`.
+6. Abrir `/telesaude/` com CPF fictício e senha privada, verificar os oito serviços e o histórico. Se houver bloqueio, usar logs privados sem expor dados pessoais.
+7. Não permitir pacientes reais até haver mecanismo robusto de autenticação individual, proteção de dados e gestão de licenças.
+
+## Testes
+
+```bash
+cd app-teste-novo-2-worker
+npm test
+```
+
+O GitHub Actions executa testes locais sem credenciais reais. Sucesso nesses testes **não** significa autenticação real na Médiquo. Não altera cobrança ou licenças.
+
+## Pontos ainda desconhecidos
+
+- Novo `clientId` e `origin` definitivo.
+- Mapeamento de chaves "Parceiro" e "Cliente" para SDK/ID, assim como a chave específica do Widget.
+- Acesso administrativo funcional para a API ID (usuário/senha ou método alternativo).
+- Confirmação de qual endpoint de token deve ser usado com o cliente 345.
+- Resultado de uma autenticação real com um paciente fictício e os oito serviços liberados.
+
+A implementação falha de modo seguro se faltar qualquer um desses itens. Não habilitar automaticamente os controles de homologação.
