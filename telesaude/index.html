@@ -466,22 +466,60 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .access-result-dialog button:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
 .patient-login #access-cpf{margin-bottom:12px}
 
-/* Acesso individual Token PromoVie, preservando identidade visual e responsividade. */
-.patient-login{margin:0 auto 14px;text-align:left;padding:17px 17px 13px;border:1px solid #e4dff3;border-radius:18px;background:linear-gradient(150deg,#fff,#f8f7fe);box-shadow:0 8px 25px rgba(66,44,121,.06)}
-.patient-login-top{display:flex;align-items:center;gap:8px;color:#4b2b80;font-size:12px;font-weight:800;margin-bottom:13px}
-.patient-login-top small{font-size:10px;font-weight:650;margin-left:auto;color:#7d6c98;background:#eee8fb;border-radius:7px;padding:4px 7px}
-.patient-login-dot{width:8px;height:8px;flex:none;background:#17a399;border-radius:50%;box-shadow:0 0 0 4px rgba(23,163,153,.12)}
-.patient-login-label{display:block;margin:0 0 6px;color:#4b4866;font-size:12px;font-weight:750}
-.patient-login input{width:100%;max-width:100%;min-height:47px;display:block;box-sizing:border-box;border:1px solid #d8d5e5;border-radius:11px;color:#34324b;padding:11px 14px;background:#fff;font:500 14px var(--font-body);outline:none}
-.patient-login input:focus{border-color:#8553df;box-shadow:0 0 0 3px rgba(125,74,221,.12)}
-.patient-login-help{font-size:11px;line-height:1.5;color:#817891;text-align:left;margin:9px 0 0}
-.patient-remember{display:flex;align-items:flex-start;gap:9px;margin-top:12px;color:#51476c;font:600 12px/1.5 var(--font-body);cursor:pointer}
-.patient-login .patient-remember input{width:17px;height:17px;min-height:17px;flex:0 0 17px;display:inline-block;box-sizing:border-box;margin:1px 0 0;padding:0;accent-color:#4b0c8f;cursor:pointer}
-.patient-remember span{flex:1}
+/* Cartão de acesso PromoVie: somente apresentação; SDK e autenticação preservados. */
+.patient-login{
+  margin:0 auto 13px;text-align:left;padding:21px 21px 19px;isolation:isolate;
+  border:1px solid rgba(217,207,242,.76);border-radius:23px;
+  background:radial-gradient(circle at 95% 1%,rgba(122,74,221,.09),transparent 38%),
+    linear-gradient(155deg,#fff 17%,#fcfaff 100%);
+  box-shadow:0 14px 38px rgba(60,28,112,.075),inset 0 1px 0 rgba(255,255,255,.95)
+}
+.patient-login-top{display:flex;align-items:center;gap:11px;margin-bottom:20px}
+.patient-login-mark{
+  width:43px;height:43px;display:grid;place-items:center;flex:none;
+  border:1px solid rgba(115,52,216,.14);border-radius:14px;color:#6425c6;
+  background:linear-gradient(145deg,#f5efff,#ece8ff);
+  box-shadow:0 5px 13px rgba(81,38,158,.08)
+}
+.patient-login-mark svg{width:21px;height:21px;stroke-width:1.85}
+.patient-login-heading{min-width:0;display:flex;flex-direction:column;gap:3px}
+.patient-login-title{color:#35214e;font:750 15px/1.28 var(--font-display);letter-spacing:-.035em}
+.patient-login-subtitle{color:#89819a;font:500 11px/1.35 var(--font-body)}
+.patient-login-label{display:block;margin:0 0 7px;color:#51466a;font:700 12px/1.4 var(--font-body)}
+.patient-login input:not([type="checkbox"]){
+  width:100%;max-width:100%;min-height:49px;display:block;box-sizing:border-box;
+  border:1px solid #e3dff0;border-radius:13px;color:#322547;
+  padding:12px 14px;background:#fff;font:600 14px var(--font-body);
+  outline:none;transition:border-color .18s ease,box-shadow .18s ease
+}
+.patient-login input:not([type="checkbox"]):focus{
+  border-color:#8b5add;box-shadow:0 0 0 3px rgba(132,80,219,.12)
+}
+.patient-login input:not([type="checkbox"])::placeholder{color:#aba3b8;font-weight:400}
+.patient-login #access-cpf{margin-bottom:16px}
+.patient-login-help{font:400 11px/1.5 var(--font-body);color:#817a91;text-align:left;margin:8px 0 0}
+.patient-remember{
+  display:flex;align-items:center;gap:11px;margin-top:17px;padding:12px 13px;
+  border:1px solid #ede8f7;border-radius:13px;background:#f7f4fd;
+  color:#443366;cursor:pointer;transition:border-color .2s ease,background .2s ease
+}
+.patient-remember:hover{border-color:#d6c7f2;background:#f5effe}
+.patient-login .patient-remember input{
+  width:18px;height:18px;min-height:18px;flex:0 0 18px;display:inline-block;
+  box-sizing:border-box;margin:0;padding:0;accent-color:#6324c3;cursor:pointer
+}
+.patient-remember span{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.patient-remember strong{font:700 12px/1.3 var(--font-body);color:#443366}
+.patient-remember small{font:400 10.5px/1.4 var(--font-body);color:#847895}
+.patient-remember:focus-within{outline:2px solid rgba(115,52,216,.3);outline-offset:2px}
 @media(max-width:700px){
-  .main:not(.phone-expanded) .patient-login{margin-bottom:13px;padding:16px;border-radius:18px}
+  .main:not(.phone-expanded) .patient-login{margin-bottom:12px;padding:19px 18px;border-radius:22px}
   .main:not(.phone-expanded) .install-block{margin-top:13px}
-  .main.phone-expanded .patient-login{margin:12px 14px;border-radius:17px}
+  .main.phone-expanded .patient-login{margin:12px 14px;border-radius:21px}
+}
+@media(max-width:370px){
+  .main:not(.phone-expanded) .patient-login{padding:17px 15px}
+  .patient-login-title{font-size:14px}
 }
 
 
@@ -665,24 +703,30 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     <form class="install-block" id="access-form" autocomplete="on" novalidate>
       <div class="patient-login">
         <div class="patient-login-top">
-          <span class="patient-login-dot" aria-hidden="true"></span>
-          <span>Token PromoVie</span>
-          <small>Acesso seguro</small>
+          <span class="patient-login-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+          <span class="patient-login-heading">
+            <strong class="patient-login-title">Acesse sua TeleSaúde</strong>
+            <span class="patient-login-subtitle">Entre com seus dados para começar.</span>
+          </span>
         </div>
-        <label class="patient-login-label" for="access-cpf">CPF do beneficiário</label>
+        <label class="patient-login-label" for="access-cpf">Seu CPF</label>
         <input id="access-cpf" name="username" type="text" inputmode="numeric" autocomplete="username" maxlength="14" placeholder="000.000.000-00" />
-        <label class="patient-login-label" for="access-code">Código pessoal de acesso</label>
+        <label class="patient-login-label" for="access-code">Código de acesso</label>
         <input id="access-code" name="password" type="password" autocomplete="current-password" maxlength="32"
-               spellcheck="false" placeholder="Código fornecido pela PromoVie" />
-        <p class="patient-login-help">Informe seu código individual. Ele é pessoal e não deve ser compartilhado.</p>
+               spellcheck="false" placeholder="Digite seu código" />
+        <p class="patient-login-help">Seu código é pessoal. Não compartilhe com outras pessoas.</p>
         <label class="patient-remember" for="remember-access">
           <input id="remember-access" type="checkbox" autocomplete="off" />
-          <span>Pedir para salvar meu acesso no gerenciador de senhas do navegador</span>
+          <span>
+            <strong>Lembrar meu acesso</strong>
+            <small>O navegador pode preencher seus dados na próxima vez.</small>
+          </span>
         </label>
-        <p class="patient-login-help">Se você optar por salvar, o navegador poderá lembrar seu CPF e código. A PromoVie não armazena o código neste aparelho.</p>
       </div>
-      <button type="submit" class="install" id="install-now" aria-label="Acessar TeleSaúde PromoVie" disabled>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
+      <button type="submit" class="install" id="install-now" aria-label="Acessar TeleSaúde" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
         <span>Verificando acesso...</span>
       </button>
       <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
@@ -768,7 +812,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       ready=Boolean(r.ok&&data.disponivel===true);
     }catch{ready=false;}
     button.disabled=!ready;
-    label.textContent=ready?"Acessar TeleSaúde PromoVie":"Acesso em preparação";
+    label.textContent=ready?"Acessar TeleSaúde":"Acesso em preparação";
     feedback(ready?"":"O acesso individual ainda está em preparação. Para receber orientação, entre em contato com a PromoVie.",ready?"info":"info");
   }
   async function startWidget(){
@@ -835,7 +879,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       codeInput.value="";
       busy=false;
       button.disabled=!ready;
-      label.textContent=ready?"Acessar TeleSaúde PromoVie":"Acesso em preparação";
+      label.textContent=ready?"Acessar TeleSaúde":"Acesso em preparação";
     }
   }
   accessForm.addEventListener("submit",function(event){event.preventDefault();startWidget();});
