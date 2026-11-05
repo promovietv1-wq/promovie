@@ -475,6 +475,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .patient-login input{width:100%;max-width:100%;min-height:47px;display:block;box-sizing:border-box;border:1px solid #d8d5e5;border-radius:11px;color:#34324b;padding:11px 14px;background:#fff;font:500 14px var(--font-body);outline:none}
 .patient-login input:focus{border-color:#8553df;box-shadow:0 0 0 3px rgba(125,74,221,.12)}
 .patient-login-help{font-size:11px;line-height:1.5;color:#817891;text-align:left;margin:9px 0 0}
+.patient-remember{display:flex;align-items:flex-start;gap:9px;margin-top:12px;color:#51476c;font:600 12px/1.5 var(--font-body);cursor:pointer}
+.patient-login .patient-remember input{width:17px;height:17px;min-height:17px;flex:0 0 17px;display:inline-block;box-sizing:border-box;margin:1px 0 0;padding:0;accent-color:#4b0c8f;cursor:pointer}
+.patient-remember span{flex:1}
 @media(max-width:700px){
   .main:not(.phone-expanded) .patient-login{margin-bottom:13px;padding:16px;border-radius:18px}
   .main:not(.phone-expanded) .install-block{margin-top:13px}
@@ -659,7 +662,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         </svg>
       </button>
     </div>
-    <div class="install-block">
+    <form class="install-block" id="access-form" autocomplete="on" novalidate>
       <div class="patient-login">
         <div class="patient-login-top">
           <span class="patient-login-dot" aria-hidden="true"></span>
@@ -667,18 +670,23 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           <small>Acesso seguro</small>
         </div>
         <label class="patient-login-label" for="access-cpf">CPF do beneficiário</label>
-        <input id="access-cpf" type="text" inputmode="numeric" autocomplete="username" maxlength="14" placeholder="000.000.000-00" />
+        <input id="access-cpf" name="username" type="text" inputmode="numeric" autocomplete="username" maxlength="14" placeholder="000.000.000-00" />
         <label class="patient-login-label" for="access-code">Código pessoal de acesso</label>
-        <input id="access-code" type="password" autocomplete="off" maxlength="32"
+        <input id="access-code" name="password" type="password" autocomplete="current-password" maxlength="32"
                spellcheck="false" placeholder="Código fornecido pela PromoVie" />
-        <p class="patient-login-help">Informe o código individual fornecido pela PromoVie. Ele é pessoal e não deve ser compartilhado.</p>
+        <p class="patient-login-help">Informe seu código individual. Ele é pessoal e não deve ser compartilhado.</p>
+        <label class="patient-remember" for="remember-access">
+          <input id="remember-access" type="checkbox" autocomplete="off" />
+          <span>Pedir para salvar meu acesso no gerenciador de senhas do navegador</span>
+        </label>
+        <p class="patient-login-help">Se você optar por salvar, o navegador poderá lembrar seu CPF e código. A PromoVie não armazena o código neste aparelho.</p>
       </div>
-      <button type="button" class="install" id="install-now" aria-label="Acessar TeleSaúde PromoVie" disabled>
+      <button type="submit" class="install" id="install-now" aria-label="Acessar TeleSaúde PromoVie" disabled>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg>
         <span>Verificando acesso...</span>
       </button>
       <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
-    </div>
+    </form>
   </div>
 </main>
 <dialog id="access-result-dialog" class="access-result-dialog" aria-labelledby="access-result-title" aria-describedby="access-result-message">
@@ -697,6 +705,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   const BACKEND_URL="https://backend.promovie.tv.br";
   const ACCESS="/api/promovie/access/v1";
   const button=document.getElementById("install-now");
+  const accessForm=document.getElementById("access-form");
+  const rememberAccess=document.getElementById("remember-access");
   const status=document.getElementById("sdk-entry-status");
   const label=button.querySelector("span");
   const codeInput=document.getElementById("access-code");
@@ -785,7 +795,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         body:JSON.stringify({cpf,codigo}),
         cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
-      codeInput.value="";
       const result=await getJson(response);
       if(response.status===401)throw new Error("CPF ou código pessoal não autorizado. Confira os dados ou solicite orientação à PromoVie.");
       if(response.status===429)throw new Error("Muitas tentativas. Tente novamente mais tarde.");
@@ -809,6 +818,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       initialized=true;
       if(typeof widget.open!=="function")throw new Error("A janela do atendimento não está disponível.");
       await Promise.resolve(widget.open());
+      // Opcao explicita para salvar apenas no gerenciador de senhas do navegador.
+      // Nenhum codigo e salvo pela pagina, banco de dados ou Worker.
+      if(rememberAccess.checked && typeof window.PasswordCredential==="function" && navigator.credentials && typeof navigator.credentials.store==="function"){
+        try{
+          const credential=new window.PasswordCredential({id:cpf,password:codigo,name:"Token PromoVie"});
+          await navigator.credentials.store(credential);
+        }catch{/* O navegador pode negar; o atendimento continua normalmente. */}
+      }
       feedback("","info");
     }catch(error){
       const message=String(error?.message||"Não foi possível conectar.");
@@ -821,18 +838,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       label.textContent=ready?"Acessar TeleSaúde PromoVie":"Acesso em preparação";
     }
   }
-  button.addEventListener("click",startWidget);
+  accessForm.addEventListener("submit",function(event){event.preventDefault();startWidget();});
   cpfInput.addEventListener("input",function(){
     let v=cpfInput.value.replace(/\D/g,"").slice(0,11);
     v=v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2");
     v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
     cpfInput.value=v;
   });
-  for(const input of [cpfInput,codeInput]){
-    input.addEventListener("keydown",function(event){
-      if(event.key==="Enter"){event.preventDefault();startWidget();}
-    });
-  }
   checkEnvironment();
   // A maquete orienta a escolha; o atendimento real abre apos autenticação.
   for(const service of document.querySelectorAll(".phone .chat-row")){
