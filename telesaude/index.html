@@ -648,6 +648,65 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 @media(prefers-reduced-motion:reduce){
   .main:not(.phone-expanded) .hero-heart{animation:none;will-change:auto}
 }
+
+/* Direção editorial responsiva: celular ao lado do acesso, com CTA visível. */
+@media (min-width:1000px){
+  body{background:radial-gradient(ellipse 48% 55% at 84% 38%,rgba(104,84,207,.055),transparent 80%),#fdfcff}
+  .site-header{border-bottom:1px solid #ede9f3;background:rgba(255,255,255,.97)}
+  .main{
+    width:min(1340px,calc(100% - 54px));
+    grid-template-columns:minmax(315px,.8fr) minmax(570px,1.2fr);
+    gap:clamp(25px,3vw,54px);align-items:center;
+    min-height:calc(100svh - 80px);padding:26px 0 32px;
+  }
+  .copy{max-width:525px;padding:0 0 5px 8px}
+  .heart-stage{width:162px;height:158px;margin:0 0 18px 0}
+  .hero-heart{width:154px;height:154px}
+  .heart-stage::before{inset:0;filter:blur(13px)}
+  .heart-stage::after{inset:6%;box-shadow:0 0 0 18px rgba(115,52,216,.015)}
+  .copy h1{font-size:clamp(38px,3.65vw,55px);line-height:1.13;letter-spacing:-.052em;margin-bottom:19px}
+  .lead{max-width:390px;color:#687081;font-size:15px;line-height:1.65}
+  .right-col{
+    display:grid;grid-template-columns:minmax(175px,.72fr) minmax(330px,1.25fr);
+    align-items:center;column-gap:clamp(12px,1.8vw,26px);
+    width:100%;min-width:0;padding:0;
+  }
+  .phone-stage{width:100%;min-width:0;min-height:0;padding:0;overflow:visible}
+  .phone-stage::before{inset:3% -14%;filter:blur(13px);
+    background:radial-gradient(ellipse at center,rgba(119,85,211,.09),transparent 77%)}
+  .phone-stage::after{width:290px;max-width:125%;height:290px;opacity:.56;box-shadow:0 0 0 24px rgba(115,52,216,.014)}
+  .phone{width:239px;height:448px;max-width:none;transform:rotate(-5deg) scale(.88);
+    box-shadow:0 26px 54px rgba(31,20,59,.18),7px 8px 17px rgba(37,25,70,.075),inset 0 0 0 1px #716784}
+  .install-block{width:100%;min-width:0;max-width:410px;margin:0;text-align:left}
+  .patient-login{padding:24px 23px 20px;margin-bottom:14px;border-radius:22px;
+    background:linear-gradient(165deg,rgba(255,255,255,.99),rgba(251,249,255,.97));
+    box-shadow:0 20px 48px rgba(62,35,107,.105),inset 0 1px 0 #fff}
+  .patient-login-top{margin-bottom:19px}
+  .patient-login #access-cpf{margin-bottom:15px}
+  .install{min-height:59px;border-radius:16px;box-shadow:0 14px 29px rgba(91,35,182,.18)}
+}
+@media (min-width:701px) and (max-width:999px){
+  .main{grid-template-columns:minmax(0,1fr) minmax(315px,1fr);gap:clamp(14px,2.6vw,28px);align-items:start;
+    min-height:calc(100svh - 80px);padding-block:42px 34px}
+  .copy{padding-top:33px}
+  .heart-stage{width:145px;height:145px;margin:0 0 15px}
+  .hero-heart{width:139px;height:139px}
+  .copy h1{font-size:clamp(31px,4vw,43px);line-height:1.16}
+  .lead{font-size:14px;line-height:1.65}
+  .right-col{display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:0}
+  .install-block{order:0;width:100%;max-width:410px;margin:0}
+  .phone-stage{order:1;min-height:0;padding:18px 0 0}
+  .phone{transform:rotate(-4deg) scale(.81);margin:-40px 0}
+}
+@media (max-width:700px){
+  /* No celular: apresentação, formulário e maquete, sem mudar a interação. */
+  .main:not(.phone-expanded){padding-top:11px}
+  .main:not(.phone-expanded) .install-block{margin-top:13px}
+  .main:not(.phone-expanded) .install{min-height:58px}
+  .main:not(.phone-expanded) .copy{box-shadow:0 8px 24px rgba(52,28,102,.047)}
+  .main:not(.phone-expanded) .patient-login{box-shadow:0 10px 24px rgba(48,28,98,.065)}
+}
+
 </style>
 </head>
 <body>
