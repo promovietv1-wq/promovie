@@ -708,7 +708,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           </span>
           <span class="patient-login-heading">
             <strong class="patient-login-title">Acesse sua TeleSaúde</strong>
-            <span class="patient-login-subtitle">Entre com seus dados para começar.</span>
+            <span class="patient-login-subtitle">Cuidar de si faz toda a diferença.</span>
           </span>
         </div>
         <label class="patient-login-label" for="access-cpf">Seu CPF</label>
@@ -725,7 +725,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           </span>
         </label>
       </div>
-      <button type="submit" class="install" id="install-now" aria-label="Acessar TeleSaúde" disabled>
+      <button type="submit" class="install" id="install-now" aria-label="Acessar" disabled>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
         <span>Verificando acesso...</span>
       </button>
@@ -812,7 +812,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       ready=Boolean(r.ok&&data.disponivel===true);
     }catch{ready=false;}
     button.disabled=!ready;
-    label.textContent=ready?"Acessar TeleSaúde":"Acesso em preparação";
+    label.textContent=ready?"Acessar":"Acesso em preparação";
     feedback(ready?"":"O acesso individual ainda está em preparação. Para receber orientação, entre em contato com a PromoVie.",ready?"info":"info");
   }
   async function startWidget(){
@@ -879,7 +879,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       codeInput.value="";
       busy=false;
       button.disabled=!ready;
-      label.textContent=ready?"Acessar TeleSaúde":"Acesso em preparação";
+      label.textContent=ready?"Acessar":"Acesso em preparação";
     }
   }
   accessForm.addEventListener("submit",function(event){event.preventDefault();startWidget();});
