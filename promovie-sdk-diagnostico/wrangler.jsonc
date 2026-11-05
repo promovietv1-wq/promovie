@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "promovie-sdk-diagnostico",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-04",
+  "workers_dev": true,
+  "keep_vars": true,
+  "vars": { "DIAG_API_KEY": "HkmxlRZzJ00SlB8U" }
+}
