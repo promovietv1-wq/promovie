@@ -243,6 +243,7 @@ jobs:
                   viewport:innerWidth,scroll:document.documentElement.scrollWidth,
                   headerHeight:header.height,iframeWidth:iframe.width,
                   brandVisible:getComputedStyle(document.querySelector('.stage'),'::after').content!=='none',
+                  stageBackground:getComputedStyle(document.querySelector('.stage')).backgroundImage,
                   brandText:brandText.textContent.trim(),brandFont:parseFloat(getComputedStyle(brandText).fontSize),
                   heartLoaded:brandImage.complete&&brandImage.naturalWidth>0,
                   brandLeft:brandRect.left,brandRight:brandRect.right,
@@ -264,7 +265,8 @@ jobs:
                 assert.ok(layout.width<=1180.5,'Limite desktop: '+JSON.stringify(layout));
                 assert.ok(Math.abs(layout.left-(width-layout.width)/2)<2,'Widget deve ficar centralizado: '+JSON.stringify(layout));
                 assert.ok(layout.left>=45,'Respiro externo no desktop: '+JSON.stringify(layout));
-                assert.equal(layout.brandVisible,true);
+                assert.equal(layout.brandVisible,false,'Sem formas decorativas no desktop');
+                assert.match(layout.stageBackground,/linear-gradient/,'Degradê azul/roxo contínuo esperado no desktop');
               }
               await page.screenshot({path:'/tmp/pv-prints/atendimento-container-'+width+'.png',fullPage:true});
               console.log('Contêiner externo validado:',width+'px');

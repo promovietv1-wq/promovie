@@ -146,30 +146,9 @@ html body .mediquo-launcher{display:none!important}
     padding-left:max(28px,calc((100vw - 1180px)/2));
     padding-right:max(28px,calc((100vw - 1180px)/2))
   }
-  /* Fundo suave, com cápsulas de gradiente inspiradas na página inicial.
-     Apenas decorativo e exclusivo do desktop, atrás do contêiner Médiquo. */
+  /* Fundo contínuo azul e roxo, sem formas, texturas ou sobreposições. */
   .stage{
-    background:
-      radial-gradient(ellipse 35% 48% at 8% 72%,rgba(115,52,216,.095),transparent 90%),
-      radial-gradient(ellipse 35% 46% at 94% 24%,rgba(0,189,232,.065),transparent 90%),
-      linear-gradient(135deg,#f8f6fd 0%,#fcfbff 52%,#f7f4fd 100%)
-  }
-  .stage::before,.stage::after{
-    content:"";position:absolute;display:block;pointer-events:none;
-    width:clamp(290px,35vw,520px);height:clamp(105px,11vw,160px);
-    border-radius:999px;
-    border:1px solid rgba(120,73,204,.22);
-    background:linear-gradient(110deg,rgba(75,12,143,.07),rgba(115,52,216,.24) 53%,rgba(0,189,232,.10));
-    box-shadow:0 0 0 23px rgba(115,52,216,.025),inset 0 1px 0 rgba(255,255,255,.48);
-    opacity:.85
-  }
-  .stage::before{
-    left:clamp(-175px,-9vw,-95px);top:16%;
-    transform:rotate(-30deg)
-  }
-  .stage::after{
-    right:clamp(-190px,-10vw,-100px);bottom:17%;
-    transform:rotate(-28deg)
+    background:linear-gradient(110deg,#3268bb 0%,#5b47bf 46%,#4b0c8f 100%)
   }
   html body #MediquoContainer,
   html body .MediquoContainer,
