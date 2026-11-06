@@ -141,6 +141,70 @@ jobs:
             }
           }finally{await browser.close();}
           JS
+      - name: Validar instalação e layout do portal público em Android iPhone Windows e Mac
+        run: |
+          python -m http.server 8766 --bind 127.0.0.1 >/tmp/pv-pwa-server.log 2>&1 &
+          sleep 2
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from 'playwright';
+          const browser=await chromium.launch({headless:true});
+          const url='http://127.0.0.1:8766/telesaude/';
+          const configs=[
+            {name:'android-320',width:320,height:720,ua:'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36',kind:'mobile'},
+            {name:'android-390',width:390,height:844,ua:'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36',kind:'mobile'},
+            {name:'iphone-390',width:390,height:844,ua:'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1',kind:'mobile'},
+            {name:'windows-1440',width:1440,height:900,ua:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',kind:'desktop'},
+            {name:'mac-1280',width:1280,height:900,ua:'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15',kind:'desktop'}
+          ];
+          try{
+            for(const cfg of configs){
+              const page=await browser.newPage({viewport:{width:cfg.width,height:cfg.height},userAgent:cfg.ua,reducedMotion:'reduce'});
+              await page.route('https://backend.promovie.tv.br/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({disponivel:true}),headers:{'Access-Control-Allow-Origin':'*'}}));
+              await page.goto(url,{waitUntil:'load'});
+              await page.waitForTimeout(400);
+              assert.equal(await page.locator('#access-form').isVisible(),true,'Login existente deve aparecer');
+              assert.equal(await page.locator('#pwa-install-actions').isVisible(),true,'Instalação deve estar visível');
+              const overflow=await page.evaluate(()=>({
+                scroll:document.documentElement.scrollWidth,
+                viewport:document.documentElement.clientWidth
+              }));
+              assert.ok(overflow.scroll<=overflow.viewport+1,'Rolagem horizontal em '+cfg.name+': '+JSON.stringify(overflow));
+              const mobile=cfg.kind==='mobile';
+              assert.equal(await page.locator('#pwa-install-android').isVisible(),mobile);
+              assert.equal(await page.locator('#pwa-install-apple').isVisible(),mobile);
+              assert.equal(await page.locator('#pwa-install-desktop').isVisible(),!mobile);
+              if(cfg.name.startsWith('android')){
+                if(cfg.name==='android-390'){
+                  await page.evaluate(()=>{
+                    window.__installCalled=false;
+                    const event=new Event('beforeinstallprompt',{cancelable:true});
+                    event.prompt=async()=>{window.__installCalled=true;};
+                    event.userChoice=Promise.resolve({outcome:'dismissed'});
+                    window.dispatchEvent(event);
+                  });
+                  await page.locator('#pwa-install-android').click();
+                  assert.equal(await page.evaluate(()=>window.__installCalled),true,'Botão Android deve chamar prompt nativo quando disponível');
+                }else{
+                  await page.locator('#pwa-install-apple').click();
+                  assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
+                }
+              }else if(cfg.name==='iphone-390'){
+                await page.locator('#pwa-install-apple').click();
+                assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
+                assert.match(await page.locator('#pwa-help-dialog').innerText(),/Adicionar à Tela de Início/);
+              }else{
+                await page.locator('#pwa-install-desktop').click();
+                assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
+                const instructions=await page.locator('#pwa-help-dialog').innerText();
+                assert.match(instructions,cfg.name.startsWith('mac')?/Adicionar ao Dock/:/barra de tarefas/);
+              }
+              await page.screenshot({path:'/tmp/pv-prints/portal-pwa-'+cfg.name+'.png',fullPage:true});
+              console.log('Portal PWA conferido:',cfg.name);
+              await page.close();
+            }
+          }finally{await browser.close();}
+          JS
       - name: Guardar capturas para inspeção
         if: always()
         uses: actions/upload-artifact@v4
