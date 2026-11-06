@@ -72,6 +72,7 @@ async function setup(env){
     "CREATE TABLE IF NOT EXISTS pv_space_sessions (token_hash TEXT PRIMARY KEY, beneficiario_id TEXT NOT NULL, code_hash TEXT NOT NULL, expires_at INTEGER NOT NULL);",
     "CREATE INDEX IF NOT EXISTS idx_pv_space_session_owner ON pv_space_sessions(beneficiario_id);",
     "CREATE TABLE IF NOT EXISTS pv_space_vaults (beneficiario_id TEXT PRIMARY KEY, revision INTEGER NOT NULL, salt TEXT NOT NULL, iv TEXT NOT NULL, ciphertext TEXT NOT NULL, updated_at TEXT NOT NULL);",
+    "CREATE TABLE IF NOT EXISTS pv_space_consents (beneficiario_id TEXT PRIMARY KEY, accepted_at TEXT NOT NULL, policy_version TEXT NOT NULL);",
     "CREATE TABLE IF NOT EXISTS pv_space_documents (id TEXT PRIMARY KEY, beneficiario_id TEXT NOT NULL, ciphertext TEXT NOT NULL, bytes INTEGER NOT NULL, created_at TEXT NOT NULL);",
     "CREATE INDEX IF NOT EXISTS idx_pv_space_docs_owner ON pv_space_documents(beneficiario_id);"
   ].join("\n"));
@@ -158,6 +159,9 @@ export async function handleHealthSpace(request,env,cors={}){
       if(!data)return response(400,{error:"Conteúdo criptografado inválido."},cors);
       const now=new Date().toISOString();
       if(data.revision===0){
+        if(data.consent!==true)return response(403,{error:"Leia e aceite o aviso de privacidade para criar seu espaço."},cors);
+        await db.prepare("INSERT OR IGNORE INTO pv_space_consents(beneficiario_id,accepted_at,policy_version) VALUES(?,?,'1')")
+          .bind(user.owner,now).run();
         const result=await db.prepare("INSERT OR IGNORE INTO pv_space_vaults(beneficiario_id,revision,salt,iv,ciphertext,updated_at) VALUES(?,1,?,?,?,?)")
           .bind(user.owner,data.salt,data.iv,data.ciphertext,now).run();
         if(result.meta?.changes!==1)return response(409,{error:"Dados atualizados em outra sessão. Recarregue."},cors);
@@ -194,6 +198,7 @@ export async function handleHealthSpace(request,env,cors={}){
     if(pathname===BASE+"/vault"&&method==="DELETE"){
       await db.prepare("DELETE FROM pv_space_documents WHERE beneficiario_id=?").bind(user.owner).run();
       await db.prepare("DELETE FROM pv_space_vaults WHERE beneficiario_id=?").bind(user.owner).run();
+      await db.prepare("DELETE FROM pv_space_consents WHERE beneficiario_id=?").bind(user.owner).run();
       await db.prepare("DELETE FROM pv_space_sessions WHERE beneficiario_id=?").bind(user.owner).run();
       return response(200,{ok:true},cors);
     }
