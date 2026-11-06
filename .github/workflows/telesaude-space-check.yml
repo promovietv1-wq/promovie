@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'telesaude/meu-espaco/**'
+      - '.github/scripts/validate-health-space-ui.mjs'
       - 'app-teste-novo-2-worker/src/health-space.mjs'
       - 'app-teste-novo-2-worker/src/index.mjs'
       - '.github/workflows/telesaude-space-check.yml'
@@ -47,3 +48,28 @@ jobs:
           assert 'window.MediquoWidget' not in js
           print('Estrutura independente validada sem gravar ou consultar dados reais.')
           PY
+
+  navegador:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar Playwright e Chromium para testes sem dados reais
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar criação, abertura e armazenamento criptografado no desktop e celular
+        run: |
+          python -m http.server 8769 --bind 127.0.0.1 >/tmp/pv-space-server.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-health-space-ui.mjs
+      - name: Guardar evidências visuais do teste
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validacao-meu-espaco-saude
+          path: /tmp/pv-space-shots
+          if-no-files-found: ignore
