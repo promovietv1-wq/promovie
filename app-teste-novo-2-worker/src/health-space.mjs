@@ -178,8 +178,12 @@ export async function handleHealthSpace(request,env,cors={}){
       const total=await db.prepare("SELECT COUNT(*) AS total FROM pv_space_documents WHERE beneficiario_id=?").bind(user.owner).first();
       if(Number(total?.total)>=MAX_FILES)return response(413,{error:"Limite de documentos atingido."},cors);
       const bytes=Math.floor(data.ciphertext.length*3/4);
-      const result=await db.prepare("INSERT OR IGNORE INTO pv_space_documents(id,beneficiario_id,ciphertext,bytes,created_at) VALUES(?,?,?,?,?)")
-        .bind(data.id,user.owner,data.ciphertext,bytes,new Date().toISOString()).run();
+      // A segunda verificação ocorre no próprio INSERT, impedindo estouro
+      // do limite por uploads paralelos (a contagem isolada não é suficiente).
+      const result=await db.prepare(
+        "INSERT OR IGNORE INTO pv_space_documents(id,beneficiario_id,ciphertext,bytes,created_at) "+
+        "SELECT ?,?,?,?,? WHERE (SELECT COUNT(*) FROM pv_space_documents WHERE beneficiario_id=?) < ?"
+      ).bind(data.id,user.owner,data.ciphertext,bytes,new Date().toISOString(),user.owner,MAX_FILES).run();
       if(result.meta?.changes!==1)return response(409,{error:"Documento já existe."},cors);
       return response(201,{id:data.id,bytes},cors);
     }
