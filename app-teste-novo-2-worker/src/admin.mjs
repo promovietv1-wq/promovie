@@ -1,6 +1,6 @@
 // Painel privado PromoVie | Cloudflare D1.
 // Cadastro administrativo não é prontuário. Não armazenar dados clínicos.
-import {sendAccessEmail} from './access-email.mjs';
+import {sendAccessEmail,emailDeliveryEnabled} from './access-email.mjs';
 const PREFIX='/api/promovie/admin/v1';
 const COOKIE='__Host-pv_admin';
 const SESSION_TTL=60*60; // 1 hora
@@ -377,20 +377,32 @@ export async function handleAdmin(request,env,cors={}){
         await appendLog(db,row.id,'codigo_revogado','Acesso pessoal revogado pela administração');
         return reply(200,{ok:true,informacao:'Código pessoal revogado. O beneficiário não poderá iniciar novas sessões.'},baseCors);
       }
-      // Um código novo invalida imediatamente o anterior. Somente exibido nesta resposta HTTPS.
+      // Não revelar códigos pessoais ao gestor, nem por API, nem pela interface.
+      // O envio de e-mail é obrigatório antes de ativar ou substituir um código.
+      if(!emailDeliveryEnabled(env))return reply(503,{
+        error:'Envio automático ainda não configurado. Nenhum código pessoal foi criado ou substituído.'
+      },baseCors);
       const code=newPersonalCode();
+      const entregaEmail=await sendAccessEmail(env,{
+        email:item.email,nome:item.nome,codigo:code,recordId:row.id
+      });
+      if(entregaEmail!=='aceito'){
+        return reply(503,{
+          error:entregaEmail==='sem_email'?
+            'Este beneficiário não tem um e-mail válido. Nenhum código pessoal foi criado ou substituído.':
+            'Não foi possível solicitar o envio por e-mail. Nenhum código pessoal foi criado ou substituído.'
+        },baseCors);
+      }
+      // A aceitação pelo provedor não garante chegada à caixa de entrada.
+      // Se o banco falhar após o aceite, o gestor poderá repetir o envio sem expor o código.
       const hash=await accessHash(env,row.cpf_index,normalizeCode(code));
       const now=new Date().toISOString();
       await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
         .bind(row.id,hash,now).run();
-      await appendLog(db,row.id,'codigo_gerado','Código pessoal criado sem armazenar o valor em texto');
-      // Serviço externo é opcional. Se desativado ou indisponível, a entrega manual continua igual.
-      const entregaEmail=await sendAccessEmail(env,{
-        email:item.email,nome:item.nome,codigo:code,recordId:row.id
-      });
-      if(entregaEmail==='aceito')await appendLog(db,row.id,'email_codigo_aceito','Serviço de e-mail aceitou a solicitação de envio (entrega não confirmada)');
-      return reply(200,{ok:true,codigo:code,entrega_email:entregaEmail,
-        informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
+      await appendLog(db,row.id,'codigo_gerado','Código pessoal protegido por HMAC, sem exibição administrativa');
+      await appendLog(db,row.id,'email_codigo_aceito','Serviço de e-mail aceitou a solicitação (entrega não confirmada)');
+      return reply(200,{ok:true,entrega_email:'aceito',
+        informacao:'Solicitação de envio aceita pelo serviço de e-mail. O código não é exibido à administração.'},baseCors);
     }
     if(method==='POST'&&action==='archive'&&row.situacao!=='arquivado'){
       await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')
