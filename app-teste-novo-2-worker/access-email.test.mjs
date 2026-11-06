@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {sendAccessEmail,emailDeliveryEnabled} from './src/access-email.mjs';
+import {sendAccessEmail,emailDeliveryEnabled,renderAccessEmail} from './src/access-email.mjs';
 
 const active={
   PROMOVIE_ACCESS_EMAIL_ENABLED:'true',
@@ -33,12 +33,18 @@ test('e-mail contém apenas texto curto, CPF não é transmitido e sucesso é ac
     const body=JSON.parse(options.body);
     assert.equal(body.from,active.PROMOVIE_ACCESS_EMAIL_FROM);
     assert.deepEqual(body.to,[recipient.email]);
-    assert.equal(body.subject,'Seu acesso à TeleSaúde PromoVie');
-    assert.match(body.text,/Identificação: seu CPF cadastrado/);
+    assert.equal(body.subject,'Seu acesso à TeleSaúde PromoVie está disponível');
+    assert.match(body.text,/utilize seu CPF e o código pessoal abaixo/);
     assert.match(body.text,/Código pessoal: ABCDE-FGHIJ-KLMNP-QRSTU/);
     assert.match(body.text,/https:\/\/www\.promovie\.tv\.br\/telesaude\//);
     assert.doesNotMatch(body.text,/529\.982\.247-25|52998224725/);
-    assert.ok(!('html' in body));
+    assert.match(body.html,/lang="pt-BR"/);
+    assert.match(body.html,/TeleSaúde PromoVie/);
+    assert.match(body.html,/href="https:\/\/www\.promovie\.tv\.br\/telesaude\/"/);
+    assert.match(body.html,/Código pessoal|CÓDIGO PESSOAL/);
+    assert.match(body.html,/ABCDE-FGHIJ-KLMNP-QRSTU/);
+    assert.match(body.html,/Sugerimos que não apague este e-mail/);
+    assert.doesNotMatch(body.html,/529\.982\.247-25|52998224725|<script|onclick=/);
     return new Response(JSON.stringify({id:'email-teste-aceito'}),{
       status:200,headers:{'Content-Type':'application/json'}
     });
@@ -55,4 +61,16 @@ test('erro de provedor retorna falhou, preservando entrega manual',async()=>{
   try{
     assert.equal(await sendAccessEmail(active,recipient),'falhou');
   }finally{globalThis.fetch=originalFetch;}
+});
+
+
+test('conteúdo HTML escapa nome recebido e não cria botão de cópia que não funciona em e-mails',()=>{
+  const email=renderAccessEmail({nome:'<script>Olga & Cia',codigo:'ABCD2-EFGH3-JKLM4-NPQR5'});
+  assert.doesNotMatch(email.html,/<script>/);
+  assert.match(email.html,/&lt;script&gt;Olga/);
+  assert.match(email.html,/ABCD2-EFGH3-JKLM4-NPQR5/);
+  assert.match(email.html,/color:#ffffff/);
+  assert.match(email.html,/apple-touch-coracao-promovie.png/);
+  assert.doesNotMatch(email.html,/javascript:|onclick=|navigator.clipboard/);
+  assert.doesNotMatch(email.text,/CPF: ?\d/);
 });

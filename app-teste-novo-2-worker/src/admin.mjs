@@ -1,6 +1,6 @@
 // Painel privado PromoVie | Cloudflare D1.
 // Cadastro administrativo não é prontuário. Não armazenar dados clínicos.
-import {sendAccessEmail} from './access-email.mjs';
+import {sendAccessEmail,emailDeliveryEnabled} from './access-email.mjs';
 const PREFIX='/api/promovie/admin/v1';
 const COOKIE='__Host-pv_admin';
 const SESSION_TTL=60*60; // 1 hora
@@ -147,7 +147,9 @@ async function ensureAccessSchema(env){
   if(accessSchemaReady)return;
   const statements=[
     "CREATE TABLE IF NOT EXISTS pv_access_codes (beneficiario_id TEXT PRIMARY KEY, code_hash TEXT NOT NULL, criado_em TEXT NOT NULL, FOREIGN KEY(beneficiario_id) REFERENCES pv_beneficiarios(id));",
-    "CREATE TABLE IF NOT EXISTS pv_access_attempts (actor_hash TEXT PRIMARY KEY, attempts INTEGER NOT NULL, expires_at INTEGER NOT NULL);"
+    "CREATE TABLE IF NOT EXISTS pv_access_attempts (actor_hash TEXT PRIMARY KEY, attempts INTEGER NOT NULL, expires_at INTEGER NOT NULL);",
+    // Preparar o hash ANTES de enviar: se uma gravação posterior falhar, o código recebido ainda é válido.
+    "CREATE TABLE IF NOT EXISTS pv_access_codes_pending (beneficiario_id TEXT PRIMARY KEY, code_hash TEXT NOT NULL, criado_em TEXT NOT NULL, FOREIGN KEY(beneficiario_id) REFERENCES pv_beneficiarios(id));"
   ];
   await d1(env).exec(statements.join('\n'));
   accessSchemaReady=true;
@@ -201,9 +203,11 @@ export async function handleBeneficiaryAccess(request,env,cors={}){
       .bind(actor).first();
     if(previous?.expires_at>now&&previous.attempts>=6)
       return reply(429,{error:'Acesso temporariamente bloqueado após várias tentativas. Tente mais tarde.'},cors);
-    const record=await db.prepare("SELECT b.id,c.code_hash FROM pv_beneficiarios b JOIN pv_access_codes c ON c.beneficiario_id=b.id WHERE b.cpf_index=? AND b.situacao='ativo'")
+    const record=await db.prepare("SELECT b.id,c.code_hash,p.code_hash AS pending_hash FROM pv_beneficiarios b LEFT JOIN pv_access_codes c ON c.beneficiario_id=b.id LEFT JOIN pv_access_codes_pending p ON p.beneficiario_id=b.id WHERE b.cpf_index=? AND b.situacao='ativo'")
       .bind(idx).first();
-    const match=record&&await equals(await accessHash(env,idx,code),record.code_hash);
+    const submittedHash=record?await accessHash(env,idx,code):'';
+    const match=!!record&&(!!record.code_hash&&await equals(submittedHash,record.code_hash)||
+      !!record.pending_hash&&await equals(submittedHash,record.pending_hash));
     if(!match){
       const attempts=previous?.expires_at>now?previous.attempts+1:1;
       await unsuccessfulAccess(db,actor,attempts,now+900);
@@ -373,24 +377,52 @@ export async function handleAdmin(request,env,cors={}){
       if(row.situacao!=='ativo')return reply(409,{error:'Somente beneficiários ativos podem receber ou revogar um código pessoal.'},baseCors);
       await ensureAccessSchema(env);
       if(action==='revoke-access'){
+        // Evita revogação simultânea à emissão de uma mensagem ainda em andamento.
+        const pending=await db.prepare('SELECT code_hash FROM pv_access_codes_pending WHERE beneficiario_id=?').bind(row.id).first();
+        if(pending)return reply(409,{error:'Envio de código em andamento ou pendente. Verifique o estado antes de revogar.'},baseCors);
         await db.prepare('DELETE FROM pv_access_codes WHERE beneficiario_id=?').bind(row.id).run();
         await appendLog(db,row.id,'codigo_revogado','Acesso pessoal revogado pela administração');
         return reply(200,{ok:true,informacao:'Código pessoal revogado. O beneficiário não poderá iniciar novas sessões.'},baseCors);
       }
-      // Um código novo invalida imediatamente o anterior. Somente exibido nesta resposta HTTPS.
+      // Nenhum código pessoal é retornado à administração, nem por API, nem pelo HTML.
+      if(!emailDeliveryEnabled(env))return reply(503,{
+        error:'Envio automático ainda não configurado. Nenhum código pessoal foi criado ou substituído.'
+      },baseCors);
+      if(!item.email)return reply(400,{error:'Cadastre o e-mail do beneficiário antes de enviar o acesso.'},baseCors);
       const code=newPersonalCode();
       const hash=await accessHash(env,row.cpf_index,normalizeCode(code));
       const now=new Date().toISOString();
-      await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
+      // Reservar hash de código antecipadamente. O login PromoVie o reconhece
+      // mesmo que a gravação de promoção, após o aceite do Resend, falhe.
+      // A chave primária impede duas solicitações simultâneas para o mesmo titular.
+      const staged=await db.prepare('INSERT OR IGNORE INTO pv_access_codes_pending(beneficiario_id,code_hash,criado_em) VALUES(?,?,?)')
         .bind(row.id,hash,now).run();
-      await appendLog(db,row.id,'codigo_gerado','Código pessoal criado sem armazenar o valor em texto');
-      // Serviço externo é opcional. Se desativado ou indisponível, a entrega manual continua igual.
+      if(staged.meta?.changes!==1)return reply(409,{
+        error:'Já há um envio em andamento ou pendente para este beneficiário. Verifique antes de tentar novamente.'
+      },baseCors);
       const entregaEmail=await sendAccessEmail(env,{
         email:item.email,nome:item.nome,codigo:code,recordId:row.id
       });
-      if(entregaEmail==='aceito')await appendLog(db,row.id,'email_codigo_aceito','Serviço de e-mail aceitou a solicitação de envio (entrega não confirmada)');
-      return reply(200,{ok:true,codigo:code,entrega_email:entregaEmail,
-        informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
+      if(entregaEmail!=='aceito'){
+        // Em falha do provedor, o código anterior continua válido.
+        await db.prepare('DELETE FROM pv_access_codes_pending WHERE beneficiario_id=? AND code_hash=?')
+          .bind(row.id,hash).run();
+        return reply(503,{
+          error:entregaEmail==='sem_email'?
+            'Este beneficiário não tem um e-mail válido. Nenhum código pessoal foi criado ou substituído.':
+            'Não foi possível solicitar o envio por e-mail. Nenhum código pessoal foi criado ou substituído.'
+        },baseCors);
+      }
+      // Se o banco falhar aqui, o código entregue ainda é reconhecido como pendente,
+      // e o código anterior permanece válido até a promoção ser concluída.
+      await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
+        .bind(row.id,hash,now).run();
+      await db.prepare('DELETE FROM pv_access_codes_pending WHERE beneficiario_id=? AND code_hash=?')
+        .bind(row.id,hash).run();
+      await appendLog(db,row.id,'codigo_gerado','Código pessoal protegido por HMAC, sem exibição administrativa');
+      await appendLog(db,row.id,'email_codigo_aceito','Resend aceitou a solicitação de envio; entrega não confirmada');
+      return reply(200,{ok:true,entrega_email:'aceito',
+        informacao:'Solicitação de envio aceita pelo serviço de e-mail. O código não é exibido à administração.'},baseCors);
     }
     if(method==='POST'&&action==='archive'&&row.situacao!=='arquivado'){
       await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')

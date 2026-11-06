@@ -311,7 +311,7 @@
           <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
           <label for="new-cpf">CPF</label>
           <input id="new-cpf" required inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00">
-          <label for="new-email">E-mail (opcional)</label>
+          <label for="new-email">E-mail do beneficiário (obrigatório para ativar e enviar acesso)</label>
           <input id="new-email" type="email" maxlength="180" autocomplete="off" placeholder="exemplo@email.com">
           <label for="new-phone">Telefone com DDD (opcional)</label>
           <input id="new-phone" type="tel" maxlength="20" autocomplete="off" placeholder="(27) 99999-9999">
@@ -336,7 +336,7 @@
             <button id="send-button" class="small" type="button">Ativar Token PromoVie</button>
             <button id="archive-button" class="danger small" type="button">Arquivar</button>
             <button id="restore-button" class="secondary small" type="button" hidden>Restaurar</button>
-            <button id="generate-access-button" class="secondary small" type="button" hidden>Gerar código pessoal</button>
+            <button id="generate-access-button" class="secondary small" type="button" hidden>Enviar novo código por e-mail</button>
             <button id="revoke-access-button" class="ghost small" type="button" hidden>Revogar código</button>
           </div>
           <hr class="divider">
@@ -353,12 +353,10 @@
   </footer>
 </main>
 <dialog id="access-code-dialog" class="access-code-dialog" aria-labelledby="access-code-title">
-  <h2 id="access-code-title">Código pessoal gerado</h2>
-  <p>Entregue este código somente ao beneficiário. Ele é individual e substitui qualquer código anterior. Após fechar esta janela, não será possível visualizá-lo novamente.</p>
-  <code id="generated-access-code" aria-label="Código pessoal de acesso"></code>
-  <p id="access-email-status" role="status" aria-live="polite" hidden></p>
+  <h2 id="access-code-title">Envio de acesso solicitado</h2>
+  <p>O código pessoal foi gerado de forma segura e encaminhado ao serviço de e-mail para envio direto ao beneficiário. Ele não aparece no gerenciador.</p>
+  <p>O aceite do provedor não confirma a entrega. Peça ao beneficiário que confira também a pasta de spam.</p>
   <div class="actions">
-    <button id="copy-access-code" type="button">Copiar código</button>
     <button id="close-access-code" class="secondary" type="button">Fechar</button>
   </div>
 </dialog>
@@ -456,6 +454,10 @@
   $('new-form').addEventListener('submit',async e=>{
     e.preventDefault();if(busy)return;
     const activate=e.submitter?.id==='save-activate-button';
+    if(activate&&!$('new-email').value.trim()){
+      msg('banner','Informe o e-mail do beneficiário para ativar e enviar o acesso.','error');
+      $('new-email').focus();return;
+    }
     setBusy(true);msg('banner','Salvando no arquivo privado...');
     try{
       const data=await request('/records',{method:'POST',body:{
@@ -486,17 +488,11 @@
               // Uma unica ativacao seguida de codigo pessoal, sem novo envio ao SDK.
               try{
                 const personal=await request('/records/'+id+'/access-code',{method:'POST',body:{}});
-                personalCode=String(personal.codigo||'');
-                if(!personalCode)throw Error('O código pessoal não foi disponibilizado.');
-                $('generated-access-code').textContent=personalCode;
-                $('copy-access-code').textContent='Copiar código';
-                const emailResult=showEmailStatus(personal);
+                if(personal.entrega_email!=='aceito')throw Error('A solicitação de envio não foi confirmada.');
                 $('access-code-dialog').showModal();
-                msg('banner',emailResult==='aceito'?
-                  'Beneficiário ativo. O serviço de e-mail aceitou o código para envio.':
-                  'Beneficiário ativo. Copie o código pessoal para entregar ao titular.','ok');
-              }catch{
-                msg('banner','Beneficiário ativo. Para entregar o acesso, abra o cadastro e selecione Gerar código pessoal.','info');
+                msg('banner','Beneficiário ativo. O serviço de e-mail aceitou o código para envio direto ao titular.','ok');
+              }catch(err){
+                msg('banner','Beneficiário ativo, mas o acesso ainda não foi enviado: '+err.message+' Verifique a configuração do e-mail e tente novamente pelo cadastro.','error');
               }
             }else{
               msg('banner','Cadastro enviado ao Token PromoVie, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
@@ -560,52 +556,16 @@
     finally{setBusy(false);}
   }
   const personalDialog=$('access-code-dialog');
-  let personalCode='';
-  function showEmailStatus(result){
-    const status=result?.entrega_email||'desativado';
-    const text={
-      aceito:'Solicitação de envio por e-mail aceita. Confira a entrega com o beneficiário.',
-      falhou:'O e-mail não pôde ser enviado. Copie o código e entregue-o de forma segura.',
-      sem_email:'Sem e-mail válido cadastrado. Copie o código para entrega manual.',
-      indisponivel:'Envio por e-mail ainda não configurado. A entrega manual continua disponível.'
-    }[status]||'';
-    const el=$('access-email-status');
-    el.textContent=text;
-    el.hidden=!text;
-    return status;
-  }
-  function closePersonalCode(){
-    personalCode='';
-    $('generated-access-code').textContent='';
-    $('access-email-status').textContent='';$('access-email-status').hidden=true;
-    if(personalDialog.open)personalDialog.close();
-  }
-  $('close-access-code').addEventListener('click',closePersonalCode);
-  personalDialog.addEventListener('close',()=>{personalCode='';$('generated-access-code').textContent='';$('access-email-status').textContent='';$('access-email-status').hidden=true;});
-  $('copy-access-code').addEventListener('click',async()=>{
-    if(!personalCode)return;
-    try{
-      await navigator.clipboard.writeText(personalCode);
-      $('copy-access-code').textContent='Copiado';
-    }catch{
-      $('copy-access-code').textContent='Selecione o código acima para copiar';
-    }
-  });
+  $('close-access-code').addEventListener('click',()=>personalDialog.close());
   $('generate-access-button').addEventListener('click',async()=>{
     if(!selectedId||busy)return;
-    if(!confirm('Gerar um código pessoal para este beneficiário? O código anterior, se houver, deixará de funcionar.'))return;
-    setBusy(true);msg('banner','Gerando código pessoal de acesso...');
+    if(!confirm('Enviar um novo código pessoal diretamente ao e-mail cadastrado? O código anterior será substituído somente se o provedor aceitar o envio.'))return;
+    setBusy(true);msg('banner','Solicitando envio do código pessoal...');
     try{
       const result=await request('/records/'+encodeURIComponent(selectedId)+'/access-code',{method:'POST',body:{}});
-      personalCode=String(result.codigo||'');
-      if(!personalCode)throw Error('O servidor não retornou o código pessoal.');
-      $('generated-access-code').textContent=personalCode;
-      $('copy-access-code').textContent='Copiar código';
-      const emailResult=showEmailStatus(result);
+      if(result.entrega_email!=='aceito')throw Error('O serviço de e-mail não confirmou a solicitação.');
       personalDialog.showModal();
-      msg('banner',emailResult==='aceito'?
-        'O serviço de e-mail aceitou o código para envio.':
-        'Código pessoal gerado. Copie agora e entregue ao beneficiário de forma segura.','ok');
+      msg('banner','Solicitação de envio aceita pelo serviço de e-mail. Confirme o recebimento com o beneficiário.','ok');
       await openRecord(selectedId);
     }catch(err){msg('banner',err.message,'error');}
     finally{setBusy(false);}
