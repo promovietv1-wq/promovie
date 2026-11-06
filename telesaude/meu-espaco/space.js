@@ -13,7 +13,8 @@
   const LIMIT_NOTES=50;
   const encoder=new TextEncoder(),decoder=new TextDecoder();
   const $=id=>document.getElementById(id);
-  const state={token:null,key:null,salt:null,revision:0,record:null,data:null,dirty:false,busy:false};
+  const state={token:null,key:null,docKey:null,salt:null,revision:0,record:null,data:null,
+    nextKey:null,nextSalt:null,previousSalt:null,recoveryMode:null,dirty:false,busy:false};
   const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
   const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
 
@@ -32,8 +33,10 @@
     return {version:1,perfil:{alergias:"",medicamentos:"",historico:""},anotacoes:[],documentos:[]};
   }
   function reset(){
-    state.token=null;state.key=null;state.salt=null;state.revision=0;state.record=null;state.data=null;state.dirty=false;
-    $("access-code").value="";$("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
+    state.token=null;state.key=null;state.docKey=null;state.salt=null;state.revision=0;
+    state.record=null;state.data=null;state.nextKey=null;state.nextSalt=null;state.previousSalt=null;
+    state.recoveryMode=null;state.dirty=false;
+    $("access-code").value="";$("vault-passphrase").value="";
     $("privacy-consent").checked=false;
     $("summary-text").textContent="";$("summary-dialog").close?.();view("login");
   }
@@ -68,11 +71,45 @@
     return crypto.subtle.deriveKey({name:"PBKDF2",salt:decode64(salt),iterations:310000,hash:"SHA-256"},
       base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
   }
-  async function encryptBytes(bytes,iv){
-    return new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},state.key,bytes));
+  // O código pessoal, já validado pelo backend, também protege os dados localmente.
+  // Usamos outro domínio criptográfico para que a chave do cofre não seja a credencial da sessão.
+  function codeSecret(code){
+    const normalized=String(code||"").trim().toUpperCase().replace(/[\s-]/g,"");
+    if(!/^[A-HJ-NP-Z2-9]{20}$/.test(normalized))throw Error("Código pessoal inválido.");
+    return "PromoVie|EspacoSaude|codigo-v2|"+normalized;
+  }
+  function newCodeSalt(){return "c2_"+encode64(crypto.getRandomValues(new Uint8Array(16)));}
+  async function keyForCode(code,salt){
+    if(!/^c2_[A-Za-z0-9_-]{22}$/.test(salt))throw Error("Formato criptográfico inválido.");
+    return keyFor(codeSecret(code),salt.slice(3));
+  }
+  async function rawKeyBits(secret,salt){
+    const material=await crypto.subtle.importKey("raw",encoder.encode(secret),{name:"PBKDF2"},false,["deriveBits"]);
+    return crypto.subtle.deriveBits({name:"PBKDF2",salt:decode64(salt),iterations:310000,hash:"SHA-256"},material,256);
+  }
+  async function openRecord(key,record){
+    let raw;
+    try{raw=await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(record.iv)},key,decode64(record.ciphertext));}
+    catch{throw Error("Não foi possível abrir os dados com a credencial utilizada.");}
+    let data;
+    try{data=JSON.parse(decoder.decode(raw));}catch{throw Error("Os dados não estão íntegros.");}
+    if(data?.version!==1||!data.perfil||!Array.isArray(data.anotacoes)||!Array.isArray(data.documentos))
+      throw Error("Formato dos dados não reconhecido. Nada foi alterado.");
+    return data;
+  }
+  async function importDocumentKey(data){
+    if(!data.documentKey)return null;
+    const bits=decode64(data.documentKey);
+    if(bits.byteLength!==32)throw Error("Chave antiga do documento inválida.");
+    const key=await crypto.subtle.importKey("raw",bits,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+    bits.fill(0);
+    return key;
+  }
+  async function encryptBytes(bytes,iv,key=state.key){
+    return new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,bytes));
   }
   async function decryptBytes(cipher,iv){
-    return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(iv)},state.key,cipher));
+    return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(iv)},state.docKey||state.key,cipher));
   }
   function changed(){
     state.dirty=true;$("save-state").textContent="Alterações ainda não salvas";
@@ -111,9 +148,9 @@
     collectProfile();
     render();
   }
-  async function save(){
+  async function save(collectForm=true){
     if(!state.token||!state.key||!state.data)return;
-    collectProfile();
+    if(collectForm)collectProfile();
     if(state.data.anotacoes.length>LIMIT_NOTES)throw Error("Limite de anotações atingido.");
     const plain=encoder.encode(JSON.stringify(state.data));
     if(plain.byteLength>70000)throw Error("Suas anotações ultrapassaram o limite deste espaço.");
@@ -121,9 +158,10 @@
     const ciphertext=await encryptBytes(plain,iv);
     const result=await api("/vault",{method:"PUT",data:{
       revision:state.revision,salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext),
-      ...(state.revision===0?{consent:true}:{})
+      ...(state.revision===0?{consent:true}:{}),
+      ...(state.previousSalt?{previousSalt:state.previousSalt}:{})
     }});
-    state.revision=result.revision;
+    state.revision=result.revision;state.previousSalt=null;
     state.record={salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)};
     state.dirty=false;$("save-state").textContent="Salvo com criptografia";
     return result;
@@ -134,6 +172,23 @@
     catch(e){notice(e?.message||"Não foi possível concluir a operação.","error");}
     finally{waiting(false);}
   }
+  function finishOpen(){
+    state.dirty=false;render();view("workspace");
+  }
+  function recoverView(mode){
+    state.recoveryMode=mode;
+    $("consent-row").hidden=true;$("privacy-consent").required=false;
+    $("legacy-wrap").hidden=false;$("vault-passphrase").required=true;
+    $("vault-passphrase").value="";
+    $("old-credential-label").textContent=mode==="old-code"?"Código de acesso anterior":"Senha privada anterior";
+    $("vault-passphrase").placeholder=mode==="old-code"?"Código usado antes da troca":"Senha usada ao criar este espaço";
+    $("unlock-title").textContent="Proteger seus dados anteriores";
+    $("unlock-description").textContent=mode==="old-code"?
+      "Seu código pessoal foi alterado. Para manter suas informações, informe o código anterior uma única vez. Ele será usado somente neste navegador.":
+      "Este espaço foi criado com uma senha antiga. Informe-a uma última vez para migrar as informações para o código pessoal da TeleSaúde.";
+    $("unlock-submit").textContent="Migrar e abrir meu espaço";
+    view("unlock");$("vault-passphrase").focus();
+  }
   $("login-form").addEventListener("submit",e=>{
     e.preventDefault();
     protectedTask(async()=>{
@@ -142,41 +197,69 @@
       state.token=session.token;$("access-code").value="";
       const vault=await api("/vault");
       state.record=vault.record;state.revision=vault.revision;
-      $("confirm-wrap").hidden=!!vault.record;
-      $("consent-row").hidden=!!vault.record;
-      $("privacy-consent").required=!vault.record;
-      $("vault-passphrase-confirm").required=!vault.record;
-      $("unlock-title").textContent=vault.record?"Desbloquear meu espaço":"Criar minha senha privada";
-      $("unlock-description").textContent=vault.record?
-        "Informe sua senha privada para abrir as informações criptografadas.":
-        "Crie uma senha privada de pelo menos 12 caracteres. Somente com ela será possível abrir seus documentos e anotações.";
-      $("unlock-submit").textContent=vault.record?"Abrir meu espaço":"Criar espaço protegido";
-      view("unlock");$("vault-passphrase").focus();
+      if(!vault.record){
+        state.salt=newCodeSalt();
+        state.key=await keyForCode(codigo,state.salt);
+        state.data=fresh();state.docKey=null;
+        $("legacy-wrap").hidden=true;$("vault-passphrase").required=false;
+        $("consent-row").hidden=false;$("privacy-consent").required=true;
+        $("unlock-title").textContent="Criar Meu Espaço de Saúde";
+        $("unlock-description").textContent="Você já está identificado. Confirme o uso opcional deste espaço. Nenhuma senha adicional será criada.";
+        $("unlock-submit").textContent="Criar meu espaço protegido";
+        view("unlock");return;
+      }
+      if(vault.record.salt.startsWith("c2_")){
+        try{
+          const key=await keyForCode(codigo,vault.record.salt);
+          const data=await openRecord(key,vault.record);
+          const docKey=await importDocumentKey(data);
+          state.key=key;state.salt=vault.record.salt;state.data=data;state.docKey=docKey;
+          finishOpen();return;
+        }catch(error){
+          if(error.message!=="Não foi possível abrir os dados com a credencial utilizada.")throw error;
+        }
+      }
+      // O novo código pode autenticar sem conseguir decifrar um cofre antigo.
+      // Preservar o conteúdo e solicitar a credencial anterior apenas para migrar.
+      state.nextSalt=newCodeSalt();
+      state.nextKey=await keyForCode(codigo,state.nextSalt);
+      recoverView(vault.record.salt.startsWith("c2_")?"old-code":"old-password");
     });
   });
   $("unlock-form").addEventListener("submit",e=>{
     e.preventDefault();
     protectedTask(async()=>{
-      const phrase=$("vault-passphrase").value;
-      if(phrase.length<12)throw Error("Use uma senha privada de pelo menos 12 caracteres.");
-      if(!state.record&&phrase!==$("vault-passphrase-confirm").value)throw Error("As duas senhas precisam ser iguais.");
-      if(!state.record&&!$("privacy-consent").checked)throw Error("É necessário aceitar o aviso de privacidade para criar seu espaço.");
-      const salt=state.record?.salt||encode64(crypto.getRandomValues(new Uint8Array(16)));
-      const key=await keyFor(phrase,salt);
-      if(state.record){
-        let raw;
-        try{raw=await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},
-          key,decode64(state.record.ciphertext));}
-        catch{throw Error("Senha privada incorreta ou dados não podem ser abertos.");}
-        let data;try{data=JSON.parse(decoder.decode(raw));}catch{throw Error("Dados do espaço não estão íntegros.");}
-        if(data?.version!==1||!data.perfil||!Array.isArray(data.anotacoes)||!Array.isArray(data.documentos))
-          throw Error("Formato do espaço desconhecido. Não foi feita nenhuma alteração.");
-        state.data=data;
-      }else state.data=fresh();
-      state.salt=salt;state.key=key;
-      $("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
-      if(!state.record)await save();
-      state.dirty=false;render();view("workspace");
+      if(!state.record){
+        if(!$("privacy-consent").checked)throw Error("Leia e aceite o aviso de privacidade para criar seu espaço.");
+        await save();finishOpen();return;
+      }
+      const old=$("vault-passphrase").value;
+      if(!old)throw Error("Informe a credencial anterior para preservar seus dados.");
+      const isCode=state.recoveryMode==="old-code";
+      const previousKey=isCode?
+        await keyForCode(old,state.record.salt):
+        await keyFor(old,state.record.salt);
+      const data=await openRecord(previousKey,state.record);
+      let docKey=await importDocumentKey(data);
+      if(data.documentos.length&&!docKey){
+        // Os anexos existentes continuam cifrados com a chave anterior.
+        // Guardar somente a chave binária dentro do NOVO cofre criptografado.
+        const oldSecret=isCode?codeSecret(old):old;
+        const oldSalt=isCode?state.record.salt.slice(3):state.record.salt;
+        const bits=await rawKeyBits(oldSecret,oldSalt);
+        data.documentKey=encode64(bits);
+        docKey=await crypto.subtle.importKey("raw",bits,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+        new Uint8Array(bits).fill(0);
+      }
+      state.data=data;state.docKey=docKey;
+      state.previousSalt=state.record.salt;state.salt=state.nextSalt;state.key=state.nextKey;
+      // No formulário de recuperação os campos clínicos estão ocultos e vazios;
+      // não substituir o perfil recém-decriptado por esses campos em branco.
+      await save(false);
+      state.nextKey=null;state.nextSalt=null;state.recoveryMode=null;
+      $("vault-passphrase").value="";
+      finishOpen();
+      notice("Informações preservadas. A partir de agora, use somente seu código pessoal atual.","success");
     });
   });
   $("unlock-back").addEventListener("click",()=>protectedTask(async()=>{
@@ -223,7 +306,7 @@
     if(state.dirty)await save();
     const id=crypto.randomUUID(),iv=crypto.getRandomValues(new Uint8Array(12));
     const buffer=await file.arrayBuffer();
-    const ciphertext=await encryptBytes(new Uint8Array(buffer),iv);
+    const ciphertext=await encryptBytes(new Uint8Array(buffer),iv,state.docKey||state.key);
     new Uint8Array(buffer).fill(0);
     await api("/documents",{method:"POST",data:{id,ciphertext:encode64(ciphertext)}});
     const meta={id,iv:encode64(iv),nome:file.name.slice(0,100),tipo:mime,tamanho:file.size,criadoEm:new Date().toISOString()};
@@ -281,18 +364,13 @@
     const bundle={format:"promovie-espaco-criptografado-v1",exportadoEm:new Date().toISOString(),
       vault:vault.record,documents};
     download(new Blob([JSON.stringify(bundle)],{type:"application/json"}),"promovie-espaco-protegido.json");
-    notice("Cópia criptografada baixada. Guarde-a com segurança e mantenha sua senha privada.","success");
+    notice("Cópia criptografada baixada. Guarde-a em local seguro e preserve o código pessoal usado para protegê-la.","success");
   }));
   $("delete-vault").addEventListener("click",()=>protectedTask(async()=>{
     const decision=prompt("Esta ação apaga permanentemente informações e documentos. Para confirmar, digite EXCLUIR:");
     if(decision!=="EXCLUIR")return;
-    const phrase=prompt("Informe sua senha privada para confirmar:");
-    if(!phrase)throw Error("Operação cancelada.");
-    try{
-      const key=await keyFor(phrase,state.salt);
-      await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},key,decode64(state.record.ciphertext));
-    }catch{throw Error("Senha privada incorreta. Nada foi excluído.");}
-    const codigo=prompt("Confirme seu código pessoal da TeleSaúde para excluir os dados:");
+    // Exclusão permanece protegida por nova confirmação do código validada pelo backend.
+    const codigo=prompt("Confirme o mesmo código pessoal da TeleSaúde para excluir os dados:");
     if(!codigo)throw Error("Operação cancelada.");
     await api("/vault",{method:"DELETE",data:{codigo}});reset();
     notice("Seu conteúdo pessoal foi excluído deste espaço.","success");

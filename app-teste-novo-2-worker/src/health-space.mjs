@@ -124,7 +124,11 @@ function envelope(data){
   for(const field of ["salt","iv","ciphertext"]){
     if(typeof data[field]!=="string"||!/^[A-Za-z0-9_-]+$/.test(data[field]))return null;
   }
-  if(data.salt.length!==22||data.iv.length!==16||data.ciphertext.length<24||
+  // Versão original: salt base64url (22 caracteres).
+  // A partir da versão 2: c2_ + salt aleatório, para diferenciar a derivação pelo código pessoal.
+  const validSalt=/^[A-Za-z0-9_-]{22}$/.test(data.salt)||
+    /^c2_[A-Za-z0-9_-]{22}$/.test(data.salt);
+  if(!validSalt||data.iv.length!==16||data.ciphertext.length<24||
      data.ciphertext.length>MAX_VAULT_CIPHER)return null;
   return data;
 }
@@ -166,8 +170,14 @@ export async function handleHealthSpace(request,env,cors={}){
           .bind(user.owner,data.salt,data.iv,data.ciphertext,now).run();
         if(result.meta?.changes!==1)return response(409,{error:"Dados atualizados em outra sessão. Recarregue."},cors);
       }else{
-        const result=await db.prepare("UPDATE pv_space_vaults SET revision=revision+1,iv=?,ciphertext=?,updated_at=? WHERE beneficiario_id=? AND revision=? AND salt=?")
-          .bind(data.iv,data.ciphertext,now,user.owner,data.revision,data.salt).run();
+        const oldSalt=data.previousSalt||data.salt;
+        if(typeof oldSalt!=="string"||
+           !(oldSalt===data.salt||
+             (/^(?:c2_)?[A-Za-z0-9_-]{22}$/.test(oldSalt)&&
+              /^c2_[A-Za-z0-9_-]{22}$/.test(data.salt))))
+          return response(400,{error:"Migração de criptografia inválida."},cors);
+        const result=await db.prepare("UPDATE pv_space_vaults SET revision=revision+1,salt=?,iv=?,ciphertext=?,updated_at=? WHERE beneficiario_id=? AND revision=? AND salt=?")
+          .bind(data.salt,data.iv,data.ciphertext,now,user.owner,data.revision,oldSalt).run();
         if(result.meta?.changes!==1)return response(409,{error:"Dados atualizados em outra sessão. Recarregue."},cors);
       }
       return response(200,{revision:data.revision+1,atualizado_em:now},cors);
