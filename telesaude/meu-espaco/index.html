@@ -32,7 +32,7 @@
   <section class="privacy-line" aria-label="Privacidade">
     <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
     <div><strong>Só você tem acesso a este conteúdo.</strong>
-      <span>Seu espaço usa uma senha privada para criptografar suas informações. Ela não é enviada à PromoVie.</span>
+      <span>Seu conteúdo é criptografado no navegador com seu código pessoal da TeleSaúde e não é compartilhado automaticamente.</span>
     </div>
   </section>
   <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
@@ -50,14 +50,12 @@
   </section>
 
   <section id="unlock-view" class="auth-panel" aria-labelledby="unlock-title" hidden>
-    <h2 id="unlock-title">Proteger seu espaço</h2>
+    <h2 id="unlock-title">Confirmar meu espaço</h2>
     <p id="unlock-description" class="muted"></p>
     <form id="unlock-form">
-      <label for="vault-passphrase">Senha privada deste espaço</label>
-      <input id="vault-passphrase" type="password" autocomplete="off" minlength="12" maxlength="200" required placeholder="Senha privada com pelo menos 12 caracteres">
-      <div id="confirm-wrap" hidden>
-        <label for="vault-passphrase-confirm">Repita a senha privada</label>
-        <input id="vault-passphrase-confirm" type="password" autocomplete="off" minlength="12" maxlength="200" placeholder="Confirme sua senha">
+      <div id="legacy-wrap" hidden>
+        <label for="vault-passphrase" id="old-credential-label">Credencial anterior</label>
+        <input id="vault-passphrase" type="password" autocomplete="off" maxlength="200" placeholder="Sua credencial anterior">
       </div>
       <label id="consent-row" class="consent-row" for="privacy-consent" hidden>
         <input type="checkbox" id="privacy-consent" required>
@@ -65,7 +63,7 @@
       </label>
       <button type="submit" class="primary" id="unlock-submit">Abrir meu espaço</button>
     </form>
-    <p class="warning"><strong>Importante:</strong> esta senha é independente do código de acesso. Se esquecê-la, a PromoVie não consegue recuperar o conteúdo criptografado.</p>
+    <p class="warning"><strong>Importante:</strong> guarde seu código pessoal com segurança. Se ele for trocado, o código anterior será necessário uma única vez para preservar os documentos já guardados. Sem ele, esses dados criptografados podem se tornar inacessíveis.</p>
     <button type="button" id="unlock-back" class="text-link">Trocar beneficiário</button>
   </section>
 
