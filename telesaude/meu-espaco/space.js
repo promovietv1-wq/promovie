@@ -71,6 +71,40 @@
     return crypto.subtle.deriveKey({name:"PBKDF2",salt:decode64(salt),iterations:310000,hash:"SHA-256"},
       base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
   }
+  // O código pessoal, já validado pelo backend, também protege os dados localmente.
+  // Usamos outro domínio criptográfico para que a chave do cofre não seja a credencial da sessão.
+  function codeSecret(code){
+    const normalized=String(code||"").trim().toUpperCase().replace(/[\\s-]/g,"");
+    if(!/^[A-HJ-NP-Z2-9]{20}$/.test(normalized))throw Error("Código pessoal inválido.");
+    return "PromoVie|EspacoSaude|codigo-v2|"+normalized;
+  }
+  function newCodeSalt(){return "c2_"+encode64(crypto.getRandomValues(new Uint8Array(16)));}
+  async function keyForCode(code,salt){
+    if(!/^c2_[A-Za-z0-9_-]{22}$/.test(salt))throw Error("Formato criptográfico inválido.");
+    return keyFor(codeSecret(code),salt.slice(3));
+  }
+  async function rawKeyBits(secret,salt){
+    const material=await crypto.subtle.importKey("raw",encoder.encode(secret),{name:"PBKDF2"},false,["deriveBits"]);
+    return crypto.subtle.deriveBits({name:"PBKDF2",salt:decode64(salt),iterations:310000,hash:"SHA-256"},material,256);
+  }
+  async function openRecord(key,record){
+    let raw;
+    try{raw=await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(record.iv)},key,decode64(record.ciphertext));}
+    catch{throw Error("Não foi possível abrir os dados com a credencial utilizada.");}
+    let data;
+    try{data=JSON.parse(decoder.decode(raw));}catch{throw Error("Os dados não estão íntegros.");}
+    if(data?.version!==1||!data.perfil||!Array.isArray(data.anotacoes)||!Array.isArray(data.documentos))
+      throw Error("Formato dos dados não reconhecido. Nada foi alterado.");
+    return data;
+  }
+  async function importDocumentKey(data){
+    if(!data.documentKey)return null;
+    const bits=decode64(data.documentKey);
+    if(bits.byteLength!==32)throw Error("Chave antiga do documento inválida.");
+    const key=await crypto.subtle.importKey("raw",bits,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+    bits.fill(0);
+    return key;
+  }
   async function encryptBytes(bytes,iv,key=state.key){
     return new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,bytes));
   }
