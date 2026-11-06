@@ -500,18 +500,16 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .patient-login #access-cpf{margin-bottom:16px}
 .patient-login-help{font:400 11px/1.5 var(--font-body);color:#817a91;text-align:left;margin:8px 0 0}
 .patient-remember{
-  display:flex;align-items:center;gap:11px;margin-top:17px;padding:12px 13px;
-  border:1px solid #ede8f7;border-radius:13px;background:#f7f4fd;
+  display:flex;align-items:center;gap:8px;margin-top:11px;padding:7px 9px;
+  border:1px solid #e7e1f0;border-radius:8px;background:#fff;
   color:#443366;cursor:pointer;transition:border-color .2s ease,background .2s ease
 }
 .patient-remember:hover{border-color:#d6c7f2;background:#f5effe}
 .patient-login .patient-remember input{
-  width:18px;height:18px;min-height:18px;flex:0 0 18px;display:inline-block;
+  width:16px;height:16px;min-height:16px;flex:0 0 16px;display:inline-block;
   box-sizing:border-box;margin:0;padding:0;accent-color:#6324c3;cursor:pointer
 }
-.patient-remember span{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
-.patient-remember strong{font:700 12px/1.3 var(--font-body);color:#443366}
-.patient-remember small{font:400 10.5px/1.4 var(--font-body);color:#847895}
+.patient-remember span{flex:1;min-width:0;font:600 11px/1.4 var(--font-body);color:#443366}
 .patient-remember:focus-within{outline:2px solid rgba(115,52,216,.3);outline-offset:2px}
 @media(max-width:700px){
   .main:not(.phone-expanded) .patient-login{margin-bottom:12px;padding:19px 18px;border-radius:22px}
@@ -859,10 +857,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
         <p class="patient-login-help">Seu código é pessoal. Não compartilhe com outras pessoas.</p>
         <label class="patient-remember" for="remember-access">
           <input id="remember-access" type="checkbox" autocomplete="off" />
-          <span>
-            <strong>Salvar CPF e código no gerenciador de senhas</strong>
-            <small>Se estiver habilitado, o navegador poderá solicitar sua confirmação para salvar.</small>
-          </span>
+          <span>Salvar CPF e código no gerenciador de senhas</span>
         </label>
       </div>
       <button type="submit" class="install" id="install-now" aria-label="Acessar" disabled>
