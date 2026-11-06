@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'telesaude/index.html'
+      - 'telesaude/atendimento/index.html'
       - '.github/workflows/telesaude-page-check.yml'
   workflow_dispatch:
 
@@ -25,18 +26,30 @@ jobs:
           import re
           page=Path('telesaude/index.html').read_text()
           source=Path('app-teste-novo-2/index.html').read_text()
+          attendance=Path('telesaude/atendimento/index.html').read_text()
           js=re.findall(r'<script[^>]*>(.*?)</script>', page, flags=re.DOTALL|re.IGNORECASE)
           assert len(js)>=1, 'Deve haver pelo menos um bloco JavaScript'
           Path('/tmp/telesaude.js').write_text('\n;\n'.join(js))
+          attendance_js=re.findall(r'<script[^>]*>(.*?)</script>', attendance, flags=re.DOTALL|re.IGNORECASE)
+          assert len(attendance_js)==1, 'A pagina exclusiva deve ter um script de inicializacao'
+          Path('/tmp/telesaude-atendimento.js').write_text(attendance_js[0])
           assert 'const ACCESS="/api/promovie/access/v1"' in page
           assert 'const BACKEND_URL="https://backend.promovie.tv.br"' in page
           assert 'id="access-cpf"' in page and 'id="access-code"' in page
-          assert 'Código pessoal de acesso' in page
+          assert 'Código de acesso' in page
           assert 'CPF do paciente fictício' not in page
           assert 'MEDIQUO_V3_SECRET_KEY' not in page
           assert 'type="password"' in page
           assert 'phone-zoom-trigger' in page and 'class="hero-heart"' in page
           assert page.count('class="chat-row"')==source.count('class="chat-row"')==8
+          assert 'window.location.assign("/telesaude/atendimento/")' in page
+          assert 'sessionStorage.setItem(handoffKey' in page
+          assert 'window.sessionStorage.removeItem(HANDOFF_KEY)' in attendance
+          assert 'isMobileView:true' in attendance
+          assert 'launcher:"hidden"' in attendance
+          assert 'MediquoWidget.open' not in page and 'widget.open()' in attendance
+          assert 'id="access-cpf"' not in attendance and 'id="access-code"' not in attendance
           print('Estrutura visual, integracao v3 e protecao de credenciais verificadas')
           PY
           node --check /tmp/telesaude.js
+          node --check /tmp/telesaude-atendimento.js
