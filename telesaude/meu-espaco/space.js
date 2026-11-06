@@ -286,7 +286,9 @@
       const key=await keyFor(phrase,state.salt);
       await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},key,decode64(state.record.ciphertext));
     }catch{throw Error("Senha privada incorreta. Nada foi excluído.");}
-    await api("/vault",{method:"DELETE"});reset();
+    const codigo=prompt("Confirme seu código pessoal da TeleSaúde para excluir os dados:");
+    if(!codigo)throw Error("Operação cancelada.");
+    await api("/vault",{method:"DELETE",data:{codigo}});reset();
     notice("Seu conteúdo pessoal foi excluído deste espaço.","success");
   }));
   window.addEventListener("beforeunload",e=>{
