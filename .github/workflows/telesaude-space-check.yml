@@ -73,7 +73,7 @@ jobs:
         run: |
           python -m http.server 8769 --bind 127.0.0.1 >/tmp/pv-space-server.log 2>&1 &
           sleep 2
-          node .github/scripts/validate-health-space-ui.mjs
+          node telesaude/meu-espaco/ui-check.mjs
       - name: Guardar evidências visuais do teste
         if: always()
         uses: actions/upload-artifact@v4
