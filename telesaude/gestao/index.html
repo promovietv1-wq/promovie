@@ -458,8 +458,16 @@
       msg('banner','Informe o e-mail do beneficiário para ativar e enviar o acesso.','error');
       $('new-email').focus();return;
     }
-    setBusy(true);msg('banner','Salvando no arquivo privado...');
+    setBusy(true);msg('banner','Verificando disponibilidade do envio...');
     try{
+      if(activate){
+        const health=await request('/health');
+        if(health.email_delivery_ready!==true){
+          msg('banner','O envio automático ainda não está publicado e ativado no backend. Nenhum cadastro foi realizado. Tente novamente após a liberação.','error');
+          return;
+        }
+      }
+      msg('banner','Salvando no arquivo privado...');
       const data=await request('/records',{method:'POST',body:{
         nome:$('new-name').value,cpf:$('new-cpf').value,email:$('new-email').value,
         telefone:$('new-phone').value
@@ -562,6 +570,9 @@
     if(!confirm('Enviar um novo código pessoal diretamente ao e-mail cadastrado? O código anterior será substituído somente se o provedor aceitar o envio.'))return;
     setBusy(true);msg('banner','Solicitando envio do código pessoal...');
     try{
+      const health=await request('/health');
+      if(health.email_delivery_ready!==true)
+        throw Error('O envio automático ainda não está publicado e ativado no backend. Nenhum código foi emitido.');
       const result=await request('/records/'+encodeURIComponent(selectedId)+'/access-code',{method:'POST',body:{}});
       if(result.entrega_email!=='aceito')throw Error('O serviço de e-mail não confirmou a solicitação.');
       personalDialog.showModal();
