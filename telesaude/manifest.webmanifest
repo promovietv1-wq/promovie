@@ -1,0 +1,27 @@
+{
+  "name": "TeleSaúde PromoVie",
+  "short_name": "TeleSaúde",
+  "description": "Acesse os serviços da TeleSaúde PromoVie.",
+  "lang": "pt-BR",
+  "id": "/telesaude/",
+  "start_url": "/telesaude/",
+  "scope": "/telesaude/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4b0c8f",
+  "icons": [
+    {
+      "src": "/app/icons/heart-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icons/heart-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "prefer_related_applications": false
+}

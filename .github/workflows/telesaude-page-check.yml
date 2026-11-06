@@ -4,6 +4,10 @@ on:
     paths:
       - 'telesaude/index.html'
       - 'telesaude/atendimento/index.html'
+      - 'telesaude/manifest.webmanifest'
+      - 'telesaude/pwa-install.js'
+      - 'telesaude/sw.js'
+      - 'telesaude/pwa-install.test.mjs'
       - '.github/workflows/telesaude-page-check.yml'
   workflow_dispatch:
 
@@ -53,3 +57,8 @@ jobs:
           PY
           node --check /tmp/telesaude.js
           node --check /tmp/telesaude-atendimento.js
+      - name: Validar manifesto, interações e service worker da instalação
+        run: |
+          node --check telesaude/pwa-install.js
+          node --check telesaude/sw.js
+          node --test telesaude/pwa-install.test.mjs
