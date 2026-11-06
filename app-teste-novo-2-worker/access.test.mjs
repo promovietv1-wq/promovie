@@ -105,6 +105,7 @@ async function call(handler,db,path,{method='GET',body,cookie,originHeader=origi
       const code=message.text.match(/Código pessoal: ([A-HJ-NP-Z2-9-]+)/)?.[1];
       assert.ok(code,'Código presente apenas no e-mail simulado');
       sentCodes.push(code);
+      if(overrides.RESEND_TEST_FAIL)return new Response(JSON.stringify({error:'falha simulada'}),{status:429});
       return new Response(JSON.stringify({id:'aceito-ficticio'}),{status:200,
         headers:{'Content-Type':'application/json'}});
     };
@@ -236,6 +237,52 @@ test('se o serviço de e-mail estiver desabilitado, nenhum código é criado ou 
   assert.equal(incomplete.status,503);
   assert.equal(db.accessCodes.get(id).code_hash,oldHash);
 });
+test('falha do e-mail mantém o código antigo e não revela código novo ao administrador',async()=>{
+  const {db,cookie,id}=await seed();
+  const original=await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
+  assert.equal(original.status,200);
+  const oldHash=db.accessCodes.get(id).code_hash;
+  const failed=await call(handleAdmin,db,'/records/'+id+'/access-code',
+    {method:'POST',cookie,body:{}},{RESEND_TEST_FAIL:true});
+  assert.equal(failed.status,503);
+  assert.equal(db.accessCodes.get(id).code_hash,oldHash);
+  assert.equal(db.pendingCodes.size,0);
+  assert.equal('codigo' in (await failed.json()),false);
+});
+
+test('falha no D1 após o aceite deixa código do e-mail válido como pendente',async()=>{
+  const {db,cookie,id}=await seed();
+  const originalPrepare=db.prepare.bind(db);
+  db.prepare=sql=>{
+    if(sql.startsWith('INSERT INTO pv_access_codes('))return {
+      bind(){return this;},async run(){throw Error('falha de escrita simulada');}
+    };
+    return originalPrepare(sql);
+  };
+  const failed=await call(handleAdmin,db,'/records/'+id+'/access-code',
+    {method:'POST',cookie,body:{}});
+  assert.equal(failed.status,500);
+  assert.equal(db.pendingCodes.size,1);
+  assert.equal('codigo' in (await failed.json()),false);
+  db.prepare=originalPrepare;
+  const code=sentCodes.at(-1);
+  const mock=vendorMock();
+  try{
+    const login=await call(handleBeneficiaryAccess,db,'/session',{
+      method:'POST',body:{cpf,codigo:code}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
+    assert.equal(login.status,200);
+  }finally{mock.restore();}
+});
+
+test('envio duplicado pendente é bloqueado e não sobrescreve a reserva',async()=>{
+  const {db,cookie,id}=await seed();
+  db.pendingCodes.set(id,{code_hash:'hash-de-reserva-anterior'});
+  const other=await call(handleAdmin,db,'/records/'+id+'/access-code',
+    {method:'POST',cookie,body:{}});
+  assert.equal(other.status,409);
+  assert.equal(db.pendingCodes.get(id).code_hash,'hash-de-reserva-anterior');
+});
+
 test('interface pública não contém autenticação fictícia nem chaves privadas',async()=>{
   const html=await readFile(new URL('../telesaude/index.html',import.meta.url),'utf8');
   const panel=await readFile(new URL('../telesaude/gestao/index.html',import.meta.url),'utf8');
