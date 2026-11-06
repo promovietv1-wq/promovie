@@ -35,6 +35,12 @@ function memoryDb(){
       return {
         bind(...values){p=values;return this;},
         async first(){
+          if(sql.includes("WHERE b.id=? AND b.situacao='ativo'")){
+            const person=people.get(p[0]);
+            return person&&person.situacao==='ativo'?{
+              cpf_index:person.cpf_index,current_hash:person.code_hash,pending_hash:null
+            }:null;
+          }
           if(sql.includes('FROM pv_space_attempts'))return attempts.get(p[0])||null;
           if(sql.includes('FROM pv_beneficiarios b LEFT JOIN pv_access_codes')){
             const row=Array.from(people.values()).find(x=>x.cpf_index===p[0]&&x.situacao==='ativo');
@@ -180,7 +186,9 @@ test('documentos só podem ser vistos e excluídos pelo proprietário',async()=>
 test('exclusão do cofre remove o consentimento e invalida a sessão',async()=>{
   const {env,db}=await fixture(),token=await login(env);
   assert.equal((await call(env,'/vault',{method:'PUT',token,data:vault})).status,200);
-  assert.equal((await call(env,'/vault',{method:'DELETE',token})).status,200);
+  assert.equal((await call(env,'/vault',{method:'DELETE',token,data:{codigo:codeB}})).status,403);
+  assert.equal(db.vaults.has('person-a'),true,'Código de outro titular não pode excluir dados');
+  assert.equal((await call(env,'/vault',{method:'DELETE',token,data:{codigo:codeA}})).status,200);
   assert.equal(db.consents.has('person-a'),false);
   assert.equal(db.vaults.has('person-a'),false);
   assert.equal((await call(env,'/vault',{token})).status,401);
