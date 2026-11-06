@@ -23,9 +23,9 @@ const base={
 };
 function database(){
   const sessions=new Map(),attempts=new Map(),people=new Map(),history=[];
-  const accessCodes=new Map(),accessAttempts=new Map(),schemas=[];
+  const accessCodes=new Map(),pendingCodes=new Map(),accessAttempts=new Map(),schemas=[];
   return {
-    sessions,attempts,people,history,accessCodes,accessAttempts,schemas,
+    sessions,attempts,people,history,accessCodes,pendingCodes,accessAttempts,schemas,
     async exec(sql){schemas.push(sql);return {success:true};},
     prepare(sql){
       let a=[];
@@ -39,10 +39,12 @@ function database(){
             return [...people.values()].find(x=>x.cpf_index===a[0])||null;
           if(sql.includes('FROM pv_beneficiarios WHERE id=?'))return people.get(a[0])||null;
           if(sql.includes('FROM pv_access_attempts'))return accessAttempts.get(a[0])||null;
-          if(sql.includes('JOIN pv_access_codes')){
+          if(sql.includes('FROM pv_access_codes_pending'))return pendingCodes.get(a[0])||null;
+          if(sql.includes('LEFT JOIN pv_access_codes')){
             const p=[...people.values()].find(x=>x.cpf_index===a[0]&&x.situacao==='ativo');
-            if(!p||!accessCodes.has(p.id))return null;
-            return {id:p.id,code_hash:accessCodes.get(p.id).code_hash};
+            if(!p)return null;
+            return {id:p.id,code_hash:accessCodes.get(p.id)?.code_hash||null,
+              pending_hash:pendingCodes.get(p.id)?.code_hash||null};
           }
           throw Error('SQL first inesperada: '+sql);
         },
@@ -62,12 +64,20 @@ function database(){
           });
           else if(sql.startsWith('INSERT INTO pv_historico'))history.push({
             id:a[0],beneficiario_id:a[1],evento:a[2],registrado_em:a[3],detalhes:a[4]});
+          else if(sql.startsWith('INSERT OR IGNORE INTO pv_access_codes_pending')){
+            if(pendingCodes.has(a[0]))return {success:true,meta:{changes:0}};
+            pendingCodes.set(a[0],{code_hash:a[1],criado_em:a[2]});
+          }
+          else if(sql.startsWith('DELETE FROM pv_access_codes_pending')){
+            const p=pendingCodes.get(a[0]);
+            if(p&&p.code_hash===a[1])pendingCodes.delete(a[0]);
+          }
           else if(sql.startsWith('INSERT INTO pv_access_codes'))accessCodes.set(a[0],{code_hash:a[1],criado_em:a[2]});
           else if(sql.startsWith('DELETE FROM pv_access_codes'))accessCodes.delete(a[0]);
           else if(sql.startsWith('INSERT INTO pv_access_attempts'))accessAttempts.set(a[0],{attempts:a[1],expires_at:a[2]});
           else if(sql.startsWith('DELETE FROM pv_access_attempts'))accessAttempts.delete(a[0]);
           else throw Error('SQL run inesperada: '+sql);
-          return {success:true};
+          return {success:true,meta:{changes:1}};
         }
       };
     }
@@ -142,6 +152,7 @@ test('gestor gera código aleatório de 20 caracteres, guardado somente como HMA
   assert.ok(!db.accessCodes.get(id).code_hash.includes(code.replace(/-/g,'')));
   assert.ok(!db.history.some(x=>x.detalhes?.includes(code)));
   assert.ok(db.schemas.some(sql=>sql.includes('pv_access_codes')));
+  assert.equal(db.pendingCodes.size,0,'Código pendente removido após gravação bem-sucedida');
   const renew=await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
   assert.equal('codigo' in (await renew.json()),false);
   assert.notEqual(sentCodes.at(-1),code);
