@@ -1,0 +1,45 @@
+name: TeleSaude - verificar arquivos publicados do Meu Espaco
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/promovie-space-public-pages-check.yml'
+      - 'telesaude/meu-espaco/**'
+      - 'telesaude/space-entry.js'
+      - 'telesaude/index.html'
+      - 'telesaude/portal-premium.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Conferir páginas e arquivos reais sem autenticar nem consultar pacientes
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          const host='https://www.promovie.tv.br';
+          const paths=[
+            ['/telesaude/', 'Meu Espaço de Saúde'],
+            ['/telesaude/space-entry.js','disponivel===true'],
+            ['/telesaude/meu-espaco/','login-form'],
+            ['/telesaude/meu-espaco/space.js','PBKDF2'],
+            ['/telesaude/meu-espaco/space.css','workspace-toolbar'],
+            ['/telesaude/meu-espaco/privacidade.html','Aviso de privacidade']
+          ];
+          for(const [path,needle] of paths){
+            const r=await fetch(host+path,{headers:{'Cache-Control':'no-cache'},
+              signal:AbortSignal.timeout(15000)});
+            assert.equal(r.status,200,'Recurso publicado: '+path);
+            const content=await r.text();
+            assert.ok(content.includes(needle),'Conteúdo correto: '+path);
+            console.log('Publicado e verificado:',path);
+          }
+          JS
