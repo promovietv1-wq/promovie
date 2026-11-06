@@ -356,6 +356,7 @@
   <h2 id="access-code-title">Código pessoal gerado</h2>
   <p>Entregue este código somente ao beneficiário. Ele é individual e substitui qualquer código anterior. Após fechar esta janela, não será possível visualizá-lo novamente.</p>
   <code id="generated-access-code" aria-label="Código pessoal de acesso"></code>
+  <p id="access-email-status" role="status" aria-live="polite" hidden></p>
   <div class="actions">
     <button id="copy-access-code" type="button">Copiar código</button>
     <button id="close-access-code" class="secondary" type="button">Fechar</button>
@@ -489,8 +490,9 @@
                 if(!personalCode)throw Error('O código pessoal não foi disponibilizado.');
                 $('generated-access-code').textContent=personalCode;
                 $('copy-access-code').textContent='Copiar código';
+                showEmailStatus(personal);
                 $('access-code-dialog').showModal();
-                msg('banner','Beneficiário ativo. Copie o código pessoal para entregar ao titular.','ok');
+                msg('banner','Beneficiário ativo. Código pessoal gerado.','ok');
               }catch{
                 msg('banner','Beneficiário ativo. Para entregar o acesso, abra o cadastro e selecione Gerar código pessoal.','info');
               }
@@ -557,13 +559,27 @@
   }
   const personalDialog=$('access-code-dialog');
   let personalCode='';
+  function showEmailStatus(result){
+    const status=result?.entrega_email||'desativado';
+    const text={
+      aceito:'Solicitação de envio por e-mail aceita. Confira a entrega com o beneficiário.',
+      falhou:'O e-mail não pôde ser enviado. Copie o código e entregue-o de forma segura.',
+      sem_email:'Sem e-mail válido cadastrado. Copie o código para entrega manual.',
+      indisponivel:'Envio por e-mail ainda não configurado. A entrega manual continua disponível.'
+    }[status]||'';
+    const el=$('access-email-status');
+    el.textContent=text;
+    el.hidden=!text;
+    return status;
+  }
   function closePersonalCode(){
     personalCode='';
     $('generated-access-code').textContent='';
+    $('access-email-status').textContent='';$('access-email-status').hidden=true;
     if(personalDialog.open)personalDialog.close();
   }
   $('close-access-code').addEventListener('click',closePersonalCode);
-  personalDialog.addEventListener('close',()=>{personalCode='';$('generated-access-code').textContent='';});
+  personalDialog.addEventListener('close',()=>{personalCode='';$('generated-access-code').textContent='';$('access-email-status').textContent='';$('access-email-status').hidden=true;});
   $('copy-access-code').addEventListener('click',async()=>{
     if(!personalCode)return;
     try{
@@ -583,8 +599,9 @@
       if(!personalCode)throw Error('O servidor não retornou o código pessoal.');
       $('generated-access-code').textContent=personalCode;
       $('copy-access-code').textContent='Copiar código';
+      showEmailStatus(result);
       personalDialog.showModal();
-      msg('banner','Código pessoal gerado. Copie agora e entregue ao beneficiário de forma segura.','ok');
+      msg('banner','Código pessoal gerado. Consulte o resultado do envio na janela.','ok');
       await openRecord(selectedId);
     }catch(err){msg('banner',err.message,'error');}
     finally{setBusy(false);}
