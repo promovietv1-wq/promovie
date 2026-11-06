@@ -59,6 +59,10 @@
         <label for="vault-passphrase-confirm">Repita a senha privada</label>
         <input id="vault-passphrase-confirm" type="password" autocomplete="off" minlength="12" maxlength="200" placeholder="Confirme sua senha">
       </div>
+      <label id="consent-row" class="consent-row" for="privacy-consent" hidden>
+        <input type="checkbox" id="privacy-consent" required>
+        <span>Concordo em guardar minhas informações pessoais de saúde neste espaço protegido. Li o <a href="/telesaude/meu-espaco/privacidade.html" target="_blank" rel="noopener noreferrer">aviso de privacidade</a> e sei que posso excluir meu conteúdo.</span>
+      </label>
       <button type="submit" class="primary" id="unlock-submit">Abrir meu espaço</button>
     </form>
     <p class="warning"><strong>Importante:</strong> esta senha é independente do código de acesso. Se esquecê-la, a PromoVie não consegue recuperar o conteúdo criptografado.</p>
