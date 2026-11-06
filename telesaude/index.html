@@ -711,8 +711,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 <link rel="stylesheet" href="/telesaude/portal-premium.css?v=20261106-2">
 <style>
 /* Hierarquia editorial do acesso: somente textos e responsividade, sem alterar a lógica. */
-.copy .lead{max-width:min(100%,360px);line-height:1.7;text-wrap:pretty}
-.patient-login-top{align-items:center;gap:14px}
+.copy .lead{max-width:min(100%,390px);line-height:1.62}
+.copy .lead-sentence{display:block;text-wrap:balance;max-width:100%}
+.copy .lead-sentence + .lead-sentence{margin-top:12px}
+.copy .lead-sentence--care{font-weight:650;color:#ffffff}
+.patient-login-top{align-items:center;gap:14px;margin-bottom:18px}
+.patient-login-heading{gap:0}
+.patient-login-mark{align-self:center;margin:0}
 .patient-login-heading{flex:1;min-width:0;gap:4px}
 .patient-login-title{
   display:block;font:750 clamp(21px,2.15vw,27px)/1.2 var(--font-display);
@@ -723,8 +728,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   color:#766e85;overflow-wrap:break-word
 }
 @media(max-width:700px){
-  .main:not(.phone-expanded) .copy .lead{max-width:100%;line-height:1.6}
-  .main:not(.phone-expanded) .patient-login-top{gap:12px;margin-bottom:20px}
+  .main:not(.phone-expanded) .copy .lead{max-width:100%;line-height:1.55}
+  .main:not(.phone-expanded) .copy .lead-sentence + .lead-sentence{margin-top:9px}
+  .main:not(.phone-expanded) .patient-login-top{gap:12px;margin-bottom:15px}
+  .main.phone-expanded .patient-login-top{margin-bottom:15px}
   .main:not(.phone-expanded) .patient-login-title{font-size:clamp(20px,5.2vw,24px);line-height:1.2}
   .main:not(.phone-expanded) .patient-login-subtitle{font-size:12px;line-height:1.45}
 }
@@ -751,7 +758,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       <img class="hero-heart" src="/app/icons/heart-512.png" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
     </div>
     <h1 id="hero-title">Telemedicina e autocuidado <span class="gradient">na palma da sua mão.</span></h1>
-    <p class="lead">Converse com profissionais de saúde de onde estiver. Cuidar de si é cuidar de quem você ama.</p>
+    <p class="lead"><span class="lead-sentence">Converse com profissionais de saúde de onde estiver.</span><span class="lead-sentence lead-sentence--care">Cuidar de si é cuidar de quem você ama.</span></p>
   </section>
   <div class="right-col">
     <div class="phone-stage">
@@ -793,7 +800,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           </span>
           <span class="patient-login-heading">
             <strong class="patient-login-title">Acesse sua TeleSaúde</strong>
-            <span class="patient-login-subtitle">Médicos e Especialistas</span>
           </span>
         </div>
         <label class="patient-login-label" for="access-cpf">Seu CPF</label>
