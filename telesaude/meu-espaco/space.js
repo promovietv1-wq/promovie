@@ -148,9 +148,9 @@
     collectProfile();
     render();
   }
-  async function save(){
+  async function save(collectForm=true){
     if(!state.token||!state.key||!state.data)return;
-    collectProfile();
+    if(collectForm)collectProfile();
     if(state.data.anotacoes.length>LIMIT_NOTES)throw Error("Limite de anotações atingido.");
     const plain=encoder.encode(JSON.stringify(state.data));
     if(plain.byteLength>70000)throw Error("Suas anotações ultrapassaram o limite deste espaço.");
@@ -253,7 +253,9 @@
       }
       state.data=data;state.docKey=docKey;
       state.previousSalt=state.record.salt;state.salt=state.nextSalt;state.key=state.nextKey;
-      await save();
+      // No formulário de recuperação os campos clínicos estão ocultos e vazios;
+      // não substituir o perfil recém-decriptado por esses campos em branco.
+      await save(false);
       state.nextKey=null;state.nextSalt=null;state.recoveryMode=null;
       $("vault-passphrase").value="";
       finishOpen();
