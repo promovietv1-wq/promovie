@@ -671,3 +671,170 @@ body{
 @media(prefers-reduced-motion:reduce){
   .phone .chat-row,.patient-remember{transition:none}
 }
+
+
+/* Portal PromoVie Mobile 2026: experiência nativa de acesso.
+   Exclusivamente CSS para até 700px; desktop, SDK e autenticação intocados. */
+@media(max-width:700px){
+  body:has(.main:not(.phone-expanded)){
+    background:linear-gradient(175deg,#f7f4ff 0%,#faf9fd 46%,#f5f7fc 100%);
+  }
+  .site-header{
+    height:67px;background:rgba(255,255,255,.97);
+    border-bottom:1px solid #efebf6;box-shadow:none;
+  }
+  .site-header .container{width:calc(100% - 36px)}
+  .main:not(.phone-expanded){
+    display:grid;grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"copy" "install";
+    width:min(470px,calc(100% - 28px));min-height:0;
+    margin:15px auto 32px;padding:0;gap:0;align-items:stretch;
+    overflow:hidden;isolation:isolate;
+    background:#fff;border:1px solid rgba(219,212,240,.8);
+    border-radius:28px;
+    box-shadow:0 18px 55px rgba(54,36,107,.10),0 3px 12px rgba(54,36,107,.03);
+  }
+  .main:not(.phone-expanded) .right-col{display:contents}
+  .main:not(.phone-expanded) .copy{
+    grid-area:copy;position:relative;display:grid;
+    grid-template-columns:74px minmax(0,1fr);
+    grid-template-areas:"heart heading" "lead lead";
+    align-items:center;column-gap:15px;row-gap:12px;
+    width:100%;max-width:none;margin:0;padding:25px 23px 26px;
+    color:#fff;overflow:hidden;isolation:isolate;
+    border:0;border-radius:27px 27px 0 0;box-shadow:none;
+    background:
+      radial-gradient(ellipse 70% 110% at 100% 0%,rgba(201,177,255,.22),transparent 68%),
+      linear-gradient(130deg,#3c1a79 0%,#5934a9 59%,#4a5eaa 100%);
+  }
+  .main:not(.phone-expanded) .copy::before{
+    display:block;content:"";position:absolute;z-index:-1;pointer-events:none;
+    width:70%;height:83%;top:-28%;right:-17%;bottom:auto;left:auto;
+    border-radius:47% 53% 34% 66% / 49% 38% 62% 51%;
+    border:1px solid rgba(255,255,255,.10);transform:rotate(-18deg);
+    background:linear-gradient(125deg,rgba(255,255,255,.07),transparent 72%);
+    box-shadow:none;
+  }
+  .main:not(.phone-expanded) .copy::after{
+    display:block;content:"";position:absolute;z-index:-1;pointer-events:none;
+    width:59%;height:36%;right:-30%;bottom:-21%;top:auto;left:auto;
+    border:1px solid rgba(255,255,255,.075);
+    border-radius:45% 55% 48% 52%;
+    background:linear-gradient(125deg,rgba(185,233,255,.08),transparent 65%);
+    transform:rotate(-16deg);box-shadow:none;
+  }
+  .main:not(.phone-expanded) .heart-stage{
+    grid-area:heart;width:74px;height:76px;margin:0;
+    display:grid;place-items:center;justify-self:start;
+  }
+  .main:not(.phone-expanded) .heart-stage::before{
+    inset:4%;filter:blur(9px);border-radius:22px;
+    background:linear-gradient(115deg,rgba(255,255,255,.085),rgba(255,255,255,.015));
+    transform:rotate(-11deg);
+  }
+  .main:not(.phone-expanded) .heart-stage::after{display:none}
+  .main:not(.phone-expanded) .hero-heart{
+    width:73px;height:73px;animation:none;will-change:auto;
+    filter:drop-shadow(0 6px 11px rgba(23,13,57,.16));
+  }
+  .main:not(.phone-expanded) .copy h1{
+    grid-area:heading;max-width:100%;margin:0;padding:0;
+    font:600 clamp(20px,5.55vw,23px)/1.22 var(--font-display);
+    letter-spacing:-.039em;color:#fff;background:none;
+    -webkit-text-fill-color:#fff;text-align:left;
+  }
+  .main:not(.phone-expanded) .copy h1 .gradient{
+    display:inline;padding:0;-webkit-text-fill-color:#d5eefc;color:#d5eefc;
+  }
+  .main:not(.phone-expanded) .lead{
+    grid-area:lead;width:100%;max-width:none;margin:2px 0 0;padding:0;
+    font:450 13px/1.54 var(--font-body);
+    letter-spacing:0;text-align:left;color:#eae3f9;
+  }
+  .main:not(.phone-expanded) .lead-break{display:block;margin-top:0}
+  /* A maquete 3D permanece no desktop e no HTML, mas não toma espaço no acesso mobile. */
+  .main:not(.phone-expanded) .phone-stage{display:none !important}
+  .main:not(.phone-expanded) .install-block{
+    grid-area:install;justify-self:stretch;align-self:stretch;
+    width:100%;max-width:none;min-width:0;margin:0;padding:26px 22px 22px;
+    background:
+      radial-gradient(ellipse 80% 60% at 96% 0%,rgba(127,91,214,.034),transparent 74%),
+      linear-gradient(180deg,#fff 0%,#fdfcff 100%);
+    box-shadow:none;border:0;border-radius:0 0 27px 27px;text-align:left;z-index:2;
+  }
+  .main:not(.phone-expanded) .install-block::before,
+  .main:not(.phone-expanded) .install-block::after{display:none}
+  .main:not(.phone-expanded) .patient-login{
+    padding:0;margin:0 0 15px;border:0;border-radius:0;
+    background:transparent;box-shadow:none;isolation:auto;
+  }
+  .main:not(.phone-expanded) .patient-login-top{
+    display:grid;grid-template-columns:46px minmax(0,1fr);
+    grid-template-rows:25px auto;
+    column-gap:12px;row-gap:2px;align-items:center;
+    padding:0;margin:0 0 22px;
+  }
+  .main:not(.phone-expanded) .patient-login-heading{display:contents}
+  .main:not(.phone-expanded) .patient-login-mark{
+    grid-column:1;grid-row:1;justify-self:center;align-self:center;
+    width:44px;height:44px;min-width:44px;flex:none;transform:none;margin:0;
+    border:1px solid #e4d9f8;border-radius:14px;
+    background:linear-gradient(142deg,#f3edff,#eae0fc);
+    box-shadow:0 5px 11px rgba(85,39,150,.055);
+  }
+  .main:not(.phone-expanded) .patient-login-mark svg{width:23px;height:23px}
+  .main:not(.phone-expanded) .patient-login-title{
+    grid-column:2;grid-row:1;align-self:center;
+    margin:0;font:650 18px/25px var(--font-display);
+    letter-spacing:-.029em;color:#302044;white-space:normal;
+  }
+  .main:not(.phone-expanded) .patient-login-subtitle{
+    grid-column:2;grid-row:2;align-self:start;
+    margin:0;font:500 11.8px/17px var(--font-body);color:#78708b;
+  }
+  .main:not(.phone-expanded) .patient-login-label{
+    font:650 12px/1.4 var(--font-body);color:#584766;margin:0 0 7px;
+  }
+  .main:not(.phone-expanded) .patient-login input:not([type="checkbox"]){
+    width:100%;min-height:51px;padding:12px 15px;
+    border-radius:12px;border:1px solid #e2dbed;background:#fff;
+    font:550 16px var(--font-body);color:#30223f;
+    box-shadow:inset 0 1px 1px rgba(50,28,90,.015);
+  }
+  .main:not(.phone-expanded) .patient-login #access-cpf{margin-bottom:16px}
+  .main:not(.phone-expanded) .patient-login-help{
+    margin:8px 0 0;font:400 11.5px/1.5 var(--font-body);color:#787187;
+  }
+  .main:not(.phone-expanded) .patient-remember{
+    margin-top:14px;padding:11px 12px;gap:10px;
+    border:1px solid #f0ecf7;border-radius:12px;
+    background:#faf8fe;box-shadow:none;
+  }
+  .main:not(.phone-expanded) .patient-remember strong{font-size:12px}
+  .main:not(.phone-expanded) .patient-remember small{font-size:10.5px;line-height:1.3}
+  .main:not(.phone-expanded) .install{
+    width:100%;min-height:55px;margin:0;padding:12px 16px;
+    border-radius:13px;
+    background:linear-gradient(106deg,#5422a0,#743bd5 65%,#5669d8);
+    font:750 15px/1.25 var(--font-body);letter-spacing:0;
+    box-shadow:0 10px 22px rgba(92,47,167,.20),
+               inset 0 1px 0 rgba(255,255,255,.17);
+  }
+  .main:not(.phone-expanded) .install svg{width:19px;height:19px}
+  .main:not(.phone-expanded) #sdk-entry-status:not([hidden]){margin:13px 0 0}
+}
+@media(max-width:370px){
+  .main:not(.phone-expanded){
+    width:calc(100% - 20px);margin-top:10px;border-radius:23px;
+  }
+  .main:not(.phone-expanded) .copy{
+    padding:20px 17px 21px;
+    grid-template-columns:62px minmax(0,1fr);
+    column-gap:11px;row-gap:10px;
+  }
+  .main:not(.phone-expanded) .heart-stage{width:62px;height:64px}
+  .main:not(.phone-expanded) .hero-heart{width:61px;height:61px}
+  .main:not(.phone-expanded) .copy h1{font-size:clamp(18px,5.4vw,20px)}
+  .main:not(.phone-expanded) .install-block{padding:23px 17px 20px}
+  .main:not(.phone-expanded) .patient-login-title{font-size:16.8px}
+}
