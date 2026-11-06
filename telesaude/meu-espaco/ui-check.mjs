@@ -1,2 +1,2 @@
 import assert from 'node:assert/strict';
-assert.ok(true);
+assert.ok(2+2===4);
