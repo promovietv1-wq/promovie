@@ -7,7 +7,7 @@
     "node": ">=20.10.0"
   },
   "scripts": {
-    "test": "node --test test.mjs v3.test.mjs admin.test.mjs access.test.mjs access-email.test.mjs space.test.mjs",
+    "test": "node --test test.mjs v3.test.mjs admin.test.mjs access.test.mjs access-email.test.mjs health-space.test.mjs",
     "deploy": "wrangler deploy"
   },
   "devDependencies": {
