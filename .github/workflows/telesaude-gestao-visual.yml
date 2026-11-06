@@ -205,6 +205,58 @@ jobs:
             }
           }finally{await browser.close();}
           JS
+      - name: Conferir centralização externa da Médiquo sem sessão nem dados reais
+        run: |
+          python -m http.server 8767 --bind 127.0.0.1 >/tmp/pv-attendance-layout.log 2>&1 &
+          sleep 2
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from 'playwright';
+          const browser=await chromium.launch({headless:true});
+          const sizes=[390,768,1024,1099,1100,1280,1650,1920];
+          try{
+            for(const width of sizes){
+              const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
+              // Sem token/sessão: somente CSS e contêiner local simulado, sem carregar a Médiquo.
+              await page.goto('http://127.0.0.1:8767/telesaude/atendimento/',{waitUntil:'domcontentloaded'});
+              await page.evaluate(()=>{
+                const shell=document.createElement('div');
+                shell.id='MediquoContainer';
+                shell.setAttribute('aria-label','Contêiner visual de prova, sem SDK');
+                const iframe=document.createElement('iframe');
+                iframe.title='Moldura simulada para verificar responsividade';
+                shell.appendChild(iframe);
+                document.body.appendChild(shell);
+              });
+              const layout=await page.evaluate(()=>{
+                const host=document.querySelector('#MediquoContainer');
+                const rect=host.getBoundingClientRect();
+                const iframe=host.querySelector('iframe').getBoundingClientRect();
+                const header=document.querySelector('.topbar').getBoundingClientRect();
+                return {left:rect.left,right:rect.right,width:rect.width,top:rect.top,
+                  viewport:innerWidth,scroll:document.documentElement.scrollWidth,
+                  headerHeight:header.height,iframeWidth:iframe.width,
+                  brandVisible:getComputedStyle(document.querySelector('.stage'),'::after').content!=='none'};
+              });
+              assert.ok(layout.scroll<=layout.viewport+1,'Rolagem horizontal: '+JSON.stringify(layout));
+              assert.ok(Math.abs(layout.top-layout.headerHeight)<2,'Widget deve ficar logo abaixo do cabeçalho');
+              assert.ok(layout.iframeWidth>=layout.width-5,'Iframe deve continuar com largura total do contêiner');
+              if(width<1100){
+                assert.ok(Math.abs(layout.left)<2,'Telas pequenas não podem mudar: '+JSON.stringify(layout));
+                assert.ok(Math.abs(layout.width-width)<2,'Largura original preservada: '+JSON.stringify(layout));
+                assert.equal(layout.brandVisible,false);
+              }else{
+                assert.ok(layout.width<=1180.5,'Limite desktop: '+JSON.stringify(layout));
+                assert.ok(Math.abs(layout.left-(width-layout.width)/2)<2,'Widget deve ficar centralizado: '+JSON.stringify(layout));
+                assert.ok(layout.left>=45,'Respiro externo no desktop: '+JSON.stringify(layout));
+                assert.equal(layout.brandVisible,true);
+              }
+              await page.screenshot({path:'/tmp/pv-prints/atendimento-container-'+width+'.png',fullPage:true});
+              console.log('Contêiner externo validado:',width+'px');
+              await page.close();
+            }
+          }finally{await browser.close();}
+          JS
       - name: Guardar capturas para inspeção
         if: always()
         uses: actions/upload-artifact@v4
