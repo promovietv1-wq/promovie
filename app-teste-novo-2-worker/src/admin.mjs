@@ -314,7 +314,8 @@ export async function handleAdmin(request,env,cors={}){
       const ok=await d1(env).prepare('SELECT 1 AS ok').first();
       if(ok?.ok!==1)throw Error('D1 falhou');
       return reply(200,{ok:true,banco:'conectado',credenciais:'configuradas',cadastro_real_habilitado:val(env,'TELESAUDE_V3_WRITE_ENABLED')==='true',
-        email_delivery_ready:emailDeliveryEnabled(env)&&!!val(env,'RESEND_API_KEY')&&!!val(env,'PROMOVIE_ACCESS_EMAIL_FROM')},baseCors);
+        email_delivery_ready:emailDeliveryEnabled(env)&&!!val(env,'RESEND_API_KEY')&&!!val(env,'PROMOVIE_ACCESS_EMAIL_FROM'),
+        email_delivery_diagnostics:{flag_active:emailDeliveryEnabled(env),key_present:!!val(env,'RESEND_API_KEY'),sender_present:!!val(env,'PROMOVIE_ACCESS_EMAIL_FROM')}},baseCors);
     }catch{
       return reply(503,{ok:false,error:'Banco administrativo indisponível.'},baseCors);
     }
