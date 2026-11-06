@@ -1,5 +1,6 @@
 // Painel privado PromoVie | Cloudflare D1.
 // Cadastro administrativo não é prontuário. Não armazenar dados clínicos.
+import {sendAccessEmail} from './access-email.mjs';
 const PREFIX='/api/promovie/admin/v1';
 const COOKIE='__Host-pv_admin';
 const SESSION_TTL=60*60; // 1 hora
@@ -383,7 +384,13 @@ export async function handleAdmin(request,env,cors={}){
       await db.prepare('INSERT INTO pv_access_codes(beneficiario_id,code_hash,criado_em) VALUES(?,?,?) ON CONFLICT(beneficiario_id) DO UPDATE SET code_hash=excluded.code_hash,criado_em=excluded.criado_em')
         .bind(row.id,hash,now).run();
       await appendLog(db,row.id,'codigo_gerado','Código pessoal criado sem armazenar o valor em texto');
-      return reply(200,{ok:true,codigo:code,informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
+      // Serviço externo é opcional. Se desativado ou indisponível, a entrega manual continua igual.
+      const entregaEmail=await sendAccessEmail(env,{
+        email:item.email,nome:item.nome,codigo:code,recordId:row.id
+      });
+      if(entregaEmail==='aceito')await appendLog(db,row.id,'email_codigo_aceito','Serviço de e-mail aceitou a solicitação de envio (entrega não confirmada)');
+      return reply(200,{ok:true,codigo:code,entrega_email:entregaEmail,
+        informacao:'Código pessoal gerado. Copie e entregue ao beneficiário de modo seguro. Ele não será exibido novamente.'},baseCors);
     }
     if(method==='POST'&&action==='archive'&&row.situacao!=='arquivado'){
       await db.prepare('UPDATE pv_beneficiarios SET situacao_anterior=?,situacao=?,arquivado_em=?,atualizado_em=? WHERE id=?')
