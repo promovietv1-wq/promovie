@@ -4,6 +4,9 @@ on:
     paths:
       - 'telesaude/meu-espaco/**'
       - '.github/scripts/validate-health-space-ui.mjs'
+      - 'telesaude/space-entry.js'
+      - 'telesaude/index.html'
+      - 'telesaude/portal-premium.css'
       - 'app-teste-novo-2-worker/src/health-space.mjs'
       - 'app-teste-novo-2-worker/src/index.mjs'
       - '.github/workflows/telesaude-space-check.yml'
@@ -24,6 +27,7 @@ jobs:
       - name: Analisar JavaScript sem executar atendimento nem usar pacientes
         run: |
           node --check telesaude/meu-espaco/space.js
+          node --check telesaude/space-entry.js
           node --check app-teste-novo-2-worker/src/health-space.mjs
           node --check app-teste-novo-2-worker/src/index.mjs
       - name: Garantias de arquitetura, privacidade e CSP
@@ -45,6 +49,10 @@ jobs:
           assert 'pv_space_sessions' in api and 'pv_space_vaults' in api
           assert 'beneficiario_id=?' in api and 'PROMOVIE_SPACE_ENABLED' in api
           assert 'handleHealthSpace' in worker and 'handleBeneficiaryAccess' in worker and 'handleV3' in worker
+          entry=Path('telesaude/space-entry.js').read_text()
+          portal=Path('telesaude/index.html').read_text()
+          assert 'disponivel===true' in entry
+          assert 'class="space-entry" hidden' in portal
           assert 'window.MediquoWidget' not in js
           print('Estrutura independente validada sem gravar ou consultar dados reais.')
           PY
