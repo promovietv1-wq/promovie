@@ -146,32 +146,30 @@ html body .mediquo-launcher{display:none!important}
     padding-left:max(28px,calc((100vw - 1180px)/2));
     padding-right:max(28px,calc((100vw - 1180px)/2))
   }
+  /* Fundo suave, com cápsulas de gradiente inspiradas na página inicial.
+     Apenas decorativo e exclusivo do desktop, atrás do contêiner Médiquo. */
   .stage{
     background:
-      radial-gradient(ellipse 28% 54% at 0 40%,rgba(91,29,169,.22),transparent 90%),
-      radial-gradient(ellipse 26% 48% at 100% 68%,rgba(115,52,216,.16),transparent 90%),
-      linear-gradient(135deg,#f0ebfa 0%,#faf9fe 54%,#eee7f9 100%)
+      radial-gradient(ellipse 35% 48% at 8% 72%,rgba(115,52,216,.095),transparent 90%),
+      radial-gradient(ellipse 35% 46% at 94% 24%,rgba(0,189,232,.065),transparent 90%),
+      linear-gradient(135deg,#f8f6fd 0%,#fcfbff 52%,#f7f4fd 100%)
   }
-  /* Formas orgânicas roxas da PromoVie nos espaços externos do desktop.
-     O widget fica acima destes elementos e não recebe alterações internas. */
   .stage::before,.stage::after{
-    content:"";position:absolute;top:0;bottom:0;pointer-events:none
+    content:"";position:absolute;display:block;pointer-events:none;
+    width:clamp(290px,35vw,520px);height:clamp(105px,11vw,160px);
+    border-radius:999px;
+    border:1px solid rgba(120,73,204,.22);
+    background:linear-gradient(110deg,rgba(75,12,143,.07),rgba(115,52,216,.24) 53%,rgba(0,189,232,.10));
+    box-shadow:0 0 0 23px rgba(115,52,216,.025),inset 0 1px 0 rgba(255,255,255,.48);
+    opacity:.85
   }
   .stage::before{
-    left:0;width:clamp(155px,24vw,470px);
-    background:
-      radial-gradient(ellipse at 5% 10%,rgba(0,189,232,.30),transparent 48%),
-      linear-gradient(156deg,#39136f 0%,#6324b5 45%,#9463d4 100%);
-    clip-path:polygon(0 0,100% 0,25% 34%,76% 66%,0 100%);
-    opacity:.91
+    left:clamp(-175px,-9vw,-95px);top:16%;
+    transform:rotate(-30deg)
   }
   .stage::after{
-    right:0;width:clamp(160px,24vw,460px);
-    background:
-      radial-gradient(circle at 84% 78%,rgba(0,189,232,.34),transparent 45%),
-      linear-gradient(202deg,#4b0c8f 0%,#6d37bd 55%,#a77de0 100%);
-    clip-path:polygon(100% 0,34% 0,72% 38%,22% 73%,100% 100%);
-    opacity:.72
+    right:clamp(-190px,-10vw,-100px);bottom:17%;
+    transform:rotate(-28deg)
   }
   html body #MediquoContainer,
   html body .MediquoContainer,
