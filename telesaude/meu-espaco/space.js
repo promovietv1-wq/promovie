@@ -172,6 +172,23 @@
     catch(e){notice(e?.message||"Não foi possível concluir a operação.","error");}
     finally{waiting(false);}
   }
+  function finishOpen(){
+    state.dirty=false;render();view("workspace");
+  }
+  function recoverView(mode){
+    state.recoveryMode=mode;
+    $("consent-row").hidden=true;$("privacy-consent").required=false;
+    $("legacy-wrap").hidden=false;$("vault-passphrase").required=true;
+    $("vault-passphrase").value="";
+    $("old-credential-label").textContent=mode==="old-code"?"Código de acesso anterior":"Senha privada anterior";
+    $("vault-passphrase").placeholder=mode==="old-code"?"Código usado antes da troca":"Senha usada ao criar este espaço";
+    $("unlock-title").textContent="Proteger seus dados anteriores";
+    $("unlock-description").textContent=mode==="old-code"?
+      "Seu código pessoal foi alterado. Para manter suas informações, informe o código anterior uma única vez. Ele será usado somente neste navegador.":
+      "Este espaço foi criado com uma senha antiga. Informe-a uma última vez para migrar as informações para o código pessoal da TeleSaúde.";
+    $("unlock-submit").textContent="Migrar e abrir meu espaço";
+    view("unlock");$("vault-passphrase").focus();
+  }
   $("login-form").addEventListener("submit",e=>{
     e.preventDefault();
     protectedTask(async()=>{
@@ -180,41 +197,67 @@
       state.token=session.token;$("access-code").value="";
       const vault=await api("/vault");
       state.record=vault.record;state.revision=vault.revision;
-      $("confirm-wrap").hidden=!!vault.record;
-      $("consent-row").hidden=!!vault.record;
-      $("privacy-consent").required=!vault.record;
-      $("vault-passphrase-confirm").required=!vault.record;
-      $("unlock-title").textContent=vault.record?"Desbloquear meu espaço":"Criar minha senha privada";
-      $("unlock-description").textContent=vault.record?
-        "Informe sua senha privada para abrir as informações criptografadas.":
-        "Crie uma senha privada de pelo menos 12 caracteres. Somente com ela será possível abrir seus documentos e anotações.";
-      $("unlock-submit").textContent=vault.record?"Abrir meu espaço":"Criar espaço protegido";
-      view("unlock");$("vault-passphrase").focus();
+      if(!vault.record){
+        state.salt=newCodeSalt();
+        state.key=await keyForCode(codigo,state.salt);
+        state.data=fresh();state.docKey=null;
+        $("legacy-wrap").hidden=true;$("vault-passphrase").required=false;
+        $("consent-row").hidden=false;$("privacy-consent").required=true;
+        $("unlock-title").textContent="Criar Meu Espaço de Saúde";
+        $("unlock-description").textContent="Você já está identificado. Confirme o uso opcional deste espaço. Nenhuma senha adicional será criada.";
+        $("unlock-submit").textContent="Criar meu espaço protegido";
+        view("unlock");return;
+      }
+      if(vault.record.salt.startsWith("c2_")){
+        try{
+          const key=await keyForCode(codigo,vault.record.salt);
+          const data=await openRecord(key,vault.record);
+          const docKey=await importDocumentKey(data);
+          state.key=key;state.salt=vault.record.salt;state.data=data;state.docKey=docKey;
+          finishOpen();return;
+        }catch(error){
+          if(error.message!=="Não foi possível abrir os dados com a credencial utilizada.")throw error;
+        }
+      }
+      // O novo código pode autenticar sem conseguir decifrar um cofre antigo.
+      // Preservar o conteúdo e solicitar a credencial anterior apenas para migrar.
+      state.nextSalt=newCodeSalt();
+      state.nextKey=await keyForCode(codigo,state.nextSalt);
+      recoverView(vault.record.salt.startsWith("c2_")?"old-code":"old-password");
     });
   });
   $("unlock-form").addEventListener("submit",e=>{
     e.preventDefault();
     protectedTask(async()=>{
-      const phrase=$("vault-passphrase").value;
-      if(phrase.length<12)throw Error("Use uma senha privada de pelo menos 12 caracteres.");
-      if(!state.record&&phrase!==$("vault-passphrase-confirm").value)throw Error("As duas senhas precisam ser iguais.");
-      if(!state.record&&!$("privacy-consent").checked)throw Error("É necessário aceitar o aviso de privacidade para criar seu espaço.");
-      const salt=state.record?.salt||encode64(crypto.getRandomValues(new Uint8Array(16)));
-      const key=await keyFor(phrase,salt);
-      if(state.record){
-        let raw;
-        try{raw=await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},
-          key,decode64(state.record.ciphertext));}
-        catch{throw Error("Senha privada incorreta ou dados não podem ser abertos.");}
-        let data;try{data=JSON.parse(decoder.decode(raw));}catch{throw Error("Dados do espaço não estão íntegros.");}
-        if(data?.version!==1||!data.perfil||!Array.isArray(data.anotacoes)||!Array.isArray(data.documentos))
-          throw Error("Formato do espaço desconhecido. Não foi feita nenhuma alteração.");
-        state.data=data;
-      }else state.data=fresh();
-      state.salt=salt;state.key=key;
-      $("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
-      if(!state.record)await save();
-      state.dirty=false;render();view("workspace");
+      if(!state.record){
+        if(!$("privacy-consent").checked)throw Error("Leia e aceite o aviso de privacidade para criar seu espaço.");
+        await save();finishOpen();return;
+      }
+      const old=$("vault-passphrase").value;
+      if(!old)throw Error("Informe a credencial anterior para preservar seus dados.");
+      const isCode=state.recoveryMode==="old-code";
+      const previousKey=isCode?
+        await keyForCode(old,state.record.salt):
+        await keyFor(old,state.record.salt);
+      const data=await openRecord(previousKey,state.record);
+      let docKey=await importDocumentKey(data);
+      if(data.documentos.length&&!docKey){
+        // Os anexos existentes continuam cifrados com a chave anterior.
+        // Guardar somente a chave binária dentro do NOVO cofre criptografado.
+        const oldSecret=isCode?codeSecret(old):old;
+        const oldSalt=isCode?state.record.salt.slice(3):state.record.salt;
+        const bits=await rawKeyBits(oldSecret,oldSalt);
+        data.documentKey=encode64(bits);
+        docKey=await crypto.subtle.importKey("raw",bits,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+        new Uint8Array(bits).fill(0);
+      }
+      state.data=data;state.docKey=docKey;
+      state.previousSalt=state.record.salt;state.salt=state.nextSalt;state.key=state.nextKey;
+      await save();
+      state.nextKey=null;state.nextSalt=null;state.recoveryMode=null;
+      $("vault-passphrase").value="";
+      finishOpen();
+      notice("Informações preservadas. A partir de agora, use somente seu código pessoal atual.","success");
     });
   });
   $("unlock-back").addEventListener("click",()=>protectedTask(async()=>{
