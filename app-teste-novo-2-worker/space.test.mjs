@@ -92,7 +92,7 @@ function request(path,{method='GET',data,token,headerOrigin=origin}={}){
 async function hit(env,path,options){return handleHealthSpace(request(path,options),env,{'Access-Control-Allow-Origin':origin});}
 async function login(env,number=cpf,c=code){
   const r=await hit(env,'/session',{method:'POST',data:{cpf:number,codigo:c}});
-  assert.equal(r.status,200,await r.text().catch(()=>''));return (await r.json()).token;
+  const result=await r.json();assert.equal(r.status,200,JSON.stringify(result));return result.token;
 }
 test('endpoint desativado por padrão; health verifica configuração e origem',async()=>{
   const {env}=await seed();
