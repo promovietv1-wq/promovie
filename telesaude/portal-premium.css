@@ -927,3 +927,19 @@ body{
     margin-top:2px;
   }
 }
+
+/* Link ao espaço pessoal: independente do acesso clínico Médiquo. */
+.space-entry[hidden]{display:none!important}
+.space-entry{
+  display:flex;align-items:center;text-align:left;gap:11px;width:100%;margin:14px auto 0;
+  padding:12px 13px;border:1px solid #ded5ed;border-radius:13px;background:#faf8fd;
+  color:#4d267e;text-decoration:none;transition:border-color .2s ease,background .2s ease,transform .2s ease
+}
+.space-entry:hover{border-color:#baa7d8;background:#f4effb;transform:translateY(-1px)}
+.space-entry:focus-visible{outline:3px solid #4ac3df;outline-offset:2px}
+.space-entry svg{width:25px;height:25px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.space-entry span{display:flex;min-width:0;flex:1;flex-direction:column;gap:2px}
+.space-entry strong{font-size:12px;line-height:1.4;font-weight:800;letter-spacing:-.01em}
+.space-entry small{font-size:10px;font-weight:500;line-height:1.4;color:#756888}
+.space-entry svg.space-arrow{height:17px;width:17px;opacity:.75}
+@media(max-width:480px){.space-entry{margin-top:11px;padding:11px 12px}.space-entry strong{font-size:12px}}

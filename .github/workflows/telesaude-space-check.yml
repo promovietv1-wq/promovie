@@ -1,0 +1,83 @@
+name: TeleSaude - verificar Meu Espaco de Saude (isolado)
+on:
+  push:
+    paths:
+      - 'telesaude/meu-espaco/**'
+      - '.github/scripts/validate-health-space-ui.mjs'
+      - 'telesaude/space-entry.js'
+      - 'telesaude/index.html'
+      - 'telesaude/portal-premium.css'
+      - 'app-teste-novo-2-worker/src/health-space.mjs'
+      - 'app-teste-novo-2-worker/src/index.mjs'
+      - '.github/workflows/telesaude-space-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Analisar JavaScript sem executar atendimento nem usar pacientes
+        run: |
+          node --check telesaude/meu-espaco/space.js
+          node --check telesaude/space-entry.js
+          node --check app-teste-novo-2-worker/src/health-space.mjs
+          node --check app-teste-novo-2-worker/src/index.mjs
+      - name: Garantias de arquitetura, privacidade e CSP
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          h=Path('telesaude/meu-espaco/index.html').read_text()
+          js=Path('telesaude/meu-espaco/space.js').read_text()
+          api=Path('app-teste-novo-2-worker/src/health-space.mjs').read_text()
+          worker=Path('app-teste-novo-2-worker/src/index.mjs').read_text()
+          for key in ['login-form','unlock-form','workspace-view','privacy-consent',
+                      'documents-list','notes-list','export-backup','delete-vault']:
+              assert f'id="{key}"' in h, f'Campo ausente: {key}'
+          assert "script-src 'self'" in h, 'Aplicativo exige CSP restritiva'
+          assert 'AES-GCM' in js and 'PBKDF2' in js and '310000' in js
+          assert 'credentials:"omit"' in js and 'Authorization=' in js
+          assert 'localStorage' not in js.replace('localStorage, IndexedDB, cookies JS','')
+          assert 'sessionStorage' not in js
+          assert 'pv_space_sessions' in api and 'pv_space_vaults' in api
+          assert 'beneficiario_id=?' in api and 'PROMOVIE_SPACE_ENABLED' in api
+          assert 'handleHealthSpace' in worker and 'handleBeneficiaryAccess' in worker and 'handleV3' in worker
+          entry=Path('telesaude/space-entry.js').read_text()
+          portal=Path('telesaude/index.html').read_text()
+          assert 'disponivel===true' in entry
+          assert 'class="space-entry" hidden' in portal
+          assert 'window.MediquoWidget' not in js
+          print('Estrutura independente validada sem gravar ou consultar dados reais.')
+          PY
+
+  navegador:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar Playwright e Chromium para testes sem dados reais
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar criação, abertura e armazenamento criptografado no desktop e celular
+        run: |
+          python -m http.server 8769 --bind 127.0.0.1 >/tmp/pv-space-server.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-health-space-ui.mjs
+      - name: Guardar evidências visuais do teste
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validacao-meu-espaco-saude
+          path: /tmp/pv-space-shots
+          if-no-files-found: ignore

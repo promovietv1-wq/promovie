@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#4b0c8f">
+<meta http-equiv="Cache-Control" content="no-store">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src https://backend.promovie.tv.br; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<title>Meu Espaço de Saúde | TeleSaúde PromoVie</title>
+<meta name="description" content="Seu espaço pessoal para organizar informações de saúde e preparar consultas.">
+<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+<link rel="manifest" href="/telesaude/manifest.webmanifest">
+<link rel="stylesheet" href="/telesaude/meu-espaco/space.css">
+<script src="/telesaude/meu-espaco/space.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="identity" href="/telesaude/" aria-label="TeleSaúde PromoVie, página de acesso">
+    <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="54" height="54" alt="">
+    <strong>TeleSaúde PromoVie</strong>
+  </a>
+  <a class="top-link" href="/telesaude/">Voltar à TeleSaúde</a>
+</header>
+<main class="container">
+  <div class="page-intro">
+    <span class="eyebrow"><span class="circle" aria-hidden="true"></span> Meu Espaço de Saúde</span>
+    <h1>Suas informações, no seu espaço.</h1>
+    <p>Organize o que pode ser importante para uma consulta. Você decide o que compartilhar com o profissional.</p>
+  </div>
+  <section class="privacy-line" aria-label="Privacidade">
+    <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    <div><strong>Só você tem acesso a este conteúdo.</strong>
+      <span>Seu espaço usa uma senha privada para criptografar suas informações. Ela não é enviada à PromoVie.</span>
+    </div>
+  </section>
+  <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
+
+  <section id="login-view" class="auth-panel" aria-labelledby="login-title">
+    <h2 id="login-title">Acessar meu espaço</h2>
+    <p class="muted">Utilize o mesmo CPF e código pessoal da sua TeleSaúde.</p>
+    <form id="login-form" autocomplete="on">
+      <label for="cpf">CPF</label>
+      <input id="cpf" name="username" inputmode="numeric" autocomplete="username" maxlength="14" required placeholder="000.000.000-00">
+      <label for="access-code">Código pessoal</label>
+      <input id="access-code" name="password" type="password" autocomplete="current-password" maxlength="32" required placeholder="Seu código de acesso">
+      <button type="submit" class="primary">Entrar com segurança</button>
+    </form>
+  </section>
+
+  <section id="unlock-view" class="auth-panel" aria-labelledby="unlock-title" hidden>
+    <h2 id="unlock-title">Proteger seu espaço</h2>
+    <p id="unlock-description" class="muted"></p>
+    <form id="unlock-form">
+      <label for="vault-passphrase">Senha privada deste espaço</label>
+      <input id="vault-passphrase" type="password" autocomplete="off" minlength="12" maxlength="200" required placeholder="Senha privada com pelo menos 12 caracteres">
+      <div id="confirm-wrap" hidden>
+        <label for="vault-passphrase-confirm">Repita a senha privada</label>
+        <input id="vault-passphrase-confirm" type="password" autocomplete="off" minlength="12" maxlength="200" placeholder="Confirme sua senha">
+      </div>
+      <label id="consent-row" class="consent-row" for="privacy-consent" hidden>
+        <input type="checkbox" id="privacy-consent" required>
+        <span>Concordo em guardar minhas informações pessoais de saúde neste espaço protegido. Li o <a href="/telesaude/meu-espaco/privacidade.html" target="_blank" rel="noopener noreferrer">aviso de privacidade</a> e sei que posso excluir meu conteúdo.</span>
+      </label>
+      <button type="submit" class="primary" id="unlock-submit">Abrir meu espaço</button>
+    </form>
+    <p class="warning"><strong>Importante:</strong> esta senha é independente do código de acesso. Se esquecê-la, a PromoVie não consegue recuperar o conteúdo criptografado.</p>
+    <button type="button" id="unlock-back" class="text-link">Trocar beneficiário</button>
+  </section>
+
+  <section id="workspace-view" hidden>
+    <div class="workspace-toolbar">
+      <div><h2>Meu Espaço de Saúde</h2><p id="save-state" class="muted">Informações protegidas</p></div>
+      <div class="toolbar-actions">
+        <button type="button" id="save-all" class="primary">Salvar alterações</button>
+        <button type="button" id="logout" class="secondary">Sair</button>
+      </div>
+    </div>
+    <div class="columns">
+      <section class="panel">
+        <div class="panel-heading"><span class="icon-disc" aria-hidden="true">+</span><div><h3>Informações importantes</h3><p>Tenha os dados essenciais à mão para consultas.</p></div></div>
+        <label for="allergies">Alergias e reações</label>
+        <textarea id="allergies" maxlength="3000" rows="3" placeholder="Ex.: medicamento, alimento ou outras alergias"></textarea>
+        <label for="medications">Medicamentos em uso</label>
+        <textarea id="medications" maxlength="3000" rows="3" placeholder="Nome, dosagem e frequência, se souber"></textarea>
+        <label for="history">Informações de saúde que quero lembrar</label>
+        <textarea id="history" maxlength="4000" rows="4" placeholder="Condições anteriores, cirurgias, observações relevantes"></textarea>
+      </section>
+      <div class="right-column">
+        <section class="panel">
+          <div class="panel-heading"><span class="icon-disc" aria-hidden="true">✎</span><div><h3>Anotações e perguntas</h3><p>Registre sintomas, dúvidas e assuntos para conversar na consulta.</p></div></div>
+          <form id="note-form">
+            <label for="note-kind">Tipo de anotação</label>
+            <select id="note-kind"><option value="pergunta">Pergunta para a consulta</option><option value="sintoma">Sintoma ou observação</option><option value="outro">Outra anotação</option></select>
+            <label for="note-text">Minha anotação</label>
+            <textarea id="note-text" maxlength="2500" rows="3" placeholder="Escreva o que gostaria de lembrar"></textarea>
+            <button type="submit" class="secondary">Adicionar anotação</button>
+          </form>
+          <ul id="notes-list" class="item-list"></ul>
+          <p id="notes-empty" class="empty">Nenhuma anotação adicionada.</p>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><span class="icon-disc" aria-hidden="true">▤</span><div><h3>Meus documentos</h3><p>Exames, receitas e laudos em PDF ou imagem.</p></div></div>
+          <label for="file-input">Adicionar documento criptografado</label>
+          <input id="file-input" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+          <p class="help">Até 500 KB por arquivo, no máximo 10 documentos nesta versão.</p>
+          <button type="button" id="upload-file" class="secondary">Guardar documento</button>
+          <ul id="documents-list" class="item-list"></ul>
+          <p id="documents-empty" class="empty">Nenhum documento guardado.</p>
+        </section>
+      </div>
+    </div>
+    <section class="panel practical">
+      <div><h3>Preparar a consulta</h3><p>Monte um resumo com suas informações para revisar ou compartilhar por escolha própria.</p></div>
+      <button type="button" id="make-summary" class="secondary">Ver resumo</button>
+    </section>
+    <section class="panel management">
+      <div><h3>Seus dados, suas escolhas</h3><p>Baixe uma cópia criptografada para guardar ou exclua seu conteúdo deste espaço.</p></div>
+      <div class="toolbar-actions">
+        <button type="button" id="export-backup" class="secondary">Baixar cópia protegida</button>
+        <button type="button" id="delete-vault" class="danger">Excluir todo o conteúdo</button>
+      </div>
+    </section>
+  </section>
+</main>
+<dialog id="summary-dialog" aria-labelledby="summary-title">
+  <div class="dialog-head"><h2 id="summary-title">Resumo para a consulta</h2><button type="button" class="close" id="close-summary" aria-label="Fechar resumo">×</button></div>
+  <p class="muted">O compartilhamento é opcional. Revise antes de enviar.</p>
+  <pre id="summary-text"></pre>
+  <button type="button" class="primary" id="copy-summary">Copiar resumo</button>
+</dialog>
+</body>
+</html>
