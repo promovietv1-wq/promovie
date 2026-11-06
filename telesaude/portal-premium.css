@@ -293,3 +293,195 @@ body{
   .main:not(.phone-expanded) .patient-login-title{font-weight:650}
   .main:not(.phone-expanded) .patient-login-subtitle{font-size:12px}
 }
+
+
+/* Acabamento visual 3D | Mockup ilustrativo, sem modificar o Widget.
+   Brilhos e reflexos sao decorativos; o toque nas especialidades permanece ativo. */
+.lead-break{display:block}
+.phone{
+  border:7px solid transparent;
+  background:
+    linear-gradient(#fefeff,#fefeff) padding-box,
+    linear-gradient(142deg,#d4d8e1 0%,#555d6c 9%,#111525 24%,#343b4c 54%,#a6adb9 84%,#262a38 100%) border-box;
+  box-shadow:
+    4px 0 0 -1px rgba(208,214,230,.46),
+    -3px 1px 0 -1px rgba(235,238,251,.34),
+    11px 12px 10px -8px rgba(10,10,28,.42),
+    20px 32px 49px rgba(13,10,36,.34),
+    inset 0 0 0 1px rgba(0,0,0,.62);
+  backface-visibility:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.phone::before{
+  width:87px;height:18px;
+  background:linear-gradient(180deg,#05070f,#171b29 62%,#090a13);
+  border:1px solid rgba(35,39,55,.75);
+  box-shadow:inset 0 -1px 2px rgba(248,250,255,.09),0 2px 3px rgba(6,7,18,.27);
+  border-radius:0 0 14px 14px;
+}
+.phone::after{
+  inset:1.5px;
+  border-radius:34px;
+  border:1px solid rgba(255,255,255,.43);
+  box-shadow:inset 1px 0 1px rgba(255,255,255,.22),inset -1px 0 1px rgba(25,25,40,.15);
+  background:linear-gradient(113deg,rgba(255,255,255,.115) 0%,rgba(255,255,255,.045) 15%,transparent 30%,transparent 76%,rgba(220,227,252,.09) 96%);
+  pointer-events:none;
+  z-index:5;
+}
+.phone-screen{
+  border-radius:35px;
+  background:linear-gradient(162deg,#fff 0%,#fbfaff 75%,#f6f8fc 100%);
+  box-shadow:inset 0 0 3px rgba(26,19,54,.1);
+}
+.phone-glass-glint{
+  position:absolute;inset:1px;z-index:7;pointer-events:none;
+  border-radius:35px;
+  background:
+    linear-gradient(111deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.055) 18%,transparent 28%),
+    linear-gradient(162deg,transparent 63%,rgba(206,225,249,.11) 100%);
+  opacity:.43;
+}
+.phone-glass-glint::after{
+  content:"";position:absolute;left:12px;top:25px;bottom:42px;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.7) 25%,rgba(255,255,255,.3) 68%,transparent);
+  opacity:.7;
+}
+.phone .list-heading{
+  background:linear-gradient(180deg,#fff,#fbfaff);
+  border-bottom:1px solid rgba(226,222,237,.8);
+}
+.phone .list-heading strong{font-size:11px;font-weight:750;letter-spacing:-.015em;color:#34234f}
+.phone .chat-list{background:linear-gradient(175deg,#fff,#fcfbff)}
+.phone .chat-row{
+  border-bottom-color:rgba(226,223,237,.65);
+  transition:background-color .16s ease;
+}
+.phone .chat-row img{
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 2px 5px rgba(54,37,99,.12);
+}
+.phone .phone-nav{
+  background:linear-gradient(180deg,rgba(255,255,255,.99),#f8f7fc);
+  box-shadow:0 -2px 8px rgba(54,37,99,.035);
+}
+/* Fundo com linhas orgânicas suaves, não halos circulares. */
+@media(min-width:1080px){
+  .copy::before{
+    width:75%;height:36%;right:-17%;top:5%;bottom:auto;
+    border:1px solid rgba(255,255,255,.085);
+    border-radius:48% 52% 34% 66% / 55% 35% 65% 45%;
+    transform:rotate(-26deg);
+    background:linear-gradient(118deg,rgba(240,237,255,.07),rgba(255,255,255,.015) 52%,transparent 78%);
+    box-shadow:0 35px 85px rgba(130,218,243,.04);
+  }
+  .copy::after{
+    content:"";left:-17%;right:auto;top:auto;bottom:6%;width:79%;height:18%;
+    border:1px solid rgba(225,235,255,.12);border-radius:120px;
+    transform:rotate(-24deg);
+    background:linear-gradient(130deg,rgba(224,223,255,.09),rgba(160,221,242,.025) 55%,transparent);
+    pointer-events:none;
+  }
+  .heart-stage::before{
+    inset:20% -12% 23% -12%;
+    border-radius:54% 46% 62% 38% / 42% 50% 50% 58%;
+    transform:rotate(-23deg);
+    background:linear-gradient(120deg,rgba(255,255,255,.145),rgba(193,220,255,.028) 60%,transparent);
+    filter:blur(12px);
+  }
+  .heart-stage::after{
+    width:111%;height:31%;inset:auto auto 19% -5%;
+    border:1px solid rgba(238,240,255,.105);
+    border-radius:100px;
+    transform:rotate(-25deg);
+    background:linear-gradient(120deg,rgba(245,247,255,.045),transparent 76%);
+    box-shadow:none;
+  }
+  .phone-stage::before{
+    inset:3% -12%;border-radius:38px;
+    background:linear-gradient(121deg,rgba(204,231,253,.14),rgba(242,226,255,.045) 64%,transparent);
+    transform:rotate(-19deg);
+    filter:blur(22px);
+  }
+  .phone-stage::after{
+    width:185px;height:320px;max-width:none;inset:auto;
+    border-radius:48px;border:1px solid rgba(255,255,255,.14);
+    background:linear-gradient(141deg,rgba(236,239,255,.075),transparent 56%);
+    transform:translate(15px,-11px) rotate(-18deg);
+    box-shadow:none;
+  }
+  .phone{
+    transform:translateY(-18px) perspective(950px) rotateY(-12deg) rotateX(2deg) rotateZ(8deg) scale(.79);
+    transform-origin:center bottom;
+  }
+  .phone:hover{
+    box-shadow:4px 0 0 -1px rgba(208,214,230,.46),
+      -3px 1px 0 -1px rgba(235,238,251,.34),
+      13px 15px 12px -8px rgba(10,10,28,.42),
+      24px 36px 52px rgba(13,10,36,.33);
+  }
+  .patient-login-top{align-items:flex-start;gap:13px}
+  .patient-login-mark{
+    width:54px;height:54px;flex:0 0 54px;
+    border-radius:17px;
+    transform:translateY(-5px);
+  }
+  .patient-login-mark svg{width:29px;height:29px}
+  .patient-login-heading{gap:5px;align-self:flex-start}
+  .patient-login-title{line-height:1.22}
+}
+@media(min-width:1080px) and (max-width:1210px){
+  .phone{transform:translateY(-17px) perspective(950px) rotateY(-11deg) rotateX(2deg) rotateZ(7deg) scale(.79)}
+  .patient-login-mark{width:50px;height:50px;flex-basis:50px}
+  .patient-login-mark svg{width:27px;height:27px}
+}
+@media(min-width:701px) and (max-width:1079px){
+  .copy::before{
+    width:83%;height:36%;right:-20%;top:9%;bottom:auto;
+    border-radius:45% 55% 40% 60% / 50% 35% 65% 50%;
+    transform:rotate(-25deg);
+    border-color:rgba(255,255,255,.085);
+    background:linear-gradient(120deg,rgba(255,255,255,.065),transparent);
+    box-shadow:none;
+  }
+  .heart-stage::before{
+    inset:17% -10%;transform:rotate(-22deg);border-radius:44% 56% 58% 42%;
+    background:linear-gradient(120deg,rgba(255,255,255,.125),transparent 70%);
+    filter:blur(11px);
+  }
+  .heart-stage::after{border:0;box-shadow:none;background:none}
+  .patient-login-top{align-items:flex-start}
+  .patient-login-mark{width:51px;height:51px;flex-basis:51px;transform:translateY(-4px)}
+}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .copy::before{
+    display:block;width:80%;height:44%;right:-22%;top:6%;bottom:auto;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:45% 55% 40% 60% / 58% 36% 64% 42%;
+    transform:rotate(-25deg);background:linear-gradient(130deg,rgba(255,255,255,.045),transparent);
+    box-shadow:none;pointer-events:none;
+  }
+  .main:not(.phone-expanded) .heart-stage::before{
+    inset:15% -15%;transform:rotate(-22deg);border-radius:44% 56% 58% 42%;
+    background:linear-gradient(110deg,rgba(255,255,255,.11),transparent 70%);filter:blur(9px);
+  }
+  .main:not(.phone-expanded) .heart-stage::after{border:0;box-shadow:none;background:none}
+  .main:not(.phone-expanded) .phone-stage::before{
+    inset:8% 17%;border-radius:35px;transform:rotate(-17deg);
+    background:linear-gradient(110deg,rgba(146,110,222,.115),rgba(160,219,248,.065));
+    filter:blur(16px);
+  }
+  .main:not(.phone-expanded) .phone-stage::after{
+    width:58%;height:68%;max-width:none;border-radius:42px;box-shadow:none;
+    border:1px solid rgba(128,99,213,.09);
+    background:linear-gradient(135deg,rgba(245,241,255,.18),transparent 68%);
+    transform:rotate(-19deg);
+  }
+  .main:not(.phone-expanded) .phone{
+    transform:perspective(1050px) rotateY(-9deg) rotateZ(-4deg);
+  }
+  .main:not(.phone-expanded) .patient-login-top{align-items:flex-start}
+  .main:not(.phone-expanded) .patient-login-mark{transform:translateY(-3px)}
+  /* O modo ampliado continua obedecendo às dimensões e aos toques originais. */
+  .main.phone-expanded .phone{transform:rotate(-3deg)}
+  .main.phone-expanded .phone-stage::after,.main.phone-expanded .phone-stage::before{display:none}
+}
