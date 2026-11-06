@@ -709,6 +709,34 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 
 </style>
 <link rel="stylesheet" href="/telesaude/portal-premium.css?v=20261106-2">
+<style>
+/* Hierarquia editorial do acesso: somente textos e responsividade, sem alterar a lógica. */
+.copy .lead{max-width:min(100%,360px);line-height:1.7;text-wrap:pretty}
+.patient-login-top{align-items:center;gap:14px}
+.patient-login-heading{flex:1;min-width:0;gap:4px}
+.patient-login-title{
+  display:block;font:650 13px/1.35 var(--font-body);letter-spacing:0;color:#66567d
+}
+.patient-login-product{
+  display:block;font:750 clamp(21px,2.15vw,27px)/1.2 var(--font-display);
+  letter-spacing:-.045em;color:#302144;overflow-wrap:break-word
+}
+.patient-login-subtitle{
+  display:block;font:500 12px/1.5 var(--font-body);
+  color:#766e85;overflow-wrap:break-word
+}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .copy .lead{max-width:100%;line-height:1.6}
+  .main:not(.phone-expanded) .patient-login-top{gap:12px;margin-bottom:20px}
+  .main:not(.phone-expanded) .patient-login-title{font-size:12px}
+  .main:not(.phone-expanded) .patient-login-product{font-size:clamp(20px,5.2vw,24px)}
+  .main:not(.phone-expanded) .patient-login-subtitle{font-size:12px;line-height:1.45}
+}
+@media(max-width:370px){
+  .patient-login-top{gap:10px}
+  .patient-login-product{font-size:20px}
+}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -727,7 +755,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       <img class="hero-heart" src="/app/icons/heart-512.png" width="241" height="241" alt="Coração PromoVie" decoding="async" fetchpriority="high">
     </div>
     <h1 id="hero-title">Telemedicina e autocuidado <span class="gradient">na palma da sua mão.</span></h1>
-    <p class="lead">Converse com profissionais de saúde,<span class="lead-break">de onde estiver.</span></p>
+    <p class="lead">Converse com profissionais de saúde de onde estiver. Cuidar de si é cuidar de quem você ama.</p>
   </section>
   <div class="right-col">
     <div class="phone-stage">
@@ -769,7 +797,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           </span>
           <span class="patient-login-heading">
             <strong class="patient-login-title">Acesse sua TeleSaúde</strong>
-            <span class="patient-login-subtitle">Cuidar de si é cuidar<br>de quem você ama.</span>
+            <strong class="patient-login-product">TeleHealth</strong>
+            <span class="patient-login-subtitle">Atendimento médico com profissionais capacitados.</span>
           </span>
         </div>
         <label class="patient-login-label" for="access-cpf">Seu CPF</label>
