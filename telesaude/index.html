@@ -816,13 +816,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   const label=button.querySelector("span");
   const codeInput=document.getElementById("access-code");
   const cpfInput=document.getElementById("access-cpf");
-  const sdkSource="https://widget.mediquo.com/js/1.0.0/mediquo.js";
   const accessDialog=document.getElementById("access-result-dialog");
   const accessDialogTitle=document.getElementById("access-result-title");
   const accessDialogMessage=document.getElementById("access-result-message");
   const accessDialogClose=document.getElementById("access-result-close");
   accessDialogClose.addEventListener("click",function(){accessDialog.close();});
-  let busy=false,ready=false,initialized=false,sdkPromise=null;
+  let busy=false,ready=false;
 
   function feedback(message,kind){
     status.textContent=message||"";
@@ -838,28 +837,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
     }else{
       status.scrollIntoView({behavior:"smooth",block:"center"});
     }
-  }
-  function loadSdk(){
-    if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function"){
-      return Promise.resolve(window.MediquoWidget);
-    }
-    if(sdkPromise)return sdkPromise;
-    sdkPromise=new Promise(function(resolve,reject){
-      const script=document.createElement("script");
-      script.src=sdkSource;
-      script.async=true;
-      const timeout=setTimeout(function(){
-        script.remove();reject(new Error("O atendimento não respondeu. Tente novamente."));
-      },18000);
-      script.onload=function(){
-        clearTimeout(timeout);
-        if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function")resolve(window.MediquoWidget);
-        else reject(new Error("O atendimento não está disponível neste momento."));
-      };
-      script.onerror=function(){clearTimeout(timeout);reject(new Error("Não foi possível conectar ao atendimento."));};
-      document.head.appendChild(script);
-    }).catch(function(e){sdkPromise=null;throw e;});
-    return sdkPromise;
   }
   async function getJson(response){
     try{return await response.json();}catch{return {};}
@@ -907,35 +884,35 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
       if(!response.ok)throw new Error(result.error||"Não foi possível verificar o acesso.");
       if(!result.access_token||!result.apiKey||result.environment!=="production")
         throw new Error("O atendimento não pôde ser iniciado com segurança.");
-      const widget=await loadSdk();
-      if(initialized&&typeof widget.destroy==="function"){
-        try{await Promise.resolve(widget.destroy());}catch{}
-        initialized=false;
-      }
-      // Exibicao oficial em janela inteira em computador, tablet e celular.
-      // Oculta apenas o launcher; o botao Acessar chama widget.open().
-      const widgetConfig={
-        apiKey:result.apiKey,
-        accessToken:result.access_token,
-        adapter:"web",
-        environment:"production",
-        show:"always",
-        isMobileView:true,
-        theme:{locale:"pt",launcher:"hidden",text:{title:"TeleSaúde"},colors:{primary:"#4b0c8f"}}
-      };
-      await Promise.resolve(widget.init(widgetConfig));
-      initialized=true;
-      if(typeof widget.open!=="function")throw new Error("A janela do atendimento não está disponível.");
-      await Promise.resolve(widget.open());
-      // Opcao explicita para salvar apenas no gerenciador de senhas do navegador.
-      // Nenhum codigo e salvo pela pagina, banco de dados ou Worker.
-      if(rememberAccess.checked && typeof window.PasswordCredential==="function" && navigator.credentials && typeof navigator.credentials.store==="function"){
+      // O gerenciador de senhas continua opcional e independente do atendimento.
+      // O CPF e o codigo pessoal nunca sao incluidos no endereco da nova pagina.
+      if(rememberAccess.checked && typeof window.PasswordCredential==="function" &&
+         navigator.credentials && typeof navigator.credentials.store==="function"){
         try{
           const credential=new window.PasswordCredential({id:cpf,password:codigo,name:"Token PromoVie"});
           await navigator.credentials.store(credential);
-        }catch{/* O navegador pode negar; o atendimento continua normalmente. */}
+        }catch{/* O navegador pode negar, sem impedir o atendimento. */}
       }
-      feedback("","info");
+      // Transferencia de uma so utilizacao, entre paginas da mesma aba e mesma origem.
+      // A pagina de atendimento remove o access token imediatamente ao recebe-lo.
+      const handoffKey="promovie:mediquo:handoff:v1";
+      try{
+        window.sessionStorage.setItem(handoffKey,JSON.stringify({
+          apiKey:result.apiKey,
+          accessToken:result.access_token,
+          environment:result.environment,
+          createdAt:Date.now()
+        }));
+      }catch{
+        throw new Error("Seu navegador bloqueou a abertura segura do atendimento. Verifique as permissoes de armazenamento temporario e tente novamente.");
+      }
+      try{
+        window.location.assign("/telesaude/atendimento/");
+      }catch{
+        try{window.sessionStorage.removeItem(handoffKey);}catch{}
+        throw new Error("Nao foi possivel abrir a pagina de atendimentos. Tente novamente.");
+      }
+      return;
     }catch(error){
       const message=String(error?.message||"Não foi possível conectar.");
       showAccessResult("Não foi possível acessar",message==="Failed to fetch"?
