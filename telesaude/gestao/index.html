@@ -466,6 +466,10 @@
           msg('banner','O envio automático ainda não está publicado e ativado no backend. Nenhum cadastro foi realizado. Tente novamente após a liberação.','error');
           return;
         }
+        if(health.cadastro_real_habilitado!==true){
+          msg('banner','A emissão de novas licenças ainda está bloqueada para proteger a integração do Token PromoVie. Nenhum cadastro foi realizado. Solicite a liberação controlada antes de cadastrar e ativar.','error');
+          return;
+        }
       }
       msg('banner','Salvando no arquivo privado...');
       const data=await request('/records',{method:'POST',body:{
