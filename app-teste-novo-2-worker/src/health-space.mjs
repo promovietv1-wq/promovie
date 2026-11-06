@@ -198,7 +198,7 @@ export async function handleHealthSpace(request,env,cors={}){
     if(pathname===BASE+"/vault"&&method==="DELETE"){
       // Mesmo com uma sessão roubada, a exclusão requer novamente o código pessoal.
       const input=await jsonBody(request,2048);
-      const code=String(input.codigo??"").trim().toUpperCase().replace(/[\\s-]/g,"");
+      const code=String(input.codigo??"").trim().toUpperCase().replace(/[\s-]/g,"");
       if(!/^[A-HJ-NP-Z2-9]{20}$/.test(code))
         return response(403,{error:"Confirme o código pessoal para excluir seu espaço."},cors);
       const current=await db.prepare(
