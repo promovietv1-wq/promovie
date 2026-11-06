@@ -13,7 +13,8 @@
   const LIMIT_NOTES=50;
   const encoder=new TextEncoder(),decoder=new TextDecoder();
   const $=id=>document.getElementById(id);
-  const state={token:null,key:null,salt:null,revision:0,record:null,data:null,dirty:false,busy:false};
+  const state={token:null,key:null,docKey:null,salt:null,revision:0,record:null,data:null,
+    nextKey:null,nextSalt:null,previousSalt:null,recoveryMode:null,dirty:false,busy:false};
   const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
   const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
 
@@ -32,8 +33,10 @@
     return {version:1,perfil:{alergias:"",medicamentos:"",historico:""},anotacoes:[],documentos:[]};
   }
   function reset(){
-    state.token=null;state.key=null;state.salt=null;state.revision=0;state.record=null;state.data=null;state.dirty=false;
-    $("access-code").value="";$("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
+    state.token=null;state.key=null;state.docKey=null;state.salt=null;state.revision=0;
+    state.record=null;state.data=null;state.nextKey=null;state.nextSalt=null;state.previousSalt=null;
+    state.recoveryMode=null;state.dirty=false;
+    $("access-code").value="";$("vault-passphrase").value="";
     $("privacy-consent").checked=false;
     $("summary-text").textContent="";$("summary-dialog").close?.();view("login");
   }
@@ -68,11 +71,11 @@
     return crypto.subtle.deriveKey({name:"PBKDF2",salt:decode64(salt),iterations:310000,hash:"SHA-256"},
       base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
   }
-  async function encryptBytes(bytes,iv){
-    return new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},state.key,bytes));
+  async function encryptBytes(bytes,iv,key=state.key){
+    return new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,bytes));
   }
   async function decryptBytes(cipher,iv){
-    return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(iv)},state.key,cipher));
+    return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(iv)},state.docKey||state.key,cipher));
   }
   function changed(){
     state.dirty=true;$("save-state").textContent="Alterações ainda não salvas";
@@ -121,9 +124,10 @@
     const ciphertext=await encryptBytes(plain,iv);
     const result=await api("/vault",{method:"PUT",data:{
       revision:state.revision,salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext),
-      ...(state.revision===0?{consent:true}:{})
+      ...(state.revision===0?{consent:true}:{}),
+      ...(state.previousSalt?{previousSalt:state.previousSalt}:{})
     }});
-    state.revision=result.revision;
+    state.revision=result.revision;state.previousSalt=null;
     state.record={salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)};
     state.dirty=false;$("save-state").textContent="Salvo com criptografia";
     return result;
@@ -223,7 +227,7 @@
     if(state.dirty)await save();
     const id=crypto.randomUUID(),iv=crypto.getRandomValues(new Uint8Array(12));
     const buffer=await file.arrayBuffer();
-    const ciphertext=await encryptBytes(new Uint8Array(buffer),iv);
+    const ciphertext=await encryptBytes(new Uint8Array(buffer),iv,state.docKey||state.key);
     new Uint8Array(buffer).fill(0);
     await api("/documents",{method:"POST",data:{id,ciphertext:encode64(ciphertext)}});
     const meta={id,iv:encode64(iv),nome:file.name.slice(0,100),tipo:mime,tamanho:file.size,criadoEm:new Date().toISOString()};
@@ -281,7 +285,7 @@
     const bundle={format:"promovie-espaco-criptografado-v1",exportadoEm:new Date().toISOString(),
       vault:vault.record,documents};
     download(new Blob([JSON.stringify(bundle)],{type:"application/json"}),"promovie-espaco-protegido.json");
-    notice("Cópia criptografada baixada. Guarde-a com segurança e mantenha sua senha privada.","success");
+    notice("Cópia criptografada baixada. Guarde-a em local seguro e preserve o código pessoal usado para protegê-la.","success");
   }));
   $("delete-vault").addEventListener("click",()=>protectedTask(async()=>{
     const decision=prompt("Esta ação apaga permanentemente informações e documentos. Para confirmar, digite EXCLUIR:");
