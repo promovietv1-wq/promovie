@@ -80,9 +80,9 @@ function memoryDb(){
             else vaults.set(p[0],{revision:1,salt:p[1],iv:p[2],ciphertext:p[3]});
           }
           else if(sql.startsWith('UPDATE pv_space_vaults SET')){
-            const row=vaults.get(p[3]);
-            if(!row||row.revision!==p[4]||row.salt!==p[5])changes=0;
-            else vaults.set(p[3],{revision:row.revision+1,salt:row.salt,iv:p[0],ciphertext:p[1]});
+            const row=vaults.get(p[4]);
+            if(!row||row.revision!==p[5]||row.salt!==p[6])changes=0;
+            else vaults.set(p[4],{revision:row.revision+1,salt:p[0],iv:p[1],ciphertext:p[2]});
           }
           else if(sql.startsWith('INSERT OR IGNORE INTO pv_space_documents')){
             if(docs.has(p[0]))changes=0;
@@ -167,6 +167,19 @@ test('consentimento, separação de dados e revisão concorrente',async()=>{
   assert.equal((await call(env,'/vault',{
     method:'PUT',token:tokenA,data:{...vault,revision:1,ciphertext:'d'.repeat(140)}
   })).status,200);
+});
+test('migração de salt antigo preserva revisão e impede perda por atualização concorrente',async()=>{
+  const {env,db}=await fixture(),token=await login(env);
+  const initial={revision:0,salt:'a'.repeat(22),iv:'b'.repeat(16),ciphertext:'c'.repeat(120),consent:true};
+  assert.equal((await call(env,'/vault',{method:'PUT',token,data:initial})).status,200);
+  const newer={revision:1,salt:'c2_'+('z'.repeat(22)),previousSalt:initial.salt,
+    iv:'c'.repeat(16),ciphertext:'d'.repeat(125)};
+  assert.equal((await call(env,'/vault',{method:'PUT',token,data:newer})).status,200);
+  const saved=db.vaults.get('person-a');
+  assert.equal(saved.salt,newer.salt);
+  assert.equal(saved.revision,2);
+  assert.equal((await call(env,'/vault',{method:'PUT',token,data:newer})).status,409);
+  assert.equal((await call(env,'/vault',{method:'PUT',token,data:{...newer,revision:2,previousSalt:'x'.repeat(22)}})).status,409);
 });
 test('documentos só podem ser vistos e excluídos pelo proprietário',async()=>{
   const {env,db}=await fixture();
