@@ -1,4 +1,5 @@
 // Mensagem transacional PromoVie. O SDK e os dados médicos não participam deste envio.
+// Publicação de verificação: preservar variáveis e segredos existentes no Worker.
 // Não registrar códigos, CPF ou dados pessoais em logs.
 const RESEND_ENDPOINT='https://api.resend.com/emails';
 const ACCESS_URL='https://www.promovie.tv.br/telesaude/';
