@@ -1,0 +1,22 @@
+name: Meu Espaco de Saude - testes sem publicacao
+on:
+  pull_request:
+    paths: ['health-space/**', '.github/workflows/health-space-test.yml']
+  push:
+    branches: ['health-space/**']
+    paths: ['health-space/**', '.github/workflows/health-space-test.yml']
+permissions:
+  contents: read
+jobs:
+  security-and-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Seguranca com SQLite real e arquivos sinteticos
+        run: node --test health-space/test/*.test.mjs
+      - name: Regressao do atendimento e instalacao
+        run: node --test app-teste-novo-2-worker/*.test.mjs app-teste-novo-2-worker/test.mjs telesaude/pwa-install.test.mjs

@@ -1,0 +1,12 @@
+{
+  "name": "promovie-health-space",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-11-06",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {"directory":"./public", "binding":"ASSETS", "run_worker_first":true},
+  "vars": {"HEALTH_ENABLED":"false", "HEALTH_ORIGIN":"https://www.promovie.tv.br"},
+  "observability": {"enabled":false}
+  // Intentionally no production routes, databases, R2 or secrets.
+  // Provision an isolated staging environment and satisfy RELEASE.md first.
+}
