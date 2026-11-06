@@ -1,0 +1,303 @@
+/* Meu Espaço de Saúde. Dados clínicos são cifrados localmente antes de qualquer envio.
+   Sem localStorage, IndexedDB, cookies JS ou acesso ao SDK Médiquo. */
+(function(){
+  "use strict";
+  const BASE="https://backend.promovie.tv.br/api/promovie/space/v1";
+  const MAX_FILE=500*1024;
+  const LIMIT_NOTES=50;
+  const encoder=new TextEncoder(),decoder=new TextDecoder();
+  const $=id=>document.getElementById(id);
+  const state={token:null,key:null,salt:null,revision:0,record:null,data:null,dirty:false,busy:false};
+  const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
+  const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
+
+  function notice(message,type="info"){
+    const p=$("feedback");p.textContent=message||"";p.hidden=!message;p.dataset.kind=type;
+    if(message)p.scrollIntoView({block:"nearest",behavior:"smooth"});
+  }
+  function view(name){
+    for(const v of ["login","unlock","workspace"])$(v+"-view").hidden=v!==name;
+  }
+  function waiting(flag){
+    state.busy=flag;
+    for(const b of document.querySelectorAll('button'))if(b.id!=="close-summary")b.disabled=flag;
+  }
+  function fresh(){
+    return {version:1,perfil:{alergias:"",medicamentos:"",historico:""},anotacoes:[],documentos:[]};
+  }
+  function reset(){
+    state.token=null;state.key=null;state.salt=null;state.revision=0;state.record=null;state.data=null;state.dirty=false;
+    $("access-code").value="";$("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
+    $("summary-text").textContent="";$("summary-dialog").close?.();view("login");
+  }
+  function encode64(bytes){
+    let binary="";
+    const arr=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);
+    for(let i=0;i<arr.length;i+=16384)binary+=String.fromCharCode(...arr.subarray(i,i+16384));
+    return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }
+  function decode64(s){
+    const binary=atob(s.replace(/-/g,"+").replace(/_/g,"/"));
+    return Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+  }
+  async function api(path,{method="GET",data}={}){
+    const headers={};
+    if(data!==undefined)headers["Content-Type"]="application/json";
+    if(state.token)headers.Authorization="Bearer "+state.token;
+    const response=await fetch(BASE+path,{method,mode:"cors",credentials:"omit",cache:"no-store",referrerPolicy:"no-referrer",
+      headers,...(data!==undefined?{body:JSON.stringify(data)}:{})});
+    let body={};try{body=await response.json();}catch{}
+    if(!response.ok){
+      if(response.status===401&&path!=="/session"){
+        reset();
+        throw Error("Sua sessão terminou ou seu código foi revogado. Entre novamente.");
+      }
+      throw Error(body.error||"Não foi possível concluir. Verifique sua conexão.");
+    }
+    return body;
+  }
+  async function keyFor(phrase,salt){
+    const base=await crypto.subtle.importKey("raw",encoder.encode(phrase),{name:"PBKDF2"},false,["deriveKey"]);
+    return crypto.subtle.deriveKey({name:"PBKDF2",salt:decode64(salt),iterations:310000,hash:"SHA-256"},
+      base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+  }
+  async function encryptBytes(bytes,iv){
+    return new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},state.key,bytes));
+  }
+  async function decryptBytes(cipher,iv){
+    return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(iv)},state.key,cipher));
+  }
+  function changed(){
+    state.dirty=true;$("save-state").textContent="Alterações ainda não salvas";
+  }
+  function collectProfile(){
+    for(const [id,field] of profileFields)state.data.perfil[field]=$(id).value.slice(0,4000);
+  }
+  function render(){
+    for(const [id,field] of profileFields)$(id).value=String(state.data.perfil?.[field]||"");
+    const notes=$("notes-list"),docs=$("documents-list");
+    notes.replaceChildren();docs.replaceChildren();
+    const noteItems=Array.isArray(state.data.anotacoes)?state.data.anotacoes:[];
+    const docItems=Array.isArray(state.data.documentos)?state.data.documentos:[];
+    $("notes-empty").hidden=noteItems.length>0;$("documents-empty").hidden=docItems.length>0;
+    for(const note of noteItems){
+      const li=document.createElement("li"),wrap=document.createElement("div");
+      const title=document.createElement("strong"),details=document.createElement("span"),del=document.createElement("button");
+      title.textContent=names[note.tipo]||"Anotação";details.textContent=note.texto||"";
+      del.type="button";del.className="delete";del.textContent="Excluir";del.setAttribute("aria-label","Excluir anotação");
+      del.addEventListener("click",()=>{state.data.anotacoes=state.data.anotacoes.filter(x=>x.id!==note.id);changed();renderNotes();});
+      wrap.append(title,details);li.append(wrap,del);notes.appendChild(li);
+    }
+    for(const doc of docItems){
+      const li=document.createElement("li"),wrap=document.createElement("div");
+      const title=document.createElement("strong"),details=document.createElement("span");
+      const open=document.createElement("button"),del=document.createElement("button");
+      title.textContent=doc.nome||"Documento";details.textContent=doc.tamanho?Math.ceil(doc.tamanho/1024)+" KB · Criptografado":"Criptografado";
+      open.type="button";open.textContent="Baixar";open.addEventListener("click",()=>downloadDoc(doc));
+      del.type="button";del.textContent="Excluir";del.className="delete";del.addEventListener("click",()=>removeDoc(doc));
+      wrap.append(title,details);li.append(wrap,open,del);docs.appendChild(li);
+    }
+    $("save-state").textContent=state.dirty?"Alterações ainda não salvas":"Salvo com criptografia";
+  }
+  function renderNotes(){
+    const copy=state.data;
+    render();
+    state.data=copy;
+  }
+  async function save(){
+    if(!state.token||!state.key||!state.data)return;
+    collectProfile();
+    if(state.data.anotacoes.length>LIMIT_NOTES)throw Error("Limite de anotações atingido.");
+    const plain=encoder.encode(JSON.stringify(state.data));
+    if(plain.byteLength>70000)throw Error("Suas anotações ultrapassaram o limite deste espaço.");
+    const iv=crypto.getRandomValues(new Uint8Array(12));
+    const ciphertext=await encryptBytes(plain,iv);
+    const result=await api("/vault",{method:"PUT",data:{
+      revision:state.revision,salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)
+    }});
+    state.revision=result.revision;
+    state.record={salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)};
+    state.dirty=false;$("save-state").textContent="Salvo com criptografia";
+    return result;
+  }
+  async function protectedTask(job){
+    if(state.busy)return;waiting(true);notice("");
+    try{await job();}
+    catch(e){notice(e?.message||"Não foi possível concluir a operação.","error");}
+    finally{waiting(false);}
+  }
+  $("login-form").addEventListener("submit",e=>{
+    e.preventDefault();
+    protectedTask(async()=>{
+      const cpf=$("cpf").value.replace(/\D/g,""),codigo=$("access-code").value;
+      const session=await api("/session",{method:"POST",data:{cpf,codigo}});
+      state.token=session.token;$("access-code").value="";
+      const vault=await api("/vault");
+      state.record=vault.record;state.revision=vault.revision;
+      $("confirm-wrap").hidden=!!vault.record;
+      $("vault-passphrase-confirm").required=!vault.record;
+      $("unlock-title").textContent=vault.record?"Desbloquear meu espaço":"Criar minha senha privada";
+      $("unlock-description").textContent=vault.record?
+        "Informe sua senha privada para abrir as informações criptografadas.":
+        "Crie uma senha privada de pelo menos 12 caracteres. Somente com ela será possível abrir seus documentos e anotações.";
+      $("unlock-submit").textContent=vault.record?"Abrir meu espaço":"Criar espaço protegido";
+      view("unlock");$("vault-passphrase").focus();
+    });
+  });
+  $("unlock-form").addEventListener("submit",e=>{
+    e.preventDefault();
+    protectedTask(async()=>{
+      const phrase=$("vault-passphrase").value;
+      if(phrase.length<12)throw Error("Use uma senha privada de pelo menos 12 caracteres.");
+      if(!state.record&&phrase!==$("vault-passphrase-confirm").value)throw Error("As duas senhas precisam ser iguais.");
+      const salt=state.record?.salt||encode64(crypto.getRandomValues(new Uint8Array(16)));
+      const key=await keyFor(phrase,salt);
+      if(state.record){
+        let raw;
+        try{raw=await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},
+          key,decode64(state.record.ciphertext));}
+        catch{throw Error("Senha privada incorreta ou dados não podem ser abertos.");}
+        let data;try{data=JSON.parse(decoder.decode(raw));}catch{throw Error("Dados do espaço não estão íntegros.");}
+        if(data?.version!==1||!data.perfil||!Array.isArray(data.anotacoes)||!Array.isArray(data.documentos))
+          throw Error("Formato do espaço desconhecido. Não foi feita nenhuma alteração.");
+        state.data=data;
+      }else state.data=fresh();
+      state.salt=salt;state.key=key;
+      $("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
+      if(!state.record)await save();
+      state.dirty=false;render();view("workspace");
+    });
+  });
+  $("unlock-back").addEventListener("click",()=>protectedTask(async()=>{
+    if(state.token)await api("/logout",{method:"POST"}).catch(()=>{});
+    reset();notice("");
+  }));
+  for(const [id] of profileFields)$(id).addEventListener("input",()=>{if(state.data)changed();});
+  $("note-form").addEventListener("submit",e=>{
+    e.preventDefault();
+    if(!state.data)return;
+    const texto=$("note-text").value.trim();
+    if(!texto){notice("Escreva uma anotação para adicionar.","error");return;}
+    if(state.data.anotacoes.length>=LIMIT_NOTES){notice("Limite de 50 anotações atingido.","error");return;}
+    state.data.anotacoes.unshift({id:crypto.randomUUID(),tipo:$("note-kind").value,texto,criadoEm:new Date().toISOString()});
+    $("note-text").value="";changed();renderNotes();
+  });
+  $("save-all").addEventListener("click",()=>protectedTask(async()=>{await save();notice("Suas alterações foram salvas com criptografia.","success");}));
+  $("logout").addEventListener("click",()=>{
+    if(state.dirty&&!confirm("Existem alterações não salvas. Deseja sair mesmo assim?"))return;
+    protectedTask(async()=>{await api("/logout",{method:"POST"}).catch(()=>{});reset();notice("Você saiu do seu espaço com segurança.");});
+  });
+  async function downloadDoc(doc){
+    await protectedTask(async()=>{
+      const stored=await api("/documents/"+encodeURIComponent(doc.id));
+      const plain=await decryptBytes(decode64(stored.ciphertext),doc.iv);
+      const mime=["application/pdf","image/png","image/jpeg"].includes(doc.tipo)?doc.tipo:"application/octet-stream";
+      const filename=String(doc.nome||"documento").replace(/[\/\\\u0000-\u001f]/g,"_").slice(0,100);
+      download(new Blob([plain],{type:mime}),filename);
+      plain.fill(0);
+    });
+  }
+  function download(blob,name){
+    const url=URL.createObjectURL(blob),link=document.createElement("a");
+    link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+  }
+  $("upload-file").addEventListener("click",()=>protectedTask(async()=>{
+    const file=$("file-input").files?.[0];
+    if(!file)throw Error("Selecione um PDF ou imagem.");
+    const mime=file.type||({pdf:"application/pdf",jpg:"image/jpeg",jpeg:"image/jpeg",png:"image/png"}[file.name.split(".").pop().toLowerCase()]);
+    if(!["application/pdf","image/jpeg","image/png"].includes(mime))throw Error("Use PDF, JPG ou PNG.");
+    if(file.size===0||file.size>MAX_FILE)throw Error("O arquivo precisa ter até 500 KB.");
+    if(state.data.documentos.length>=10)throw Error("Limite de dez documentos atingido.");
+    if(state.dirty)await save();
+    const id=crypto.randomUUID(),iv=crypto.getRandomValues(new Uint8Array(12));
+    const buffer=await file.arrayBuffer();
+    const ciphertext=await encryptBytes(new Uint8Array(buffer),iv);
+    new Uint8Array(buffer).fill(0);
+    await api("/documents",{method:"POST",data:{id,ciphertext:encode64(ciphertext)}});
+    const meta={id,iv:encode64(iv),nome:file.name.slice(0,100),tipo:mime,tamanho:file.size,criadoEm:new Date().toISOString()};
+    state.data.documentos.push(meta);
+    try{await save();}catch(e){
+      state.data.documentos=state.data.documentos.filter(d=>d.id!==id);
+      await api("/documents/"+id,{method:"DELETE"}).catch(()=>{});
+      throw e;
+    }
+    $("file-input").value="";render();notice("Documento guardado com criptografia.","success");
+  }));
+  async function removeDoc(doc){
+    if(!confirm("Excluir o documento “"+doc.nome+"”?"))return;
+    await protectedTask(async()=>{
+      if(state.dirty)await save();
+      state.data.documentos=state.data.documentos.filter(d=>d.id!==doc.id);
+      try{await save();}
+      catch(e){state.data.documentos.push(doc);throw e;}
+      await api("/documents/"+doc.id,{method:"DELETE"});
+      render();notice("Documento excluído.","success");
+    });
+  }
+  function summary(){
+    collectProfile();
+    const p=state.data.perfil;
+    const out=["MEU RESUMO PARA A CONSULTA","", "Alergias e reações:",p.alergias||"Não informado","",
+      "Medicamentos em uso:",p.medicamentos||"Não informado","",
+      "Informações de saúde:",p.historico||"Não informado","", "Minhas anotações:"];
+    const notes=state.data.anotacoes;
+    for(const note of notes)out.push("• "+(names[note.tipo]||"Anotação")+": "+note.texto);
+    if(!notes.length)out.push("Nenhuma anotação.");
+    if(state.data.documentos.length){
+      out.push("","Documentos guardados (não incluídos no resumo):");
+      for(const d of state.data.documentos)out.push("• "+d.nome);
+    }
+    return out.join("\n");
+  }
+  $("make-summary").addEventListener("click",()=>{
+    $("summary-text").textContent=summary();$("summary-dialog").showModal();
+  });
+  $("close-summary").addEventListener("click",()=>$("summary-dialog").close());
+  $("summary-dialog").addEventListener("close",()=>$("summary-text").textContent="");
+  $("copy-summary").addEventListener("click",()=>protectedTask(async()=>{
+    await navigator.clipboard.writeText($("summary-text").textContent);
+    notice("Resumo copiado. Compartilhe somente com quem você escolher.","success");
+  }));
+  $("export-backup").addEventListener("click",()=>protectedTask(async()=>{
+    if(state.dirty)await save();
+    const vault=await api("/vault");
+    const documents=[];
+    for(const doc of state.data.documentos){
+      const stored=await api("/documents/"+doc.id);
+      documents.push({id:doc.id,ciphertext:stored.ciphertext});
+    }
+    const bundle={format:"promovie-espaco-criptografado-v1",exportadoEm:new Date().toISOString(),
+      vault:vault.record,documents};
+    download(new Blob([JSON.stringify(bundle)],{type:"application/json"}),"promovie-espaco-protegido.json");
+    notice("Cópia criptografada baixada. Guarde-a com segurança e mantenha sua senha privada.","success");
+  }));
+  $("delete-vault").addEventListener("click",()=>protectedTask(async()=>{
+    const decision=prompt("Esta ação apaga permanentemente informações e documentos. Para confirmar, digite EXCLUIR:");
+    if(decision!=="EXCLUIR")return;
+    const phrase=prompt("Informe sua senha privada para confirmar:");
+    if(!phrase)throw Error("Operação cancelada.");
+    try{
+      const key=await keyFor(phrase,state.salt);
+      await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},key,decode64(state.record.ciphertext));
+    }catch{throw Error("Senha privada incorreta. Nada foi excluído.");}
+    await api("/vault",{method:"DELETE"});reset();
+    notice("Seu conteúdo pessoal foi excluído deste espaço.","success");
+  }));
+  window.addEventListener("beforeunload",e=>{
+    if(!state.dirty)return;
+    e.preventDefault();e.returnValue="";
+  });
+  (async()=>{
+    try{
+      const health=await api("/health");
+      if(!health.disponivel){
+        $("login-form").querySelector("button").disabled=true;
+        notice("Este espaço está em preparação. O atendimento médico continua disponível na TeleSaúde.","error");
+      }
+    }catch{
+      $("login-form").querySelector("button").disabled=true;
+      notice("Não foi possível verificar a disponibilidade do espaço. Tente novamente mais tarde.","error");
+    }
+  })();
+})();
