@@ -59,14 +59,14 @@ button{font:inherit}
 }
 .back{
   position:relative;z-index:1;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:41px;white-space:nowrap;padding:10px 14px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:40px;height:40px;min-width:40px;flex:0 0 40px;
   border:1px solid #ded5ee;border-radius:12px;
-  background:#fff;color:#542aa0;text-decoration:none;font-size:12px;font-weight:750;
+  background:#fff;color:#542aa0;text-decoration:none;
 }
 .back:hover,.back:focus-visible{background:#f7f3fd;border-color:#bda8df}
 .back:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
-.back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .stage{position:fixed;inset:var(--bar-h) 0 0;background:#fff}
 .status{
   position:absolute;inset:0;padding:24px;
@@ -127,15 +127,15 @@ html body .mediquo-launcher{display:none!important}
   .identity{gap:8px;min-width:0}
   .identity img{width:43px;height:43px}
   .identity-copy strong{font-size:13.5px;letter-spacing:-.035em}
-  .back{min-height:38px;padding:8px 10px;font-size:10.5px;gap:5px}
-  .back svg{width:14px;height:14px}
+  .back{width:38px;height:38px;min-width:38px;flex-basis:38px}
+  .back svg{width:17px;height:17px}
 }
 @media(max-width:360px){
   .topbar{padding-inline:9px;gap:6px}
   .identity{gap:5px}
   .identity img{width:40px;height:40px}
   .identity-copy strong{font-size:12px}
-  .back{padding:7px 8px;font-size:10px}
+
 }
 /* Composição exclusiva para telas amplas.
    Centralizamos somente o contêiner externo do widget. O SDK, seu iframe,
@@ -148,7 +148,7 @@ html body .mediquo-launcher{display:none!important}
   }
   /* Fundo contínuo azul e roxo, sem formas, texturas ou sobreposições. */
   .stage{
-    background:linear-gradient(110deg,#3268bb 0%,#5b47bf 46%,#4b0c8f 100%)
+    background:linear-gradient(110deg,#eff9ff 0%,#f8f7ff 46%,#f3edfc 100%)
   }
   html body #MediquoContainer,
   html body .MediquoContainer,
@@ -176,9 +176,8 @@ html body .mediquo-launcher{display:none!important}
       <strong>TeleSaúde PromoVie</strong>
     </div>
   </div>
-  <a class="back" href="/telesaude/" id="back-access">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-    Voltar ao acesso
+  <a class="back" href="/telesaude/" id="back-access" aria-label="Sair e voltar ao acesso" title="Sair">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </a>
 </header>
 <main class="stage" aria-label="Área de atendimentos">
