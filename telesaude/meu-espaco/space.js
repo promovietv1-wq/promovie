@@ -100,9 +100,9 @@
     $("save-state").textContent=state.dirty?"Alterações ainda não salvas":"Salvo com criptografia";
   }
   function renderNotes(){
-    const copy=state.data;
+    // Manter alterações de texto ainda não salvas ao redesenhar a lista.
+    collectProfile();
     render();
-    state.data=copy;
   }
   async function save(){
     if(!state.token||!state.key||!state.data)return;
