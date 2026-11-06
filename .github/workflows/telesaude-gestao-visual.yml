@@ -254,6 +254,10 @@ jobs:
               assert.ok(layout.iframeWidth>=layout.width-5,'Iframe deve continuar com largura total do contêiner');
               assert.equal(layout.brandText,'TeleSaúde PromoVie','Identidade deve estar presente no mobile e desktop');
               assert.equal(layout.heartLoaded,true,'Logo coração deve carregar em todas as larguras');
+              const exit=page.locator('#back-access');
+              assert.equal(await exit.getAttribute('href'),'/telesaude/','X deve levar de volta ao acesso');
+              assert.match(await exit.getAttribute('aria-label'),/Sair/,'X precisa ter nome acessível');
+              assert.equal((await exit.innerText()).trim(),'','Não exibir texto extra no botão X');
               assert.ok(layout.brandRight<=layout.backLeft+2,'Cabeçalho sem sobreposição em '+width+': '+JSON.stringify(layout));
               assert.ok(layout.brandLeft>=0&&layout.backRight<=width,'Cabeçalho não deve sair da viewport');
               if(width>=1100)assert.ok(layout.brandFont>=18,'Marca maior que o título da lista no desktop');
@@ -266,7 +270,8 @@ jobs:
                 assert.ok(Math.abs(layout.left-(width-layout.width)/2)<2,'Widget deve ficar centralizado: '+JSON.stringify(layout));
                 assert.ok(layout.left>=45,'Respiro externo no desktop: '+JSON.stringify(layout));
                 assert.equal(layout.brandVisible,false,'Sem formas decorativas no desktop');
-                assert.match(layout.stageBackground,/linear-gradient/,'Degradê azul/roxo contínuo esperado no desktop');
+                assert.match(layout.stageBackground,/linear-gradient/,'Degradê suave contínuo esperado no desktop');
+                assert.match(layout.stageBackground,/rgb\(239, 249, 255\)/,'Cor pastel azul claro deve ser aplicada');
               }
               await page.screenshot({path:'/tmp/pv-prints/atendimento-container-'+width+'.png',fullPage:true});
               console.log('Contêiner externo validado:',width+'px');
