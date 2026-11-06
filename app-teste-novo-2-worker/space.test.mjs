@@ -103,7 +103,7 @@ test('endpoint desativado por padrão; health verifica configuração e origem',
 });
 test('CPF e código pessoal, limite de erros e sessão individual',async()=>{
   const {env,db}=await seed();
-  for(let i=0;i<6;i++)assert.equal((await hit(env,'/session',{method:'POST',data:{cpf,codigo:'ABCDEFGHIJKLMNOPQRST'}})).status,401);
+  for(let i=0;i<6;i++)assert.equal((await hit(env,'/session',{method:'POST',data:{cpf,codigo:otherCode}})).status,401);
   assert.equal((await hit(env,'/session',{method:'POST',data:{cpf,codigo:code}})).status,429);
   assert.equal((await hit(env,'/session',{method:'POST',data:{cpf:cpfOther,codigo:otherCode}})).status,200);
   assert.equal(db.sessions.size,1);
