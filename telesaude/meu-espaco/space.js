@@ -28,6 +28,7 @@
   function reset(){
     state.token=null;state.key=null;state.salt=null;state.revision=0;state.record=null;state.data=null;state.dirty=false;
     $("access-code").value="";$("vault-passphrase").value="";$("vault-passphrase-confirm").value="";
+    $("privacy-consent").checked=false;
     $("summary-text").textContent="";$("summary-dialog").close?.();view("login");
   }
   function encode64(bytes){
@@ -113,7 +114,8 @@
     const iv=crypto.getRandomValues(new Uint8Array(12));
     const ciphertext=await encryptBytes(plain,iv);
     const result=await api("/vault",{method:"PUT",data:{
-      revision:state.revision,salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)
+      revision:state.revision,salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext),
+      ...(state.revision===0?{consent:true}:{})
     }});
     state.revision=result.revision;
     state.record={salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)};
@@ -135,6 +137,8 @@
       const vault=await api("/vault");
       state.record=vault.record;state.revision=vault.revision;
       $("confirm-wrap").hidden=!!vault.record;
+      $("consent-row").hidden=!!vault.record;
+      $("privacy-consent").required=!vault.record;
       $("vault-passphrase-confirm").required=!vault.record;
       $("unlock-title").textContent=vault.record?"Desbloquear meu espaço":"Criar minha senha privada";
       $("unlock-description").textContent=vault.record?
@@ -150,6 +154,7 @@
       const phrase=$("vault-passphrase").value;
       if(phrase.length<12)throw Error("Use uma senha privada de pelo menos 12 caracteres.");
       if(!state.record&&phrase!==$("vault-passphrase-confirm").value)throw Error("As duas senhas precisam ser iguais.");
+      if(!state.record&&!$("privacy-consent").checked)throw Error("É necessário aceitar o aviso de privacidade para criar seu espaço.");
       const salt=state.record?.salt||encode64(crypto.getRandomValues(new Uint8Array(16)));
       const key=await keyFor(phrase,salt);
       if(state.record){
