@@ -16,7 +16,10 @@ const base={
   MEDIQUO_V3_PLAN:'345',
   MEDIQUO_V3_BASE_URL:'https://sdk.mediquo.com/v1',
   MEDIQUO_V3_WIDGET_API_KEY:'widget-publica-ficticia',
-  MEDIQUO_V3_SDK_SECRET_KEY:'segredo-apenas-ficticio'
+  MEDIQUO_V3_SDK_SECRET_KEY:'segredo-apenas-ficticio',
+  PROMOVIE_ACCESS_EMAIL_ENABLED:'true',
+  PROMOVIE_ACCESS_EMAIL_FROM:'TeleSaúde PromoVie <telesaude@promovie.tv.br>',
+  RESEND_API_KEY:'re_chave_de_teste_ficticia'
 };
 function database(){
   const sessions=new Map(),attempts=new Map(),people=new Map(),history=[];
@@ -71,6 +74,7 @@ function database(){
   };
 }
 function envFor(db,overrides={}){return {...base,PROMOVIE_BENEFICIARIOS_DB:db,...overrides};}
+const sentCodes=[];
 async function call(handler,db,path,{method='GET',body,cookie,originHeader=origin}={},overrides={}){
   const headers=new Headers();
   if(originHeader)headers.set('Origin',originHeader);
@@ -78,16 +82,33 @@ async function call(handler,db,path,{method='GET',body,cookie,originHeader=origi
   if(body!==undefined)headers.set('Content-Type','application/json');
   headers.set('CF-Connecting-IP','192.0.2.55');
   const prefix=handler===handleAdmin?'/api/promovie/admin/v1':'/api/promovie/access/v1';
-  return handler(new Request('https://backend.promovie.tv.br'+prefix+path,{
+  const request=new Request('https://backend.promovie.tv.br'+prefix+path,{
     method,headers,...(body!==undefined?{body:JSON.stringify(body)}:{})
-  }),envFor(db,overrides),{'Access-Control-Allow-Origin':origin});
+  });
+  // Captura o código somente no provedor fictício, nunca na resposta da API administrativa.
+  if(handler===handleAdmin&&path.endsWith('/access-code')&&method==='POST'){
+    const previous=globalThis.fetch;
+    globalThis.fetch=async(url,options)=>{
+      assert.equal(String(url),'https://api.resend.com/emails');
+      const message=JSON.parse(options.body);
+      assert.deepEqual(message.to,['titular@example.org']);
+      const code=message.text.match(/Código pessoal: ([A-HJ-NP-Z2-9-]+)/)?.[1];
+      assert.ok(code,'Código presente apenas no e-mail simulado');
+      sentCodes.push(code);
+      return new Response(JSON.stringify({id:'aceito-ficticio'}),{status:200,
+        headers:{'Content-Type':'application/json'}});
+    };
+    try{return await handler(request,envFor(db,overrides),{'Access-Control-Allow-Origin':origin});}
+    finally{globalThis.fetch=previous;}
+  }
+  return handler(request,envFor(db,overrides),{'Access-Control-Allow-Origin':origin});
 }
 async function seed(){
   const db=database();
   const login=await call(handleAdmin,db,'/login',{method:'POST',body:{senha:base.PROMOVIE_ADMIN_PASSWORD}});
   assert.equal(login.status,200);
   const cookie=login.headers.get('set-cookie').split(';')[0];
-  const created=await call(handleAdmin,db,'/records',{method:'POST',cookie,body:{nome:'Pessoa Fictícia',cpf}});
+  const created=await call(handleAdmin,db,'/records',{method:'POST',cookie,body:{nome:'Pessoa Fictícia',cpf,email:'titular@example.org'}});
   assert.equal(created.status,201);
   const id=(await created.json()).id;
   db.people.get(id).situacao='ativo'; // Simula plano confirmado no SDK sem enviar paciente real.
@@ -113,13 +134,17 @@ test('gestor gera código aleatório de 20 caracteres, guardado somente como HMA
   const {db,cookie,id}=await seed();
   const r=await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
   assert.equal(r.status,200);
-  const code=(await r.json()).codigo;
+  const response=await r.json();
+  assert.equal(response.entrega_email,'aceito');
+  assert.equal('codigo' in response,false,'A resposta administrativa não revela o código');
+  const code=sentCodes.at(-1);
   assert.match(code,/^[A-HJ-NP-Z2-9]{5}(?:-[A-HJ-NP-Z2-9]{5}){3}$/);
   assert.ok(!db.accessCodes.get(id).code_hash.includes(code.replace(/-/g,'')));
   assert.ok(!db.history.some(x=>x.detalhes?.includes(code)));
   assert.ok(db.schemas.some(sql=>sql.includes('pv_access_codes')));
   const renew=await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
-  assert.notEqual((await renew.json()).codigo,code);
+  assert.equal('codigo' in (await renew.json()),false);
+  assert.notEqual(sentCodes.at(-1),code);
   const revoke=await call(handleAdmin,db,'/records/'+id+'/revoke-access',{method:'POST',cookie,body:{}});
   assert.equal(revoke.status,200);
   assert.equal(db.accessCodes.size,0);
@@ -135,7 +160,8 @@ test('somente gestor autenticado pode gerar códigos e não há cadastramento au
 test('beneficiário autenticado gera token SDK somente com CPF, código e plano ativos',async()=>{
   const {db,cookie,id}=await seed();
   const r=await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
-  const code=(await r.json()).codigo;
+  assert.equal('codigo' in (await r.json()),false);
+  const code=sentCodes.at(-1);
   const mock=vendorMock();
   try{
     assert.equal((await call(handleBeneficiaryAccess,db,'/health',{}, {PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'})).status,200);
@@ -157,8 +183,10 @@ test('beneficiário autenticado gera token SDK somente com CPF, código e plano 
 });
 test('licença inativa não recebe token e revogação impede novas sessões',async()=>{
   const {db,cookie,id}=await seed();
-  const code=(await (await call(handleAdmin,db,'/records/'+id+'/access-code',{
-    method:'POST',cookie,body:{}})).json()).codigo;
+  const created=await call(handleAdmin,db,'/records/'+id+'/access-code',{
+    method:'POST',cookie,body:{}});
+  assert.equal('codigo' in (await created.json()),false);
+  const code=sentCodes.at(-1);
   const mock=vendorMock({active:false});
   try{
     const r=await call(handleBeneficiaryAccess,db,'/session',{
@@ -183,6 +211,20 @@ test('bloqueio distribuído no D1 após seis códigos inválidos do mesmo CPF',a
     method:'POST',body:{cpf,codigo:'AAAAAAAAAAAAAAAAAAAA'}},{PROMOVIE_BENEFICIARY_ACCESS_ENABLED:'true'});
   assert.equal(blocked.status,429);
 });
+test('se o serviço de e-mail estiver desabilitado, nenhum código é criado ou substituído',async()=>{
+  const {db,cookie,id}=await seed();
+  const old=await call(handleAdmin,db,'/records/'+id+'/access-code',{method:'POST',cookie,body:{}});
+  assert.equal(old.status,200);
+  const oldHash=db.accessCodes.get(id).code_hash;
+  const unavailable=await call(handleAdmin,db,'/records/'+id+'/access-code',
+    {method:'POST',cookie,body:{}},{PROMOVIE_ACCESS_EMAIL_ENABLED:'false'});
+  assert.equal(unavailable.status,503);
+  assert.equal(db.accessCodes.get(id).code_hash,oldHash);
+  const incomplete=await call(handleAdmin,db,'/records/'+id+'/access-code',
+    {method:'POST',cookie,body:{}},{RESEND_API_KEY:''});
+  assert.equal(incomplete.status,503);
+  assert.equal(db.accessCodes.get(id).code_hash,oldHash);
+});
 test('interface pública não contém autenticação fictícia nem chaves privadas',async()=>{
   const html=await readFile(new URL('../telesaude/index.html',import.meta.url),'utf8');
   const panel=await readFile(new URL('../telesaude/gestao/index.html',import.meta.url),'utf8');
@@ -194,4 +236,5 @@ test('interface pública não contém autenticação fictícia nem chaves privad
   assert.match(panel,/id="generate-access-button"/);
   assert.match(panel,/id="revoke-access-button"/);
   assert.match(panel,/id="access-code-dialog"/);
+  assert.doesNotMatch(panel,/id="generated-access-code"|id="copy-access-code"|personal\.codigo/);
 });
