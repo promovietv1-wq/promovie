@@ -109,6 +109,42 @@ html body .mediquo-launcher{display:none!important}
   .back{min-height:40px;padding:9px 11px;font-size:11px;gap:6px}
   .back svg{width:15px;height:15px}
 }
+/* Composição exclusiva para telas amplas.
+   Centralizamos somente o contêiner externo do widget. O SDK, seu iframe,
+   formulários, navegação e sessões permanecem integralmente sob controle da Médiquo. */
+@media (min-width:1100px){
+  body{background:#f7f5fb}
+  .topbar{
+    padding-left:max(28px,calc((100vw - 1180px)/2));
+    padding-right:max(28px,calc((100vw - 1180px)/2))
+  }
+  .stage{
+    background:
+      radial-gradient(ellipse 26% 42% at 94% 47%,rgba(112,62,202,.085),transparent 88%),
+      linear-gradient(180deg,#faf9fd 0%,#f7f5fb 100%)
+  }
+  .stage::after{
+    content:"";position:absolute;pointer-events:none;
+    width:clamp(120px,12vw,195px);height:clamp(120px,12vw,195px);
+    right:clamp(8px,2.1vw,36px);top:clamp(130px,23vh,245px);
+    background:url("/app/icons/heart-512.png") center / contain no-repeat;
+    opacity:.11
+  }
+  html body #MediquoContainer,
+  html body .MediquoContainer,
+  html body #mediquo-container,
+  html body .mediquo-container,
+  html body [id^="MediquoContainer"],
+  html body [class~="MediquoContainer"]{
+    left:50%!important;right:auto!important;
+    width:min(1180px,calc(100vw - 96px))!important;
+    max-width:1180px!important;
+    transform:translateX(-50%)!important;
+    border-left:1px solid #ebe5f4!important;
+    border-right:1px solid #ebe5f4!important;
+    box-shadow:0 20px 60px rgba(55,35,95,.09)!important
+  }
+}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 </head>
