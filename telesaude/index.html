@@ -742,16 +742,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 /* Instalação do portal, independente do login e do atendimento. */
 .pwa-install-actions{
-  margin:17px 0 0;padding:16px 14px 13px;text-align:left;
-  border:1px solid #e7def3;border-radius:16px;
-  background:linear-gradient(145deg,#fff,#faf8fe);
-  box-shadow:0 5px 18px rgba(75,12,143,.035);
+  margin:14px 0 0;padding:0;text-align:left;
+  border:0;background:transparent;box-shadow:none;
 }
 .pwa-install-actions[hidden]{display:none!important}
-.pwa-install-title{
-  margin:0 0 10px;color:#493363;font-size:12px;
-  line-height:1.4;font-weight:800;letter-spacing:-.01em
-}
 .pwa-install-mobile{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .pwa-install-desktop{display:flex}
 .pwa-install-btn{
@@ -764,15 +758,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 }
 .pwa-install-btn:hover{border-color:#bda6de;background:#f6f1fd}
 .pwa-install-btn svg{width:17px;height:17px;flex:none;stroke-width:1.9}
-.pwa-install-note{
-  margin:10px 0 0;color:#756d86;font:450 11px/1.55 var(--font-body)
-}
 html[data-pwa-device="mobile"] .pwa-install-mobile{display:grid}
 html[data-pwa-device="mobile"] .pwa-install-desktop{display:none}
 html[data-pwa-device="desktop"] .pwa-install-mobile{display:none}
 html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
 @media(max-width:700px){
-  .pwa-install-actions{margin-top:14px;padding:13px 12px}
+  .pwa-install-actions{margin-top:14px;padding:0}
   .pwa-install-mobile{display:grid}
   .pwa-install-desktop{display:none}
   .pwa-install-btn{font-size:11px;padding:9px 6px;gap:5px}
@@ -880,7 +871,6 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       </button>
       <p id="sdk-entry-status" role="status" aria-live="polite" hidden></p>
       <section class="pwa-install-actions" id="pwa-install-actions" aria-label="Instalar TeleSaúde PromoVie como aplicativo">
-        <h2 class="pwa-install-title">Tenha sua TeleSaúde sempre à mão</h2>
         <div class="pwa-install-mobile">
           <button type="button" id="pwa-install-android" class="pwa-install-btn" aria-label="Instalar aplicativo TeleSaúde PromoVie no Android">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M11 17h2"/></svg>
@@ -897,7 +887,6 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
             <span>Instalar como aplicativo no computador</span>
           </button>
         </div>
-        <p class="pwa-install-note">No celular, adicione à tela inicial. No computador, mantenha o aplicativo à mão.</p>
       </section>
     </form>
   </div>
