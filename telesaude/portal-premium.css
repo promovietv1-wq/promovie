@@ -53,7 +53,7 @@ body{background:#f6f5f9}
     text-align:left;z-index:3;position:relative
   }
   .install-block::before{
-    content:"ÁREA DO BENEFICIÁRIO";display:block;margin-bottom:19px;
+    content:none;display:none;margin:0;
     font:800 10px/1.2 var(--font-body);letter-spacing:.15em;color:#866ba8
   }
   .patient-login{padding:0;margin:0 0 22px;border:0;border-radius:0;box-shadow:none;background:transparent}
@@ -837,4 +837,93 @@ body{
   .main:not(.phone-expanded) .copy h1{font-size:clamp(18px,5.4vw,20px)}
   .main:not(.phone-expanded) .install-block{padding:23px 17px 20px}
   .main:not(.phone-expanded) .patient-login-title{font-size:16.8px}
+}
+
+
+/* Ajuste estrutural de tipografia do cabeçalho de acesso.
+   O título deve crescer naturalmente em duas linhas sem invadir o subtítulo.
+   Não afeta SDK, formulários, botão Acessar nem lógica da Médiquo. */
+.patient-login-top{
+  grid-template-rows:auto;
+  align-items:start;
+}
+.patient-login-heading{
+  display:flex;
+  flex-direction:column;
+  grid-column:2;
+  grid-row:1;
+  align-self:start;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:8px;
+  min-width:0;
+  min-height:0;
+  padding:0;
+}
+.patient-login-title{
+  display:block;
+  grid-column:auto;
+  grid-row:auto;
+  align-self:auto;
+  margin:0;
+  line-height:1.25;
+  white-space:normal;
+  text-wrap:pretty;
+}
+.patient-login-subtitle{
+  display:block;
+  grid-column:auto;
+  grid-row:auto;
+  align-self:auto;
+  margin:0;
+  line-height:1.55;
+  white-space:normal;
+  position:static;
+  text-wrap:pretty;
+}
+.patient-login-mark{
+  grid-column:1;
+  grid-row:1;
+  align-self:start;
+  justify-self:center;
+  transform:none;
+  margin:2px 0 0;
+}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .patient-login-top,
+  .main.phone-expanded .patient-login-top{
+    grid-template-rows:auto;
+    align-items:start;
+  }
+  .main:not(.phone-expanded) .patient-login-heading,
+  .main.phone-expanded .patient-login-heading{
+    display:flex;
+    flex-direction:column;
+    grid-column:2;
+    grid-row:1;
+    align-self:start;
+    gap:6px;
+    min-width:0;
+    min-height:0;
+    padding:0;
+  }
+  .main:not(.phone-expanded) .patient-login-title,
+  .main.phone-expanded .patient-login-title{
+    grid-column:auto;
+    grid-row:auto;
+    line-height:1.32;
+    white-space:normal;
+  }
+  .main:not(.phone-expanded) .patient-login-subtitle,
+  .main.phone-expanded .patient-login-subtitle{
+    grid-column:auto;
+    grid-row:auto;
+    line-height:1.5;
+    white-space:normal;
+  }
+  .main:not(.phone-expanded) .patient-login-mark,
+  .main.phone-expanded .patient-login-mark{
+    align-self:start;
+    margin-top:2px;
+  }
 }
