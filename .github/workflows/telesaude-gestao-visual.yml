@@ -233,14 +233,29 @@ jobs:
                 const rect=host.getBoundingClientRect();
                 const iframe=host.querySelector('iframe').getBoundingClientRect();
                 const header=document.querySelector('.topbar').getBoundingClientRect();
+                const brand=document.querySelector('.topbar .identity');
+                const brandText=document.querySelector('.topbar .identity-copy strong');
+                const brandImage=document.querySelector('.topbar .identity img');
+                const back=document.querySelector('#back-access');
+                const brandRect=brand.getBoundingClientRect();
+                const backRect=back.getBoundingClientRect();
                 return {left:rect.left,right:rect.right,width:rect.width,top:rect.top,
                   viewport:innerWidth,scroll:document.documentElement.scrollWidth,
                   headerHeight:header.height,iframeWidth:iframe.width,
-                  brandVisible:getComputedStyle(document.querySelector('.stage'),'::after').content!=='none'};
+                  brandVisible:getComputedStyle(document.querySelector('.stage'),'::after').content!=='none',
+                  brandText:brandText.textContent.trim(),brandFont:parseFloat(getComputedStyle(brandText).fontSize),
+                  heartLoaded:brandImage.complete&&brandImage.naturalWidth>0,
+                  brandLeft:brandRect.left,brandRight:brandRect.right,
+                  backLeft:backRect.left,backRight:backRect.right};
               });
               assert.ok(layout.scroll<=layout.viewport+1,'Rolagem horizontal: '+JSON.stringify(layout));
               assert.ok(Math.abs(layout.top-layout.headerHeight)<2,'Widget deve ficar logo abaixo do cabeçalho');
               assert.ok(layout.iframeWidth>=layout.width-5,'Iframe deve continuar com largura total do contêiner');
+              assert.equal(layout.brandText,'TeleSaúde PromoVie','Identidade deve estar presente no mobile e desktop');
+              assert.equal(layout.heartLoaded,true,'Logo coração deve carregar em todas as larguras');
+              assert.ok(layout.brandRight<=layout.backLeft+2,'Cabeçalho sem sobreposição em '+width+': '+JSON.stringify(layout));
+              assert.ok(layout.brandLeft>=0&&layout.backRight<=width,'Cabeçalho não deve sair da viewport');
+              if(width>=1100)assert.ok(layout.brandFont>=18,'Marca maior que o título da lista no desktop');
               if(width<1100){
                 assert.ok(Math.abs(layout.left)<2,'Telas pequenas não podem mudar: '+JSON.stringify(layout));
                 assert.ok(Math.abs(layout.width-width)<2,'Largura original preservada: '+JSON.stringify(layout));
