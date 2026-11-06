@@ -74,7 +74,7 @@
   // O código pessoal, já validado pelo backend, também protege os dados localmente.
   // Usamos outro domínio criptográfico para que a chave do cofre não seja a credencial da sessão.
   function codeSecret(code){
-    const normalized=String(code||"").trim().toUpperCase().replace(/[\\s-]/g,"");
+    const normalized=String(code||"").trim().toUpperCase().replace(/[\s-]/g,"");
     if(!/^[A-HJ-NP-Z2-9]{20}$/.test(normalized))throw Error("Código pessoal inválido.");
     return "PromoVie|EspacoSaude|codigo-v2|"+normalized;
   }
