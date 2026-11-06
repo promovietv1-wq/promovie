@@ -84,3 +84,8 @@ dialog::backdrop{background:rgba(28,15,57,.5)}
 .consent-row input{width:17px;height:17px;min-width:17px;accent-color:#5b249e;margin:2px 0 0}
 .consent-row span{flex:1}
 .consent-row a{font-weight:750}
+
+.privacy-document{max-width:800px}
+.privacy-document .panel h2{margin:22px 0 8px;color:#411f73;font-size:16px}
+.privacy-document .panel h2:first-child{margin-top:0}
+.privacy-document .panel p{font-size:13px;line-height:1.75;margin:0 0 14px}
