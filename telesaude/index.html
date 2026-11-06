@@ -912,20 +912,17 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
         try{await Promise.resolve(widget.destroy());}catch{}
         initialized=false;
       }
+      // Exibicao oficial em janela inteira em computador, tablet e celular.
+      // Oculta apenas o launcher; o botao Acessar chama widget.open().
       const widgetConfig={
         apiKey:result.apiKey,
         accessToken:result.access_token,
         adapter:"web",
         environment:"production",
         show:"always",
-        theme:{locale:"pt",text:{title:"TeleSaúde"},colors:{primary:"#4b0c8f"}}
+        isMobileView:true,
+        theme:{locale:"pt",launcher:"hidden",text:{title:"TeleSaúde"},colors:{primary:"#4b0c8f"}}
       };
-      // No celular, sem botao flutuante: o acesso abre o Widget diretamente.
-      // O desktop conserva a configuracao original.
-      if(window.matchMedia("(max-width:700px)").matches){
-        widgetConfig.isMobileView=true;
-        widgetConfig.theme.launcher="hidden";
-      }
       await Promise.resolve(widget.init(widgetConfig));
       initialized=true;
       if(typeof widget.open!=="function")throw new Error("A janela do atendimento não está disponível.");
