@@ -715,9 +715,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 .patient-login-top{align-items:center;gap:14px}
 .patient-login-heading{flex:1;min-width:0;gap:4px}
 .patient-login-title{
-  display:block;font:650 13px/1.35 var(--font-body);letter-spacing:0;color:#66567d
-}
-.patient-login-product{
   display:block;font:750 clamp(21px,2.15vw,27px)/1.2 var(--font-display);
   letter-spacing:-.045em;color:#302144;overflow-wrap:break-word
 }
@@ -728,13 +725,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
 @media(max-width:700px){
   .main:not(.phone-expanded) .copy .lead{max-width:100%;line-height:1.6}
   .main:not(.phone-expanded) .patient-login-top{gap:12px;margin-bottom:20px}
-  .main:not(.phone-expanded) .patient-login-title{font-size:12px}
-  .main:not(.phone-expanded) .patient-login-product{font-size:clamp(20px,5.2vw,24px)}
+  .main:not(.phone-expanded) .patient-login-title{font-size:clamp(20px,5.2vw,24px);line-height:1.2}
   .main:not(.phone-expanded) .patient-login-subtitle{font-size:12px;line-height:1.45}
 }
 @media(max-width:370px){
   .patient-login-top{gap:10px}
-  .patient-login-product{font-size:20px}
+  .patient-login-title{font-size:20px}
 }
 </style>
 </head>
@@ -797,7 +793,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
           </span>
           <span class="patient-login-heading">
             <strong class="patient-login-title">Acesse sua TeleSaúde</strong>
-            <strong class="patient-login-product">TeleHealth</strong>
             <span class="patient-login-subtitle">Atendimento médico com profissionais capacitados.</span>
           </span>
         </div>
