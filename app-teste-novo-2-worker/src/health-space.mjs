@@ -196,6 +196,20 @@ export async function handleHealthSpace(request,env,cors={}){
       }
     }
     if(pathname===BASE+"/vault"&&method==="DELETE"){
+      // Mesmo com uma sessão roubada, a exclusão requer novamente o código pessoal.
+      const input=await jsonBody(request,2048);
+      const code=String(input.codigo??"").trim().toUpperCase().replace(/[\\s-]/g,"");
+      if(!/^[A-HJ-NP-Z2-9]{20}$/.test(code))
+        return response(403,{error:"Confirme o código pessoal para excluir seu espaço."},cors);
+      const current=await db.prepare(
+        "SELECT b.cpf_index,c.code_hash AS current_hash,p.code_hash AS pending_hash "+
+        "FROM pv_beneficiarios b LEFT JOIN pv_access_codes c ON c.beneficiario_id=b.id "+
+        "LEFT JOIN pv_access_codes_pending p ON p.beneficiario_id=b.id "+
+        "WHERE b.id=? AND b.situacao='ativo'"
+      ).bind(user.owner).first();
+      const signed=current?await accessCodeHash(env,current.cpf_index,code):"";
+      if(!current||!(equalHex(signed,current.current_hash)||equalHex(signed,current.pending_hash)))
+        return response(403,{error:"Código pessoal incorreto. Nenhum dado foi excluído."},cors);
       await db.prepare("DELETE FROM pv_space_documents WHERE beneficiario_id=?").bind(user.owner).run();
       await db.prepare("DELETE FROM pv_space_vaults WHERE beneficiario_id=?").bind(user.owner).run();
       await db.prepare("DELETE FROM pv_space_consents WHERE beneficiario_id=?").bind(user.owner).run();
