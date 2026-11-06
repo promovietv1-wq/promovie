@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Atendimentos | TeleSaúde PromoVie</title>
+<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bar-h:64px;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-synthesis:none;
+}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;background:#fff}
+body{overflow:hidden;color:#302349}
+a{color:inherit}
+button{font:inherit}
+.topbar{
+  position:fixed;inset:0 0 auto;height:var(--bar-h);
+  padding:0 max(18px,env(safe-area-inset-right)) 0 max(18px,env(safe-area-inset-left));
+  background:rgba(255,255,255,.98);border-bottom:1px solid #e9e4f2;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  z-index:2147483640;
+}
+.identity{display:flex;align-items:center;gap:11px;min-width:0}
+.identity img{display:block;width:47px;height:47px;object-fit:contain;flex:none}
+.identity-copy{min-width:0;display:flex;flex-direction:column;gap:3px}
+.identity-copy strong{font-size:14px;font-weight:800;letter-spacing:-.025em;color:#3c196e}
+.identity-copy span{font-size:11px;color:#766b86}
+.back{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:41px;white-space:nowrap;padding:10px 14px;
+  border:1px solid #ded5ee;border-radius:12px;
+  background:#fff;color:#542aa0;text-decoration:none;font-size:12px;font-weight:750;
+}
+.back:hover,.back:focus-visible{background:#f7f3fd;border-color:#bda8df}
+.back:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
+.back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.stage{position:fixed;inset:var(--bar-h) 0 0;background:#fff}
+.status{
+  position:absolute;inset:0;padding:24px;
+  display:grid;place-items:center;z-index:1;background:#fff;
+}
+.status[hidden]{display:none}
+.status-card{width:min(420px,100%);text-align:center}
+.status-icon{
+  display:grid;place-items:center;margin:0 auto 20px;
+  width:62px;height:62px;border-radius:20px;
+  background:linear-gradient(142deg,#eee7fb,#f5f1fc);
+  color:#542aa0;font-size:27px;font-weight:800;
+}
+.status-card h1{font-size:21px;line-height:1.28;letter-spacing:-.03em;margin:0 0 10px}
+.status-card p{font-size:13px;line-height:1.65;color:#756e80;margin:0}
+.status-card a{
+  display:inline-flex;justify-content:center;margin-top:24px;padding:13px 20px;
+  background:#5424a0;color:#fff;border-radius:12px;
+  font-size:13px;font-weight:700;text-decoration:none;
+}
+.status-card a[hidden]{display:none}
+.loading .status-icon{animation:breathe 1.8s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.7;transform:scale(.96)}}
+/* A Médiquo controla o conteúdo interno. Estilizamos somente o contêiner externo.
+   Os nomes de contêiner são do Widget; nunca alteramos o iframe de atendimento. */
+html body #MediquoContainer,
+html body .MediquoContainer,
+html body #mediquo-container,
+html body .mediquo-container,
+html body [id^="MediquoContainer"],
+html body [class~="MediquoContainer"]{
+  position:fixed!important;
+  top:var(--bar-h)!important;right:0!important;bottom:0!important;left:0!important;
+  width:100vw!important;max-width:none!important;min-width:0!important;
+  height:calc(100vh - var(--bar-h))!important;
+  height:calc(100dvh - var(--bar-h))!important;
+  max-height:none!important;min-height:0!important;
+  margin:0!important;padding:0!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important;
+  transform:none!important;z-index:1000!important;
+  overflow:hidden!important;background:#fff!important;
+}
+html body #MediquoContainer iframe,
+html body .MediquoContainer iframe,
+html body #mediquo-container iframe,
+html body .mediquo-container iframe{
+  display:block!important;width:100%!important;height:100%!important;
+  max-width:none!important;max-height:none!important;border:0!important;border-radius:0!important;
+}
+html body #MediquoLauncher,
+html body .MediquoLauncher,
+html body #mediquo-launcher,
+html body .mediquo-launcher{display:none!important}
+@media(max-width:700px){
+  :root{--bar-h:58px}
+  .topbar{gap:10px;padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}
+  .identity{gap:7px}
+  .identity img{width:40px;height:40px}
+  .identity-copy strong{font-size:12px}
+  .identity-copy span{font-size:10px}
+  .back{min-height:40px;padding:9px 11px;font-size:11px;gap:6px}
+  .back svg{width:15px;height:15px}
+}
+@media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="identity">
+    <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="47" height="47" alt="">
+    <div class="identity-copy">
+      <strong>TeleSaúde PromoVie</strong>
+      <span>Área de atendimentos</span>
+    </div>
+  </div>
+  <a class="back" href="/telesaude/" id="back-access">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    Voltar ao acesso
+  </a>
+</header>
+<main class="stage" aria-label="Área de atendimentos">
+  <section id="status" class="status loading" role="status" aria-live="polite">
+    <div class="status-card">
+      <div class="status-icon" aria-hidden="true">+</div>
+      <h1 id="status-title">Preparando seu atendimento</h1>
+      <p id="status-message">Estamos abrindo a TeleSaúde em uma página exclusiva.</p>
+      <a id="retry" href="/telesaude/" hidden>Voltar e acessar novamente</a>
+    </div>
+  </section>
+</main>
+<script>
+(function(){
+  "use strict";
+  const HANDOFF_KEY="promovie:mediquo:handoff:v1";
+  const status=document.getElementById("status");
+  const title=document.getElementById("status-title");
+  const message=document.getElementById("status-message");
+  const retry=document.getElementById("retry");
+  const SDK_SOURCE="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+
+  function errorState(text){
+    status.hidden=false;
+    status.classList.remove("loading");
+    title.textContent="Não foi possível abrir o atendimento";
+    message.textContent=text;
+    retry.hidden=false;
+  }
+
+  function receiveOnce(){
+    let raw=null;
+    try{
+      raw=window.sessionStorage.getItem(HANDOFF_KEY);
+      window.sessionStorage.removeItem(HANDOFF_KEY);
+    }catch{return null;}
+    if(!raw)return null;
+    try{
+      const data=JSON.parse(raw);
+      if(!data||typeof data!=="object"||
+         typeof data.apiKey!=="string"||!data.apiKey||
+         typeof data.accessToken!=="string"||!data.accessToken||
+         data.environment!=="production"||
+         typeof data.createdAt!=="number"||
+         Date.now()-data.createdAt>60000||
+         data.createdAt-Date.now()>10000)return null;
+      return data;
+    }catch{return null;}
+  }
+
+  function loadSdk(){
+    return new Promise(function(resolve,reject){
+      const script=document.createElement("script");
+      script.src=SDK_SOURCE;
+      script.async=true;
+      const timeout=setTimeout(function(){
+        script.remove();reject(new Error("O atendimento não respondeu."));
+      },20000);
+      script.onload=function(){
+        clearTimeout(timeout);
+        if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function"){
+          resolve(window.MediquoWidget);
+        }else{reject(new Error("O atendimento está indisponível."));}
+      };
+      script.onerror=function(){
+        clearTimeout(timeout);reject(new Error("A conexão com o atendimento falhou."));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  async function openAttendance(){
+    const handoff=receiveOnce();
+    if(!handoff){
+      errorState("Por segurança, abra a TeleSaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
+      return;
+    }
+    try{
+      const widget=await loadSdk();
+      await Promise.resolve(widget.init({
+        apiKey:handoff.apiKey,
+        accessToken:handoff.accessToken,
+        adapter:"web",
+        environment:"production",
+        show:"always",
+        isMobileView:true,
+        theme:{
+          launcher:"hidden",locale:"pt",
+          text:{title:"TeleSaúde"},
+          colors:{primary:"#4b0c8f"}
+        }
+      }));
+      if(typeof widget.open!=="function")throw new Error("Não foi possível abrir a interface de atendimento.");
+      await Promise.resolve(widget.open());
+      status.hidden=true;
+    }catch{
+      errorState("Não conseguimos carregar a TeleSaúde nesta página. Retorne ao acesso e tente novamente.");
+    }
+  }
+  openAttendance();
+})();
+</script>
+</body>
+</html>
