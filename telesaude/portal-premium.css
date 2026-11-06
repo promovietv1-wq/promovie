@@ -487,3 +487,187 @@ body{
   .main.phone-expanded .phone{transform:rotate(-3deg)}
   .main.phone-expanded .phone-stage::after,.main.phone-expanded .phone-stage::before{display:none}
 }
+
+
+/* Lapidacao de proporcoes, alinhamentos opticos e microtipografia.
+   Somente a camada visual da PromoVie; nao interfere no SDK Mediquo. */
+.patient-login-top{
+  display:grid;
+  grid-template-columns:50px minmax(0,1fr);
+  grid-template-rows:30px auto;
+  column-gap:14px;
+  row-gap:3px;
+  align-items:center;
+  padding-top:10px;
+  margin:0 0 26px;
+}
+.patient-login-heading{display:contents}
+.patient-login-mark{
+  grid-column:1;
+  grid-row:1;
+  width:50px;
+  height:50px;
+  min-width:50px;
+  flex:none;
+  place-self:center;
+  transform:none;
+  margin:0;
+  border-radius:17px;
+}
+.patient-login-mark svg{width:27px;height:27px}
+.patient-login-title{
+  grid-column:2;
+  grid-row:1;
+  align-self:center;
+  margin:0;
+  font-size:clamp(21px,1.7vw,24px);
+  line-height:30px;
+  letter-spacing:-.031em;
+  font-weight:650;
+}
+.patient-login-subtitle{
+  grid-column:2;
+  grid-row:2;
+  align-self:start;
+  margin:0;
+  font-size:13px;
+  line-height:18px;
+  color:#756b86;
+}
+.patient-login-label{margin-bottom:8px;letter-spacing:.004em}
+.patient-login input:not([type="checkbox"]){
+  min-height:54px;
+  border-radius:12px;
+  font-size:15px;
+  padding:13px 15px;
+}
+.patient-login input:not([type="checkbox"]):focus-visible{
+  border-color:#8b5add;
+  box-shadow:0 0 0 3px rgba(132,80,219,.115);
+}
+.patient-login #access-cpf{margin-bottom:19px}
+.patient-login-help{margin-top:8px;line-height:1.55}
+.patient-remember{margin-top:19px;border-radius:13px}
+.install{border-radius:14px;letter-spacing:.005em}
+.lead-break{display:block;margin-top:2px}
+@media(min-width:1080px){
+  .main{
+    box-shadow:0 22px 63px rgba(42,29,82,.078),
+               0 3px 12px rgba(27,19,58,.024);
+  }
+  .copy{padding-top:54px;padding-bottom:56px}
+  .copy h1{
+    max-width:460px;
+    font-size:clamp(40px,3.45vw,50px);
+    font-weight:600;
+    letter-spacing:-.043em;
+    line-height:1.145;
+    margin-bottom:19px;
+  }
+  .lead{
+    max-width:390px;
+    font-size:16px;
+    line-height:1.72;
+    letter-spacing:-.008em;
+    color:#f1eafa;
+  }
+  .heart-stage{margin-bottom:21px}
+  .hero-heart{
+    width:138px;height:138px;
+    filter:drop-shadow(0 10px 16px rgba(23,13,57,.16));
+  }
+  .copy::before{opacity:.76}
+  .copy::after{opacity:.56}
+  .install-block::before{
+    margin-bottom:19px;
+    letter-spacing:.14em;
+  }
+  .patient-login{margin-bottom:19px}
+  .install{
+    min-height:57px;
+    box-shadow:0 11px 24px rgba(84,36,154,.17),
+               inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .phone-stage{bottom:49px}
+  .phone{
+    transform:translateY(-15px) perspective(980px)
+      rotateY(-11deg) rotateX(2deg) rotateZ(7.5deg) scale(.79);
+    box-shadow:4px 0 0 -1px rgba(208,214,230,.42),
+               -2px 1px 0 -1px rgba(240,242,250,.3),
+               12px 12px 10px -8px rgba(10,10,28,.34),
+               20px 30px 46px rgba(13,10,36,.29),
+               inset 0 0 0 1px rgba(0,0,0,.58);
+  }
+  .phone-glass-glint{opacity:.36}
+  .phone .chat-row{gap:8px}
+  .phone .chat-info small{margin-top:3px}
+}
+@media(min-width:1080px) and (max-width:1210px){
+  .copy h1{font-size:40px;max-width:340px}
+  .lead{font-size:15px;max-width:320px}
+  .heart-stage{width:140px;height:140px}
+  .hero-heart{width:129px;height:129px}
+}
+@media(min-width:701px) and (max-width:1079px){
+  .patient-login-top{
+    grid-template-columns:47px minmax(0,1fr);
+    grid-template-rows:27px auto;
+    column-gap:12px;
+    padding-top:10px;
+    margin-bottom:25px;
+  }
+  .patient-login-mark{
+    width:47px;height:47px;min-width:47px;
+    border-radius:15px;
+  }
+  .patient-login-mark svg{width:25px;height:25px}
+  .patient-login-title{
+    font-size:19px;
+    line-height:27px;
+    letter-spacing:-.026em;
+  }
+  .patient-login-subtitle{font-size:12px;line-height:17px}
+  .lead{line-height:1.67}
+}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .patient-login-top,
+  .main.phone-expanded .patient-login-top{
+    display:grid;
+    grid-template-columns:44px minmax(0,1fr);
+    grid-template-rows:25px auto;
+    column-gap:12px;
+    row-gap:2px;
+    align-items:center;
+    padding-top:9px;
+    margin-bottom:22px;
+  }
+  .main:not(.phone-expanded) .patient-login-mark,
+  .main.phone-expanded .patient-login-mark{
+    width:44px;height:44px;min-width:44px;
+    transform:none;
+    border-radius:14px;
+  }
+  .main:not(.phone-expanded) .patient-login-mark svg,
+  .main.phone-expanded .patient-login-mark svg{
+    width:23px;height:23px;
+  }
+  .main:not(.phone-expanded) .patient-login-title,
+  .main.phone-expanded .patient-login-title{
+    font-size:15px;
+    line-height:25px;
+    letter-spacing:-.019em;
+  }
+  .main:not(.phone-expanded) .patient-login-subtitle,
+  .main.phone-expanded .patient-login-subtitle{
+    font-size:11.5px;
+    line-height:17px;
+  }
+  .main:not(.phone-expanded) .lead{line-height:1.6}
+  .main:not(.phone-expanded) .install{
+    min-height:56px;
+    box-shadow:0 11px 24px rgba(84,36,154,.18);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .phone .chat-row,.patient-remember{transition:none}
+}
