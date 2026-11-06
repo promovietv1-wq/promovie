@@ -183,6 +183,20 @@ test('documentos só podem ser vistos e excluídos pelo proprietário',async()=>
   await call(env,'/documents/'+id,{method:'DELETE',token:tokenA});
   assert.equal(db.docs.has(id),false);
 });
+test('limite de dez documentos impede armazenamento excessivo por beneficiário',async()=>{
+  const {env}=await fixture();
+  const token=await login(env);
+  for(let i=0;i<10;i++){
+    const id=crypto.randomUUID();
+    const result=await call(env,'/documents',{method:'POST',token,data:{
+      id,ciphertext:'c'.repeat(128)
+    }});
+    assert.equal(result.status,201,'Documento '+(i+1));
+  }
+  assert.equal((await call(env,'/documents',{method:'POST',token,data:{
+    id:crypto.randomUUID(),ciphertext:'d'.repeat(128)
+  }})).status,413);
+});
 test('exclusão do cofre remove o consentimento e invalida a sessão',async()=>{
   const {env,db}=await fixture(),token=await login(env);
   assert.equal((await call(env,'/vault',{method:'PUT',token,data:vault})).status,200);
