@@ -367,13 +367,8 @@
   $("delete-vault").addEventListener("click",()=>protectedTask(async()=>{
     const decision=prompt("Esta ação apaga permanentemente informações e documentos. Para confirmar, digite EXCLUIR:");
     if(decision!=="EXCLUIR")return;
-    const phrase=prompt("Informe sua senha privada para confirmar:");
-    if(!phrase)throw Error("Operação cancelada.");
-    try{
-      const key=await keyFor(phrase,state.salt);
-      await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(state.record.iv)},key,decode64(state.record.ciphertext));
-    }catch{throw Error("Senha privada incorreta. Nada foi excluído.");}
-    const codigo=prompt("Confirme seu código pessoal da TeleSaúde para excluir os dados:");
+    // Exclusão permanece protegida por nova confirmação do código validada pelo backend.
+    const codigo=prompt("Confirme o mesmo código pessoal da TeleSaúde para excluir os dados:");
     if(!codigo)throw Error("Operação cancelada.");
     await api("/vault",{method:"DELETE",data:{codigo}});reset();
     notice("Seu conteúdo pessoal foi excluído deste espaço.","success");
