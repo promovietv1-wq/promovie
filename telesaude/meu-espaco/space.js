@@ -2,6 +2,12 @@
    Sem localStorage, IndexedDB, cookies JS ou acesso ao SDK Médiquo. */
 (function(){
   "use strict";
+  // Bloquear apresentação em quadros de outros sites (a hospedagem estática
+  // não permite definir frame-ancestors por cabeçalho HTTP).
+  if(window.top!==window.self){
+    document.body.replaceChildren();
+    return;
+  }
   const BASE="https://backend.promovie.tv.br/api/promovie/space/v1";
   const MAX_FILE=500*1024;
   const LIMIT_NOTES=50;
