@@ -1,0 +1,46 @@
+name: Meu Espaco de Saude - verificar API publicada
+on:
+  workflow_run:
+    workflows: ['Publicar Worker Token PromoVie']
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificacao:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Conferir backend privado em produção sem acessar qualquer beneficiário
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          const base='https://backend.promovie.tv.br/api/promovie/space/v1';
+          const site='https://www.promovie.tv.br';
+          async function get(path,headers={}) {
+            return fetch(base+path,{headers:{Origin:site,'Cache-Control':'no-cache',...headers},
+              signal:AbortSignal.timeout(15000)});
+          }
+          const health=await get('/health');
+          assert.equal(health.status,200,'A API precisa estar disponível');
+          const state=await health.json();
+          assert.equal(state.disponivel,true,'O novo espaço deve estar ativo');
+          const login=await fetch(base+'/session',{
+            method:'POST',
+            headers:{Origin:site,'Content-Type':'application/json'},
+            body:JSON.stringify({cpf:'00000000000',codigo:'formato-invalido'}),
+            signal:AbortSignal.timeout(15000)
+          });
+          assert.equal(login.status,401,'Código e CPF inválidos nunca devem autenticar');
+          const vault=await get('/vault');
+          assert.equal(vault.status,401,'Cofre só pode ser consultado com sessão');
+          const cross=await get('/health',{Origin:'https://site-nao-autorizado.example'});
+          assert.equal(cross.status,403,'A origem externa deve ser recusada');
+          console.log('API habilitada, esquema D1 inicializado e acesso não autenticado bloqueado.');
+          JS
