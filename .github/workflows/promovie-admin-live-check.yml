@@ -35,6 +35,7 @@ jobs:
           assert.equal(state.ok,true);
           assert.equal(state.banco,'conectado');
           assert.equal(typeof state.cadastro_real_habilitado,'boolean','Status de escrita do SDK deve ser informado sem alterar configuracoes');
+          console.log('Conferência do e-mail (sem valores ou segredos):',JSON.stringify(state.email_delivery_diagnostics||{}));
           assert.equal(state.email_delivery_ready,true,'O envio de e-mail deve estar habilitado e com remetente e chave configurados');
           console.log('Resend configurado e envio automatico habilitado, sem efetuar disparos.');
           const guest=await req('https://backend.promovie.tv.br/api/promovie/admin/v1/me');
