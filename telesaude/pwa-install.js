@@ -98,7 +98,7 @@
     const url=current.photo||"";
     photo.onload=function(){figure.hidden=false;};
     photo.onerror=function(){figure.hidden=true;};
-    figure.hidden=true;
+    figure.hidden=!url;
     if(url){
       credit.textContent=current.credit||"Captura de tela real do navegador.";
       photo.alt="Captura de tela real do menu de atalho ou instalacao do navegador";
