@@ -15,6 +15,9 @@
         /^#pv-handoff=[0-9a-f-]{36}$/i.test(location.hash);
     }catch{}
     if(!permitted){document.body.replaceChildren();return;}
+    // O retorno visível fica no cabeçalho da página do atendimento.
+    // Evitar um segundo botão aparente dentro do quadro de registros.
+    document.documentElement.classList.add("pv-space-embedded");
   }
   const BASE="https://backend.promovie.tv.br/api/promovie/space/v1";
   const MAX_FILE=500*1024;
