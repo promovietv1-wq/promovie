@@ -2,7 +2,6 @@
 /* Extras visuais da PromoVie: agendamentos e orientacao de atalhos.
    Nao altera o SDK nem os elementos internos da Mediquo. */
 .clinic-tools{display:flex;align-items:center;justify-content:center;gap:11px;margin-left:auto;min-width:0;position:relative;z-index:1}
-.clinic-tools-caption{font:700 12px/1.3 Inter,Arial,sans-serif;color:#4b2881;white-space:nowrap}
 .agenda-open{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;min-height:37px;border:1px solid #bca2df;border-radius:10px;color:#4b0c8f;background:#f0e8fb;font:800 12px/1.2 Inter,Arial,sans-serif;cursor:pointer;white-space:nowrap}
 .agenda-open:hover{background:#e4d5fa}
 .agenda-open:focus-visible,.agenda-modal button:focus-visible,.agenda-modal a:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
@@ -28,7 +27,6 @@
   .topbar .identity-copy strong{font-size:11px;letter-spacing:-.045em}
   .topbar .back{width:34px;height:34px;min-width:34px;flex-basis:34px}
   .clinic-tools{gap:0}
-  .clinic-tools-caption{display:none}
   .agenda-open{font-size:10.5px;min-height:35px;padding:8px 8px;border-radius:9px}
   .agenda-modal{padding:20px}
 }
@@ -55,8 +53,6 @@
 .pwa-help-image figcaption a{color:#5520a0}
 .pwa-help-hint{font-size:12px;line-height:1.5;color:#71677c;margin:8px 0}
 .pwa-help-dialog .pwa-help-close{margin-top:15px}
-.pwa-native-install{display:block;width:100%;border:1px solid #5420a0;border-radius:11px;color:#fff;background:#5420a0;padding:10px 13px;min-height:43px;font-weight:800;cursor:pointer;margin-top:11px}
-.pwa-native-install[hidden]{display:none!important}
 @media(max-width:600px){
   .pwa-help-dialog{padding:19px;width:calc(100% - 16px)}
   .pwa-help-dialog h2{font-size:22px}
