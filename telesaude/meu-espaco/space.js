@@ -35,14 +35,14 @@
             attendance.focus();
             setTimeout(function(){
               if(document.visibilityState==="visible"&&document.hasFocus()){
-                notice("Para retornar à consulta, selecione a aba do atendimento no navegador.");
+                notice("Para retornar à consulta, selecione a aba do atendimento no navegador.","navigation");
               }
             },750);
             return;
           }
         }catch{}
         const fallback="Para retornar à consulta, selecione a aba do atendimento no navegador.";
-        if(typeof BroadcastChannel!=="function"){notice(fallback);return;}
+        if(typeof BroadcastChannel!=="function"){notice(fallback,"navigation");return;}
         const channel=new BroadcastChannel("promovie:telesaude:alternancia:v1");
         const id=crypto.randomUUID();
         let gotReply=false;
@@ -52,7 +52,7 @@
         channel.postMessage({type:"focus-attendance",id});
         setTimeout(function(){
           channel.close();
-          if(!gotReply)notice(fallback);
+          if(!gotReply)notice(fallback,"navigation");
         },700);
       };
       button.addEventListener("click",returnToAttendance);
