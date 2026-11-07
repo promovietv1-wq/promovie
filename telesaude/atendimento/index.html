@@ -114,6 +114,15 @@ button{font:inherit}
     transform:translateX(-50%)
   }
 }
+.space-embedded[hidden]{display:none!important}
+.space-embedded{
+  position:fixed;inset:0;z-index:2147483647;display:block;
+  background:#f9f7fc;overflow:hidden
+}
+.space-embedded iframe{
+  display:block;width:100%;height:100%;height:100dvh;
+  border:0;background:#f9f7fc
+}
 .space-open-help[hidden]{display:none!important}
 .space-open-help{
   position:fixed;z-index:1200;left:max(12px,env(safe-area-inset-left));
@@ -265,9 +274,12 @@ html body .mediquo-launcher{display:none!important}
     </svg>
   </a>
 </nav>
+<section id="space-embedded" class="space-embedded" hidden role="region" aria-label="Meu Espaço de Saúde integrado ao aplicativo">
+  <iframe id="space-embedded-frame" title="Meu Espaço de Saúde" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
+</section>
 <section id="space-open-help" class="space-open-help" hidden role="alert" aria-live="assertive">
   <strong>Seu atendimento continua aberto.</strong>
-  <span>Este aplicativo não abriu uma segunda janela. Para consultar seus registros, abra o Meu Espaço de Saúde em um navegador separado, sem fechar a consulta.</span>
+  <span>Não foi possível abrir seus registros aqui. A consulta permanece ativa. Se necessário, copie o endereço para acessar em outro navegador.</span>
   <div class="space-help-actions">
     <button id="space-copy-link" type="button">Copiar endereço</button>
     <button id="space-hide-help" type="button">Fechar aviso</button>
@@ -336,6 +348,17 @@ html body .mediquo-launcher{display:none!important}
       false,["encrypt","decrypt"]).finally(()=>binary.fill(0));
     delete handoff.key;
     let openedSpace=null;
+    const embeddedLayer=document.getElementById("space-embedded");
+    const embeddedFrame=document.getElementById("space-embedded-frame");
+    window.addEventListener("message",function(message){
+      if(message.origin===location.origin&&embeddedFrame&&
+         message.source===embeddedFrame.contentWindow&&
+         message.data?.type==="promovie-space-close"&&
+         embeddedLayer&&!embeddedLayer.hidden){
+        embeddedLayer.hidden=true;
+        link.focus();
+      }
+    });
     const openHelp=document.getElementById("space-open-help");
     const hideHelp=document.getElementById("space-hide-help");
     const copyLink=document.getElementById("space-copy-link");
@@ -349,17 +372,39 @@ html body .mediquo-launcher{display:none!important}
       }
     });
     link.addEventListener("click",function(event){
-      if(Date.now()-createdAt>=29*60*1000)return;
+      const installedApp=Boolean(
+        (typeof window.matchMedia==="function"&&
+         window.matchMedia("(display-mode: standalone)").matches)||
+        navigator.standalone===true);
+      if(installedApp&&embeddedLayer&&embeddedFrame&&
+         embeddedFrame.getAttribute("src")){
+        event.preventDefault();
+        embeddedLayer.hidden=false;
+        return;
+      }
+      if(Date.now()-createdAt>=29*60*1000){
+        if(installedApp){event.preventDefault();if(openHelp)openHelp.hidden=false;}
+        return;
+      }
       if(openedSpace&&!openedSpace.closed){
         event.preventDefault();
         try{openedSpace.focus();}catch{}
         return;
       }
       const id=crypto.randomUUID(),url=new URL(link.href,location.origin);
+      if(installedApp)url.searchParams.set("integrado","1");
       url.hash="pv-handoff="+id;
       const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
       let done=false;
-      const timeout=setTimeout(()=>{if(!done)channel.close();},12000);
+      const timeout=setTimeout(()=>{
+        if(!done){
+          channel.close();
+          if(installedApp&&embeddedLayer){
+            embeddedLayer.hidden=true;
+            if(openHelp)openHelp.hidden=false;
+          }
+        }
+      },12000);
       channel.addEventListener("message",async function(message){
         if(done||message.data?.type!=="space-ready"||message.data.id!==id)return;
         try{
@@ -375,6 +420,15 @@ html body .mediquo-launcher{display:none!important}
           clearTimeout(timeout);channel.close();
         }catch{}
       });
+      // Um aplicativo instalado não precisa sair da própria tela.
+      // O quadro usa a sessão efêmera já preparada no login, sem reiniciar o SDK.
+      if(installedApp&&embeddedLayer&&embeddedFrame){
+        event.preventDefault();
+        embeddedLayer.hidden=false;
+        embeddedFrame.setAttribute("src",url.href);
+        openedSpace=embeddedFrame.contentWindow;
+        return;
+      }
       const popup=window.open(url.href,"_blank");
       if(!popup){
         // Em PWAs móveis, especialmente no iOS, window.open pode não abrir
