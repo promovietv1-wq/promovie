@@ -92,5 +92,95 @@ async function run(width){
     console.log('Código único e migração aprovados:',width);
   }finally{await page.close();}
 }
-try{for(const width of [390,1440])await run(width);}
+
+async function testSingleSignOn(){
+  let vault=null,profileToCheck="Anotação de teste sem dados reais";
+  const errors=[],context=await browser.newContext({
+    viewport:{width:390,height:820},permissions:["clipboard-read","clipboard-write"]
+  });
+  context.on("page",page=>page.on("pageerror",err=>errors.push(err.message)));
+  await context.route("https://widget.mediquo.com/**",route=>route.fulfill({
+    status:200,contentType:"application/javascript",
+    body:"window.MediquoWidget={init:()=>{window.__pvInit=(window.__pvInit||0)+1},open:()=>{window.__pvOpen=(window.__pvOpen||0)+1}};"
+  }));
+  await context.route("https://backend.promovie.tv.br/**",async route=>{
+    const request=route.request(),url=new URL(request.url()),method=request.method();
+    const path=url.pathname,headers={
+      "Access-Control-Allow-Origin":origin,
+      "Access-Control-Allow-Methods":"GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers":"Authorization,Content-Type",
+      "Cache-Control":"no-store"
+    };
+    if(method==="OPTIONS")return route.fulfill({status:204,headers});
+    let body={},status=200;
+    if(path==="/api/promovie/access/v1/health")body={disponivel:true};
+    else if(path==="/api/promovie/access/v1/session")body={
+      access_token:"sdk-session-test",apiKey:"mock-sdk-api-key",environment:"production"
+    };
+    else if(path==="/api/promovie/space/v1/health")body={disponivel:true};
+    else if(path==="/api/promovie/space/v1/session")body={token:"S".repeat(43),expira_em_segundos:1800};
+    else if(path==="/api/promovie/space/v1/vault"&&method==="GET"){
+      assert.equal(request.headers().authorization,"Bearer "+"S".repeat(43));
+      body={revision:vault?.revision||0,record:vault};
+    }else if(path==="/api/promovie/space/v1/vault"&&method==="PUT"){
+      const req=request.postDataJSON();
+      assert.equal(req.revision,vault?.revision||0);
+      if(!vault)assert.equal(req.consent,true);
+      vault={revision:req.revision+1,salt:req.salt,iv:req.iv,ciphertext:req.ciphertext};
+      body={revision:vault.revision};
+    }else if(path==="/api/promovie/space/v1/logout")body={ok:true};
+    else{status=404;body={error:"Rota de teste não simulada."};}
+    await route.fulfill({status,headers,contentType:"application/json",body:JSON.stringify(body)});
+  });
+  async function openFromSameLogin(code){
+    const tab=await context.newPage();
+    await tab.goto(origin+"/telesaude/",{waitUntil:"load"});
+    await tab.waitForFunction(()=>!document.getElementById("install-now").disabled);
+    await tab.locator("#access-cpf").fill("123.456.789-09");
+    await tab.locator("#access-code").fill(code);
+    await tab.locator("#install-now").click();
+    await tab.waitForURL("**/telesaude/atendimento/",{timeout:15000});
+    await tab.locator(".space-entry").waitFor({state:"visible",timeout:15000});
+    assert.equal(await tab.evaluate(()=>window.__pvInit),1);
+    assert.equal(await tab.evaluate(()=>window.__pvOpen),1);
+    assert.equal(await tab.evaluate(()=>sessionStorage.getItem("promovie:mediquo:handoff:v1")),null);
+    const opening=tab.waitForEvent("popup",{timeout:15000});
+    await tab.locator(".space-entry").click();
+    const space=await opening;
+    await space.waitForLoadState("load");
+    assert.equal(new URL(space.url()).hash,"");
+    assert.ok(!space.url().includes("sdk-session-test"));
+    return {tab,space};
+  }
+  try{
+    const firstOpen=await openFromSameLogin(first);
+    await firstOpen.space.locator("#unlock-view").waitFor({state:"visible",timeout:20000});
+    assert.equal(await firstOpen.space.locator("#login-view").isVisible(),false,
+      "A nova aba não deve pedir novamente CPF/código");
+    await firstOpen.space.locator("#privacy-consent").check();
+    await firstOpen.space.locator("#unlock-submit").click();
+    await firstOpen.space.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
+    await firstOpen.space.locator("#allergies").fill(profileToCheck);
+    await firstOpen.space.locator("#save-all").click();
+    await firstOpen.space.locator("#make-summary").click();
+    await firstOpen.space.locator("#copy-summary").click();
+    const copied=await firstOpen.space.evaluate(()=>navigator.clipboard.readText());
+    assert.ok(copied.includes(profileToCheck),"Resumo pode ser copiado para colar no atendimento");
+    await firstOpen.space.locator("#focus-attendance").click();
+    assert.equal(await firstOpen.tab.evaluate(()=>window.__pvInit),1,
+      "Alternar entre abas não reinicializa o SDK");
+    assert.equal(new URL(firstOpen.tab.url()).pathname,"/telesaude/atendimento/");
+    await firstOpen.space.close();await firstOpen.tab.close();
+
+    const secondOpen=await openFromSameLogin(first);
+    await secondOpen.space.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
+    assert.equal(await secondOpen.space.locator("#allergies").inputValue(),profileToCheck,
+      "O cofre pode ser reaberto sem novo login e preserva a criptografia");
+    await secondOpen.space.close();await secondOpen.tab.close();
+    assert.deepEqual(errors,[],"Sem erros JavaScript nas duas páginas");
+    console.log("Integração: autenticação única, cópia e consulta preservada, desktop/mobile simulado.");
+  }finally{await context.close();}
+}
+
+try{for(const width of [390,1440])await run(width);await testSingleSignOn();}
 finally{await browser.close();}
