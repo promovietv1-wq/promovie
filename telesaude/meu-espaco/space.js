@@ -21,10 +21,10 @@
   // Quando aberto pela consulta, o retorno não navega à tela de login.
   // Cada aba conserva seu próprio estado; nenhuma credencial é transmitida.
   if(new URLSearchParams(location.search).get("atendimento")==="aberto"){
-    const back=$("back-to-access"),button=$("focus-attendance");
+    const back=$("back-to-access"),button=$("focus-attendance"),summaryReturn=$("return-from-summary");
     if(back&&button){
       back.hidden=true;button.hidden=false;
-      button.addEventListener("click",function(){
+      const returnToAttendance=function(){
         // O clique do usuário permite focar diretamente a aba que abriu este espaço.
         // Nunca navegar para a página da consulta, pois isso reiniciaria o SDK.
         try{
@@ -33,6 +33,11 @@
              attendance.location.origin===location.origin&&
              attendance.location.pathname==="/telesaude/atendimento/"){
             attendance.focus();
+            setTimeout(function(){
+              if(document.visibilityState==="visible"&&document.hasFocus()){
+                notice("A consulta permanece na outra aba. Se não voltar automaticamente, selecione a aba do atendimento.");
+              }
+            },750);
             return;
           }
         }catch{}
@@ -49,7 +54,12 @@
           channel.close();
           if(!gotReply)notice(fallback);
         },700);
-      });
+      };
+      button.addEventListener("click",returnToAttendance);
+      if(summaryReturn){
+        summaryReturn.hidden=false;
+        summaryReturn.addEventListener("click",returnToAttendance);
+      }
     }
   }
 
