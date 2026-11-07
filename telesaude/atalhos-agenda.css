@@ -22,9 +22,14 @@
 .agenda-modal-guide p{font-size:12px;line-height:1.65;margin:0 0 9px}
 .agenda-modal-guide p:last-child{margin-bottom:0}
 @media(max-width:700px){
+  .topbar{gap:5px;padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right))}
+  .topbar .identity{gap:5px;min-width:0}
+  .topbar .identity img{width:36px;height:36px}
+  .topbar .identity-copy strong{font-size:11px;letter-spacing:-.045em}
+  .topbar .back{width:34px;height:34px;min-width:34px;flex-basis:34px}
   .clinic-tools{gap:0}
   .clinic-tools-caption{display:none}
-  .agenda-open{font-size:11px;min-height:35px;padding:8px 9px;border-radius:9px}
+  .agenda-open{font-size:10.5px;min-height:35px;padding:8px 8px;border-radius:9px}
   .agenda-modal{padding:20px}
 }
 @media(max-width:370px){.agenda-open{padding:7px 7px;font-size:10px}}
