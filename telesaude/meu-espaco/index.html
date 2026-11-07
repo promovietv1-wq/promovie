@@ -13,7 +13,7 @@
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="manifest" href="/telesaude/manifest.webmanifest">
 <link rel="stylesheet" href="/telesaude/meu-espaco/space.css">
-<script src="/telesaude/meu-espaco/space.js?v=20261106-sso" defer></script>
+<script src="/telesaude/meu-espaco/space.js?v=20261107-return-1" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -124,7 +124,10 @@
   <div class="dialog-head"><h2 id="summary-title">Resumo para a consulta</h2><button type="button" class="close" id="close-summary" aria-label="Fechar resumo">×</button></div>
   <p class="muted">O compartilhamento é opcional. Revise antes de enviar.</p>
   <pre id="summary-text"></pre>
-  <button type="button" class="primary" id="copy-summary">Copiar resumo</button>
+  <div class="summary-actions">
+    <button type="button" class="primary" id="copy-summary">Copiar resumo</button>
+    <button type="button" class="secondary" id="return-from-summary" hidden>Voltar ao atendimento</button>
+  </div>
 </dialog>
 </body>
 </html>
