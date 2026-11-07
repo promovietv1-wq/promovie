@@ -175,7 +175,19 @@ async function testSingleSignOn(){
     assert.equal(await firstOpen.tab.evaluate(()=>window.__pvInit),1,
       "Alternar entre abas não reinicializa o SDK");
     assert.equal(new URL(firstOpen.tab.url()).pathname,"/telesaude/atendimento/");
-    await firstOpen.space.close();await firstOpen.tab.close();
+    await firstOpen.space.close();
+    // Simular um PWA móvel que não permite abrir outra janela (ex.: iPhone).
+    // O clique não pode substituir o documento da consulta e derrubar o SDK.
+    await firstOpen.tab.evaluate(()=>{
+      window.open=()=>null;
+    });
+    await firstOpen.tab.locator(".space-entry").click();
+    assert.equal(new URL(firstOpen.tab.url()).pathname,"/telesaude/atendimento/",
+      "Um bloqueio de pop-up não pode fechar a consulta");
+    assert.equal(await firstOpen.tab.locator("#space-open-help").isVisible(),true);
+    assert.equal(await firstOpen.tab.evaluate(()=>window.__pvInit),1,
+      "Falha de segunda janela não deve recarregar Médiquo");
+    await firstOpen.tab.close();
 
     const secondOpen=await openFromSameLogin(first,1440);
     await secondOpen.space.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
