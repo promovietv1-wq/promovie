@@ -76,6 +76,9 @@ dialog::backdrop{background:rgba(28,15,57,.5)}
 .dialog-head h2{font-size:20px;color:#39166b;margin:0}
 .close{border:0;background:#f5f0fb;color:#572197;border-radius:9px;width:37px;height:37px;font-size:24px}
 #summary-text{margin:18px 0;padding:18px;border:1px solid #e6dff0;border-radius:12px;max-height:46vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#433055;background:#fbfafc;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
+.summary-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.summary-actions button{min-height:44px}
+@media(max-width:580px){.summary-actions button{flex:1 1 100%}}
 @media(max-width:850px){.columns{grid-template-columns:1fr}.container{margin-top:25px}.practical,.management{align-items:flex-start;flex-direction:column}.topbar{padding-inline:18px}}
 @media(max-width:580px){.container{width:calc(100% - 28px);margin:20px auto 45px}.topbar{min-height:65px;padding:7px 12px;gap:8px}.identity{gap:7px;font-size:13px}.identity img{width:40px;height:40px}.top-link{font-size:11px;padding:9px}.page-intro{margin-bottom:19px}.page-intro p{font-size:13px}.privacy-line{align-items:flex-start;padding:11px 12px}.auth-panel,.panel{padding:18px;border-radius:17px}.workspace-toolbar{align-items:flex-start;flex-direction:column}.toolbar-actions{width:100%}.toolbar-actions button{flex:1}.page-intro h1{margin:9px 0}.practical,.management{gap:15px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
