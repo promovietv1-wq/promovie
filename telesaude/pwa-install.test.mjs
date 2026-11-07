@@ -5,7 +5,7 @@ import {runInNewContext} from 'node:vm';
 
 const read = path => readFile(new URL(path,import.meta.url),'utf8');
 
-test('manifesto instala a TeleSaúde PromoVie isolada e com identidade visual da marca', async()=>{
+test('manifesto legado mantém identidade sem recomendar instalação', async()=>{
   const m=JSON.parse(await read('./manifest.webmanifest'));
   assert.equal(m.name,'TeleSaúde PromoVie');
   assert.equal(m.start_url,'/telesaude/');
@@ -33,14 +33,21 @@ test('entrada preserva login e oferece um único Adicionar atalho ilustrado',asy
   assert.match(html,/window\.location\.assign\("\/telesaude\/atendimento\/"\)/);
 });
 
-test('instalação depende do navegador, e iPhone/Mac recebem passos reais',async()=>{
+test('guia oferece somente atalhos, sem instalar aplicativos',async()=>{
   const js=await read('./pwa-install.js');
+  const html=await read('./index.html');
+  const css=await read('./atalhos-agenda.css');
   assert.match(js,/beforeinstallprompt/);
-  assert.match(js,/\.prompt\(\)/);
-  assert.match(js,/appinstalled/);
+  assert.match(js,/event\.preventDefault\(\)/);
+  assert.doesNotMatch(js,/\.prompt\(\)|userChoice|installPrompt|nativeButton/);
+  assert.doesNotMatch(html,/id="pwa-native-install"|Instalar agora neste aparelho/);
+  assert.doesNotMatch(css,/\.pwa-native-install/);
+  assert.match(js,/DESATIVE a opção Abrir como app web/);
+  assert.match(js,/Criar atalho/);
+  assert.match(js,/Google Chrome/);
   assert.match(js,/Adicionar à Tela de Início/);
-  assert.match(js,/Adicionar ao Dock/);
-  assert.match(js,/barra de tarefas/);
+  assert.match(js,/Adicionar à tela/);
+  assert.match(js,/não/);
   assert.match(js,/data-pwa-close/);
   assert.doesNotMatch(js,/sessionStorage|localStorage|access_token|MediquoWidget|\/patients\/authenticate/);
   assert.doesNotMatch(js,/JSON\.stringify\(\{\s*cpf|MEDIQUO_V3_SDK_SECRET_KEY/);
