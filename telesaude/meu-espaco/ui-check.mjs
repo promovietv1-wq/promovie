@@ -59,7 +59,7 @@ async function run(width){
     assert.equal(await page.locator('#unlock-title').innerText(),'Meu Espaço de Saúde');
     assert.equal(await page.locator('#unlock-submit').innerText(),'Ativar meu espaço');
     assert.match(await page.locator('.warning').innerText(),/informar o anterior uma vez/);
-    assert.equal((await page.locator('#unlock-back').innerText()).trim(),'Entrar com outro CPF');
+    assert.equal(await page.locator('#unlock-back').count(),0);
     await page.locator('#privacy-consent').check();
     await page.locator('#unlock-submit').click();
     await page.locator('#workspace-view').waitFor({state:'visible',timeout:25000});

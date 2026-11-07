@@ -61,7 +61,7 @@ jobs:
           assert 'html body #MediquoContainer' in attendance, 'Widget deve continuar independente'
           assert 'bottom:var(--space-h)!important' in attendance
           assert 'window.MediquoWidget.init' in attendance
-          assert 'Entrar com outro CPF' in h and 'Trocar beneficiário' not in h
+          assert 'Entrar com outro CPF' not in h and 'Trocar beneficiário' not in h
           assert 'Ativar meu espaço' in js and 'Nenhuma senha adicional será criada' not in js
           assert 'window.MediquoWidget' not in js
           print('Estrutura independente validada sem gravar ou consultar dados reais.')

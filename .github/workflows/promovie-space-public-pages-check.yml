@@ -27,8 +27,8 @@ jobs:
           import assert from 'node:assert/strict';
           const host='https://www.promovie.tv.br';
           const paths=[
-            ['/telesaude/', 'Meu Espaço de Saúde'],
-            ['/telesaude/space-entry.js','disponivel===true'],
+            ['/telesaude/atendimento/', 'Meu Espaço de Saúde'],
+            ['/telesaude/space-entry.js','disponivel!==true'],
             ['/telesaude/meu-espaco/','login-form'],
             ['/telesaude/meu-espaco/space.js','PBKDF2'],
             ['/telesaude/meu-espaco/space.css','workspace-toolbar'],
