@@ -69,7 +69,7 @@ button{font:inherit}
 .back:hover,.back:focus-visible{background:#f7f3fd;border-color:#bda8df}
 .back:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
 .back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-:root.space-link-ready{--space-h:83px}
+:root.space-link-ready{--space-h:calc(83px + env(safe-area-inset-bottom))}
 /* Barra institucional fora do widget: não envolve, intercepta ou altera o SDK. */
 .space-footer[hidden]{display:none!important}
 .space-footer{
@@ -157,7 +157,7 @@ html body #mediquo-launcher,
 html body .mediquo-launcher{display:none!important}
 @media(max-width:700px){
   :root{--bar-h:62px}
-  :root.space-link-ready{--space-h:76px}
+  :root.space-link-ready{--space-h:calc(76px + env(safe-area-inset-bottom))}
   .topbar{gap:8px;padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}
   .topbar::after{right:7%;top:-133px;width:210px;height:190px;opacity:.6}
   .identity{gap:8px;min-width:0}
