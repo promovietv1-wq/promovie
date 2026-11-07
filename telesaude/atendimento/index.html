@@ -116,11 +116,25 @@ button{font:inherit}
 }
 .space-embedded[hidden]{display:none!important}
 .space-embedded{
-  position:fixed;inset:0;z-index:2147483647;display:block;
-  background:#f9f7fc;overflow:hidden
+  position:fixed;inset:0;z-index:2147483647;display:flex;
+  flex-direction:column;background:#f9f7fc;overflow:hidden
 }
+.space-embedded-bar{
+  flex:none;display:flex;align-items:center;gap:10px;
+  min-height:calc(56px + env(safe-area-inset-top));
+  padding:env(safe-area-inset-top) max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left));
+  background:#fff;border-bottom:1px solid #e7dff1
+}
+.space-embedded-return{
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:44px;padding:9px 12px;border-radius:10px;
+  border:1px solid #d8c9ed;color:#4b0c8f;background:#f6f1fc;
+  font-size:14px;font-weight:800;cursor:pointer
+}
+.space-embedded-return svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.space-embedded-return:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
 .space-embedded iframe{
-  display:block;width:100%;height:100%;height:100dvh;
+  display:block;flex:1;min-height:0;width:100%;
   border:0;background:#f9f7fc
 }
 .space-open-help[hidden]{display:none!important}
@@ -274,7 +288,13 @@ html body .mediquo-launcher{display:none!important}
     </svg>
   </a>
 </nav>
-<section id="space-embedded" class="space-embedded" hidden role="region" aria-label="Meu Espaço de Saúde integrado ao aplicativo">
+<section id="space-embedded" class="space-embedded" hidden role="region" aria-label="Meu Espaço de Saúde integrado ao atendimento">
+  <div class="space-embedded-bar">
+    <button type="button" id="space-embedded-return" class="space-embedded-return" aria-label="Voltar ao atendimento sem encerrar a consulta">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Voltar ao atendimento</span>
+    </button>
+  </div>
   <iframe id="space-embedded-frame" title="Meu Espaço de Saúde" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
 </section>
 <section id="space-open-help" class="space-open-help" hidden role="alert" aria-live="assertive">
@@ -350,13 +370,20 @@ html body .mediquo-launcher{display:none!important}
     let openedSpace=null;
     const embeddedLayer=document.getElementById("space-embedded");
     const embeddedFrame=document.getElementById("space-embedded-frame");
+    const embeddedReturn=document.getElementById("space-embedded-return");
+    const closeEmbedded=function(){
+      if(!embeddedLayer||embeddedLayer.hidden)return;
+      embeddedLayer.hidden=true;
+      link.focus({preventScroll:true});
+    };
+    // Botão próprio da tela do atendimento: não depende do iframe receber mensagens.
+    if(embeddedReturn)embeddedReturn.addEventListener("click",closeEmbedded);
     window.addEventListener("message",function(message){
       if(message.origin===location.origin&&embeddedFrame&&
          message.source===embeddedFrame.contentWindow&&
          message.data?.type==="promovie-space-close"&&
          embeddedLayer&&!embeddedLayer.hidden){
-        embeddedLayer.hidden=true;
-        link.focus();
+        closeEmbedded();
       }
     });
     const openHelp=document.getElementById("space-open-help");
@@ -372,9 +399,12 @@ html body .mediquo-launcher{display:none!important}
       }
     });
     link.addEventListener("click",function(event){
+      // Abrir dentro da mesma tela em todos os celulares, mesmo sem PWA instalado.
+      // Assim o retorno depende de um botão local, não da troca de abas do navegador.
       const installedApp=Boolean(
         (typeof window.matchMedia==="function"&&
-         window.matchMedia("(display-mode: standalone)").matches)||
+          (window.matchMedia("(display-mode: standalone)").matches||
+           window.matchMedia("(max-width:700px)").matches))||
         navigator.standalone===true);
       if(installedApp&&embeddedLayer&&embeddedFrame&&
          embeddedFrame.getAttribute("src")){
