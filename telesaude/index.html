@@ -908,6 +908,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   // A API publica valida CPF + codigo individual no servidor antes de emitir sessao.
   const BACKEND_URL="https://backend.promovie.tv.br";
   const ACCESS="/api/promovie/access/v1";
+  const SPACE="/api/promovie/space/v1";
   const button=document.getElementById("install-now");
   const accessForm=document.getElementById("access-form");
   const rememberAccess=document.getElementById("remember-access");
@@ -939,6 +940,77 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   }
   async function getJson(response){
     try{return await response.json();}catch{return {};}
+  }
+  // A mesma identificação autorizada prepara um acesso efêmero ao cofre pessoal.
+  // Apenas a chave derivada, nunca CPF ou código, percorre o handoff de uma só leitura.
+  function base64url(bytes){
+    let binary="";
+    for(const b of bytes)binary+=String.fromCharCode(b);
+    return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }
+  function fromBase64url(value){
+    return Uint8Array.from(atob(value.replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
+  }
+  function newSpaceSalt(){
+    return "c2_"+base64url(crypto.getRandomValues(new Uint8Array(16)));
+  }
+  async function deriveSpaceKey(code,salt){
+    if(!/^c2_[A-Za-z0-9_-]{22}$/.test(salt))throw Error("Salt inválido.");
+    const normalized=String(code).trim().toUpperCase().replace(/[\s-]/g,"");
+    if(!/^[A-HJ-NP-Z2-9]{20}$/.test(normalized))throw Error("Código inválido.");
+    const base=await crypto.subtle.importKey("raw",
+      new TextEncoder().encode("PromoVie|EspacoSaude|codigo-v2|"+normalized),
+      {name:"PBKDF2"},false,["deriveBits"]);
+    return new Uint8Array(await crypto.subtle.deriveBits({
+      name:"PBKDF2",salt:fromBase64url(salt.slice(3)),iterations:310000,hash:"SHA-256"
+    },base,256));
+  }
+  async function prepareSpaceAccess(cpf,codigo){
+    const aborter=new AbortController();
+    const timer=setTimeout(()=>aborter.abort(),6500);
+    try{
+      const options={mode:"cors",credentials:"omit",cache:"no-store",
+        referrerPolicy:"no-referrer",signal:aborter.signal};
+      const sr=await fetch(BACKEND_URL+SPACE+"/session",{
+        ...options,method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({cpf,codigo})
+      });
+      if(!sr.ok)return null;
+      const session=await getJson(sr);
+      if(!/^[A-Za-z0-9_-]{43}$/.test(session.token||""))return null;
+      const vr=await fetch(BACKEND_URL+SPACE+"/vault",{
+        ...options,method:"GET",headers:{Authorization:"Bearer "+session.token}
+      });
+      if(!vr.ok)return null;
+      const vault=await getJson(vr),record=vault.record||null;
+      let mode="new",salt=record?.salt||newSpaceSalt(),bytes;
+      if(!record){
+        bytes=await deriveSpaceKey(codigo,salt);
+      }else if(/^c2_[A-Za-z0-9_-]{22}$/.test(salt)){
+        bytes=await deriveSpaceKey(codigo,salt);
+        try{
+          const key=await crypto.subtle.importKey("raw",bytes,{name:"AES-GCM"},false,["decrypt"]);
+          const opened=await crypto.subtle.decrypt({
+            name:"AES-GCM",iv:fromBase64url(record.iv)
+          },key,fromBase64url(record.ciphertext));
+          new Uint8Array(opened).fill(0);
+          mode="existing";
+        }catch{
+          bytes.fill(0);
+          salt=newSpaceSalt();
+          bytes=await deriveSpaceKey(codigo,salt);
+          mode="recover";
+        }
+      }else{
+        salt=newSpaceSalt();
+        bytes=await deriveSpaceKey(codigo,salt);
+        mode="recover";
+      }
+      const result={token:session.token,mode,salt,key:base64url(bytes),createdAt:Date.now()};
+      bytes.fill(0);
+      return result;
+    }catch{return null;}
+    finally{clearTimeout(timer);}
   }
   async function checkEnvironment(){
     try{
@@ -992,6 +1064,9 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           await navigator.credentials.store(credential);
         }catch{/* O navegador pode negar, sem impedir o atendimento. */}
       }
+      // Preparar o Meu Espaço não modifica o token nem o SDK do atendimento.
+      // Se o cofre estiver indisponível, a consulta continua normalmente.
+      const spaceBootstrap=await prepareSpaceAccess(cpf,codigo);
       // Transferencia de uma so utilizacao, entre paginas da mesma aba e mesma origem.
       // A pagina de atendimento remove o access token imediatamente ao recebe-lo.
       const handoffKey="promovie:mediquo:handoff:v1";
@@ -1000,7 +1075,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           apiKey:result.apiKey,
           accessToken:result.access_token,
           environment:result.environment,
-          createdAt:Date.now()
+          createdAt:Date.now(),
+          ...(spaceBootstrap?{spaceBootstrap}:{})
         }));
       }catch{
         throw new Error("Seu navegador bloqueou a abertura segura do atendimento. Verifique as permissoes de armazenamento temporario e tente novamente.");

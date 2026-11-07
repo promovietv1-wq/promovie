@@ -289,6 +289,64 @@ html body .mediquo-launcher{display:none!important}
     }catch{return null;}
   }
 
+  // Sessão pessoal opcional, isolada da integração Médiquo.
+  // A chave cifradora permanece na memória depois de consumir o handoff temporário.
+  function enableSpaceSingleSignOn(handoff){
+    const link=document.querySelector(".space-entry");
+    if(!link||!handoff||typeof handoff!=="object"||
+       !/^[A-Za-z0-9_-]{43}$/.test(handoff.token||"")||
+       !["new","existing","recover"].includes(handoff.mode)||
+       !/^c2_[A-Za-z0-9_-]{22}$/.test(handoff.salt||"")||
+       !/^[A-Za-z0-9_-]{43}$/.test(handoff.key||"")||
+       !Number.isFinite(handoff.createdAt)||
+       Date.now()-handoff.createdAt>60000||
+       handoff.createdAt-Date.now()>10000)return;
+    if(typeof BroadcastChannel!=="function")return;
+    const spaceToken=handoff.token,mode=handoff.mode,salt=handoff.salt,createdAt=handoff.createdAt;
+    let binary;
+    try{
+      binary=Uint8Array.from(atob(handoff.key.replace(/-/g,"+").replace(/_/g,"/")),
+        c=>c.charCodeAt(0));
+      if(binary.length!==32)return;
+    }catch{return;}
+    // Converte imediatamente os bytes transitórios em uma chave não exportável.
+    const keyPromise=crypto.subtle.importKey("raw",binary,{name:"AES-GCM"},
+      false,["encrypt","decrypt"]).finally(()=>binary.fill(0));
+    delete handoff.key;
+    let openedSpace=null;
+    link.addEventListener("click",function(event){
+      if(Date.now()-createdAt>=29*60*1000)return;
+      if(openedSpace&&!openedSpace.closed){
+        event.preventDefault();
+        try{openedSpace.focus();}catch{}
+        return;
+      }
+      const id=crypto.randomUUID(),url=new URL(link.href,location.origin);
+      url.hash="pv-handoff="+id;
+      const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
+      let done=false;
+      const timeout=setTimeout(()=>{if(!done)channel.close();},12000);
+      channel.addEventListener("message",async function(message){
+        if(done||message.data?.type!=="space-ready"||message.data.id!==id)return;
+        try{
+          const page=new URL(openedSpace.location.href);
+          if(page.origin!==location.origin||page.pathname!=="/telesaude/meu-espaco/")return;
+          const key=await keyPromise;
+          if(Date.now()-createdAt>=29*60*1000)return;
+          openedSpace.postMessage({
+            type:"promovie-space-session",id,
+            space:{token:spaceToken,mode,salt,key}
+          },location.origin);
+          done=true;
+          clearTimeout(timeout);channel.close();
+        }catch{}
+      });
+      const popup=window.open(url.href,"_blank");
+      if(!popup){clearTimeout(timeout);channel.close();return;}
+      openedSpace=popup;event.preventDefault();
+      try{popup.opener=null;}catch{}
+    });
+  }
   function loadSdk(){
     return new Promise(function(resolve,reject){
       const script=document.createElement("script");
@@ -316,6 +374,7 @@ html body .mediquo-launcher{display:none!important}
       errorState("Por segurança, abra a TeleSaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
       return;
     }
+    enableSpaceSingleSignOn(handoff.spaceBootstrap);
     try{
       const widget=await loadSdk();
       await Promise.resolve(widget.init({

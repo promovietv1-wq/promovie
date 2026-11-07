@@ -395,6 +395,62 @@
     await api("/vault",{method:"DELETE",data:{codigo}});reset();
     notice("Seu conteúdo pessoal foi excluído deste espaço.","success");
   }));
+  // Login compartilhado vindo exclusivamente da aba de atendimento.
+  // Sem salvar o token ou a chave em disco e sem mostrar o código pessoal novamente.
+  function acceptAttendanceSession(){
+    const marker=location.hash.match(/^#pv-handoff=([0-9a-f-]{36})$/i);
+    if(!marker||new URLSearchParams(location.search).get("atendimento")!=="aberto"||
+       typeof BroadcastChannel!=="function")return;
+    const id=marker[1];
+    try{history.replaceState(null,"",location.pathname+location.search);}catch{}
+    try{window.opener=null;}catch{}
+    const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
+    let completed=false;
+    window.addEventListener("message",function(event){
+      if(completed||event.origin!==location.origin||
+         event.data?.type!=="promovie-space-session"||event.data.id!==id)return;
+      completed=true;channel.close();
+      protectedTask(async()=>{
+        try{
+          const s=event.data.space;
+          if(!s||!/^[A-Za-z0-9_-]{43}$/.test(s.token||"")||
+             !["new","existing","recover"].includes(s.mode)||
+             !/^c2_[A-Za-z0-9_-]{22}$/.test(s.salt||"")||
+             !(s.key instanceof CryptoKey)||s.key.type!=="secret"||
+             s.key.algorithm?.name!=="AES-GCM"||!s.key.usages.includes("decrypt"))
+            throw Error("Sessão pessoal inválida.");
+          state.token=s.token;
+          const vault=await api("/vault");
+          state.record=vault.record;state.revision=vault.revision;
+          if(s.mode==="new"&&!vault.record){
+            state.salt=s.salt;state.key=s.key;state.data=fresh();state.docKey=null;
+            $("legacy-wrap").hidden=true;$("vault-passphrase").required=false;
+            $("consent-row").hidden=false;$("privacy-consent").required=true;
+            $("unlock-title").textContent="Meu Espaço de Saúde";
+            $("unlock-description").textContent="Ative seu espaço com segurança.";
+            $("unlock-submit").textContent="Ativar meu espaço";
+            view("unlock");
+          }else if(s.mode==="existing"&&vault.record?.salt===s.salt){
+            const data=await openRecord(s.key,vault.record);
+            state.key=s.key;state.salt=s.salt;state.data=data;
+            state.docKey=await importDocumentKey(data);
+            finishOpen();
+          }else if(s.mode==="recover"&&vault.record){
+            state.nextKey=s.key;state.nextSalt=s.salt;
+            recoverView(vault.record.salt.startsWith("c2_")?"old-code":"old-password");
+          }else{
+            throw Error("Seu espaço foi atualizado. Entre novamente para continuar.");
+          }
+        }catch(error){
+          reset();
+          throw error;
+        }
+      });
+    });
+    channel.postMessage({type:"space-ready",id});
+    setTimeout(()=>{if(!completed)channel.close();},12000);
+  }
+  acceptAttendanceSession();
   window.addEventListener("beforeunload",e=>{
     if(!state.dirty)return;
     e.preventDefault();e.returnValue="";
