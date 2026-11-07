@@ -1,0 +1,61 @@
+
+/* Extras visuais da PromoVie: agendamentos e orientacao de atalhos.
+   Nao altera o SDK nem os elementos internos da Mediquo. */
+.clinic-tools{display:flex;align-items:center;justify-content:center;gap:11px;margin-left:auto;min-width:0;position:relative;z-index:1}
+.clinic-tools-caption{font:700 12px/1.3 Inter,Arial,sans-serif;color:#4b2881;white-space:nowrap}
+.agenda-open{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;min-height:37px;border:1px solid #bca2df;border-radius:10px;color:#4b0c8f;background:#f0e8fb;font:800 12px/1.2 Inter,Arial,sans-serif;cursor:pointer;white-space:nowrap}
+.agenda-open:hover{background:#e4d5fa}
+.agenda-open:focus-visible,.agenda-modal button:focus-visible,.agenda-modal a:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
+.agenda-modal{border:1px solid #ded4ec;border-radius:19px;width:min(460px,calc(100% - 24px));max-height:calc(100dvh - 28px);padding:27px;background:#fff;color:#2d2340;font:400 14px/1.5 Inter,Arial,sans-serif;box-shadow:0 30px 90px rgba(32,13,60,.3);overflow-y:auto}
+.agenda-modal::backdrop{background:rgba(22,10,40,.57)}
+.agenda-modal-head{display:flex;align-items:start;justify-content:space-between;gap:12px}
+.agenda-modal h2{font:800 23px/1.2 Inter,Arial,sans-serif;color:#42167a;margin:0 0 10px}
+.agenda-modal-close{border:0;background:#f5f1fa;color:#48217f;border-radius:10px;min-height:36px;min-width:36px;font-size:22px;cursor:pointer}
+.agenda-modal-lead{color:#685d76;margin:0 0 19px;font-size:13px}
+.agenda-modal-actions{display:grid;gap:10px;margin:16px 0}
+.agenda-modal-link{display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;border:1px solid #d9cee8;border-radius:12px;background:#f8f5fe;color:#48217f;padding:12px 14px;font-size:14px;font-weight:750}
+.agenda-modal-link:first-child{color:#fff;background:#5520a0;border-color:#5520a0}
+.agenda-modal-link:hover{filter:brightness(.96)}
+.agenda-modal-link span:last-child{font-size:17px;line-height:1}
+.agenda-modal-guide{border-top:1px solid #ece5f2;padding-top:16px;color:#4d425b}
+.agenda-modal-guide h3{font-size:13px;font-weight:800;margin:0 0 7px;color:#40206f}
+.agenda-modal-guide p{font-size:12px;line-height:1.65;margin:0 0 9px}
+.agenda-modal-guide p:last-child{margin-bottom:0}
+@media(max-width:700px){
+  .clinic-tools{gap:0}
+  .clinic-tools-caption{display:none}
+  .agenda-open{font-size:11px;min-height:35px;padding:8px 9px;border-radius:9px}
+  .agenda-modal{padding:20px}
+}
+@media(max-width:370px){.agenda-open{padding:7px 7px;font-size:10px}}
+/* Acao unificada: independente de aparelho, navegador ou loja. */
+.pwa-install-actions{width:100%;max-width:none!important;margin-top:13px!important}
+.pwa-install-actions[hidden]{display:none!important}
+#pwa-install-shortcut{display:flex;width:100%;align-items:center;justify-content:center;min-height:45px;gap:8px;padding:11px 16px;background:#fff;border:1px solid #cbb8e8;border-radius:12px;color:#4b2486;font:750 13px/1.35 Inter,Arial,sans-serif;cursor:pointer}
+#pwa-install-shortcut:hover{background:#f7f3fd;border-color:#9d7dcf}
+#pwa-install-shortcut:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+.pwa-help-dialog{width:min(680px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:24px;border-radius:20px;text-align:left;overflow:auto}
+.pwa-help-dialog h2{margin:0 40px 6px 0;font-size:24px}
+.pwa-help-intro{font-size:13px!important;line-height:1.5!important;margin:0 0 16px!important;color:#6b6079!important}
+.pwa-help-nav{display:flex;gap:7px;overflow-x:auto;padding:2px 0 9px;margin:0 0 10px;scrollbar-width:thin}
+.pwa-help-tab{flex:0 0 auto;border:1px solid #dfd3ee;border-radius:999px;background:#fff;color:#4c2a7c;padding:8px 12px;min-height:37px;font:700 12px Inter,Arial,sans-serif;cursor:pointer}
+.pwa-help-tab[aria-selected="true"]{background:#5420a0;border-color:#5420a0;color:#fff}
+.pwa-help-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.82fr);gap:16px;align-items:start}
+.pwa-help-dialog ol{margin:0 0 8px;padding-left:20px}
+.pwa-help-dialog li{font-size:13px;line-height:1.5;margin-bottom:10px}
+.pwa-help-image{margin:0;background:#f9f6fc;border:1px solid #e8dff3;border-radius:13px;padding:8px;overflow:hidden}
+.pwa-help-image[hidden]{display:none!important}
+.pwa-help-image img{display:block;width:100%;max-height:260px;object-fit:contain;border-radius:7px}
+.pwa-help-image figcaption{font-size:10px;color:#746781;line-height:1.4;margin-top:7px;text-align:center}
+.pwa-help-image figcaption a{color:#5520a0}
+.pwa-help-hint{font-size:12px;line-height:1.5;color:#71677c;margin:8px 0}
+.pwa-help-dialog .pwa-help-close{margin-top:15px}
+.pwa-native-install{display:block;width:100%;border:1px solid #5420a0;border-radius:11px;color:#fff;background:#5420a0;padding:10px 13px;min-height:43px;font-weight:800;cursor:pointer;margin-top:11px}
+.pwa-native-install[hidden]{display:none!important}
+@media(max-width:600px){
+  .pwa-help-dialog{padding:19px;width:calc(100% - 16px)}
+  .pwa-help-dialog h2{font-size:22px}
+  .pwa-help-layout{grid-template-columns:minmax(0,1fr)}
+  .pwa-help-image img{max-height:220px}
+  .pwa-help-nav{margin-bottom:7px}
+}
