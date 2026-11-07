@@ -29,60 +29,12 @@
   const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
   const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
 
-  // Quando aberto pela consulta, o retorno não navega à tela de login.
-  // Cada aba conserva seu próprio estado; nenhuma credencial é transmitida.
+  // Exibir instruções junto à preparação da consulta, sem prometer
+  // troca automática de abas que o navegador pode bloquear.
   if(new URLSearchParams(location.search).get("atendimento")==="aberto"){
-    const back=$("back-to-access"),button=$("focus-attendance"),summaryReturn=$("return-from-summary");
-    if(back&&button){
-      back.hidden=true;button.hidden=false;
-      const returnToAttendance=function(){
-        // No aplicativo instalado, apenas ocultar o quadro interno.
-        // A página e a sessão do médico continuam carregadas e ativas.
-        if(window.parent!==window){
-          try{
-            if(window.parent.location.origin===location.origin&&
-               window.parent.location.pathname==="/telesaude/atendimento/"){
-              window.parent.postMessage({type:"promovie-space-close"},location.origin);
-              return;
-            }
-          }catch{}
-        }
-        // No navegador comum, focar a aba original sem navegar.
-        // Nunca navegar para a página da consulta, pois isso reiniciaria o SDK.
-        try{
-          const attendance=window.opener;
-          if(attendance&&!attendance.closed&&
-             attendance.location.origin===location.origin&&
-             attendance.location.pathname==="/telesaude/atendimento/"){
-            attendance.focus();
-            setTimeout(function(){
-              if(document.visibilityState==="visible"&&document.hasFocus()){
-                notice("Para retornar à consulta, selecione a aba do atendimento no navegador.","navigation");
-              }
-            },750);
-            return;
-          }
-        }catch{}
-        const fallback="Para retornar à consulta, selecione a aba do atendimento no navegador.";
-        if(typeof BroadcastChannel!=="function"){notice(fallback,"navigation");return;}
-        const channel=new BroadcastChannel("promovie:telesaude:alternancia:v1");
-        const id=crypto.randomUUID();
-        let gotReply=false;
-        channel.addEventListener("message",function(event){
-          if(event.data?.type==="attendance-ready"&&event.data.id===id)gotReply=true;
-        });
-        channel.postMessage({type:"focus-attendance",id});
-        setTimeout(function(){
-          channel.close();
-          if(!gotReply)notice(fallback,"navigation");
-        },700);
-      };
-      button.addEventListener("click",returnToAttendance);
-      if(summaryReturn){
-        summaryReturn.hidden=false;
-        summaryReturn.addEventListener("click",returnToAttendance);
-      }
-    }
+    const back=$("back-to-access"),guidance=$("attendance-guidance");
+    if(back)back.hidden=true;
+    if(guidance)guidance.hidden=false;
   }
 
   function notice(message,type="info"){

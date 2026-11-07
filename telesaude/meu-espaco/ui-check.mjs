@@ -175,9 +175,12 @@ async function testSingleSignOn(){
     await firstOpen.space.locator("#copy-summary").click();
     const copied=await firstOpen.space.evaluate(()=>navigator.clipboard.readText());
     assert.ok(copied.includes(profileToCheck),"Resumo pode ser copiado para colar no atendimento");
-    assert.equal(await firstOpen.space.locator("#return-from-summary").isVisible(),true);
-    await firstOpen.space.locator("#return-from-summary").click();
-    await firstOpen.tab.waitForFunction(()=>document.hasFocus(),null,{timeout:6000});
+    assert.equal(await firstOpen.space.locator("#attendance-guidance").isVisible(),true);
+    assert.equal(await firstOpen.space.locator("#attendance-guidance").innerText().then(t=>t.includes("Sua consulta continua aberta")),true);
+    assert.equal(await firstOpen.space.locator("#return-from-summary").count(),0);
+    assert.equal(await firstOpen.space.locator("#focus-attendance").count(),0);
+    await firstOpen.space.locator("#close-summary").click();
+    await firstOpen.tab.bringToFront();
     assert.equal(await firstOpen.tab.evaluate(()=>window.__pvInit),1,
       "Alternar entre abas não reinicializa o SDK");
     assert.equal(new URL(firstOpen.tab.url()).pathname,"/telesaude/atendimento/");
@@ -197,8 +200,8 @@ async function testSingleSignOn(){
 
     const secondOpen=await openFromSameLogin(first,1440);
     await secondOpen.space.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
-    await secondOpen.space.locator("#focus-attendance").click();
-    await secondOpen.tab.waitForFunction(()=>document.hasFocus(),null,{timeout:6000});
+    assert.equal(await secondOpen.space.locator("#attendance-guidance").isVisible(),true);
+    await secondOpen.tab.bringToFront();
     assert.equal(await secondOpen.space.locator("#allergies").inputValue(),profileToCheck,
       "O cofre pode ser reaberto sem novo login e preserva a criptografia");
     await secondOpen.space.close();await secondOpen.tab.close();
@@ -237,6 +240,10 @@ async function testSingleSignOn(){
     assert.equal(await embedded.locator("#loading-view").isVisible(),false);
     assert.equal(await embedded.locator("#login-view").isVisible(),false);
     assert.equal(await embedded.locator("#allergies").inputValue(),profileToCheck);
+    assert.equal(await embedded.locator("#attendance-guidance").isVisible(),true);
+    assert.equal(await embedded.locator(".guidance-in-app").isVisible(),true);
+    assert.equal(await embedded.locator(".guidance-other-tab").isVisible(),false);
+    assert.equal(await installed.locator("#space-embedded-return").innerText(),"Fechar registros");
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
     await installed.locator("#space-embedded-return").click();
@@ -250,7 +257,8 @@ async function testSingleSignOn(){
       "Reabrir no PWA mantém o cofre carregado em memória");
     await embedded.locator("#make-summary").click();
     await embedded.locator("#copy-summary").click();
-    await embedded.locator("#return-from-summary").click();
+    await embedded.locator("#close-summary").click();
+    await installed.locator("#space-embedded-return").click();
     await installed.locator("#space-embedded").waitFor({state:"hidden",timeout:5000});
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
     await installed.close();
