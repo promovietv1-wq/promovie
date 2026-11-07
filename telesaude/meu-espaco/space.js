@@ -25,6 +25,17 @@
     if(back&&button){
       back.hidden=true;button.hidden=false;
       button.addEventListener("click",function(){
+        // O clique do usuário permite focar diretamente a aba que abriu este espaço.
+        // Nunca navegar para a página da consulta, pois isso reiniciaria o SDK.
+        try{
+          const attendance=window.opener;
+          if(attendance&&!attendance.closed&&
+             attendance.location.origin===location.origin&&
+             attendance.location.pathname==="/telesaude/atendimento/"){
+            attendance.focus();
+            return;
+          }
+        }catch{}
         const fallback="Seu atendimento permanece na outra aba. Se não voltar automaticamente, selecione a aba da consulta. Mantenha este espaço aberto para não perder o acesso.";
         if(typeof BroadcastChannel!=="function"){notice(fallback);return;}
         const channel=new BroadcastChannel("promovie:telesaude:alternancia:v1");
@@ -403,7 +414,6 @@
        typeof BroadcastChannel!=="function")return;
     const id=marker[1];
     try{history.replaceState(null,"",location.pathname+location.search);}catch{}
-    try{window.opener=null;}catch{}
     const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
     let completed=false;
     window.addEventListener("message",function(event){
