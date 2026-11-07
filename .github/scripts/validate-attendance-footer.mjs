@@ -56,7 +56,8 @@ try{
       assert.match(m.text,/Meu Espaço de Saúde/);
       assert.equal(m.brandVisible,true);
       const link=page.locator('.space-entry');
-      assert.equal(await link.getAttribute('href'),'/telesaude/meu-espaco/');
+      assert.equal(await link.getAttribute('href'),'/telesaude/meu-espaco/?atendimento=aberto',
+        'O retorno deve preservar o atendimento em uma segunda aba');
       assert.equal(await link.getAttribute('target'),'_blank','Preservar atendimento em andamento');
       assert.deepEqual(errors,[],'Sem erros JavaScript no navegador');
       console.log('Meu Espaço abaixo do aplicativo em '+width+'px, SDK preservado');
