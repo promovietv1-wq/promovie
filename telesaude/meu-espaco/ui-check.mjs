@@ -132,8 +132,9 @@ async function testSingleSignOn(){
     else{status=404;body={error:"Rota de teste não simulada."};}
     await route.fulfill({status,headers,contentType:"application/json",body:JSON.stringify(body)});
   });
-  async function openFromSameLogin(code){
+  async function openFromSameLogin(code,width=390){
     const tab=await context.newPage();
+    await tab.setViewportSize({width,height:900});
     await tab.goto(origin+"/telesaude/",{waitUntil:"load"});
     await tab.waitForFunction(()=>!document.getElementById("install-now").disabled);
     await tab.locator("#access-cpf").fill("123.456.789-09");
@@ -173,13 +174,13 @@ async function testSingleSignOn(){
     assert.equal(new URL(firstOpen.tab.url()).pathname,"/telesaude/atendimento/");
     await firstOpen.space.close();await firstOpen.tab.close();
 
-    const secondOpen=await openFromSameLogin(first);
+    const secondOpen=await openFromSameLogin(first,1440);
     await secondOpen.space.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
     assert.equal(await secondOpen.space.locator("#allergies").inputValue(),profileToCheck,
       "O cofre pode ser reaberto sem novo login e preserva a criptografia");
     await secondOpen.space.close();await secondOpen.tab.close();
     assert.deepEqual(errors,[],"Sem erros JavaScript nas duas páginas");
-    console.log("Integração: autenticação única, cópia e consulta preservada, desktop/mobile simulado.");
+    console.log("Integração: login único, cópia e consulta preservada, mobile 390px e desktop 1440px.");
   }finally{await context.close();}
 }
 
