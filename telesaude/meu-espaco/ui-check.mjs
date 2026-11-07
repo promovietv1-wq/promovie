@@ -196,8 +196,56 @@ async function testSingleSignOn(){
     assert.equal(await secondOpen.space.locator("#allergies").inputValue(),profileToCheck,
       "O cofre pode ser reaberto sem novo login e preserva a criptografia");
     await secondOpen.space.close();await secondOpen.tab.close();
-    assert.deepEqual(errors,[],"Sem erros JavaScript nas duas páginas");
-    console.log("Integração: login único, cópia e consulta preservada, mobile 390px e desktop 1440px.");
+
+    // Simular um atalho de tela inicial / PWA em modo standalone.
+    // O Meu Espaço deve abrir DENTRO da página, sem window.open.
+    const installed=await context.newPage();
+    await installed.addInitScript(()=>{
+      const nativeMatchMedia=window.matchMedia.bind(window);
+      window.matchMedia=function(query){
+        if(query==="(display-mode: standalone)")return {
+          matches:true,media:query,
+          addListener(){},removeListener(){},
+          addEventListener(){},removeEventListener(){}
+        };
+        return nativeMatchMedia(query);
+      };
+    });
+    await installed.setViewportSize({width:390,height:850});
+    await installed.goto(origin+"/telesaude/",{waitUntil:"load"});
+    await installed.waitForFunction(()=>!document.getElementById("install-now").disabled);
+    await installed.locator("#access-cpf").fill("123.456.789-09");
+    await installed.locator("#access-code").fill(first);
+    await installed.locator("#install-now").click();
+    await installed.waitForURL("**/telesaude/atendimento/",{timeout:15000});
+    await installed.locator(".space-entry").waitFor({state:"visible",timeout:15000});
+    let popups=0;
+    installed.on("popup",()=>popups++);
+    await installed.locator(".space-entry").click();
+    await installed.locator("#space-embedded").waitFor({state:"visible",timeout:15000});
+    const embedded=installed.frameLocator("#space-embedded-frame");
+    await embedded.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
+    assert.equal(await embedded.locator("#allergies").inputValue(),profileToCheck);
+    assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
+    assert.equal(await installed.evaluate(()=>window.__pvInit),1);
+    await embedded.locator("#focus-attendance").click();
+    await installed.locator("#space-embedded").waitFor({state:"hidden",timeout:5000});
+    assert.equal(new URL(installed.url()).pathname,"/telesaude/atendimento/");
+    assert.equal(await installed.evaluate(()=>window.__pvOpen),1,
+      "O retorno no PWA não deve reiniciar o atendimento");
+    await installed.locator(".space-entry").click();
+    await installed.locator("#space-embedded").waitFor({state:"visible",timeout:5000});
+    assert.equal(await embedded.locator("#allergies").inputValue(),profileToCheck,
+      "Reabrir no PWA mantém o cofre carregado em memória");
+    await embedded.locator("#make-summary").click();
+    await embedded.locator("#copy-summary").click();
+    await embedded.locator("#return-from-summary").click();
+    await installed.locator("#space-embedded").waitFor({state:"hidden",timeout:5000});
+    assert.equal(await installed.evaluate(()=>window.__pvInit),1);
+    await installed.close();
+
+    assert.deepEqual(errors,[],"Sem erros JavaScript na alternância do atendimento");
+    console.log("Integração: navegador, mobile, desktop e PWA sem reiniciar a consulta.");
   }finally{await context.close();}
 }
 
