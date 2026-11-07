@@ -263,10 +263,10 @@ async function testSingleSignOn(){
     assert.equal(await embedded.locator("#attendance-guidance span").evaluate(el=>
       getComputedStyle(el).boxDecorationBreak),"clone",
       "O fundo da orientação deve terminar exatamente no texto, mesmo com quebra de linha");
-    assert.equal(await installed.locator("#space-embedded-return").innerText(),"Fechar registros");
+    assert.equal(await installed.locator("#space-embedded-return").count(),0);
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
-    await installed.locator("#space-embedded-return").click();
+    await installed.evaluate(()=>history.back());
     await installed.locator("#space-embedded").waitFor({state:"hidden",timeout:5000});
     assert.equal(new URL(installed.url()).pathname,"/telesaude/atendimento/");
     assert.equal(await installed.evaluate(()=>window.__pvOpen),1,
@@ -278,7 +278,7 @@ async function testSingleSignOn(){
     await embedded.locator("#make-summary").click();
     await embedded.locator("#copy-summary").click();
     await embedded.locator("#close-summary").click();
-    await installed.locator("#space-embedded-return").click();
+    await installed.evaluate(()=>history.back());
     await installed.locator("#space-embedded").waitFor({state:"hidden",timeout:5000});
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
     await installed.close();
