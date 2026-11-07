@@ -182,7 +182,8 @@ async function testSingleSignOn(){
       el.previousElementSibling?.classList.contains("workspace-heading")&&
       el.nextElementSibling?.classList.contains("toolbar-actions")),true,
       "Aviso deve ficar entre Meus registros e Salvar informações");
-    assert.equal(await firstOpen.space.locator("#attendance-guidance").innerText().then(t=>t.includes("Sua consulta continua aberta")),true);
+    assert.equal(await firstOpen.space.locator("#attendance-guidance").innerText(),
+      "Seu atendimento continua aberto na aba anterior.");
     assert.equal(await firstOpen.space.locator("#return-from-summary").count(),0);
     assert.equal(await firstOpen.space.locator("#focus-attendance").count(),0);
     await firstOpen.space.locator("#close-summary").click();
@@ -251,8 +252,8 @@ async function testSingleSignOn(){
       el.previousElementSibling?.classList.contains("workspace-heading")&&
       el.nextElementSibling?.querySelector("#save-all")!==null),true,
       "No celular, a orientação deve anteceder o botão de salvar");
-    assert.equal(await embedded.locator(".guidance-in-app").isVisible(),true);
-    assert.equal(await embedded.locator(".guidance-other-tab").isVisible(),false);
+    assert.equal(await embedded.locator("#attendance-guidance").innerText(),
+      "Seu atendimento continua aberto na aba anterior.");
     assert.equal(await installed.locator("#space-embedded-return").innerText(),"Fechar registros");
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
