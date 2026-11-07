@@ -254,6 +254,11 @@ async function testSingleSignOn(){
       "No celular, a orientação deve anteceder o botão de salvar");
     assert.equal(await embedded.locator("#attendance-guidance").innerText(),
       "Seu atendimento continua aberto na aba anterior.");
+    const boxSize=await embedded.locator("#attendance-guidance").evaluate(el=>({
+      notice:el.getBoundingClientRect().width,
+      toolbar:el.parentElement.getBoundingClientRect().width
+    }));
+    assert.ok(boxSize.notice<boxSize.toolbar,"A orientação deve ocupar só a largura necessária");
     assert.equal(await installed.locator("#space-embedded-return").innerText(),"Fechar registros");
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
