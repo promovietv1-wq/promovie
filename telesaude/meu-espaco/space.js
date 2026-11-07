@@ -2,11 +2,19 @@
    Sem localStorage, IndexedDB, cookies JS ou acesso ao SDK Médiquo. */
 (function(){
   "use strict";
-  // Bloquear apresentação em quadros de outros sites (a hospedagem estática
-  // não permite definir frame-ancestors por cabeçalho HTTP).
+  // Permitir somente o quadro interno da própria página de atendimento.
+  // Continuar bloqueando quadros externos e outros caminhos do mesmo domínio.
   if(window.top!==window.self){
-    document.body.replaceChildren();
-    return;
+    let permitted=false;
+    try{
+      const params=new URLSearchParams(location.search);
+      permitted=window.parent===window.top&&
+        window.parent.location.origin===location.origin&&
+        window.parent.location.pathname==="/telesaude/atendimento/"&&
+        params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
+        /^#pv-handoff=[0-9a-f-]{36}$/i.test(location.hash);
+    }catch{}
+    if(!permitted){document.body.replaceChildren();return;}
   }
   const BASE="https://backend.promovie.tv.br/api/promovie/space/v1";
   const MAX_FILE=500*1024;
@@ -25,7 +33,18 @@
     if(back&&button){
       back.hidden=true;button.hidden=false;
       const returnToAttendance=function(){
-        // O clique do usuário permite focar diretamente a aba que abriu este espaço.
+        // No aplicativo instalado, apenas ocultar o quadro interno.
+        // A página e a sessão do médico continuam carregadas e ativas.
+        if(window.parent!==window){
+          try{
+            if(window.parent.location.origin===location.origin&&
+               window.parent.location.pathname==="/telesaude/atendimento/"){
+              window.parent.postMessage({type:"promovie-space-close"},location.origin);
+              return;
+            }
+          }catch{}
+        }
+        // No navegador comum, focar a aba original sem navegar.
         // Nunca navegar para a página da consulta, pois isso reiniciaria o SDK.
         try{
           const attendance=window.opener;
@@ -427,7 +446,8 @@
     const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
     let completed=false;
     window.addEventListener("message",function(event){
-      if(completed||event.origin!==location.origin||
+      const source=window.parent!==window?window.parent:window.opener;
+      if(completed||!source||event.source!==source||event.origin!==location.origin||
          event.data?.type!=="promovie-space-session"||event.data.id!==id)return;
       completed=true;channel.close();
       protectedTask(async()=>{
