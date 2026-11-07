@@ -99,6 +99,8 @@
     if(message)p.scrollIntoView({block:"nearest",behavior:"smooth"});
   }
   function view(name){
+    // Nunca renderizar o formulário de CPF durante um login compartilhado.
+    $("loading-view").hidden=true;
     for(const v of ["login","unlock","workspace"])$(v+"-view").hidden=v!==name;
   }
   function waiting(flag){
@@ -452,7 +454,7 @@
   function acceptAttendanceSession(){
     const marker=location.hash.match(/^#pv-handoff=([0-9a-f-]{36})$/i);
     if(!marker||new URLSearchParams(location.search).get("atendimento")!=="aberto"||
-       typeof BroadcastChannel!=="function")return;
+       typeof BroadcastChannel!=="function")return false;
     const id=marker[1];
     try{history.replaceState(null,"",location.pathname+location.search);}catch{}
     const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
@@ -500,9 +502,16 @@
       });
     });
     channel.postMessage({type:"space-ready",id});
-    setTimeout(()=>{if(!completed)channel.close();},12000);
+    setTimeout(()=>{
+      if(completed)return;
+      channel.close();
+      // Se a sessão não chegar, oferecer a entrada manual só após a tentativa.
+      view("login");
+      notice("Não foi possível abrir automaticamente. Entre com seu CPF e código.","error");
+    },12000);
+    return true;
   }
-  acceptAttendanceSession();
+  if(!acceptAttendanceSession())view("login");
   window.addEventListener("beforeunload",e=>{
     if(!state.dirty)return;
     e.preventDefault();e.returnValue="";

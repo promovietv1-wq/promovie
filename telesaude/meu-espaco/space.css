@@ -51,6 +51,20 @@ h1{font-size:clamp(27px,3.1vw,41px);letter-spacing:-.045em;margin:12px 0;line-he
 }
 .feedback[data-kind="error"]{color:#922d3f;background:#fff1f3;border-color:#f0ced5}
 .feedback[data-kind="success"]{color:#276346;background:#eefaf0;border-color:#c4e5ce}
+.space-loading{
+  display:flex;align-items:center;gap:12px;width:min(475px,100%);
+  min-height:80px;margin:0;padding:18px 20px;
+  border:1px solid #e7e0f1;border-radius:16px;
+  background:rgba(255,255,255,.94);color:#4b0c8f;
+  font-size:13px;font-weight:700
+}
+.space-loading-indicator{
+  width:16px;height:16px;flex:none;border:3px solid #e4d4f5;
+  border-top-color:#5520a0;border-radius:50%;
+  animation:space-wait .9s linear infinite
+}
+@keyframes space-wait{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.space-loading-indicator{animation:none}}
 .auth-panel{background:#fff;border:1px solid var(--line);border-radius:23px;padding:30px;width:min(475px,100%);box-shadow:var(--shadow)}
 .auth-panel h2,.workspace-toolbar h2{font-size:23px;letter-spacing:-.035em;color:#39166b;margin:0 0 7px}
 .muted{color:var(--muted);font-size:13px;line-height:1.55}

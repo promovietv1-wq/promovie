@@ -120,6 +120,8 @@ async function testSingleSignOn(){
     else if(path==="/api/promovie/space/v1/health")body={disponivel:true};
     else if(path==="/api/promovie/space/v1/session")body={token:"S".repeat(43),expira_em_segundos:1800};
     else if(path==="/api/promovie/space/v1/vault"&&method==="GET"){
+      // Mantém a etapa de carregamento perceptível para detectar flashes de login.
+      await new Promise(resolve=>setTimeout(resolve,450));
       assert.equal(request.headers().authorization,"Bearer "+"S".repeat(43));
       body={revision:vault?.revision||0,record:vault};
     }else if(path==="/api/promovie/space/v1/vault"&&method==="PUT"){
@@ -149,6 +151,10 @@ async function testSingleSignOn(){
     await tab.locator(".space-entry").click();
     const space=await opening;
     await space.waitForLoadState("load");
+    assert.equal(await space.locator("#login-view").isVisible(),false,
+      "Login da área pessoal não pode piscar antes do acesso compartilhado");
+    assert.equal(await space.locator("#loading-view").isVisible(),true,
+      "Deve mostrar apenas carregamento discreto durante o SSO");
     assert.equal(new URL(space.url()).hash,"");
     assert.ok(!space.url().includes("sdk-session-test"));
     assert.equal(await space.evaluate(()=>window.opener?.location.pathname),"/telesaude/atendimento/",
@@ -224,7 +230,12 @@ async function testSingleSignOn(){
     await installed.locator(".space-entry").click();
     await installed.locator("#space-embedded").waitFor({state:"visible",timeout:15000});
     const embedded=installed.frameLocator("#space-embedded-frame");
+    await embedded.locator("#loading-view").waitFor({state:"visible",timeout:12000});
+    assert.equal(await embedded.locator("#login-view").isVisible(),false,
+      "PWA não deve mostrar o formulário de login durante a abertura");
     await embedded.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
+    assert.equal(await embedded.locator("#loading-view").isVisible(),false);
+    assert.equal(await embedded.locator("#login-view").isVisible(),false);
     assert.equal(await embedded.locator("#allergies").inputValue(),profileToCheck);
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
