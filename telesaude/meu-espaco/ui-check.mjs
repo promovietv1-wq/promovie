@@ -166,6 +166,7 @@ async function testSingleSignOn(){
     await firstOpen.space.locator("#copy-summary").click();
     const copied=await firstOpen.space.evaluate(()=>navigator.clipboard.readText());
     assert.ok(copied.includes(profileToCheck),"Resumo pode ser copiado para colar no atendimento");
+    await firstOpen.space.locator("#close-summary").click();
     await firstOpen.space.locator("#focus-attendance").click();
     assert.equal(await firstOpen.tab.evaluate(()=>window.__pvInit),1,
       "Alternar entre abas não reinicializa o SDK");
