@@ -173,35 +173,34 @@ jobs:
                 viewport:document.documentElement.clientWidth
               }));
               assert.ok(overflow.scroll<=overflow.viewport+1,'Rolagem horizontal em '+cfg.name+': '+JSON.stringify(overflow));
-              const mobile=cfg.kind==='mobile';
-              assert.equal(await page.locator('#pwa-install-android').isVisible(),mobile);
-              assert.equal(await page.locator('#pwa-install-apple').isVisible(),mobile);
-              assert.equal(await page.locator('#pwa-install-desktop').isVisible(),!mobile);
-              if(cfg.name.startsWith('android')){
-                if(cfg.name==='android-390'){
-                  await page.evaluate(()=>{
-                    window.__installCalled=false;
-                    const event=new Event('beforeinstallprompt',{cancelable:true});
-                    event.prompt=async()=>{window.__installCalled=true;};
-                    event.userChoice=Promise.resolve({outcome:'dismissed'});
-                    window.dispatchEvent(event);
-                  });
-                  await page.locator('#pwa-install-android').click();
-                  assert.equal(await page.evaluate(()=>window.__installCalled),true,'Botão Android deve chamar prompt nativo quando disponível');
-                }else{
-                  await page.locator('#pwa-install-apple').click();
-                  assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
-                }
-              }else if(cfg.name==='iphone-390'){
-                await page.locator('#pwa-install-apple').click();
-                assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
-                assert.match(await page.locator('#pwa-help-dialog').innerText(),/Adicionar à Tela de Início/);
-              }else{
-                await page.locator('#pwa-install-desktop').click();
-                assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
-                const instructions=await page.locator('#pwa-help-dialog').innerText();
-                assert.match(instructions,cfg.name.startsWith('mac')?/Adicionar ao Dock/:/barra de tarefas/);
+              assert.equal(await page.locator('#pwa-install-shortcut').isVisible(),true);
+              assert.equal(await page.locator('#pwa-install-android').count(),0);
+              const expectedDevice=cfg.name.startsWith('android')?'android':
+                cfg.name.startsWith('iphone')?'iphone':
+                cfg.name.startsWith('mac')?'mac':'windows';
+              if(cfg.name==='android-390'){
+                await page.evaluate(()=>{
+                  window.__installCalled=false;
+                  const event=new Event('beforeinstallprompt',{cancelable:true});
+                  event.prompt=async()=>{window.__installCalled=true;};
+                  event.userChoice=Promise.resolve({outcome:'dismissed'});
+                  window.dispatchEvent(event);
+                });
               }
+              await page.locator('#pwa-install-shortcut').click();
+              assert.equal(await page.locator('#pwa-help-dialog').evaluate(el=>el.open),true);
+              assert.equal(await page.locator('#pwa-help-device').inputValue(),expectedDevice);
+              assert.ok(await page.locator('#pwa-help-steps li').count()>=3);
+              assert.match(await page.locator('#pwa-help-source').getAttribute('href'),/^https:\/\//);
+              if(cfg.name==='android-390'){
+                assert.equal(await page.locator('#pwa-native-install').isVisible(),true);
+                await page.locator('#pwa-native-install').click();
+                assert.equal(await page.evaluate(()=>window.__installCalled),true);
+              }
+              if(cfg.name==='iphone-390')
+                assert.match(await page.locator('#pwa-help-dialog').innerText(),/Adicionar à Tela de Início/);
+              if(cfg.name==='mac-1280')
+                assert.match(await page.locator('#pwa-help-dialog').innerText(),/Adicionar ao Dock/);
               await page.screenshot({path:'/tmp/pv-prints/portal-pwa-'+cfg.name+'.png',fullPage:true});
               console.log('Portal PWA conferido:',cfg.name);
               await page.close();
