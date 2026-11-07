@@ -59,3 +59,10 @@
   .pwa-help-image img{max-height:220px}
   .pwa-help-nav{margin-bottom:7px}
 }
+
+.pwa-help-selectors{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+.pwa-help-selectors label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:750;color:#4b2879}
+.pwa-help-selectors select{display:block;width:100%;min-width:0;min-height:42px;padding:9px 30px 9px 11px;border:1px solid #dcd0ec;border-radius:10px;color:#362547;background:#fff;font:600 13px Inter,Arial,sans-serif}
+.pwa-help-selectors select:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+.pwa-help-source{display:inline-flex;margin:3px 0 4px;color:#5420a0;font-size:12px;font-weight:750;text-underline-offset:3px}
+@media(max-width:440px){.pwa-help-selectors{grid-template-columns:1fr;gap:9px}}
