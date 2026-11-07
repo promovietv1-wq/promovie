@@ -18,22 +18,17 @@ test('manifesto instala a TeleSaúde PromoVie isolada e com identidade visual da
   assert.ok(m.icons.every(icon=>icon.src.startsWith('/app/icons/')));
 });
 
-test('a página mantém o login e apresenta opções separadas para celular e desktop',async()=>{
+test('entrada preserva login e oferece um único Adicionar atalho ilustrado',async()=>{
   const html=await read('./index.html');
   assert.match(html,/rel="manifest" href="\/telesaude\/manifest\.webmanifest"/);
   assert.match(html,/src="\/telesaude\/pwa-install\.js/);
   for(const id of ['access-form','access-cpf','access-code','install-now',
-    'pwa-install-actions','pwa-install-android','pwa-install-apple',
-    'pwa-install-desktop','pwa-help-dialog','pwa-help-steps']){
+    'pwa-install-actions','pwa-install-shortcut','pwa-help-dialog','pwa-help-device',
+    'pwa-help-browser','pwa-help-steps','pwa-help-figure','pwa-help-photo']){
     assert.ok(html.includes('id="'+id+'"'),'Elemento ausente: '+id);
   }
-  assert.match(html,/data-pwa-device="mobile"/);
-  assert.match(html,/data-pwa-device="desktop"/);
-  assert.match(html,/pwa-install-mobile\{display:grid/);
-  assert.match(html,/pwa-install-desktop\{display:flex/);
-  assert.match(html,/type="button" id="pwa-install-android"/);
-  assert.match(html,/type="button" id="pwa-install-apple"/);
-  assert.match(html,/type="button" id="pwa-install-desktop"/);
+  assert.doesNotMatch(html,/id="pwa-install-android"|id="pwa-install-apple"|id="pwa-install-desktop"/);
+  assert.match(html,/type="button" id="pwa-install-shortcut"/);
   assert.match(html,/id="install-now" aria-label="Acessar" disabled/);
   assert.match(html,/window\.location\.assign\("\/telesaude\/atendimento\/"\)/);
 });
@@ -49,6 +44,22 @@ test('instalação depende do navegador, e iPhone/Mac recebem passos reais',asyn
   assert.match(js,/data-pwa-close/);
   assert.doesNotMatch(js,/sessionStorage|localStorage|access_token|MediquoWidget|\/patients\/authenticate/);
   assert.doesNotMatch(js,/JSON\.stringify\(\{\s*cpf|MEDIQUO_V3_SDK_SECRET_KEY/);
+});
+
+test('agendamentos externos ficam isolados da Médiquo, sem mensagem repetida',async()=>{
+  const html=await read('./atendimento/index.html');
+  const script=await read('./agendamentos.js');
+  const style=await read('./atalhos-agenda.css');
+  assert.match(html,/id="appointments-trigger"/);
+  assert.match(html,/id="appointments-dialog"/);
+  assert.match(html,/href="https:\/\/tinyurl\.com\/agendamq"/);
+  assert.match(html,/href="https:\/\/tinyurl\.com\/AgndrCon"/);
+  assert.match(html,/target="_blank" rel="noopener noreferrer"/);
+  assert.match(html,/text:\{title:"Médicos e Especialistas"\}/);
+  assert.match(html,/https:\/\/widget\.mediquo\.com\/js\/1\.0\.0\/mediquo\.js/);
+  assert.match(script,/showModal/);
+  assert.doesNotMatch(script,/MediquoWidget|accessToken|apiKey|sessionStorage|localStorage/);
+  assert.match(style,/agenda-modal/);
 });
 
 test('service worker acessa somente entrada pública por rede, nunca atendimento ou API',async()=>{
