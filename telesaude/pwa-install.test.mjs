@@ -101,3 +101,24 @@ test('service worker acessa somente entrada pública por rede, nunca atendimento
   assert.equal(simulate('https://www.promovie.tv.br/telesaude/','cors','GET'),false);
   assert.equal(calls,2);
 });
+
+
+test('busca de especialidades é independente, apresenta oito opções em ordem estratégica',async()=>{
+  const html=await read('./atendimento/index.html');
+  const js=await read('./especialidades.js');
+  const css=await read('./especialidades.css');
+  const wanted=['Clínico geral','Psicologia','Nutrição','Treinamento físico','Pediatria','Dermatologia','Ginecologia','Veterinária'];
+  assert.match(html,/id="specialties-trigger"/);
+  assert.match(html,/id="specialties-dialog"/);
+  assert.match(html,/id="specialties-query"/);
+  assert.match(html,/id="specialties-empty"/);
+  assert.match(html,/id="specialties-see-list"/);
+  const order=[...html.matchAll(/data-specialty="([^"]+)"/g)].map(m=>m[1]);
+  assert.deepEqual(order,wanted);
+  assert.match(html,/Esta seleção não altera nem filtra a lista original/);
+  assert.match(html,/A disponibilidade de profissionais depende do plano/);
+  assert.match(js,/normalize\("NFD"\)/);
+  assert.match(js,/typeof sdk\.open_list==="function"/);
+  assert.doesNotMatch(js,/fetch\(|localStorage|sessionStorage|accessToken|apiKey|\.init\(|\.logout\(|\.destroy\(/);
+  assert.match(css,/@media\(max-width:360px\)/);
+});
