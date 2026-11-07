@@ -34,8 +34,9 @@ jobs:
           js=re.findall(r'<script[^>]*>(.*?)</script>', page, flags=re.DOTALL|re.IGNORECASE)
           assert len(js)>=1, 'Deve haver pelo menos um bloco JavaScript'
           Path('/tmp/telesaude.js').write_text('\n;\n'.join(js))
-          attendance_js=re.findall(r'<script[^>]*>(.*?)</script>', attendance, flags=re.DOTALL|re.IGNORECASE)
-          assert len(attendance_js)==1, 'A pagina exclusiva deve ter um script de inicializacao'
+          attendance_js=[code for code in re.findall(r'<script[^>]*>(.*?)</script>', attendance, flags=re.DOTALL|re.IGNORECASE) if code.strip()]
+          assert len(attendance_js)==1, 'O SDK deve manter um unico script de inicializacao; scripts externos independentes sao permitidos'
+          assert '/telesaude/space-entry.js' in attendance, 'Acesso ao espaco fica somente no atendimento'
           Path('/tmp/telesaude-atendimento.js').write_text(attendance_js[0])
           assert 'const ACCESS="/api/promovie/access/v1"' in page
           assert 'const BACKEND_URL="https://backend.promovie.tv.br"' in page

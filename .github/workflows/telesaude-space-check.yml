@@ -6,6 +6,7 @@ on:
       - '.github/scripts/validate-health-space-ui.mjs'
       - 'telesaude/space-entry.js'
       - 'telesaude/index.html'
+      - 'telesaude/atendimento/index.html'
       - 'telesaude/portal-premium.css'
       - 'app-teste-novo-2-worker/src/health-space.mjs'
       - 'app-teste-novo-2-worker/src/index.mjs'
@@ -51,9 +52,15 @@ jobs:
           assert 'handleHealthSpace' in worker and 'handleBeneficiaryAccess' in worker and 'handleV3' in worker
           entry=Path('telesaude/space-entry.js').read_text()
           portal=Path('telesaude/index.html').read_text()
-          assert 'disponivel===true' in entry
-          assert 'class="space-entry" hidden' in portal
-          assert portal.index('</form>',portal.index('id="access-form"')) < portal.index('class="space-entry"'), 'Card deve ficar fora do formulário'
+          attendance=Path('telesaude/atendimento/index.html').read_text()
+          assert 'disponivel!==true' in entry
+          assert 'class="space-entry"' not in portal, 'Card não pertence à tela inicial'
+          assert '/telesaude/space-entry.js' not in portal
+          assert 'class="space-footer" hidden' in attendance, 'Card após abertura do atendimento'
+          assert 'class="space-entry"' in attendance
+          assert 'html body #MediquoContainer' in attendance, 'Widget deve continuar independente'
+          assert 'bottom:var(--space-h)!important' in attendance
+          assert 'window.MediquoWidget.init' in attendance
           assert 'Entrar com outro CPF' in h and 'Trocar beneficiário' not in h
           assert 'Ativar meu espaço' in js and 'Nenhuma senha adicional será criada' not in js
           assert 'window.MediquoWidget' not in js
