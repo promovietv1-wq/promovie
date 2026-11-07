@@ -59,6 +59,9 @@ test('agendamentos externos ficam isolados da Médiquo, sem mensagem repetida',a
   const style=await read('./atalhos-agenda.css');
   assert.match(html,/id="appointments-trigger"/);
   assert.match(html,/id="appointments-dialog"/);
+  assert.equal((html.match(/class="agenda-link-arrow"/g)||[]).length,2,"Os dois links devem ter ícones SVG");
+  assert.doesNotMatch(html,/<span aria-hidden="true">↗<\/span>/,"Não usar setas emoji no celular");
+  assert.match(style,/\.agenda-modal-link \.agenda-link-arrow/);
   assert.match(html,/href="https:\/\/tinyurl\.com\/agendamq"/);
   assert.match(html,/href="https:\/\/tinyurl\.com\/AgndrCon"/);
   assert.match(html,/target="_blank" rel="noopener noreferrer"/);
