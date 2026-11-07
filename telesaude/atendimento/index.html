@@ -70,8 +70,8 @@ button{font:inherit}
 .back:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
 .back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 :root.space-link-ready{--space-h:calc(48px + env(safe-area-inset-bottom))}
-/* Faixa de acesso PromoVie: altura compacta, azul da faixa institucional,
-   apenas icone de arquivo e titulo centralizados. Sem alterar o widget. */
+/* Faixa de acesso PromoVie: azul da barra superior, altura compacta,
+   ícone e título no centro, indicador de navegação na direita. Sem tocar no widget. */
 .space-footer[hidden]{display:none!important}
 .space-footer{
   position:fixed;inset:auto 0 0;height:var(--space-h);
@@ -79,9 +79,9 @@ button{font:inherit}
   padding:0;background:#1459ad;
 }
 .space-entry{
-  display:flex;align-items:center;justify-content:center;
+  position:relative;display:flex;align-items:center;justify-content:center;
   gap:9px;width:100%;height:100%;min-height:0;
-  padding:0 max(16px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px,env(safe-area-inset-left));
+  padding:0 max(48px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(48px,env(safe-area-inset-left));
   border:0;border-radius:0;background:#1459ad;
   text-align:center;text-decoration:none;color:#fff;
 }
@@ -95,6 +95,12 @@ button{font:inherit}
 .space-entry strong{
   display:block;font-size:15px;font-weight:750;line-height:1.25;
   color:#fff;white-space:nowrap
+}
+.space-entry .space-arrow{
+  position:absolute;right:max(18px,env(safe-area-inset-right));
+  top:calc((100% - env(safe-area-inset-bottom))/2);
+  width:18px;height:18px;transform:translateY(-50%);
+  pointer-events:none
 }
 @media(max-width:700px){
   :root.space-link-ready{--space-h:calc(48px + env(safe-area-inset-bottom))}
@@ -240,6 +246,9 @@ html body .mediquo-launcher{display:none!important}
       <path d="M14 2v6h6M8 13h8M8 17h8"/>
     </svg>
     <strong>Meu Espaço de Saúde</strong>
+    <svg class="space-arrow" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m9 18 6-6-6-6"/>
+    </svg>
   </a>
 </nav>
 <script>
