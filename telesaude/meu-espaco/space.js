@@ -35,13 +35,13 @@
             attendance.focus();
             setTimeout(function(){
               if(document.visibilityState==="visible"&&document.hasFocus()){
-                notice("A consulta permanece na outra aba. Se não voltar automaticamente, selecione a aba do atendimento.");
+                notice("Para retornar à consulta, selecione a aba do atendimento no navegador.");
               }
             },750);
             return;
           }
         }catch{}
-        const fallback="Seu atendimento permanece na outra aba. Se não voltar automaticamente, selecione a aba da consulta. Mantenha este espaço aberto para não perder o acesso.";
+        const fallback="Para retornar à consulta, selecione a aba do atendimento no navegador.";
         if(typeof BroadcastChannel!=="function"){notice(fallback);return;}
         const channel=new BroadcastChannel("promovie:telesaude:alternancia:v1");
         const id=crypto.randomUUID();
