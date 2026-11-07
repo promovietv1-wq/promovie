@@ -83,7 +83,16 @@
   }
 
   function notice(message,type="info"){
-    const p=$("feedback");p.textContent=message||"";p.hidden=!message;p.dataset.kind=type;
+    const p=$("feedback");
+    // No celular, o retorno é feito pelo botão do próprio aplicativo.
+    // Não orientar a seleção de abas de navegador na interface mobile.
+    const mobile=typeof window.matchMedia==="function"&&
+      window.matchMedia("(max-width:700px)").matches;
+    if(type==="navigation"&&(window.parent!==window||mobile)){
+      p.textContent="";p.hidden=true;p.removeAttribute("data-kind");
+      return;
+    }
+    p.textContent=message||"";p.hidden=!message;p.dataset.kind=type;
     if(message)p.scrollIntoView({block:"nearest",behavior:"smooth"});
   }
   function view(name){
