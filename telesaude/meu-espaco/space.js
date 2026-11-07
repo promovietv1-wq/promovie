@@ -18,6 +18,30 @@
   const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
   const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
 
+  // Quando aberto pela consulta, o retorno não navega à tela de login.
+  // Cada aba conserva seu próprio estado; nenhuma credencial é transmitida.
+  if(new URLSearchParams(location.search).get("atendimento")==="aberto"){
+    const back=$("back-to-access"),button=$("focus-attendance");
+    if(back&&button){
+      back.hidden=true;button.hidden=false;
+      button.addEventListener("click",function(){
+        const fallback="Seu atendimento permanece na outra aba. Se não voltar automaticamente, selecione a aba da consulta. Mantenha este espaço aberto para não perder o acesso.";
+        if(typeof BroadcastChannel!=="function"){notice(fallback);return;}
+        const channel=new BroadcastChannel("promovie:telesaude:alternancia:v1");
+        const id=crypto.randomUUID();
+        let gotReply=false;
+        channel.addEventListener("message",function(event){
+          if(event.data?.type==="attendance-ready"&&event.data.id===id)gotReply=true;
+        });
+        channel.postMessage({type:"focus-attendance",id});
+        setTimeout(function(){
+          channel.close();
+          if(!gotReply)notice(fallback);
+        },700);
+      });
+    }
+  }
+
   function notice(message,type="info"){
     const p=$("feedback");p.textContent=message||"";p.hidden=!message;p.dataset.kind=type;
     if(message)p.scrollIntoView({block:"nearest",behavior:"smooth"});

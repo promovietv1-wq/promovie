@@ -6,6 +6,19 @@
   const status=document.getElementById("status");
   if(!footer||!status)return;
 
+  // Permite solicitar foco da consulta aberta em outra aba, sem navegar,
+  // compartilhar credenciais ou reinicializar a interface da Médiquo.
+  if(typeof BroadcastChannel==="function"){
+    const channel=new BroadcastChannel("promovie:telesaude:alternancia:v1");
+    channel.addEventListener("message",function(event){
+      const data=event.data;
+      if(!data||data.type!=="focus-attendance"||
+         typeof data.id!=="string"||data.id.length>64||!status.hidden)return;
+      channel.postMessage({type:"attendance-ready",id:data.id});
+      try{window.focus();}catch{}
+    });
+  }
+
   function enableWhenReady(){
     if(!status.hidden)return false;
     document.documentElement.classList.add("space-link-ready");
