@@ -4,6 +4,9 @@ on:
     paths:
       - 'telesaude/gestao/index.html'
       - 'telesaude/index.html'
+      - 'telesaude/atendimento/index.html'
+      - 'telesaude/space-entry.js'
+      - '.github/scripts/validate-attendance-footer.mjs'
       - '.github/workflows/telesaude-gestao-visual.yml'
   workflow_dispatch:
 
@@ -279,6 +282,11 @@ jobs:
             }
           }finally{await browser.close();}
           JS
+      - name: Confirmar card externo abaixo do aplicativo após o acesso, sem SDK real
+        run: |
+          python -m http.server 8778 --bind 127.0.0.1 >/tmp/space-footer-server.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-attendance-footer.mjs
       - name: Guardar capturas para inspeção
         if: always()
         uses: actions/upload-artifact@v4
