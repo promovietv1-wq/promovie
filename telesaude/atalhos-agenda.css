@@ -15,7 +15,7 @@
 .agenda-modal-link{display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;border:1px solid #d9cee8;border-radius:12px;background:#f8f5fe;color:#48217f;padding:12px 14px;font-size:14px;font-weight:750}
 .agenda-modal-link:first-child{color:#fff;background:#5520a0;border-color:#5520a0}
 .agenda-modal-link:hover{filter:brightness(.96)}
-.agenda-modal-link span:last-child{font-size:17px;line-height:1}
+.agenda-modal-link .agenda-link-arrow{display:block;flex:0 0 18px;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;opacity:.87}
 .agenda-modal-guide{border-top:1px solid #ece5f2;padding-top:16px;color:#4d425b}
 .agenda-modal-guide h3{font-size:13px;font-weight:800;margin:0 0 7px;color:#40206f}
 .agenda-modal-guide p{font-size:12px;line-height:1.65;margin:0 0 9px}
