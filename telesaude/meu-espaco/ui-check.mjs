@@ -56,6 +56,10 @@ async function run(width){
     await page.goto(origin+'/telesaude/meu-espaco/',{waitUntil:'load'});
     await login(first,'unlock');
     assert.equal(await page.locator('#legacy-wrap').isVisible(),false);
+    assert.equal(await page.locator('#unlock-title').innerText(),'Meu Espaço de Saúde');
+    assert.equal(await page.locator('#unlock-submit').innerText(),'Ativar meu espaço');
+    assert.match(await page.locator('.warning').innerText(),/informar o anterior uma vez/);
+    assert.equal((await page.locator('#unlock-back').innerText()).trim(),'Entrar com outro CPF');
     await page.locator('#privacy-consent').check();
     await page.locator('#unlock-submit').click();
     await page.locator('#workspace-view').waitFor({state:'visible',timeout:25000});
@@ -71,7 +75,7 @@ async function run(width){
     assert.equal(await page.locator('#allergies').inputValue(),'Observação de teste');
     await logout();
     await login(second,'unlock');
-    assert.match(await page.locator('#old-credential-label').innerText(),/Código de acesso anterior/);
+    assert.match(await page.locator('#old-credential-label').innerText(),/Código anterior/);
     await page.locator('#vault-passphrase').fill(first);
     await page.locator('#unlock-submit').click();
     await page.locator('#workspace-view').waitFor({state:'visible',timeout:25000});

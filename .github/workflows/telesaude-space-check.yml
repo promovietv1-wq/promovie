@@ -53,6 +53,9 @@ jobs:
           portal=Path('telesaude/index.html').read_text()
           assert 'disponivel===true' in entry
           assert 'class="space-entry" hidden' in portal
+          assert portal.index('</form>',portal.index('id="access-form"')) < portal.index('class="space-entry"'), 'Card deve ficar fora do formulário'
+          assert 'Entrar com outro CPF' in h and 'Trocar beneficiário' not in h
+          assert 'Ativar meu espaço' in js and 'Nenhuma senha adicional será criada' not in js
           assert 'window.MediquoWidget' not in js
           print('Estrutura independente validada sem gravar ou consultar dados reais.')
           PY

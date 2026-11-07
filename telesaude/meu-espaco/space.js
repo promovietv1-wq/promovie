@@ -180,13 +180,13 @@
     $("consent-row").hidden=true;$("privacy-consent").required=false;
     $("legacy-wrap").hidden=false;$("vault-passphrase").required=true;
     $("vault-passphrase").value="";
-    $("old-credential-label").textContent=mode==="old-code"?"Código de acesso anterior":"Senha privada anterior";
+    $("old-credential-label").textContent=mode==="old-code"?"Código anterior":"Senha anterior";
     $("vault-passphrase").placeholder=mode==="old-code"?"Código usado antes da troca":"Senha usada ao criar este espaço";
-    $("unlock-title").textContent="Proteger seus dados anteriores";
+    $("unlock-title").textContent="Atualizar acesso aos meus dados";
     $("unlock-description").textContent=mode==="old-code"?
-      "Seu código pessoal foi alterado. Para manter suas informações, informe o código anterior uma única vez. Ele será usado somente neste navegador.":
-      "Este espaço foi criado com uma senha antiga. Informe-a uma última vez para migrar as informações para o código pessoal da TeleSaúde.";
-    $("unlock-submit").textContent="Migrar e abrir meu espaço";
+      "Para preservar seus dados, informe o código anterior uma única vez.":
+      "Para preservar seus dados, informe a senha usada anteriormente uma única vez.";
+    $("unlock-submit").textContent="Confirmar e abrir";
     view("unlock");$("vault-passphrase").focus();
   }
   $("login-form").addEventListener("submit",e=>{
@@ -203,9 +203,9 @@
         state.data=fresh();state.docKey=null;
         $("legacy-wrap").hidden=true;$("vault-passphrase").required=false;
         $("consent-row").hidden=false;$("privacy-consent").required=true;
-        $("unlock-title").textContent="Criar Meu Espaço de Saúde";
-        $("unlock-description").textContent="Você já está identificado. Confirme o uso opcional deste espaço. Nenhuma senha adicional será criada.";
-        $("unlock-submit").textContent="Criar meu espaço protegido";
+        $("unlock-title").textContent="Meu Espaço de Saúde";
+        $("unlock-description").textContent="Você já está identificado. Ative seu espaço com o mesmo código da TeleSaúde.";
+        $("unlock-submit").textContent="Ativar meu espaço";
         view("unlock");return;
       }
       if(vault.record.salt.startsWith("c2_")){

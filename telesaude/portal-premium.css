@@ -931,7 +931,7 @@ body{
 /* Link ao espaço pessoal: independente do acesso clínico Médiquo. */
 .space-entry[hidden]{display:none!important}
 .space-entry{
-  display:flex;align-items:center;text-align:left;gap:11px;width:100%;margin:14px auto 0;
+  display:flex;align-items:center;text-align:left;gap:11px;width:min(100%,395px);margin:18px auto 0;
   padding:12px 13px;border:1px solid #ded5ed;border-radius:13px;background:#faf8fd;
   color:#4d267e;text-decoration:none;transition:border-color .2s ease,background .2s ease,transform .2s ease
 }
