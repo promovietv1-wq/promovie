@@ -347,7 +347,7 @@ html body .mediquo-launcher{display:none!important}
     const keyPromise=crypto.subtle.importKey("raw",binary,{name:"AES-GCM"},
       false,["encrypt","decrypt"]).finally(()=>binary.fill(0));
     delete handoff.key;
-    let openedSpace=null;
+    let openedSpace=null,embeddedLoaded=false;
     const embeddedLayer=document.getElementById("space-embedded");
     const embeddedFrame=document.getElementById("space-embedded-frame");
     const closeEmbedded=function(){
@@ -402,8 +402,7 @@ html body .mediquo-launcher{display:none!important}
           (window.matchMedia("(display-mode: standalone)").matches||
            window.matchMedia("(max-width:700px)").matches))||
         navigator.standalone===true);
-      if(installedApp&&embeddedLayer&&embeddedFrame&&
-         embeddedFrame.getAttribute("src")){
+      if(installedApp&&embeddedLayer&&embeddedFrame&&embeddedLoaded){
         event.preventDefault();
         showEmbedded();
         return;
@@ -454,6 +453,7 @@ html body .mediquo-launcher{display:none!important}
         // Evita criar uma etapa extra no histórico do quadro.
         embeddedFrame.contentWindow.location.replace(url.href);
         openedSpace=embeddedFrame.contentWindow;
+        embeddedLoaded=true;
         return;
       }
       const popup=window.open(url.href,"_blank");
