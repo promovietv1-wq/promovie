@@ -259,6 +259,10 @@ async function testSingleSignOn(){
       toolbar:el.parentElement.getBoundingClientRect().width
     }));
     assert.ok(boxSize.notice<boxSize.toolbar,"A orientação deve ocupar só a largura necessária");
+    assert.equal(await embedded.locator("#attendance-guidance svg").count(),0);
+    assert.equal(await embedded.locator("#attendance-guidance span").evaluate(el=>
+      getComputedStyle(el).boxDecorationBreak),"clone",
+      "O fundo da orientação deve terminar exatamente no texto, mesmo com quebra de linha");
     assert.equal(await installed.locator("#space-embedded-return").innerText(),"Fechar registros");
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
