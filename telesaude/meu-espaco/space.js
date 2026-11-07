@@ -188,7 +188,7 @@
     return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:decode64(iv)},state.docKey||state.key,cipher));
   }
   function changed(){
-    state.dirty=true;$("save-state").textContent="Alterações ainda não salvas";
+    state.dirty=true;$("save-state").textContent="Informações ainda não salvas";
   }
   function collectProfile(){
     for(const [id,field] of profileFields)state.data.perfil[field]=$(id).value.slice(0,4000);
@@ -213,11 +213,11 @@
       const title=document.createElement("strong"),details=document.createElement("span");
       const open=document.createElement("button"),del=document.createElement("button");
       title.textContent=doc.nome||"Documento";details.textContent=doc.tamanho?Math.ceil(doc.tamanho/1024)+" KB · Criptografado":"Criptografado";
-      open.type="button";open.textContent="Baixar";open.addEventListener("click",()=>downloadDoc(doc));
+      open.type="button";open.textContent="Baixar arquivo";open.addEventListener("click",()=>downloadDoc(doc));
       del.type="button";del.textContent="Excluir";del.className="delete";del.addEventListener("click",()=>removeDoc(doc));
       wrap.append(title,details);li.append(wrap,open,del);docs.appendChild(li);
     }
-    $("save-state").textContent=state.dirty?"Alterações ainda não salvas":"Salvo com criptografia";
+    $("save-state").textContent=state.dirty?"Informações ainda não salvas":"Informações salvas";
   }
   function renderNotes(){
     // Manter alterações de texto ainda não salvas ao redesenhar a lista.
@@ -239,7 +239,7 @@
     }});
     state.revision=result.revision;state.previousSalt=null;
     state.record={salt:state.salt,iv:encode64(iv),ciphertext:encode64(ciphertext)};
-    state.dirty=false;$("save-state").textContent="Salvo com criptografia";
+    state.dirty=false;$("save-state").textContent="Informações salvas";
     return result;
   }
   async function protectedTask(job){
@@ -348,7 +348,7 @@
     state.data.anotacoes.unshift({id:crypto.randomUUID(),tipo:$("note-kind").value,texto,criadoEm:new Date().toISOString()});
     $("note-text").value="";changed();renderNotes();
   });
-  $("save-all").addEventListener("click",()=>protectedTask(async()=>{await save();notice("Suas alterações foram salvas com criptografia.","success");}));
+  $("save-all").addEventListener("click",()=>protectedTask(async()=>{await save();notice("Informações salvas com segurança.","success");}));
   $("logout").addEventListener("click",()=>{
     if(state.dirty&&!confirm("Existem alterações não salvas. Deseja sair mesmo assim?"))return;
     protectedTask(async()=>{await api("/logout",{method:"POST"}).catch(()=>{});reset();notice("Você saiu do seu espaço com segurança.");});
@@ -388,7 +388,7 @@
       await api("/documents/"+id,{method:"DELETE"}).catch(()=>{});
       throw e;
     }
-    $("file-input").value="";render();notice("Documento guardado com criptografia.","success");
+    $("file-input").value="";render();notice("Arquivo salvo com criptografia. Ele não foi enviado ao profissional.","success");
   }));
   async function removeDoc(doc){
     if(!confirm("Excluir o documento “"+doc.nome+"”?"))return;
@@ -436,7 +436,7 @@
     const bundle={format:"promovie-espaco-criptografado-v1",exportadoEm:new Date().toISOString(),
       vault:vault.record,documents};
     download(new Blob([JSON.stringify(bundle)],{type:"application/json"}),"promovie-espaco-protegido.json");
-    notice("Cópia criptografada baixada. Guarde-a em local seguro e preserve o código pessoal usado para protegê-la.","success");
+    notice("Cópia de segurança gerada. É um arquivo criptografado, não um PDF para leitura. Guarde seu código pessoal.","success");
   }));
   $("delete-vault").addEventListener("click",()=>protectedTask(async()=>{
     const decision=prompt("Esta ação apaga permanentemente informações e documentos. Para confirmar, digite EXCLUIR:");
