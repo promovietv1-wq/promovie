@@ -262,10 +262,6 @@
       notice("Informações preservadas. A partir de agora, use somente seu código pessoal atual.","success");
     });
   });
-  $("unlock-back").addEventListener("click",()=>protectedTask(async()=>{
-    if(state.token)await api("/logout",{method:"POST"}).catch(()=>{});
-    reset();notice("");
-  }));
   for(const [id] of profileFields)$(id).addEventListener("input",()=>{if(state.data)changed();});
   $("note-form").addEventListener("submit",e=>{
     e.preventDefault();
