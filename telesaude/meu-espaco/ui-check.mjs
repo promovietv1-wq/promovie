@@ -156,7 +156,7 @@ async function testSingleSignOn(){
     return {tab,space};
   }
   try{
-    const firstOpen=await openFromSameLogin(first);
+    const firstOpen=await openFromSameLogin(first,1440);
     await firstOpen.space.locator("#unlock-view").waitFor({state:"visible",timeout:20000});
     assert.equal(await firstOpen.space.locator("#login-view").isVisible(),false,
       "A nova aba não deve pedir novamente CPF/código");
@@ -228,7 +228,7 @@ async function testSingleSignOn(){
     assert.equal(await embedded.locator("#allergies").inputValue(),profileToCheck);
     assert.equal(popups,0,"App instalado deve manter Meu Espaço na mesma janela");
     assert.equal(await installed.evaluate(()=>window.__pvInit),1);
-    await embedded.locator("#focus-attendance").click();
+    await installed.locator("#space-embedded-return").click();
     await installed.locator("#space-embedded").waitFor({state:"hidden",timeout:5000});
     assert.equal(new URL(installed.url()).pathname,"/telesaude/atendimento/");
     assert.equal(await installed.evaluate(()=>window.__pvOpen),1,
