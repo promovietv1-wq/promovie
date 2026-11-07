@@ -238,6 +238,7 @@ html body .mediquo-launcher{display:none!important}
 }
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
+<link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-1">
 </head>
 <body>
 <header class="topbar">
@@ -246,6 +247,10 @@ html body .mediquo-launcher{display:none!important}
     <div class="identity-copy">
       <strong>TeleSaúde PromoVie</strong>
     </div>
+  </div>
+  <div class="clinic-tools">
+    <span class="clinic-tools-caption">Médicos e Especialistas</span>
+    <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos</button>
   </div>
   <a class="back" href="/telesaude/" id="back-access" aria-label="Sair e voltar ao acesso" title="Sair">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -285,6 +290,24 @@ html body .mediquo-launcher{display:none!important}
     <button id="space-hide-help" type="button">Fechar aviso</button>
   </div>
 </section>
+<dialog id="appointments-dialog" class="agenda-modal" aria-labelledby="appointments-title">
+  <div class="agenda-modal-head">
+    <h2 id="appointments-title">Agendamentos</h2>
+    <button type="button" class="agenda-modal-close" data-agenda-close aria-label="Fechar">×</button>
+  </div>
+  <p class="agenda-modal-lead">Agende uma consulta ou fale com a equipe de suporte.</p>
+  <div class="agenda-modal-actions">
+    <a class="agenda-modal-link" href="https://tinyurl.com/agendamq" target="_blank" rel="noopener noreferrer"><span>Agendar consulta</span><span aria-hidden="true">↗</span></a>
+    <a class="agenda-modal-link" href="https://tinyurl.com/AgndrCon" target="_blank" rel="noopener noreferrer"><span>Suporte e dúvidas</span><span aria-hidden="true">↗</span></a>
+  </div>
+  <section class="agenda-modal-guide" aria-label="Orientações para agendar">
+    <h3>Como funciona</h3>
+    <p>Escolha o profissional e o horário disponível. No dia da consulta, envie uma mensagem no chat do profissional agendado para liberar o contato.</p>
+    <p>Na psicologia, geralmente são exibidos horários dos próximos 7 dias. Se não houver horário com um profissional, consulte outro. Agendamentos podem ser recorrentes, a cada 15 dias.</p>
+    <p>O link de agendamento não é atendimento humano. Para outras solicitações, use <strong>Suporte e dúvidas</strong>.</p>
+  </section>
+</dialog>
+<script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
 (function(){
   "use strict";
