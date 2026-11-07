@@ -13,7 +13,7 @@
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="manifest" href="/telesaude/manifest.webmanifest">
 <link rel="stylesheet" href="/telesaude/meu-espaco/space.css?v=20261107-return-header-2">
-<script src="/telesaude/meu-espaco/space.js?v=20261107-return-header-2" defer></script>
+<script src="/telesaude/meu-espaco/space.js?v=20261107-arquivos-1" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -69,7 +69,7 @@
     <div class="workspace-toolbar">
       <div><h2>Meus registros</h2><p id="save-state" class="muted">Informações protegidas</p></div>
       <div class="toolbar-actions">
-        <button type="button" id="save-all" class="primary">Salvar alterações</button>
+        <button type="button" id="save-all" class="primary">Salvar informações</button>
         <button type="button" id="logout" class="secondary">Sair</button>
       </div>
     </div>
@@ -97,13 +97,13 @@
           <p id="notes-empty" class="empty">Nenhuma anotação adicionada.</p>
         </section>
         <section class="panel">
-          <div class="panel-heading"><span class="icon-disc" aria-hidden="true">▤</span><div><h3>Meus documentos</h3><p>Exames, receitas e laudos em PDF ou imagem.</p></div></div>
-          <label for="file-input">Adicionar documento criptografado</label>
+          <div class="panel-heading"><span class="icon-disc" aria-hidden="true">▤</span><div><h3>Meus documentos</h3><p>Guarde exames, receitas e laudos para consultar quando precisar.</p></div></div>
+          <label for="file-input">Selecionar arquivo</label>
           <input id="file-input" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
-          <p class="help">Até 500 KB por arquivo, no máximo 10 documentos nesta versão.</p>
-          <button type="button" id="upload-file" class="secondary">Guardar documento</button>
+          <p class="help">PDF, JPG ou PNG, até 500 KB. Máximo de 10 arquivos. Não são enviados automaticamente ao profissional.</p>
+          <button type="button" id="upload-file" class="secondary">Salvar arquivo</button>
           <ul id="documents-list" class="item-list"></ul>
-          <p id="documents-empty" class="empty">Nenhum documento guardado.</p>
+          <p id="documents-empty" class="empty">Nenhum arquivo salvo.</p>
         </section>
       </div>
     </div>
@@ -112,9 +112,9 @@
       <button type="button" id="make-summary" class="secondary">Ver resumo</button>
     </section>
     <section class="panel management">
-      <div><h3>Seus dados, suas escolhas</h3><p>Baixe uma cópia criptografada para guardar ou exclua seu conteúdo deste espaço.</p></div>
+      <div><h3>Seus dados, suas escolhas</h3><p>Baixe uma cópia de segurança criptografada ou exclua seus registros.</p></div>
       <div class="toolbar-actions">
-        <button type="button" id="export-backup" class="secondary">Baixar cópia protegida</button>
+        <button type="button" id="export-backup" class="secondary">Baixar cópia de segurança</button>
         <button type="button" id="delete-vault" class="danger">Excluir todo o conteúdo</button>
       </div>
     </section>
