@@ -176,6 +176,12 @@ async function testSingleSignOn(){
     const copied=await firstOpen.space.evaluate(()=>navigator.clipboard.readText());
     assert.ok(copied.includes(profileToCheck),"Resumo pode ser copiado para colar no atendimento");
     assert.equal(await firstOpen.space.locator("#attendance-guidance").isVisible(),true);
+    assert.equal(await firstOpen.space.locator(".workspace-toolbar > #attendance-guidance").count(),1,
+      "Aviso deve ficar dentro da barra de Meus registros");
+    assert.equal(await firstOpen.space.locator("#attendance-guidance").evaluate(el=>
+      el.previousElementSibling?.classList.contains("workspace-heading")&&
+      el.nextElementSibling?.classList.contains("toolbar-actions")),true,
+      "Aviso deve ficar entre Meus registros e Salvar informações");
     assert.equal(await firstOpen.space.locator("#attendance-guidance").innerText().then(t=>t.includes("Sua consulta continua aberta")),true);
     assert.equal(await firstOpen.space.locator("#return-from-summary").count(),0);
     assert.equal(await firstOpen.space.locator("#focus-attendance").count(),0);
@@ -241,6 +247,10 @@ async function testSingleSignOn(){
     assert.equal(await embedded.locator("#login-view").isVisible(),false);
     assert.equal(await embedded.locator("#allergies").inputValue(),profileToCheck);
     assert.equal(await embedded.locator("#attendance-guidance").isVisible(),true);
+    assert.equal(await embedded.locator("#attendance-guidance").evaluate(el=>
+      el.previousElementSibling?.classList.contains("workspace-heading")&&
+      el.nextElementSibling?.querySelector("#save-all")!==null),true,
+      "No celular, a orientação deve anteceder o botão de salvar");
     assert.equal(await embedded.locator(".guidance-in-app").isVisible(),true);
     assert.equal(await embedded.locator(".guidance-other-tab").isVisible(),false);
     assert.equal(await installed.locator("#space-embedded-return").innerText(),"Fechar registros");
