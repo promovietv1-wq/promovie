@@ -151,6 +151,8 @@ async function testSingleSignOn(){
     await space.waitForLoadState("load");
     assert.equal(new URL(space.url()).hash,"");
     assert.ok(!space.url().includes("sdk-session-test"));
+    assert.equal(await space.evaluate(()=>window.opener?.location.pathname),"/telesaude/atendimento/",
+      "Espaço precisa de uma referência à aba da consulta para retornar sem recarregar");
     return {tab,space};
   }
   try{
@@ -167,8 +169,9 @@ async function testSingleSignOn(){
     await firstOpen.space.locator("#copy-summary").click();
     const copied=await firstOpen.space.evaluate(()=>navigator.clipboard.readText());
     assert.ok(copied.includes(profileToCheck),"Resumo pode ser copiado para colar no atendimento");
-    await firstOpen.space.locator("#close-summary").click();
-    await firstOpen.space.locator("#focus-attendance").click();
+    assert.equal(await firstOpen.space.locator("#return-from-summary").isVisible(),true);
+    await firstOpen.space.locator("#return-from-summary").click();
+    await firstOpen.tab.waitForFunction(()=>document.hasFocus(),null,{timeout:6000});
     assert.equal(await firstOpen.tab.evaluate(()=>window.__pvInit),1,
       "Alternar entre abas não reinicializa o SDK");
     assert.equal(new URL(firstOpen.tab.url()).pathname,"/telesaude/atendimento/");
@@ -176,6 +179,8 @@ async function testSingleSignOn(){
 
     const secondOpen=await openFromSameLogin(first,1440);
     await secondOpen.space.locator("#workspace-view").waitFor({state:"visible",timeout:20000});
+    await secondOpen.space.locator("#focus-attendance").click();
+    await secondOpen.tab.waitForFunction(()=>document.hasFocus(),null,{timeout:6000});
     assert.equal(await secondOpen.space.locator("#allergies").inputValue(),profileToCheck,
       "O cofre pode ser reaberto sem novo login e preserva a criptografia");
     await secondOpen.space.close();await secondOpen.tab.close();
