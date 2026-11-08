@@ -105,7 +105,7 @@ try{
  await page.locator("#hub-global-query").fill("Ana Clara");
  await page.locator("#hub-global-results .hub-person").first().click();
  assert.match(await page.locator("#hub-profile .hub-profile-description").innerText(),
- /não disponibilizou uma descrição/);
+ /Não conseguimos carregar a descrição/);
  assert.equal(await page.locator("#hub-profile .hub-avatar img").count(),0);
  await page.close();
  console.log("Busca inline, perfil sem biografia e inicial como fallback: OK.");

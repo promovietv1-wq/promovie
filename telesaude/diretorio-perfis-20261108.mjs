@@ -46,10 +46,10 @@ function profileAvatar(person,size){
  if(typeof person.avatar==="string"&&person.avatar){
    try{
      const url=new URL(person.avatar);
-     const official=url.protocol==="https:"&&(
-       url.hostname==="mediquo.com"||url.hostname.endsWith(".mediquo.com")||
-       url.hostname==="mediquo.com.br"||url.hostname.endsWith(".mediquo.com.br"));
-     if(official){
+     // O servidor da Médiquo já validou a URL pública da foto.
+     // A imagem pode estar em uma CDN em vez de um subdomínio da Médiquo.
+     const approved=url.protocol==="https:"&&!url.username&&!url.password;
+     if(approved){
        const img=node("img");
        img.alt="Foto de "+person.name;
        img.loading="lazy";img.decoding="async";img.referrerPolicy="no-referrer";
@@ -94,7 +94,7 @@ function publicProfileInfo(person){
 }
 function publicProfileDescription(person){
  return person.description||
-   "A Médiquo não disponibilizou uma descrição deste profissional no catálogo deste acesso.";
+   "Não conseguimos carregar a descrição deste profissional no catálogo experimental. O perfil completo continua disponível no Chat Médico.";
 }
 export function initSpecialtyDirectory(widget,grant,accessToken){
  const el=id=>document.getElementById(id), dialog=el("directory-dialog"),trigger=el("directory-open");
@@ -267,6 +267,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    head.append(profileAvatar(p,"large"),copy);
    profileBody.append(head,node("h4","pv-profile-section-title","Sobre o profissional"),
      node("p","hub-profile-description",publicProfileDescription(p)));
+   if(!p.avatar)profileBody.append(node("p","pv-profile-missing",
+     "Fotografia não carregada neste catálogo. O perfil original da Médiquo pode exibi-la."));
    // A consulta é aberta somente depois da leitura do perfil e de novo clique.
    open.textContent="Acessar atendimento com "+p.name;
    showPane("profile");
@@ -547,6 +549,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      loaded=true;renderCategories();
      if(chosenService)renderPeople();
      if(!catalog.length)note.textContent="Os profissionais ainda não foram carregados neste painel. Use Chat Médico para acessar o atendimento.";
+     else if(data.profileData&&data.profileData.photos===0&&data.profileData.descriptions===0){
+       note.textContent="O catálogo autorizado não retornou fotos nem descrições para este teste. Os perfis originais permanecem acessíveis no Chat Médico.";
+     }
    }catch{
      loaded=true;renderCategories();
      note.textContent="Não foi possível consultar o catálogo. Você pode continuar pelo Chat Médico.";
