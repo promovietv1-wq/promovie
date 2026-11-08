@@ -539,14 +539,43 @@ html body .mediquo-launcher{display:none!important}
       }
     });
     window.addEventListener("message",function(message){
-      if(message.origin===location.origin&&embeddedFrame&&
-         message.source===embeddedFrame.contentWindow&&
-         message.data?.type==="promovie-space-close"&&
-         embeddedLayer&&!embeddedLayer.hidden){
+      // Aceita somente eventos do Meu Espaço carregado neste iframe,
+      // no mesmo domínio e enquanto a pessoa está visualizando seus registros.
+      if(message.origin!==location.origin||!embeddedFrame||
+         message.source!==embeddedFrame.contentWindow||
+         !embeddedLayer||embeddedLayer.hidden)return;
+      if(message.data?.type==="promovie-space-close"){
         if(history.state?.promovieSpaceOverlay)history.back();
         else closeEmbedded();
+      }else if(message.data?.type==="promovie-space-open-appointments"){
+        const agenda=document.getElementById("appointments-dialog");
+        const trigger=document.getElementById("appointments-trigger");
+        if(trigger&&agenda&&!agenda.open){
+          window.dispatchEvent(new CustomEvent("promovie:space-appointments"));
+          trigger.click();
+        }
       }
     });
+    // Fechar Agendamentos devolve aos registros. Somente escolhas expressas de
+    // Especialidades ou Chat Médico encerram a sobreposição de Meu Espaço.
+    function leaveSpaceFor(destination){
+      if(!embeddedLayer||embeddedLayer.hidden)return;
+      embeddedLayer.dataset.returnTo=destination;
+      if(history.state?.promovieSpaceOverlay)history.back();
+      else closeEmbedded();
+    }
+    document.getElementById("appointments-specialties")?.addEventListener("click",()=>{
+      leaveSpaceFor("specialties");
+    },{capture:true});
+    document.getElementById("appointments-chat")?.addEventListener("click",()=>{
+      leaveSpaceFor("chat");
+    },{capture:true});
+    document.getElementById("appointments-space")?.addEventListener("click",event=>{
+      if(!embeddedLayer||embeddedLayer.hidden)return;
+      event.preventDefault();event.stopImmediatePropagation();
+      const agenda=document.getElementById("appointments-dialog");
+      if(agenda?.open)agenda.close();
+    },{capture:true});
     const openHelp=document.getElementById("space-open-help");
     const hideHelp=document.getElementById("space-hide-help");
     const copyLink=document.getElementById("space-copy-link");
