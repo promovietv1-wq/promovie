@@ -433,7 +433,7 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
  .hub-category-photo .hub-category-mark{top:7px;left:7px;width:27px;height:27px}
  .hub-category-photo .hub-arrow{top:7px;right:7px;width:28px;height:28px;font-size:23px}
 }
-@media(max-width:390px){
+@media(max-width:350px){
  .hub-grid{grid-template-columns:1fr;gap:13px}
  .hub-category.hub-category-photo{
   flex-direction:row;align-items:stretch;
