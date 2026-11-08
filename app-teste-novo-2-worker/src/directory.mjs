@@ -1,5 +1,5 @@
 // Diretorio autorizado: lista de profissionais por paciente autenticado, sem acesso a mensagens.
-// Nunca guardar tokens SDK, prontuarios ou mensagens; consulta somente GET /professionals.
+// Nunca guardar tokens SDK, prontuarios ou mensagens; diretório de paciente e perfis públicos separados.
 const PREFIX="/api/promovie/directory/v1",MAX=160,SESSION_SECONDS=15*60;
 const enc=new TextEncoder();
 function setting(env,k){return typeof env[k]==="string"?env[k].trim():"";}
@@ -43,11 +43,41 @@ export async function issueDirectoryGrant(env,beneficiaryId,accessHash,sdkToken)
   }catch{return null;}
 }
 function text(s){return typeof s==="string"?s.trim().replace(/\s+/g," "):"";}
+function biography(value){
+  if(typeof value!=="string")return "";
+  // Alguns perfis são formatados em HTML pelo próprio fornecedor.
+  // Remove também conteúdo de scripts/estilos, mas preserva o texto profissional.
+  return value.replace(/<(script|style|iframe|object)\b[^>]*>[\s\S]*?<\/\1\s*>/gi,"")
+    .replace(/<\s*(?:br\s*\/??|\/p|\/div|\/li)\s*>/gi,"\n")
+    .replace(/<[^>]*>/g," ")
+    .replace(/&(?:nbsp|#160);/gi," ")
+    .replace(/&amp;/gi,"&").replace(/&lt;/gi,"<").replace(/&gt;/gi,">")
+    .replace(/&quot;/gi,'"').replace(/&#(?:39|x27);/gi,"'")
+    .replace(/[ \t]+/g," ").replace(/\n\s*\n\s*\n+/g,"\n\n")
+    .trim().slice(0,1800);
+}
+function safeAvatar(value,publicProfile){
+  const raw=text(value);if(!raw)return "";
+  try{
+    const url=publicProfile&&raw.startsWith("/")&&!raw.startsWith("//")?
+      new URL(raw,"https://api.mediquo.com"):new URL(raw);
+    if(url.protocol!=="https:"||url.username||url.password||
+      (url.port&&url.port!=="443"))return "";
+    const host=url.hostname.toLowerCase();
+    if(!host||host==="localhost"||host.endsWith(".localhost")||
+      host.endsWith(".local")||host.endsWith(".internal")||host.endsWith(".test")||
+      /^\d+\.\d+\.\d+\.\d+$/.test(host)||host.startsWith("["))return "";
+    // Somente URI devolvida pelo fornecedor autenticado; referrer-policy no-referrer no navegador.
+    if(!publicProfile&&!(host==="mediquo.com"||host.endsWith(".mediquo.com")||
+       host==="mediquo.com.br"||host.endsWith(".mediquo.com.br")))return "";
+    return url.href;
+  }catch{return "";}
+}
 export function projectPatientProfessionals(payload,{publicProfile=false}={}){
   let list=payload;
   for(let i=0;i<3&&!Array.isArray(list);i++){
     if(!list||typeof list!=="object")return [];
-    list=list.data??list.professionals??list.items??null;
+    list=list.data??list.professionals??list.items??list.consultants??list.results??null;
   }
   if(!Array.isArray(list))return [];
   const ids=new Set(),out=[];
@@ -61,24 +91,11 @@ export function projectPatientProfessionals(payload,{publicProfile=false}={}){
       name.length<2||name.length>90||/[<>]/.test(name)||
       title.length>90||/[<>]/.test(title))continue;
     ids.add(hash);
-    const description=text(p.description).slice(0,publicProfile?1800:500);
-    const rawAvatar=text(p.avatar);
-    let avatar="";
-    if(rawAvatar){
-      try{
-        // A documentação Médiquo admite URL absoluta e caminho de avatar.
-        // Caminhos relativos somente no catálogo expandido e sob host oficial.
-        const parsed=publicProfile&&rawAvatar.startsWith("/")&&!rawAvatar.startsWith("//")?
-          new URL(rawAvatar,"https://api.mediquo.com"):new URL(rawAvatar);
-        if(parsed.protocol==="https:"&&(
-          parsed.hostname==="mediquo.com"||parsed.hostname.endsWith(".mediquo.com")||
-          parsed.hostname==="mediquo.com.br"||parsed.hostname.endsWith(".mediquo.com.br")
-        ))avatar=parsed.href;
-      }catch{}
-    }
+    const description=publicProfile?biography(p.description):text(p.description).slice(0,500);
+    const avatar=safeAvatar(p.avatar,publicProfile);
     out.push({id:hash,name,title,
       status:p.status==="online"?"online":p.status==="offline"?"offline":null,
-      ...(description&&!/[<>]/.test(description)?{description}:{}),
+      ...(description&&(publicProfile||!/[<>]/.test(description))?{description}:{}),
       ...(avatar?{avatar}:{}),
       ...(typeof p.speciality_id==="string"&&/^[A-Za-z0-9_-]{1,32}$/.test(p.speciality_id)?{speciality_id:p.speciality_id}:{}),
       ...(publicProfile&&typeof p.collegiate_number==="string"&&
@@ -94,6 +111,44 @@ export function projectPatientProfessionals(payload,{publicProfile=false}={}){
     if(out.length>=MAX)break;
   }
   return out;
+}
+export function combineAuthorizedProfiles(authorized,consultants){
+  if(!Array.isArray(authorized))return [];
+  // O catálogo de pacientes é a ÚNICA autoridade para permissão de atendimento.
+  // Consultores externos apenas completam campos de IDs exatamente iguais.
+  const enriched=new Map(projectPatientProfessionals(consultants,{publicProfile:true})
+    .map(p=>[p.id,p]));
+  return authorized.map(p=>{
+    const extra=enriched.get(p.id);
+    if(!extra)return p;
+    return {...p,
+      ...(extra.avatar?{avatar:extra.avatar}:{}),
+      ...(extra.description?{description:extra.description}:{}),
+      ...(extra.collegiate_number?{collegiate_number:extra.collegiate_number}:{}),
+      ...(extra.languages?.length?{languages:extra.languages}:{}),
+      ...(extra.status?{status:extra.status}:{}),
+    };
+  });
+}
+async function fetchVendorProfileList(env){
+  const apiKey=setting(env,"MEDIQUO_V3_WIDGET_API_KEY");
+  const secret=setting(env,"MEDIQUO_V3_SDK_SECRET_KEY");
+  // Endpoint /v1/consultants exige os headers oficiais SDK API.
+  // A chave secreta nunca é entregue ao navegador.
+  if(!apiKey||!secret)return null;
+  try{
+    const response=await fetch("https://sdk.mediquo.com/v1/consultants",{
+      method:"GET",headers:{
+        "X-API-Key":apiKey,"X-Secret-Key":secret,
+        "Accept-Language":"pt","Accept":"application/json"
+      },signal:AbortSignal.timeout(9000)
+    });
+    if(!response.ok)return null;
+    if(Number(response.headers.get("Content-Length")||0)>350000)return null;
+    const raw=await response.text();
+    if(raw.length>350000)return null;
+    return JSON.parse(raw);
+  }catch{return null;}
 }
 export async function handleDirectory(request,env,cors={}){
   const url=new URL(request.url);
@@ -138,7 +193,19 @@ export async function handleDirectory(request,env,cors={}){
     if(Number(r.headers.get("Content-Length")||0)>350000)return reply(502,{available:false},cors);
     const raw=await r.text();
     if(raw.length>350000)return reply(502,{available:false},cors);
-    const items=projectPatientProfessionals(JSON.parse(raw),{publicProfile});
+    let items=projectPatientProfessionals(JSON.parse(raw),{publicProfile});
+    if(publicProfile&&items.length){
+      const consultantPayload=await fetchVendorProfileList(env);
+      if(consultantPayload)items=combineAuthorizedProfiles(items,consultantPayload);
+      return reply(200,{
+        available:true,items,
+        profileData:{
+          photos:items.filter(x=>Boolean(x.avatar)).length,
+          descriptions:items.filter(x=>Boolean(x.description)).length,
+          supplierProfileAvailable:Boolean(consultantPayload)
+        }
+      },cors);
+    }
     return reply(200,{available:items.length>0,items},cors);
   }catch{return reply(503,{available:false},cors);}
 }
