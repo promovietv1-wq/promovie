@@ -1,0 +1,39 @@
+name: Investigar metodos publicos do widget (somente pesquisa)
+on:
+  push:
+    branches:
+      - research/mediquo-widget-navigation-20261107
+    paths:
+      - research/inspect-widget.mjs
+      - .github/workflows/investigar-widget-publico.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  read-only-inspection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar navegador de analise
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Analisar biblioteca publica sem autenticar pacientes
+        run: node research/inspect-widget.mjs
+      - name: Guardar resultado somente nesta ramificacao de pesquisa
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/widget-navigation-inspection.md
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(research): registrar comportamento publico do widget"
+            git push origin HEAD:research/mediquo-widget-navigation-20261107
+          fi
