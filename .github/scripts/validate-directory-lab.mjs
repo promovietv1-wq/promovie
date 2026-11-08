@@ -111,5 +111,60 @@ try{
  await alternative.waitForFunction(()=>!document.getElementById("directory-dialog").open);
  assert.equal(await alternative.evaluate(()=>window.__alternate),"p01");
  await alternative.close();
+
+ // O fluxo antigo deve abrir ESPECIALIDADES automaticamente depois do login.
+ // Executa o HTML real, com SDK e catálogo simulados somente neste teste.
+ const anteriorHtml=await readFile("telesaude/atendimento-anterior/index.html","utf8");
+ const normalHtml=await readFile("telesaude/atendimento/index.html","utf8");
+ assert.match(anteriorHtml,/\/telesaude\/diretorio-anterior\.mjs/);
+ assert.match(anteriorHtml,/initDirectory\(widget,handoff\.directoryToken,handoff\.accessToken\)/);
+ assert.doesNotMatch(normalHtml,/diretorio-anterior|directory-open|directoryToken/);
+ for(const config of [
+   {width:375,authorized:false,rows:[]},
+   {width:1280,authorized:true,rows:people}
+ ]){
+   const page=await browser.newPage({viewport:{width:config.width,height:820}});
+   await page.route("https://widget.mediquo.com/js/1.0.0/mediquo.js",route=>route.fulfill({
+     status:200,contentType:"application/javascript",
+     body:"window.MediquoWidget={init:async()=>{},open:async()=>{window.__sdkOpened=true;},navigate:()=>{},open_room:()=>{}};"
+   }));
+   await page.addInitScript(({authorized,rows})=>{
+     window.sessionStorage.setItem("promovie:mediquo:handoff:v1",JSON.stringify({
+       apiKey:"TESTE-NENHUMA-CHAVE-REAL",accessToken:"T".repeat(43),
+       environment:"production",createdAt:Date.now(),
+       ...(authorized?{directoryToken:"D".repeat(43)}:{})
+     }));
+     const original=window.fetch.bind(window);
+     window.fetch=(input,options)=>{
+       const url=typeof input==="string"?input:String(input?.url||"");
+       if(url.includes("/api/promovie/directory/v1/catalog")){
+         return Promise.resolve(new Response(JSON.stringify({available:rows.length>0,items:rows}),{
+           status:200,headers:{"content-type":"application/json","access-control-allow-origin":"*"}
+         }));
+       }
+       return original(input,options);
+     };
+   },{authorized:config.authorized,rows:config.rows});
+   await page.goto("http://127.0.0.1:8779/telesaude/atendimento-anterior/",{waitUntil:"domcontentloaded"});
+   await page.locator("button.directory-specialty-card").first().waitFor({state:"visible",timeout:12000});
+   assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),true);
+   assert.equal(await page.locator("button.directory-specialty-card").count(),8);
+   assert.match(await page.locator("#directory-title").innerText(),/Como podemos cuidar/);
+   assert.equal(await page.evaluate(()=>window.__sdkOpened),true);
+   await page.locator(".directory-tone-psicologia").click();
+   assert.equal(await page.locator("#directory-title").innerText(),"Psicologia");
+   if(config.authorized){
+     assert.equal(await page.locator(".directory-person").count(),1);
+     await page.locator(".directory-person").click();
+     assert.equal(await page.locator(".directory-profile-names h3").innerText(),"Ana Exemplo");
+   }else{
+     assert.equal(await page.locator(".directory-person").count(),0);
+     assert.match(await page.locator(".directory-empty").innerText(),/não há profissionais reais retornados/i);
+   }
+   await page.locator("#directory-show-widget").click();
+   assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
+   await page.close();
+   console.log("Entrada do teste anterior com SDK simulado aprovada:",config.width+"px");
+ }
 }finally{await browser.close();}
 console.log("Laboratório visual em 3 etapas: testes simulados aprovados, sem enviar mensagens reais.");
