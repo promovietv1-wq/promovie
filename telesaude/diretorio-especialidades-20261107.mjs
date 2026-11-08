@@ -239,6 +239,28 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    document.body.classList.add("pv-navigation-mode");
    if(appointmentTrigger)appointmentTrigger.click();
  }
+ function restoreAfterSpace(destination){
+   const chat=destination==="chat";
+   document.body.classList.toggle("pv-navigation-mode",!chat);
+   document.documentElement.classList.toggle("pv-chat-mode",chat);
+   if(chat){
+     document.getElementById("chat-search-shell")?.removeAttribute("hidden");
+   }else{
+     document.getElementById("chat-search-shell")?.setAttribute("hidden","");
+     // Retorna ao mesmo estado: grade, lista ou perfil que já estava aberto.
+     if(!dialog.open)dialog.showModal();
+   }
+ }
+ window.addEventListener("promovie:space-return",event=>{
+   restoreAfterSpace(event.detail?.destination==="chat"?"chat":"specialties");
+ });
+ const spaceLink=document.querySelector(".space-entry");
+ spaceLink?.addEventListener("click",()=>{
+   const layer=el("space-embedded");
+   if(layer)layer.dataset.returnTo=
+     document.documentElement.classList.contains("pv-chat-mode")&&!dialog.open?
+       "chat":"specialties";
+ },{capture:true});
  function openMySpace(){
    const link=document.querySelector(".space-entry");
    const footer=document.querySelector(".space-footer");
@@ -247,23 +269,23 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      if(target)target.textContent="Meu Espaço de Saúde não está disponível para este acesso.";
      return;
    }
+   const origin=document.documentElement.classList.contains("pv-chat-mode")&&!dialog.open?
+     "chat":"specialties";
+   const embedded=el("space-embedded");
+   if(embedded)embedded.dataset.returnTo=origin;
    if(dialog.open)dialog.close();
    if(appointmentDialog?.open){
      appointmentReturn="space";
      appointmentDialog.close();
    }
    document.body.classList.remove("pv-navigation-mode");
-   // Reaproveita o acesso protegido já instalado: sem duplicar ou transmitir tokens.
+   // Reutiliza a sessão protegida já ativa, sem reinicializar o SDK.
    link.click();
-   const embedded=el("space-embedded");
-   if(embedded&&!embedded.hidden){
-     const observer=new MutationObserver(()=>{
-       if(embedded.hidden){observer.disconnect();reopen();}
+   if(!embedded||embedded.hidden){
+     // Caso não seja possível abrir o quadro, recupera a tela de origem.
+     requestAnimationFrame(()=>{
+       if(!dialog.open&&!appointmentDialog?.open)restoreAfterSpace(origin);
      });
-     observer.observe(embedded,{attributes:true,attributeFilter:["hidden"]});
-   }else{
-     // O Meu Espaço abre em uma aba própria. A página de origem permanece nas especialidades.
-     requestAnimationFrame(()=>{if(!dialog.open&&!appointmentDialog?.open)reopen();});
    }
  }
  trigger.hidden=false;trigger.addEventListener("click",reopen);
