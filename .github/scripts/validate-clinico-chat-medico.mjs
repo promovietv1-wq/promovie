@@ -46,6 +46,9 @@ try{
     assert.equal(await page.locator("#hub-global-query").getAttribute("placeholder"),"Buscar pelo nome");
     const cards=page.locator("#hub-category-grid .hub-category");
     assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
+    assert.equal(await cards.nth(7).locator(".hub-pet-detail").innerText(),"(cães e gatos)");
+    assert.equal(await cards.nth(7).locator(".hub-pet-detail").evaluate(el=>getComputedStyle(el).fontWeight),"400");
+    assert.equal(await page.locator(".hub-exit").innerText(),"Sair da TeleSaúde");
     await cards.nth(4).locator(".hub-count").waitFor();
     assert.equal(await cards.nth(4).locator(".hub-count").innerText(),"Acesso pelo Chat Médico");
     assert.equal(await page.locator("#hub-shortcut-specialties").count(),0);
