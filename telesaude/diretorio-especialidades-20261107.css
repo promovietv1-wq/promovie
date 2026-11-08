@@ -253,3 +253,35 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
  top:calc(var(--bar-h) + 54px)!important;
  height:calc(100dvh - var(--bar-h) - var(--space-h) - 54px)!important
 }
+
+/* Resultados de busca diretamente sobre o Chat Médico, no mesmo campo.
+   Nunca abre o modal de Especialidades; nenhuma modificação interna ao SDK. */
+.chat-search-shell{z-index:2147483645}
+.chat-search-shell .chat-search-results[hidden]{display:none!important}
+.chat-search-shell .chat-search-results{
+ position:absolute;top:calc(100% + 3px);left:50%;
+ transform:translateX(-50%);width:min(1180px,calc(100% - 24px));
+ max-height:min(64dvh,550px);overflow:auto;overscroll-behavior:contain;
+ display:flex;flex-direction:column;gap:8px;padding:12px;
+ background:#fff;border:1px solid #dacbec;border-radius:0 0 14px 14px;
+ box-shadow:0 18px 42px rgba(27,12,64,.2);color:#342448
+}
+.chat-search-results .hub-person{width:100%;min-height:67px}
+.chat-search-results .hub-empty{width:100%;margin:0;padding:15px 12px}
+.chat-inline-profile{display:flex;align-items:center;gap:13px;padding:7px 5px 4px}
+.chat-inline-profile .hub-person-copy strong{font-size:15px}
+.chat-inline-summary{margin:0;padding:5px 5px 8px;
+ color:#62546e;font-size:12px;line-height:1.55}
+.chat-inline-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.chat-inline-actions button{
+ min-height:41px;padding:9px 12px;border-radius:10px;
+ font:800 12px/1.4 Inter,Arial,sans-serif;cursor:pointer
+}
+.chat-inline-actions .chat-inline-open{background:#4b0c8f;border:1px solid #4b0c8f;color:#fff}
+.chat-inline-actions .chat-inline-open:hover{background:#39086e}
+.chat-inline-actions .chat-inline-back{background:#fff;border:1px solid #cab7df;color:#52258a}
+.chat-inline-actions button:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+@media(max-width:470px){
+ .chat-search-shell .chat-search-results{width:calc(100% - 14px);max-height:65dvh;padding:9px}
+ .chat-inline-actions{grid-template-columns:1fr}
+}
