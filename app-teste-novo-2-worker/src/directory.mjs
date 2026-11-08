@@ -43,7 +43,7 @@ export async function issueDirectoryGrant(env,beneficiaryId,accessHash,sdkToken)
   }catch{return null;}
 }
 function text(s){return typeof s==="string"?s.trim().replace(/\s+/g," "):"";}
-export function projectPatientProfessionals(payload){
+export function projectPatientProfessionals(payload,{publicProfile=false}={}){
   let list=payload;
   for(let i=0;i<3&&!Array.isArray(list);i++){
     if(!list||typeof list!=="object")return [];
@@ -61,12 +61,15 @@ export function projectPatientProfessionals(payload){
       name.length<2||name.length>90||/[<>]/.test(name)||
       title.length>90||/[<>]/.test(title))continue;
     ids.add(hash);
-    const description=text(p.description).slice(0,500);
+    const description=text(p.description).slice(0,publicProfile?1800:500);
     const rawAvatar=text(p.avatar);
     let avatar="";
     if(rawAvatar){
       try{
-        const parsed=new URL(rawAvatar);
+        // A documentação Médiquo admite URL absoluta e caminho de avatar.
+        // Caminhos relativos somente no catálogo expandido e sob host oficial.
+        const parsed=publicProfile&&rawAvatar.startsWith("/")&&!rawAvatar.startsWith("//")?
+          new URL(rawAvatar,"https://api.mediquo.com"):new URL(rawAvatar);
         if(parsed.protocol==="https:"&&(
           parsed.hostname==="mediquo.com"||parsed.hostname.endsWith(".mediquo.com")||
           parsed.hostname==="mediquo.com.br"||parsed.hostname.endsWith(".mediquo.com.br")
@@ -77,7 +80,16 @@ export function projectPatientProfessionals(payload){
       status:p.status==="online"?"online":p.status==="offline"?"offline":null,
       ...(description&&!/[<>]/.test(description)?{description}:{}),
       ...(avatar?{avatar}:{}),
-      ...(typeof p.speciality_id==="string"&&/^[A-Za-z0-9_-]{1,32}$/.test(p.speciality_id)?{speciality_id:p.speciality_id}:{})
+      ...(typeof p.speciality_id==="string"&&/^[A-Za-z0-9_-]{1,32}$/.test(p.speciality_id)?{speciality_id:p.speciality_id}:{}),
+      ...(publicProfile&&typeof p.collegiate_number==="string"&&
+          p.collegiate_number.trim().length>1&&p.collegiate_number.trim().length<=90&&
+          !/[<>]/.test(p.collegiate_number)?
+          {collegiate_number:p.collegiate_number.trim()}:{}),
+      ...(publicProfile&&typeof p.speciality==="string"&&
+          p.speciality.trim().length<=90&&!/[<>]/.test(p.speciality)?
+          {speciality:p.speciality.trim()}:{}),
+      ...(publicProfile&&Array.isArray(p.languages)?
+          {languages:p.languages.filter(x=>typeof x==="string"&&x.length<=40&&!/[<>]/.test(x)).slice(0,8)}:{})
     });
     if(out.length>=MAX)break;
   }
@@ -88,7 +100,9 @@ export async function handleDirectory(request,env,cors={}){
   const o=request.headers.get("Origin")||"";
   if(!setting(env,"ALLOWED_ORIGINS").split(",").map(x=>x.trim()).includes(o))
     return reply(403,{error:"Origem não autorizada."},cors);
-  if(url.pathname!==PREFIX+"/catalog"||request.method!=="POST")
+  // Endpoint expandido exclusivo da nova homologação, sem alterar o /catalog.
+  const publicProfile=url.pathname===PREFIX+"/catalog-profile";
+  if((url.pathname!==PREFIX+"/catalog"&&!publicProfile)||request.method!=="POST")
     return reply(404,{error:"Rota não encontrada."},cors);
   if(!ready(env))return reply(503,{available:false},cors);
   const grant=(request.headers.get("Authorization")||"").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
@@ -124,7 +138,7 @@ export async function handleDirectory(request,env,cors={}){
     if(Number(r.headers.get("Content-Length")||0)>350000)return reply(502,{available:false},cors);
     const raw=await r.text();
     if(raw.length>350000)return reply(502,{available:false},cors);
-    const items=projectPatientProfessionals(JSON.parse(raw));
+    const items=projectPatientProfessionals(JSON.parse(raw),{publicProfile});
     return reply(200,{available:items.length>0,items},cors);
   }catch{return reply(503,{available:false},cors);}
 }
