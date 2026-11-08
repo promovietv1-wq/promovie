@@ -648,3 +648,43 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
  .hub-dialog #hub-categories .hub-category-photo .hub-category-body .hub-count{font-size:10px}
  .hub-dialog .hub-head #hub-top-back{max-width:135px;font-size:10px}
 }
+
+
+/* Pesquisa integrada de especialidades e profissionais: apenas o teste atual. */
+.hub-dialog #hub-global-results .hub-search-group-title{
+ grid-column:1/-1;margin:5px 0 1px;
+ font-size:11px;font-weight:800;letter-spacing:.015em;
+ color:#4b277e;
+}
+.hub-dialog #hub-global-results .hub-search-category{
+ display:flex;align-items:center;gap:11px;min-width:0;width:100%;
+ min-height:69px;padding:10px 12px;
+ background:linear-gradient(115deg,#f8f4ff 0%,#fff 85%);
+ color:#34224e;border:1px solid #d9c7ef;border-radius:13px;
+ cursor:pointer;text-align:left;
+}
+.hub-dialog #hub-global-results .hub-search-category:hover{
+ border-color:#9c71cd;background:#f4eaff;
+}
+.hub-dialog #hub-global-results .hub-search-category:focus-visible{
+ outline:3px solid #7940d5;outline-offset:2px;
+}
+.hub-dialog #hub-global-results .hub-search-category-mark{
+ flex:0 0 40px;display:grid;place-items:center;
+ width:40px;height:40px;border-radius:11px;
+ background:#ebe2fa;color:#632eaa;font-size:19px;
+}
+.hub-dialog #hub-global-results .hub-search-category .hub-person-arrow{
+ white-space:normal;text-align:right;line-height:1.3;
+}
+.hub-dialog #hub-global-results .hub-search-info{
+ grid-column:1/-1;margin:3px 0 5px;
+ padding:5px 8px;font-size:11px;line-height:1.45;color:#726581;
+}
+@media(max-width:540px){
+ .hub-dialog #hub-global-results{grid-template-columns:minmax(0,1fr)}
+ .hub-dialog #hub-global-results .hub-search-category{min-height:65px}
+ .hub-dialog #hub-global-results .hub-search-category-mark{
+  width:36px;height:36px;flex-basis:36px
+ }
+}
