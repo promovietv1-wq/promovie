@@ -84,6 +84,14 @@ try{
    const page=await setup(width);
    const cards=page.locator("#hub-category-grid .hub-category");
    assert.equal(await cards.count(),8);
+   assert.equal(await page.locator(".hub-exit").count(),1);
+   assert.equal(await page.locator(".hub-exit").innerText(),"← Voltar às especialidades");
+   assert.equal(await page.locator(".hub-exit").isVisible(),false);
+   assert.equal(await page.locator("#hub-nav").count(),0,
+     "O botão de voltar antigo não pode permanecer embaixo do cabeçalho");
+   assert.equal(await page.locator("a[aria-label='Sair da TeleSaúde']").count(),0);
+   const modal=await page.locator("#directory-dialog").boundingBox();
+   assert.ok(modal&&modal.width<=813,"A janela deve ter até 812px no desktop");
    assert.equal(await page.locator(".hub-category-photo .hub-category-image").count(),8);
    for(let i=0;i<8;i++){
      const card=cards.nth(i);
@@ -106,6 +114,11 @@ try{
      "Imagem da especialidade deve permanecer horizontal, 16:9, sem distorção");
    assert.ok(tile.width/tile.height>=0.92,
      "O card não pode ficar excessivamente alto ou estreito");
+   await cards.nth(1).click();
+   assert.equal(await page.locator("#hub-top-back").isVisible(),true);
+   await page.locator("#hub-top-back").click();
+   assert.equal(await page.locator("#hub-categories").isVisible(),true);
+   assert.equal(await page.locator("#hub-top-back").isVisible(),false);
    await cards.nth(1).click();
    assert.equal(await page.locator("#hub-professionals .hub-person").count(),2);
    const alice=page.locator("#hub-professionals .hub-person").filter({hasText:"Alicia Rodrigues"}).first();
