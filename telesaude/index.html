@@ -1082,6 +1082,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           apiKey:result.apiKey,
           accessToken:result.access_token,
           environment:result.environment,
+          ...(/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
+            {directoryToken:result.directory_token}:{}),
           createdAt:Date.now(),
           ...(spaceBootstrap?{spaceBootstrap}:{})
         }));

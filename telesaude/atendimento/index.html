@@ -239,6 +239,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
+<link rel="stylesheet" href="/telesaude/diretorio.css?v=20261107-1">
 </head>
 <body>
 <header class="topbar">
@@ -249,6 +250,10 @@ html body .mediquo-launcher{display:none!important}
     </div>
   </div>
   <div class="clinic-tools">
+    <button type="button" class="directory-open" id="directory-open" aria-label="Pesquisar profissionais" title="Pesquisar profissionais" aria-haspopup="dialog" aria-controls="directory-dialog" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
+      <span>Profissionais</span>
+    </button>
     <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos</button>
   </div>
   <a class="back" href="/telesaude/" id="back-access" aria-label="Sair e voltar ao acesso" title="Sair">
@@ -305,6 +310,22 @@ html body .mediquo-launcher{display:none!important}
     <p>Na psicologia, geralmente são exibidos horários dos próximos 7 dias. Se não houver horário com um profissional, consulte outro. Agendamentos podem ser recorrentes, a cada 15 dias.</p>
     <p>O link de agendamento não é atendimento humano. Para outras solicitações, use <strong>Suporte e dúvidas</strong>.</p>
   </section>
+</dialog>
+<dialog class="directory-dialog" id="directory-dialog" aria-labelledby="directory-title">
+  <div class="directory-head">
+    <div>
+      <h2 id="directory-title">Encontre seu profissional</h2>
+      <p>Pesquise pelo nome ou especialidade.</p>
+    </div>
+    <button type="button" class="directory-close" id="directory-close" aria-label="Fechar">×</button>
+  </div>
+  <label class="directory-search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
+    <input type="search" id="directory-query" aria-label="Nome ou especialidade" placeholder="Nome ou especialidade" autocomplete="off">
+  </label>
+  <div id="directory-results" class="directory-results" aria-live="polite"></div>
+  <p id="directory-feedback" class="directory-feedback" role="status"></p>
+  <p class="directory-hint">O atendimento e a disponibilidade são confirmados pela plataforma de saúde.</p>
 </dialog>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
@@ -536,6 +557,15 @@ html body .mediquo-launcher{display:none!important}
       if(typeof widget.open!=="function")throw new Error("Não foi possível abrir a interface de atendimento.");
       await Promise.resolve(widget.open());
       status.hidden=true;
+      // Recurso independente: apenas após a inicialização clínica original.
+      // Catálogo vazio, API indisponível ou open_room ausente mantêm a tela intacta.
+      if(/^[A-Za-z0-9_-]{43}$/.test(handoff.directoryToken||"") &&
+         typeof widget.open_room==="function"){
+        try{
+          const module=await import("/telesaude/diretorio.mjs?v=20261107-1");
+          await module.initDirectory(widget,handoff.directoryToken);
+        }catch{/* Nenhum erro do diretório deve afetar a consulta. */}
+      }
     }catch{
       errorState("Não conseguimos carregar a TeleSaúde nesta página. Retorne ao acesso e tente novamente.");
     }
