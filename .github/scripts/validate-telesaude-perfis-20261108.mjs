@@ -61,7 +61,11 @@ async function setup(width){
    sessionStorage.setItem("promovie:mediquo:handoff:v1",JSON.stringify({
      apiKey:"TEST-WIDGET-API-KEY",accessToken:"TEST-ACCESS-TOKEN-FAKE-ONLY-123456789",
      environment:"production",createdAt:Date.now(),
-     directoryToken:"G".repeat(43)
+     directoryToken:"G".repeat(43),
+     spaceBootstrap:{
+       token:"T".repeat(43),mode:"new",salt:"c2_"+"S".repeat(22),
+       key:"A".repeat(43),createdAt:Date.now()
+     }
    }));
    const old=window.fetch.bind(window);
    window.fetch=(resource,options)=>{
@@ -76,6 +80,9 @@ async function setup(width){
  await page.locator("#directory-dialog[open]").waitFor();
  await page.locator("#hub-category-grid .hub-category").first().waitFor();
  await page.waitForFunction(()=>window.__sdkInit===1);
+ await page.locator(".space-footer:not([hidden])").waitFor();
+ assert.equal(await page.evaluate(()=>document.documentElement.classList.contains("space-link-ready")),true,
+   "O acesso ao Meu Espaço deve ficar visível após validar a sessão efêmera");
  assert.equal(await page.evaluate(()=>window.__sdkOpen||0),0,"A lista médica não deve abrir antes da escolha");
  const visual=await page.evaluate(()=>{
    const overlay=getComputedStyle(document.body,"::before");
@@ -188,6 +195,48 @@ try{
  assert.equal(await page.locator("#hub-profile").isVisible(),false);
  await page.close();
  console.log("Busca geral e busca inline abriram conversa diretamente, sem tela intermediária.");
+ 
+ // Meu Espaço deve abrir na própria tela e voltar ao ponto de origem,
+ // sem nova aba, perda de sessão nem reinício do SDK.
+ for(const width of [390,1280]){
+   const space=await setup(width);
+   const initialPageCount=space.context().pages().length;
+   await space.locator("#hub-category-grid .hub-category").nth(1).click();
+   assert.equal(await space.locator("#hub-professionals").isVisible(),true);
+   assert.equal(await space.evaluate(()=>window.__sdkOpen||0),0);
+   await space.locator("#hub-shortcut-space").click();
+   await space.locator("#space-embedded:not([hidden])").waitFor();
+   assert.equal(await space.locator("#space-embedded-back").innerText(),"← Voltar às Especialidades");
+   assert.equal(space.context().pages().length,initialPageCount,
+     "O Meu Espaço não pode abrir outra aba no laboratório de perfis");
+   assert.match(await space.locator("#space-embedded-frame").getAttribute("src")||await space.locator("#space-embedded-frame").evaluate(el=>el.contentWindow.location.href),
+     /\/telesaude\/meu-espaco\//);
+   await space.locator("#space-embedded-back").click();
+   await space.locator("#directory-dialog[open]").waitFor();
+   assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),true);
+   assert.equal(await space.locator("#hub-professionals").isVisible(),true,
+     "Retorno deve preservar a lista de Psicologia");
+   assert.equal(await space.evaluate(()=>window.__sdkOpen||0),0,
+     "Meu Espaço não pode abrir o Chat Médico no retorno");
+   await space.close();
+   console.log("Botão voltar do Meu Espaço à especialidade:",width);
+ }
+ const fromChat=await setup(1280);
+ await fromChat.locator("#hub-native").click();
+ await fromChat.waitForFunction(()=>window.__sdkOpen===1);
+ await fromChat.locator(".space-entry").click();
+ await fromChat.locator("#space-embedded:not([hidden])").waitFor();
+ assert.equal(await fromChat.locator("#space-embedded-back").innerText(),"← Voltar ao Chat Médico");
+ assert.equal(fromChat.context().pages().length,1);
+ // Testa também o botão Voltar do navegador.
+ await fromChat.goBack();
+ await fromChat.waitForFunction(()=>document.getElementById("space-embedded").hidden);
+ assert.equal(await fromChat.locator("#directory-dialog").evaluate(el=>el.open),false);
+ assert.equal(await fromChat.locator("#chat-search-shell").isVisible(),true);
+ assert.equal(await fromChat.evaluate(()=>window.__sdkOpen),1,
+   "O Chat Médico deve permanecer na mesma sessão");
+ await fromChat.close();
+ console.log("Voltar do navegador: Meu Espaço -> Chat Médico, sem reiniciar a sessão.");
 }finally{
  await browser.close();
 }
