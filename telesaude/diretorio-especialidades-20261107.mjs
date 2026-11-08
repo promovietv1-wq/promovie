@@ -120,7 +120,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
      card.append(mark,heading,desc,meta,arrow);
      if(loaded){
-       const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):(key==="Clínico geral"?"Acesso pelo Chat Médico 24h":"Profissionais não listados"));
+       const withoutNames=key==="Clínico geral"?"Acesso pelo Chat Médico 24h":
+         key==="Pediatria"?"Acesso pelo Chat Médico":"Profissionais não listados";
+       const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):withoutNames);
        card.append(quantity);
      }
      grid.append(card);
@@ -163,14 +165,18 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  }
  function renderPeople(){
    list.replaceChildren();
-   const filtered=catalog.filter(p=>p.category===chosenService&&norm(p.name).includes(norm(query.value)));
+   // Busca dentro de uma especialidade apenas para Psicologia;
+   // preserva a pesquisa geral e a busca opcional no Chat Médico.
+   const searchInSpecialty=chosenService==="Psicologia";
+   searchField.hidden=!searchInSpecialty;
+   const filtered=catalog.filter(p=>p.category===chosenService&&
+     (!searchInSpecialty||norm(p.name).includes(norm(query.value))));
    if(!loaded){
      list.append(node("p","hub-empty","Carregando os profissionais disponíveis..."));return;
    }
    const clinicalFallback=chosenService==="Clínico geral"&&!catalog.some(p=>p.category==="Clínico geral");
    // No plantão clínico, a lista nativa é o caminho correto quando os nomes
    // individuais não fazem parte do catálogo. Evita busca vazia e erro enganoso.
-   searchField.hidden=clinicalFallback;
    serviceHead.hidden=clinicalFallback;
    if(clinicalFallback){
      const box=node("div","hub-empty hub-clinical-fallback");

@@ -46,6 +46,8 @@ try{
     assert.equal(await page.locator("#hub-global-query").getAttribute("placeholder"),"Buscar pelo nome");
     const cards=page.locator("#hub-category-grid .hub-category");
     assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
+    await cards.nth(4).locator(".hub-count").waitFor();
+    assert.equal(await cards.nth(4).locator(".hub-count").innerText(),"Acesso pelo Chat Médico");
     assert.equal(await page.locator("#hub-shortcut-specialties").count(),0);
     assert.equal(await page.locator("#hub-shortcut-appointments").innerText(),"Agendamentos");
     assert.equal(await page.locator("#hub-shortcut-space").innerText(),"Meu Espaço de Saúde");
@@ -100,6 +102,7 @@ try{
   assert.equal(await navigation.locator(".hub-shortcuts button").count(),2);
   await navCards.nth(7).click();
   assert.equal(await navigation.locator("#hub-service-title").innerText(),"Pet (cães e gatos)");
+  assert.equal(await navigation.locator("#hub-professionals .hub-search").isVisible(),false);
   assert.equal(await navigation.locator(".hub-person").count(),1);
   await navigation.locator("#hub-back").click();
   await navigation.locator("#hub-shortcut-appointments").click();
@@ -142,10 +145,22 @@ try{
   const direct=await createPage(390,[
     {id:"professional-123",name:"Dr. Teste",title:"Médico generalista",
       description:"Atendimento clínico."},
-    {id:"nutrition-222",name:"Nutri Exemplo",title:"Nutrição"}
+    {id:"nutrition-222",name:"Nutri Exemplo",title:"Nutrição"},
+    {id:"psych-1",name:"Psicóloga Ana",title:"Psicologia"},
+    {id:"psych-2",name:"Psicóloga Beatriz",title:"Psicologia"}
   ]);
-  await direct.locator("#hub-category-grid .hub-category").first().click();
+  await direct.locator("#hub-category-grid .hub-category").nth(1).click();
+  assert.equal(await direct.locator("#hub-service-title").innerText(),"Psicologia");
   assert.equal(await direct.locator("#hub-professionals .hub-search").isVisible(),true);
+  await direct.locator("#hub-query").fill("Beatriz");
+  assert.equal(await direct.locator("#hub-professionals .hub-person").count(),1);
+  assert.match(await direct.locator("#hub-professionals .hub-person").first().innerText(),/Beatriz/);
+  await direct.locator("#hub-back").click();
+  await direct.locator("#hub-category-grid .hub-category").nth(2).click();
+  assert.equal(await direct.locator("#hub-professionals .hub-search").isVisible(),false);
+  await direct.locator("#hub-back").click();
+  await direct.locator("#hub-category-grid .hub-category").first().click();
+  assert.equal(await direct.locator("#hub-professionals .hub-search").isVisible(),false);
   await direct.locator("button.hub-person").first().click();
   assert.equal(await direct.locator("#hub-profile .hub-profile-copy h3").innerText(),"Dr. Teste");
   await direct.locator("#hub-open").click();
