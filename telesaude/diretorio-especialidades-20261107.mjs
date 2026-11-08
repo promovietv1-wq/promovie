@@ -73,8 +73,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<button id="hub-other" class="hub-secondary" type="button">Ver outros profissionais</button>',
  '</div></section>',
  '<p id="hub-feedback" class="hub-feedback" role="status" aria-live="polite"></p>',
- '<div class="hub-footer"><button type="button" id="hub-native">Usar lista original</button>',
- '<span>Consultas e agendamentos são realizados pela Médiquo.</span></div>'
+ '<div class="hub-footer"><button type="button" id="hub-native">Chat Médico</button></div>'
  ].join("");
  const nav=el("hub-nav"),back=el("hub-back"),step=el("hub-step");
  const categories=el("hub-categories"),grid=el("hub-category-grid"),note=el("hub-note");
@@ -195,17 +194,17 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      // O widget controla o chat; não esperaremos evento interno não documentado
      // para fechar a apresentação nem alegaremos consulta confirmada.
      Promise.resolve(result).catch(()=>{
-       say("O atendimento não confirmou a abertura. Reabra Especialidades ou use a lista original.");
+       say("Não foi possível confirmar a abertura. Você pode usar Chat Médico.");
      });
      dialog.close();
    }catch{
-     say("Não foi possível abrir este profissional. Experimente a lista original.");
+     say("Não foi possível abrir este profissional. Tente o Chat Médico.");
    }finally{busy=false;open.disabled=false;}
  });
  renderCategories();reopen();
  if(!/^[A-Za-z0-9_-]{43}$/.test(grant||"")||typeof accessToken!=="string"||accessToken.length<24){
    loaded=true;renderCategories();
-   note.textContent="A sessão não liberou a consulta da lista personalizada. Use a lista original ou retorne ao acesso.";
+   note.textContent="A sessão não liberou o catálogo de profissionais. Use Chat Médico ou volte ao acesso.";
    return false;
  }
  // Fetch no backend já existente. Nenhum endpoint novo, credencial ou regra de elegibilidade.
@@ -235,10 +234,10 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      }));
      loaded=true;renderCategories();
      if(chosenService)renderPeople();
-     if(!catalog.length)note.textContent="A Médiquo não retornou profissionais elegíveis para este acesso. Você pode utilizar a lista original.";
+     if(!catalog.length)note.textContent="Os profissionais ainda não foram carregados neste painel. Use Chat Médico para acessar o atendimento.";
    }catch{
      loaded=true;renderCategories();
-     note.textContent="Não foi possível carregar a lista personalizada. A lista original continua disponível.";
+     note.textContent="Não foi possível consultar o catálogo. Você pode continuar pelo Chat Médico.";
      if(chosenService)renderPeople();
    }
  })();
