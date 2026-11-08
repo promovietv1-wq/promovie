@@ -81,12 +81,19 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  const list=el("hub-list"),query=el("hub-query");
  const profile=el("hub-profile"),profileBody=el("hub-profile-body"),open=el("hub-open");
  const feedback=el("hub-feedback"),native=el("hub-native");
+ const headTitle=el("directory-title"),headSubtitle=el("hub-subtitle");
+ const serviceHead=serviceTitle.parentElement, searchField=query.closest(".hub-search");
  let catalog=[],chosenService=null,chosenPerson=null,loaded=false,busy=false;
  const providerService=key=>SERVICES.find(s=>s.key===key)||EXTRA;
  const say=message=>{feedback.textContent=message||"";};
  function showPane(pane){
    categories.hidden=pane!=="categories";professionals.hidden=pane!=="professionals";profile.hidden=pane!=="profile";
    nav.hidden=pane==="categories";
+   const clinical=pane==="professionals"&&chosenService==="Clínico geral";
+   headTitle.textContent=clinical?"Clínico geral: atendimento adulto e infantil":"Como podemos cuidar de você?";
+   headSubtitle.textContent=clinical?
+     "Atendimento com médicos plantonistas, sem agendamento.":
+     "Selecione uma especialidade para conhecer os profissionais.";
    step.textContent=pane==="profile"?"Conheça o profissional":(chosenService||"");
    back.textContent=pane==="profile"?"← Voltar aos profissionais":"← Voltar às especialidades";
    dialog.scrollTop=0;
@@ -125,20 +132,28 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(!loaded){
      list.append(node("p","hub-empty","Carregando os profissionais disponíveis..."));return;
    }
+   const clinicalFallback=chosenService==="Clínico geral"&&!catalog.some(p=>p.category==="Clínico geral");
+   // No plantão clínico, a lista nativa é o caminho correto quando os nomes
+   // individuais não fazem parte do catálogo. Evita busca vazia e erro enganoso.
+   searchField.hidden=clinicalFallback;
+   serviceHead.hidden=clinicalFallback;
+   if(clinicalFallback){
+     const box=node("div","hub-empty hub-clinical-fallback");
+     const legend=node("p","hub-online-legend");
+     const onlineDot=node("span","hub-online-dot");
+     onlineDot.setAttribute("aria-hidden","true");
+     legend.append(onlineDot,
+       document.createTextNode("A bolinha verde identifica os profissionais que estão on-line."));
+     box.append(node("strong","hub-fallback-title","Como encontrar um médico de plantão"),
+       node("p",null,"Para consultar um clínico geral, acesse o Chat Médico."),legend);
+     list.append(box);
+     return;
+   }
    if(!filtered.length){
-     if(chosenService==="Clínico geral"&&!query.value){
-       const box=node("div","hub-empty hub-clinical-fallback");
-       box.append(node("strong","hub-fallback-title","Clínico geral 24h"),
-         node("p",null,"Os nomes dos plantonistas não vieram no catálogo personalizado. Você pode iniciar pelo Chat Médico."));
-       const direct=node("button","hub-clinical-native","Abrir Chat Médico 24h");
-       direct.type="button";direct.addEventListener("click",openNative);
-       box.append(direct,node("small","hub-fallback-note","Na plataforma, escolha Clínico geral para iniciar seu atendimento."));
-       list.append(box);
-     }else{
-       list.append(node("p","hub-empty",query.value?
-         "Nenhum profissional corresponde a esta pesquisa.":
-         "Nenhum profissional foi listado nesta especialidade para o seu acesso."));
-     }
+     list.append(node("p","hub-empty",!loaded?
+       "Carregando os profissionais disponíveis...":
+       query.value?"Nenhum profissional corresponde a esta pesquisa.":
+       "Nenhum profissional foi listado nesta especialidade para o seu acesso."));
      return;
    }
    filtered.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
