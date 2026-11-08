@@ -42,11 +42,23 @@ try{
     const page=await createPage(width,[
       {id:"p01",name:"Psicóloga Exemplo",title:"Psicologia"}
     ]);
-    assert.equal(await page.locator("#hub-category-grid .hub-category").count(),8);
+    assert.equal(await page.locator("#hub-category-grid .hub-category").count(),9);
     const cards=page.locator("#hub-category-grid .hub-category");
+    assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
+    assert.equal(await cards.nth(8).locator("strong").innerText(),"Agendamento");
+    await page.waitForFunction(()=>window.__widgetOpens===1);
+    await cards.nth(8).click();
+    await page.locator("#appointments-dialog[open]").waitFor();
+    assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
+    assert.equal(await page.locator(".agenda-modal-link").first().getAttribute("href"),
+      "https://tinyurl.com/agendamq");
+    // Fechar a agenda deve voltar à seleção, sem abrir a interface médica.
+    await page.locator("[data-agenda-close]").click();
+    await page.locator("#directory-dialog[open]").waitFor();
+    assert.equal(await page.evaluate(()=>window.__widgetOpens),1);
     await cards.first().click();
     await page.locator(".hub-clinical-fallback").waitFor();
-    assert.equal(await page.locator("#directory-title").innerText(),"Clínico geral: atendimento adulto e infantil");
+    assert.equal(await page.locator("#directory-title").innerText(),"Plantão com médico clínico geral adulto e infantil");
     assert.match(await page.locator(".hub-clinical-fallback").innerText(),/bolinha verde identifica/);
     assert.equal(await page.locator(".hub-search").isVisible(),false);
     assert.equal(await page.locator(".hub-section-title").isVisible(),false);
@@ -58,6 +70,50 @@ try{
     await page.close();
     console.log("Clínico 24h sem lista individual, Chat Médico simulado:",width);
   }
+  // O acesso ao Meu Espaço, as saídas da agenda e o Chat Médico são escolhas distintas.
+  const navigation=await createPage(390,[
+    {id:"veter-1",name:"Dra. Veterinária",title:"Veterinária"},
+    {id:"other-1",name:"Dr. Outra Área",title:"Cardiologia"}
+  ]);
+  await navigation.waitForFunction(()=>window.__widgetOpens===1);
+  const navCards=navigation.locator("#hub-category-grid .hub-category");
+  assert.equal(await navCards.count(),10);
+  assert.equal(await navCards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
+  assert.equal(await navCards.nth(8).locator("strong").innerText(),"Agendamento");
+  assert.equal(await navCards.nth(9).locator("strong").innerText(),"Outras especialidades");
+  await navCards.nth(7).click();
+  assert.equal(await navigation.locator("#hub-service-title").innerText(),"Pet (cães e gatos)");
+  assert.equal(await navigation.locator(".hub-person").count(),1);
+  await navigation.locator("#hub-back").click();
+  await navigation.locator("#hub-shortcut-appointments").click();
+  await navigation.locator("#appointments-dialog[open]").waitFor();
+  await navigation.locator("#appointments-specialties").click();
+  await navigation.locator("#directory-dialog[open]").waitFor();
+  assert.equal(await navigation.evaluate(()=>window.__widgetOpens),1);
+  await navigation.evaluate(()=>{
+    // Exercita só o atalho, sem abrir uma área pessoal real no teste.
+    const link=document.querySelector(".space-entry");
+    link.addEventListener("click",event=>{
+      event.preventDefault();
+      window.__openedSpace=(window.__openedSpace||0)+1;
+    });
+    document.querySelector(".space-footer").hidden=false;
+  });
+  await navigation.locator("#hub-shortcut-space").click();
+  await navigation.waitForFunction(()=>window.__openedSpace===1);
+  await navigation.locator("#directory-dialog[open]").waitFor();
+  assert.equal(await navigation.evaluate(()=>window.__widgetOpens),1);
+  await navigation.locator("#hub-shortcut-appointments").click();
+  await navigation.locator("#appointments-dialog[open]").waitFor();
+  await navigation.locator("#appointments-chat").click();
+  await navigation.waitForFunction(()=>window.__widgetOpens===2);
+  assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
+  assert.equal(await navigation.locator("#appointments-dialog").evaluate(el=>el.open),false);
+  await navigation.locator("#directory-open").click();
+  await navigation.locator("#directory-dialog[open]").waitFor();
+  await navigation.close();
+  console.log("Navegação autônoma, Meu Espaço, agendamento e retorno às especialidades: aprovada.");
+
   const direct=await createPage(390,[
     {id:"professional-123",name:"Dr. Teste",title:"Médico generalista",
       description:"Atendimento clínico."},
@@ -70,6 +126,7 @@ try{
   await direct.locator("#hub-open").click();
   await direct.waitForFunction(()=>!document.getElementById("directory-dialog").open);
   assert.equal(await direct.evaluate(()=>window.__navigation),"/professionals/professional-123/room");
+  assert.equal(await direct.evaluate(()=>document.body.classList.contains("pv-navigation-mode")),false);
   await direct.close();
   console.log("Profissional clínico individual: rota original simulada.");
 }finally{await browser.close();}
