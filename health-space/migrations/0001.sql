@@ -1,0 +1,11 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE health_users (owner TEXT PRIMARY KEY, state TEXT NOT NULL DEFAULT 'active' CHECK(state IN ('active','deleting')), consent_at INTEGER NOT NULL, consent_version TEXT NOT NULL);
+CREATE TABLE health_sessions (hash TEXT PRIMARY KEY, owner TEXT NOT NULL REFERENCES health_users(owner) ON DELETE CASCADE, credential_hash TEXT NOT NULL, csrf TEXT NOT NULL, expires INTEGER NOT NULL, idle INTEGER NOT NULL, created INTEGER NOT NULL);
+CREATE INDEX health_sessions_owner ON health_sessions(owner);
+CREATE INDEX health_sessions_expiry ON health_sessions(expires);
+CREATE TABLE health_records (owner TEXT PRIMARY KEY REFERENCES health_users(owner) ON DELETE CASCADE, encrypted TEXT NOT NULL, version INTEGER NOT NULL, updated INTEGER NOT NULL);
+CREATE TABLE health_files (id TEXT PRIMARY KEY, owner TEXT NOT NULL REFERENCES health_users(owner) ON DELETE CASCADE, object_key TEXT NOT NULL UNIQUE, encrypted_metadata TEXT NOT NULL, size INTEGER NOT NULL CHECK(size BETWEEN 1 AND 5242880), state TEXT NOT NULL CHECK(state IN ('pending','ready','deleting')), created INTEGER NOT NULL);
+CREATE INDEX health_files_owner ON health_files(owner,state);
+CREATE TABLE health_limits (actor TEXT PRIMARY KEY, count INTEGER NOT NULL, expires INTEGER NOT NULL);
+CREATE TABLE health_audit (id TEXT PRIMARY KEY, actor TEXT NOT NULL, event TEXT NOT NULL, at INTEGER NOT NULL);
+CREATE INDEX health_audit_expiry ON health_audit(at);
