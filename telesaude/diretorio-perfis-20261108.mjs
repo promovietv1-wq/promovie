@@ -396,6 +396,12 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  window.addEventListener("promovie:space-return",event=>{
    restoreAfterSpace(event.detail?.destination==="chat"?"chat":"specialties");
  });
+ // Se o agendamento foi aberto de dentro dos registros, fechar o modal
+ // deve devolver ao Meu Espaço, e não abrir Especialidades por cima.
+ window.addEventListener("promovie:space-appointments",()=>{
+   if(el("space-embedded")&&!el("space-embedded").hidden)
+     appointmentReturn="space";
+ });
  const spaceLink=document.querySelector(".space-entry");
  spaceLink?.addEventListener("click",()=>{
    const layer=el("space-embedded");

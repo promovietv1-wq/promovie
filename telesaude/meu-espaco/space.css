@@ -137,3 +137,15 @@ dialog::backdrop{background:rgba(28,15,57,.5)}
 .privacy-document .panel h2{margin:22px 0 8px;color:#411f73;font-size:16px}
 .privacy-document .panel h2:first-child{margin-top:0}
 .privacy-document .panel p{font-size:13px;line-height:1.75;margin:0 0 14px}
+
+/* Agendamentos aparece apenas no Meu Espaço integrado ao teste aprovado. */
+.space-appointments-link{
+ display:inline-flex;align-items:center;justify-content:center;text-align:center;
+ min-height:43px;padding:11px 17px;border-radius:11px;
+ font-size:13px;font-weight:750;text-decoration:none;
+ background:#f5effd;border:1px solid #d8c9ed;color:#57249c;
+}
+.space-appointments-link:hover{background:#ebe0fa}
+.space-appointments-link:focus-visible{outline:3px solid #44cce8;outline-offset:3px}
+.space-appointments-link[hidden]{display:none!important}
+@media(max-width:580px){.toolbar-actions .space-appointments-link{flex:1;min-width:120px}}
