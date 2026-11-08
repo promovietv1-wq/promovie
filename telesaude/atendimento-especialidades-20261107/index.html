@@ -239,7 +239,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=orientacao-3">
+<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=navegacao-5">
 </head>
 <body>
 <header class="topbar">
@@ -310,6 +310,12 @@ html body .mediquo-launcher{display:none!important}
     <p>Na psicologia, geralmente são exibidos horários dos próximos 7 dias. Se não houver horário com um profissional, consulte outro. Agendamentos podem ser recorrentes, a cada 15 dias.</p>
     <p>O link de agendamento não é atendimento humano. Para outras solicitações, use <strong>Suporte e dúvidas</strong>.</p>
   </section>
+  <nav class="agenda-modal-nav" aria-label="Navegar pela TeleSaúde">
+    <button type="button" id="appointments-specialties">Especialidades</button>
+    <button type="button" id="appointments-space">Meu Espaço de Saúde</button>
+    <button type="button" id="appointments-chat">Chat Médico</button>
+  </nav>
+  <p id="appointments-space-feedback" class="agenda-modal-nav-feedback" role="status" aria-live="polite"></p>
 </dialog>
 <dialog class="directory-dialog" id="directory-dialog" aria-labelledby="directory-title">
   <div class="directory-head">
@@ -563,7 +569,7 @@ html body .mediquo-launcher{display:none!important}
       // A interface PromoVie aparece antes de revelar a lista nativa.
       // Mesmo SDK, token, autenticação e conector direto da versão 20261107.
       try{
-        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=plantao-texto-4");
+        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=navegacao-5");
         module.initSpecialtyDirectory(widget,handoff.directoryToken,handoff.accessToken);
       }catch{
         const feedback=document.getElementById("directory-feedback");
