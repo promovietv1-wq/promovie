@@ -59,7 +59,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<div class="hub-head"><div><small class="hub-eyebrow">TELESAÚDE PROMOVIE</small>',
  '<h2 id="directory-title">Como podemos cuidar de você?</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
- '<a class="hub-exit" href="/telesaude/?teste=20261107-especialidades" aria-label="Sair do atendimento">Sair</a></div>',
+ '<a class="hub-exit" href="/telesaude/?teste=20261107-especialidades" aria-label="Sair da TeleSaúde">Sair da TeleSaúde</a></div>',
  '<div id="hub-nav" class="hub-nav" hidden><button id="hub-back" type="button">← Especialidades</button><span id="hub-step"></span></div>',
  '<section id="hub-categories" class="hub-pane" aria-label="Selecionar especialidade">',
  '<label class="hub-search hub-search-global"><span aria-hidden="true">⌕</span><input id="hub-global-query" type="search" autocomplete="off" placeholder="Buscar pelo nome" aria-label="Pesquisar profissional pelo nome"></label>',
@@ -116,6 +116,10 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      const card=node("button","hub-category");card.type="button";card.dataset.key=key;
      const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(index+1).padStart(2,"0");
      const heading=node("strong",null,key),desc=node("small",null,info.desc);
+     if(key==="Pet (cães e gatos)"){
+       heading.replaceChildren(document.createTextNode("Pet "),
+         node("span","hub-pet-detail","(cães e gatos)"));
+     }
      const meta=node("span","hub-kind",info.kind);
      const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
      card.append(mark,heading,desc,meta,arrow);
