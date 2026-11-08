@@ -841,6 +841,11 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       </button>
     </div>
     <form class="install-block" id="access-form" autocomplete="on" novalidate>
+      <div id="directory-test-login" hidden style="padding:12px 14px;margin-bottom:12px;border:1px solid #d3c0ea;border-radius:12px;background:#f5f0fd;color:#4b267c;font:600 13px/1.55 Inter,Arial,sans-serif">
+        <strong>Teste de busca de profissionais</strong>
+        <span style="display:block;font-weight:400">Use o mesmo CPF e código de sempre. Esta entrada abre apenas o ambiente experimental.</span>
+        <a href="/telesaude/" style="display:inline-block;margin-top:5px;color:#4b0c8f;font-weight:700">Ir para o acesso normal</a>
+      </div>
       <div class="patient-login">
         <div class="patient-login-top">
           <span class="patient-login-mark" aria-hidden="true">
@@ -915,6 +920,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   // A API publica valida CPF + codigo individual no servidor antes de emitir sessao.
   const BACKEND_URL="https://backend.promovie.tv.br";
   const ACCESS="/api/promovie/access/v1";
+  const directoryTest=new URLSearchParams(location.search).get("teste")==="profissionais";
+  if(directoryTest)document.getElementById("directory-test-login").hidden=false;
   const SPACE="/api/promovie/space/v1";
   const button=document.getElementById("install-now");
   const accessForm=document.getElementById("access-form");
@@ -1052,7 +1059,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     try{
       const response=await fetch(BACKEND_URL+ACCESS+"/session",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({cpf,codigo}),
+        body:JSON.stringify(directoryTest?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
         cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
       const result=await getJson(response);
@@ -1083,13 +1090,19 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           accessToken:result.access_token,
           environment:result.environment,
           createdAt:Date.now(),
+          ...(directoryTest&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
+            {directoryToken:result.directory_token}:{}),
           ...(spaceBootstrap?{spaceBootstrap}:{})
         }));
       }catch{
         throw new Error("Seu navegador bloqueou a abertura segura do atendimento. Verifique as permissoes de armazenamento temporario e tente novamente.");
       }
       try{
-        window.location.assign("/telesaude/atendimento/");
+        if(directoryTest){
+          window.location.assign("/telesaude/atendimento-teste/");
+        }else{
+          window.location.assign("/telesaude/atendimento/");
+        }
       }catch{
         try{window.sessionStorage.removeItem(handoffKey);}catch{}
         throw new Error("Nao foi possivel abrir a pagina de atendimentos. Tente novamente.");
