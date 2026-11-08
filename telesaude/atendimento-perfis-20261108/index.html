@@ -257,7 +257,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=janela-70pct-6">
+<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=fundo-neutro-7">
 </head>
 <body class="pv-navigation-mode">
 <header class="topbar">
@@ -381,6 +381,8 @@ html body .mediquo-launcher{display:none!important}
   const SDK_SOURCE="https://widget.mediquo.com/js/1.0.0/mediquo.js";
 
   function errorState(text){
+    // Uma falha de autenticação deve continuar legível, sem a tela decorativa.
+    document.body.classList.remove("pv-navigation-mode");
     status.hidden=false;
     status.classList.remove("loading");
     title.textContent="Não foi possível abrir o atendimento";
