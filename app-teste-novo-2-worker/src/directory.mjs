@@ -52,14 +52,33 @@ export function projectPatientProfessionals(payload){
   if(!Array.isArray(list))return [];
   const ids=new Set(),out=[];
   for(const p of list.slice(0,MAX*3)){
-    if(!p||typeof p!=="object"||p.is_available!==true)continue;
+    // A documentação pública do SDK não exige is_available: quando o campo é
+    // omitido, o profissional retornado pela consulta autenticada continua elegível.
+    // Uma negativa explícita permanece bloqueada.
+    if(!p||typeof p!=="object"||p.is_available===false)continue;
     const hash=text(p.hash),name=text(p.name),title=text(p.title);
     if(!/^[A-Za-z0-9_-]{1,128}$/.test(hash)||ids.has(hash)||
       name.length<2||name.length>90||/[<>]/.test(name)||
       title.length>90||/[<>]/.test(title))continue;
     ids.add(hash);
+    const description=text(p.description).slice(0,500);
+    const rawAvatar=text(p.avatar);
+    let avatar="";
+    if(rawAvatar){
+      try{
+        const parsed=new URL(rawAvatar);
+        if(parsed.protocol==="https:"&&(
+          parsed.hostname==="mediquo.com"||parsed.hostname.endsWith(".mediquo.com")||
+          parsed.hostname==="mediquo.com.br"||parsed.hostname.endsWith(".mediquo.com.br")
+        ))avatar=parsed.href;
+      }catch{}
+    }
     out.push({id:hash,name,title,
-      status:p.status==="online"?"online":p.status==="offline"?"offline":null});
+      status:p.status==="online"?"online":p.status==="offline"?"offline":null,
+      ...(description&&!/[<>]/.test(description)?{description}:{}),
+      ...(avatar?{avatar}:{}),
+      ...(typeof p.speciality_id==="string"&&/^[A-Za-z0-9_-]{1,32}$/.test(p.speciality_id)?{speciality_id:p.speciality_id}:{})
+    });
     if(out.length>=MAX)break;
   }
   return out;
