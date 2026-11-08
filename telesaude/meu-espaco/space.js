@@ -32,6 +32,26 @@
   const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
   const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
 
+  // No laboratório de Especialidades aprovado, o botão Agendamentos reutiliza
+  // a janela de agendamentos da própria TeleSaúde, sem abrir outro acesso.
+  // Na TeleSaúde original e nos demais testes, não altera a interface.
+  const appointmentsLink=$("space-appointments");
+  if(appointmentsLink&&window.parent!==window){
+    let approvedTest=false;
+    try{
+      approvedTest=document.documentElement.classList.contains("pv-space-embedded")&&
+        window.parent.location.origin===location.origin&&
+        window.parent.location.pathname==="/telesaude/atendimento-perfis-20261108/";
+    }catch{}
+    if(approvedTest){
+      appointmentsLink.hidden=false;
+      appointmentsLink.addEventListener("click",event=>{
+        event.preventDefault();
+        window.parent.postMessage({type:"promovie-space-open-appointments"},location.origin);
+      });
+    }
+  }
+
   // Exibir instruções junto à preparação da consulta, sem prometer
   // troca automática de abas que o navegador pode bloquear.
   if(new URLSearchParams(location.search).get("atendimento")==="aberto"){
