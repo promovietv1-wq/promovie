@@ -299,7 +299,7 @@ html body .mediquo-launcher{display:none!important}
 </main>
 <nav class="space-footer" hidden aria-label="Acesso ao Meu Espaço de Saúde">
   <a class="space-entry" href="/telesaude/meu-espaco/?atendimento=aberto" target="_blank" rel="opener" referrerpolicy="no-referrer"
-     aria-label="Abrir Meu Espaço de Saúde em outra aba, sem encerrar o atendimento">
+     aria-label="Abrir Meu Espaço de Saúde e voltar ao atendimento">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
       <path d="M14 2v6h6M8 13h8M8 17h8"/>
@@ -434,6 +434,15 @@ html body .mediquo-launcher{display:none!important}
     const keyPromise=crypto.subtle.importKey("raw",binary,{name:"AES-GCM"},
       false,["encrypt","decrypt"]).finally(()=>binary.fill(0));
     delete handoff.key;
+    // Exibir a entrada apenas quando a chave efêmera da sessão for válida.
+    // A área pessoal nunca exige outra autenticação ao retornar desta tela.
+    keyPromise.then(()=>{
+      const footer=link.closest(".space-footer");
+      if(footer){
+        footer.hidden=false;
+        document.documentElement.classList.add("space-link-ready");
+      }
+    }).catch(()=>{});
     let openedSpace=null,embeddedLoaded=false;
     const embeddedLayer=document.getElementById("space-embedded");
     const embeddedFrame=document.getElementById("space-embedded-frame");
@@ -493,6 +502,9 @@ html body .mediquo-launcher{display:none!important}
       // Abrir dentro da mesma tela em todos os celulares, mesmo sem PWA instalado.
       // Assim o retorno depende de um botão local, não da troca de abas do navegador.
       const installedApp=Boolean(
+        // Neste laboratório, inclusive no desktop, Meu Espaço fica na mesma
+        // tela para oferecer Voltar por botão e pelo histórico do navegador.
+        location.pathname==="/telesaude/atendimento-perfis-20261108/"||
         location.pathname==="/telesaude/atendimento-especialidades-20261107/"||
         (typeof window.matchMedia==="function"&&
           (window.matchMedia("(display-mode: standalone)").matches||
