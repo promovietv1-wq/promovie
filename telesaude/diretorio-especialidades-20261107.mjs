@@ -74,7 +74,6 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '</div></section>',
  '<p id="hub-feedback" class="hub-feedback" role="status" aria-live="polite"></p>',
  '<nav class="hub-footer" aria-label="Navegação da TeleSaúde"><div class="hub-shortcuts">',
- '<button type="button" id="hub-shortcut-specialties">Especialidades</button>',
  '<button type="button" id="hub-shortcut-appointments">Agendamentos</button>',
  '<button type="button" id="hub-shortcut-space">Meu Espaço de Saúde</button>',
  '</div><button type="button" id="hub-native" class="hub-native-full">Chat Médico</button></nav>'
@@ -106,21 +105,20 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  }
  function renderCategories(){
    grid.replaceChildren();
-   // O cartão 09 abre o agendamento já existente, sem criar novo serviço.
-   const keys=[...SERVICES.map(s=>s.key),"Agendamento"];
-   // Preserva acesso a profissionais reais de outras categorias, quando houver.
+   // A grade contém somente especialidades, sem repetir Agendamentos do rodapé.
+   const keys=SERVICES.map(s=>s.key);
+   // Não oculta profissionais de outras áreas vinculados ao beneficiário.
    if(catalog.some(p=>p.category===EXTRA.key))keys.push(EXTRA.key);
    for(const [index,key] of keys.entries()){
-     const booking=key==="Agendamento";
-     const info=booking?{desc:"Escolha um horário para sua consulta",kind:"Agendar consulta"}:providerService(key);
-     const count=booking?0:catalog.filter(p=>p.category===key).length;
+     const info=providerService(key);
+     const count=catalog.filter(p=>p.category===key).length;
      const card=node("button","hub-category");card.type="button";card.dataset.key=key;
      const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(index+1).padStart(2,"0");
      const heading=node("strong",null,key),desc=node("small",null,info.desc);
      const meta=node("span","hub-kind",info.kind);
      const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
      card.append(mark,heading,desc,meta,arrow);
-     if(loaded&&!booking){
+     if(loaded){
        const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):(key==="Clínico geral"?"Acesso pelo Chat Médico 24h":"Profissionais não listados"));
        card.append(quantity);
      }
@@ -231,9 +229,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  grid.addEventListener("click",event=>{
    const card=event.target.closest("button.hub-category");
-   if(!card)return;
-   if(card.dataset.key==="Agendamento"){openAppointments();return;}
-   showGroup(card.dataset.key);
+   if(card)showGroup(card.dataset.key);
  });
  list.addEventListener("click",event=>{
    const item=event.target.closest("button.hub-person");if(!item)return;
@@ -256,7 +252,6 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    try{if(typeof widget.open==="function")widget.open();}catch{}
  }
  native.addEventListener("click",openNative);
- el("hub-shortcut-specialties").addEventListener("click",reopen);
  el("hub-shortcut-appointments").addEventListener("click",openAppointments);
  el("hub-shortcut-space").addEventListener("click",openMySpace);
  // Fechar Agendamentos devolve às Especialidades, nunca ao chat de forma involuntária.
