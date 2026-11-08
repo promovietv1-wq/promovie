@@ -1,0 +1,166 @@
+/* Diretório por especialidades, somente no atendimento paralelo 20261107.
+   O CSS não acessa nem modifica elementos internos do iframe Médiquo. */
+.directory-open[hidden],.hub-dialog [hidden]{display:none!important}
+.directory-open{
+ display:inline-flex;align-items:center;justify-content:center;gap:7px;
+ min-height:37px;padding:8px 12px;border:1px solid #bda5dd;border-radius:10px;
+ background:#fff;color:#4b0c8f;font:800 12px/1.2 Inter,Arial,sans-serif;
+ cursor:pointer;white-space:nowrap
+}
+.directory-open svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.directory-open:hover{background:#f7f2ff}
+.clinic-tools{gap:8px}
+.hub-dialog{
+ width:min(1000px,calc(100vw - 32px));
+ max-width:1000px;
+ max-height:calc(100dvh - 44px);
+ margin:auto;padding:0;border:1px solid #ded5ee;border-radius:24px;
+ overflow-y:auto;overscroll-behavior:contain;
+ background:linear-gradient(135deg,#fff 0%,#fbf9ff 100%);
+ color:#2a2141;font:400 14px/1.5 Inter,Arial,sans-serif;
+ box-shadow:0 32px 100px rgba(25,12,59,.26)
+}
+.hub-dialog::backdrop{background:rgba(18,9,39,.67)}
+.hub-dialog *{box-sizing:border-box}
+.hub-dialog button{font:inherit;cursor:pointer}
+.hub-dialog button:focus-visible,.hub-dialog a:focus-visible,.hub-dialog input:focus-visible{
+ outline:3px solid #00bde8;outline-offset:3px
+}
+.hub-head{
+ display:flex;justify-content:space-between;gap:20px;align-items:flex-start;
+ background:linear-gradient(120deg,#42207d,#6624b0 70%,#5e46bb);color:white;
+ padding:26px clamp(19px,4vw,40px) 25px
+}
+.hub-eyebrow{font-size:10px;line-height:1.4;letter-spacing:.14em;font-weight:800;color:#d8cdf3}
+.hub-head h2{color:#fff;font-weight:800;font-size:clamp(22px,3vw,32px);letter-spacing:-.045em;line-height:1.19;margin:9px 0 7px}
+.hub-head p{margin:0;font-size:13px;line-height:1.5;color:#eee6ff}
+.hub-exit{
+ display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:52px;min-height:36px;
+ padding:7px 13px;border:1px solid #b69ae6;border-radius:10px;background:#ffffff15;
+ color:white;font-size:12px;font-weight:750;text-decoration:none
+}
+.hub-exit:hover{background:#ffffff2b}
+.hub-pane{padding:24px clamp(18px,4vw,40px) 16px}
+.hub-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.hub-category{
+ display:flex;position:relative;flex-direction:column;align-items:flex-start;text-align:left;
+ gap:7px;padding:18px 16px 16px;min-height:181px;min-width:0;border:1px solid #e3daf0;
+ border-radius:16px;background:#fff;color:#2d1c48;box-shadow:0 3px 12px rgba(58,32,112,.038);
+ transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease
+}
+.hub-category:hover{transform:translateY(-2px);border-color:#a788d4;box-shadow:0 8px 21px rgba(65,29,125,.11)}
+.hub-category-mark{
+ display:grid;place-items:center;width:33px;height:33px;border-radius:10px;
+ color:#5a269a;background:#eee5fa;font-size:12px;font-weight:800
+}
+.hub-category strong{font-size:14px;line-height:1.25;font-weight:800;color:#352051}
+.hub-category small{font-size:11px;line-height:1.38;color:#746984}
+.hub-kind{
+ margin-top:auto;padding:5px 8px;border-radius:100px;
+ color:#4d2881;background:#f1ebfb;font-weight:800;font-size:10px;line-height:1.35
+}
+.hub-arrow{position:absolute;right:14px;top:18px;font-size:24px;color:#7540b0;line-height:1}
+.hub-count{font-size:10px;color:#8b7d9c;font-weight:700}
+.hub-note{font-size:11px;color:#716780;line-height:1.5;margin:15px 0 0}
+.hub-nav{
+ display:flex;align-items:center;justify-content:space-between;gap:13px;
+ padding:13px clamp(18px,4vw,40px);border-bottom:1px solid #ede6f6;background:#f8f5fd
+}
+.hub-nav button{background:#fff;border:1px solid #dbcbef;color:#562692;font-weight:800;
+ border-radius:10px;min-height:37px;padding:8px 12px}
+.hub-nav span{font-size:12px;color:#837491;font-weight:700}
+.hub-section-title h3{margin:0 0 5px;color:#381766;font-size:22px;line-height:1.25}
+.hub-section-title p{margin:0 0 17px;color:#756b80;font-size:12px}
+.hub-search{display:flex;align-items:center;gap:8px;border:1px solid #dbcaeb;
+ background:#fff;border-radius:11px;padding:0 14px;margin:0 0 15px}
+.hub-search span{font-size:26px;color:#7041ad}
+.hub-search input{width:100%;min-height:47px;border:0;background:transparent;
+ outline:none;color:#312142;font:500 13px Inter,Arial,sans-serif}
+.hub-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.hub-person{
+ display:flex;align-items:center;gap:12px;min-width:0;min-height:80px;text-align:left;
+ padding:12px;border:1px solid #e2d9eb;border-radius:13px;background:#fff;color:#2d2240
+}
+.hub-person:hover{border-color:#af90da;background:#faf7ff}
+.hub-avatar{
+ flex:none;display:grid;place-items:center;overflow:hidden;border-radius:50%;
+ background:linear-gradient(130deg,#e4d9f8,#dbeffd);color:#56228e;
+ font-weight:800;font-size:14px;width:53px;height:53px
+}
+.hub-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.hub-avatar.large{width:91px;height:91px;font-size:25px}
+.hub-person-copy{display:block;min-width:0;flex:1}
+.hub-person-copy strong{display:block;font-size:13px;line-height:1.3;font-weight:800;overflow-wrap:anywhere}
+.hub-person-copy small{display:block;margin-top:4px;font-size:11px;color:#81738d;overflow-wrap:anywhere}
+.hub-person-arrow{font-size:11px;color:#562691;font-weight:800;white-space:nowrap}
+.hub-empty{grid-column:1/-1;border:1px dashed #d9c9eb;background:#fff;border-radius:12px;
+ padding:26px 18px;text-align:center;color:#6f617b;font-size:13px}
+.hub-profile-head{display:flex;align-items:center;gap:20px;padding:22px;border:1px solid #e7dcf2;
+ border-radius:17px;background:#fff}
+.hub-profile-copy{min-width:0}
+.hub-profile-eyebrow{font-size:10px;color:#6d479e;letter-spacing:.09em;text-transform:uppercase;font-weight:800}
+.hub-profile-copy h3{margin:6px 0 4px;line-height:1.24;font-size:clamp(20px,3vw,28px);color:#3d1673;overflow-wrap:anywhere}
+.hub-profile-copy p{margin:0 0 10px;color:#685e75;font-size:13px}
+.hub-profile-kind{display:inline-flex;padding:6px 10px;border-radius:100px;background:#eee7fb;
+ color:#51238e;font-size:11px;font-weight:800}
+.hub-profile-description{font-size:13px;line-height:1.65;margin:17px 0 5px;color:#4a4155}
+.hub-profile-detail{font-size:12px;color:#746880;margin:0 0 19px}
+.hub-profile-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+.hub-open{border:1px solid #4b0c8f;border-radius:12px;background:#4b0c8f;color:white;
+ font-weight:800!important;padding:13px 19px;min-height:49px}
+.hub-open:hover{background:#390870}
+.hub-open:disabled{opacity:.65;cursor:wait}
+.hub-secondary{min-height:49px;border:1px solid #d7c5e9;border-radius:12px;
+ background:#fff;color:#58298e;font-weight:800!important;padding:12px 18px}
+.hub-feedback{margin:0;padding:0 clamp(18px,4vw,40px);
+ font-size:12px;color:#6a319f;line-height:1.45}
+.hub-feedback:empty{display:none}
+.hub-footer{
+ padding:17px clamp(18px,4vw,40px) 20px;margin-top:9px;
+ border-top:1px solid #ece5f5;display:flex;align-items:center;justify-content:space-between;gap:15px
+}
+.hub-footer button{flex:none;border:1px solid #ccbbdf;border-radius:10px;
+ background:#fff;color:#5e3494;padding:9px 13px;min-height:37px;font-weight:800;font-size:11px}
+.hub-footer button:hover{background:#f2ebfb}
+.hub-footer span{color:#81768b;font-size:10px;line-height:1.45;text-align:right}
+@media(max-width:860px){.hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+ .clinic-tools{gap:6px}
+ .directory-open{min-width:35px;min-height:35px;padding:7px 8px}
+ .directory-open span{display:none}
+ .hub-dialog{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:17px}
+ .hub-head{padding:21px 17px}
+ .hub-pane{padding:17px 14px 12px}
+ .hub-nav{padding:10px 14px}
+ .hub-grid{gap:10px}
+ .hub-category{padding:15px 12px;min-height:166px}
+ .hub-list{grid-template-columns:1fr}
+ .hub-footer{padding:13px 14px 17px}
+}
+@media(max-width:410px){
+ .hub-grid{grid-template-columns:1fr}
+ .hub-category{min-height:0;display:grid;grid-template-columns:34px 1fr;
+   grid-template-rows:auto auto auto;align-items:center;gap:2px 10px;padding:13px 39px 13px 13px}
+ .hub-category-mark{grid-row:1/4}
+ .hub-category strong{font-size:13px}
+ .hub-category small{font-size:10px}
+ .hub-kind{margin-top:4px;justify-self:start}
+ .hub-arrow{right:11px;top:20px}
+ .hub-count{grid-column:2}
+ .hub-profile-head{gap:12px;padding:13px}
+ .hub-avatar.large{width:65px;height:65px;font-size:18px}
+ .hub-profile-actions{grid-template-columns:1fr}
+ .hub-footer{align-items:stretch;flex-direction:column}
+ .hub-footer span{text-align:left}
+ .hub-exit{min-width:46px;padding:7px 10px}
+}
+@media(max-width:360px){
+ .topbar .identity{gap:4px}
+ .topbar .identity img{width:30px;height:30px}
+ .topbar .identity-copy strong{font-size:9.5px;letter-spacing:-.055em}
+ .clinic-tools{gap:4px}
+ .directory-open{min-width:31px;min-height:32px;padding:5px}
+ .agenda-open{font-size:9.2px;min-height:32px;padding:6px}
+ .topbar .back{width:31px;min-width:31px;flex-basis:31px;height:32px}
+}
+@media(prefers-reduced-motion:reduce){.hub-category{transition:none}.hub-category:hover{transform:none}}
