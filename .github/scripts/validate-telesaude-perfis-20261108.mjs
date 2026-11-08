@@ -271,6 +271,25 @@ try{
    }
    assert.equal(await space.locator("#space-embedded-wait").isVisible(),false);
    assert.equal(await space.locator("#space-embedded-frame").evaluate(el=>getComputedStyle(el).visibility),"visible");
+   // Agendamentos abre o painel oficial da própria TeleSaúde, sobre os
+   // registros ainda abertos. Fechar devolve ao mesmo Meu Espaço.
+   const embeddedSpace=space.frameLocator("#space-embedded-frame");
+   await embeddedSpace.locator("#space-appointments").waitFor({state:"visible"});
+   assert.equal(await embeddedSpace.locator("#space-appointments").innerText(),"Agendamentos");
+   await embeddedSpace.locator("#allergies").fill("Anotação local de teste, sem dados reais");
+   await embeddedSpace.locator("#space-appointments").click();
+   await space.locator("#appointments-dialog[open]").waitFor();
+   assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),2);
+   assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),false);
+   assert.equal(await space.evaluate(()=>window.__sdkOpen||0),0,
+     "Agendamentos não deve ativar o Chat Médico");
+   await space.locator("#appointments-dialog [data-agenda-close]").click();
+   await space.waitForFunction(()=>!document.getElementById("appointments-dialog").open);
+   assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),false,
+     "Ao fechar Agendamentos, permanecer em Meu Espaço");
+   assert.equal(await embeddedSpace.locator("#allergies").inputValue(),
+     "Anotação local de teste, sem dados reais");
+   assert.equal(space.context().pages().length,initialPageCount);
    await space.locator("#space-embedded-back").click();
    await space.locator("#directory-dialog[open]").waitFor();
    assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),true);
