@@ -35,9 +35,8 @@
   // Exibir instruções junto à preparação da consulta, sem prometer
   // troca automática de abas que o navegador pode bloquear.
   if(new URLSearchParams(location.search).get("atendimento")==="aberto"){
-    const back=$("back-to-access"),guidance=$("attendance-guidance");
+    const back=$("back-to-access");
     if(back)back.hidden=true;
-    if(guidance)guidance.hidden=false;
   }
 
   function notice(message,type="info"){
