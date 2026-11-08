@@ -1,0 +1,41 @@
+name: TeleSaude - quarto teste de sala original
+on:
+  push:
+    branches:
+      - main
+      - feat/telesaude-abrir-chat-perfil-original-20261108
+    paths:
+      - 'telesaude/atendimento-chat-original-20261108/**'
+      - 'telesaude/diretorio-chat-original-20261108.*'
+      - '.github/scripts/validate-telesaude-chat-original-20261108.mjs'
+      - '.github/workflows/telesaude-chat-original-20261108.yml'
+  pull_request:
+    paths:
+      - 'telesaude/atendimento-chat-original-20261108/**'
+      - 'telesaude/diretorio-chat-original-20261108.*'
+      - '.github/scripts/validate-telesaude-chat-original-20261108.mjs'
+      - '.github/workflows/telesaude-chat-original-20261108.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe e isolamento
+        run: |
+          node --check telesaude/diretorio-chat-original-20261108.mjs
+          node --check .github/scripts/validate-telesaude-chat-original-20261108.mjs
+      - name: Preparar navegador
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar escolha direta e ausência de prévia duplicada
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/pv-chat-original-test.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-telesaude-chat-original-20261108.mjs
