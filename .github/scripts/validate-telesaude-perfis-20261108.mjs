@@ -77,6 +77,27 @@ async function setup(width){
  await page.locator("#hub-category-grid .hub-category").first().waitFor();
  await page.waitForFunction(()=>window.__sdkInit===1);
  assert.equal(await page.evaluate(()=>window.__sdkOpen||0),0,"A lista médica não deve abrir antes da escolha");
+ const visual=await page.evaluate(()=>{
+   const overlay=getComputedStyle(document.body,"::before");
+   const modalBackdrop=getComputedStyle(document.querySelector("#directory-dialog"),"::backdrop");
+   return {
+     mode:document.body.classList.contains("pv-navigation-mode"),
+     overlayTop:overlay.top,overlayBottom:overlay.bottom,
+     overlayLeft:overlay.left,overlayRight:overlay.right,
+     overlayStack:Number(overlay.zIndex),
+     overlayImage:overlay.backgroundImage,
+     overlayPointer:overlay.pointerEvents,
+     backdropColor:modalBackdrop.backgroundColor
+   };
+ });
+ assert.equal(visual.mode,true,"Especialidades deve manter fundo neutro ativo");
+ for(const value of [visual.overlayTop,visual.overlayBottom,visual.overlayLeft,visual.overlayRight])
+   assert.equal(value,"0px","O fundo deve cobrir toda a janela, incluindo topo e rodapé");
+ assert.ok(visual.overlayStack>2147483640,"O fundo deve encobrir a barra da TeleSaúde");
+ assert.match(visual.overlayImage,/linear-gradient/);
+ assert.match(visual.overlayImage,/radial-gradient/);
+ assert.equal(visual.overlayPointer,"none","O fundo não deve bloquear cliques");
+ assert.equal(visual.backdropColor,"rgba(0, 0, 0, 0)");
  return page;
 }
 try{
@@ -131,6 +152,8 @@ try{
    assert.equal(await page.evaluate(()=>window.__sdkOpen),1);
    assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
    assert.equal(await page.locator("#hub-profile").isVisible(),false);
+   assert.equal(await page.evaluate(()=>document.body.classList.contains("pv-navigation-mode")),false,
+     "O Chat Médico deve voltar a ser visível só depois da escolha");
    await page.close();
    console.log("Foto e clique direto no profissional sem prévia intermediária:",width);
  }
