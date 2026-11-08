@@ -239,7 +239,6 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/especialidades.css?v=20261107-1">
 </head>
 <body>
 <header class="topbar">
@@ -250,9 +249,6 @@ html body .mediquo-launcher{display:none!important}
     </div>
   </div>
   <div class="clinic-tools">
-    <button type="button" class="specialties-trigger" id="specialties-trigger" aria-label="Buscar especialidade" title="Buscar especialidade" aria-haspopup="dialog" aria-controls="specialties-dialog" disabled>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
-    </button>
     <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos</button>
   </div>
   <a class="back" href="/telesaude/" id="back-access" aria-label="Sair e voltar ao acesso" title="Sair">
@@ -310,38 +306,6 @@ html body .mediquo-launcher{display:none!important}
     <p>O link de agendamento não é atendimento humano. Para outras solicitações, use <strong>Suporte e dúvidas</strong>.</p>
   </section>
 </dialog>
-<dialog id="specialties-dialog" class="specialties-dialog" aria-labelledby="specialties-title">
-  <div class="specialties-heading">
-    <div>
-      <h2 id="specialties-title">Encontre seu atendimento</h2>
-      <p>Escolha uma área de cuidado.</p>
-    </div>
-    <button type="button" class="specialties-close" aria-label="Fechar busca" data-specialties-close>×</button>
-  </div>
-  <label class="specialties-search" for="specialties-query">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
-    <input type="search" id="specialties-query" placeholder="Buscar especialidade" autocomplete="off" spellcheck="false" aria-label="Buscar especialidade">
-  </label>
-  <div class="specialties-grid" id="specialties-grid" role="group" aria-label="Especialidades em ordem de acesso">
-    <button type="button" class="specialty-item" data-specialty="Clínico geral" aria-pressed="false"><span>Clínico geral</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Psicologia" aria-pressed="false"><span>Psicologia</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Nutrição" aria-pressed="false"><span>Nutrição</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Treinamento físico" aria-pressed="false"><span>Treinamento físico</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Pediatria" aria-pressed="false"><span>Pediatria</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Dermatologia" aria-pressed="false"><span>Dermatologia</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Ginecologia" aria-pressed="false"><span>Ginecologia</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-    <button type="button" class="specialty-item" data-specialty="Veterinária" aria-pressed="false"><span>Veterinária</span><span class="specialty-chevron" aria-hidden="true"></span></button>
-  </div>
-  <p class="specialties-empty" id="specialties-empty" hidden>Nenhuma especialidade corresponde à busca.</p>
-  <div class="specialties-result" id="specialties-result" hidden>
-    <strong id="specialties-result-title"></strong>
-    <p>A lista de profissionais é apresentada pela Médiquo. Esta seleção não altera nem filtra a lista original.</p>
-    <button type="button" id="specialties-see-list" class="specialties-see-list">Abrir lista de profissionais</button>
-    <p class="specialties-live" id="specialties-live" role="status" hidden></p>
-  </div>
-  <p class="specialties-note">As áreas são referências de busca. A disponibilidade de profissionais depende do plano e é confirmada no atendimento.</p>
-</dialog>
-<script defer src="/telesaude/especialidades.js?v=20261107-1"></script>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
 (function(){

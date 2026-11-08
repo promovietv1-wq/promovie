@@ -249,8 +249,6 @@ jobs:
                   heartLoaded:brandImage.complete&&brandImage.naturalWidth>0,
                   brandLeft:brandRect.left,brandRight:brandRect.right,
                   backLeft:backRect.left,backRight:backRect.right,
-                  searchButtonLeft:document.querySelector('#specialties-trigger').getBoundingClientRect().left,
-                  searchButtonRight:document.querySelector('#specialties-trigger').getBoundingClientRect().right,
                   agendaButtonLeft:document.querySelector('#appointments-trigger').getBoundingClientRect().left,
                   agendaButtonRight:document.querySelector('#appointments-trigger').getBoundingClientRect().right};
               });
@@ -265,10 +263,6 @@ jobs:
               assert.equal((await exit.innerText()).trim(),'','Não exibir texto extra no botão X');
               assert.ok(layout.brandRight<=layout.backLeft+2,'Cabeçalho sem sobreposição em '+width+': '+JSON.stringify(layout));
               assert.ok(layout.brandLeft>=0&&layout.backRight<=width,'Cabeçalho não deve sair da viewport');
-              assert.ok(layout.brandRight<=layout.searchButtonLeft+2,
-                'Lupa não pode encobrir a marca em '+width+': '+JSON.stringify(layout));
-              assert.ok(layout.searchButtonRight<=layout.agendaButtonLeft+2,
-                'Lupa e Agendamentos não podem se sobrepor em '+width+': '+JSON.stringify(layout));
               assert.ok(layout.agendaButtonRight<=layout.backLeft+2,
                 'Agendamentos não pode encobrir Sair em '+width+': '+JSON.stringify(layout));
               if(width>=1100)assert.ok(layout.brandFont>=18,'Marca maior que o título da lista no desktop');
@@ -283,21 +277,6 @@ jobs:
                 assert.equal(layout.brandVisible,false,'Sem formas decorativas no desktop');
                 assert.match(layout.stageBackground,/linear-gradient/,'Degradê suave contínuo esperado no desktop');
                 assert.match(layout.stageBackground,/rgb\(239, 249, 255\)/,'Cor pastel azul claro deve ser aplicada');
-              }
-              if(width===320||width===390||width===1280){
-                // Pesquisa local somente de especialidades, sem tocar na lista interna.
-                assert.equal(await page.locator('#specialties-trigger').isDisabled(),true);
-                await page.evaluate(()=>{document.getElementById('status').hidden=true;});
-                await page.locator('#specialties-trigger').click();
-                assert.equal(await page.locator('#specialties-dialog').evaluate(el=>el.open),true);
-                assert.equal(await page.locator('.specialty-item').count(),8);
-                await page.locator('#specialties-query').fill('nutri');
-                assert.equal(await page.locator('.specialty-item:visible').count(),1);
-                await page.locator('.specialty-item:visible').click();
-                assert.equal(await page.locator('#specialties-result-title').innerText(),'Nutrição');
-                await page.locator('#specialties-see-list').click();
-                assert.match(await page.locator('#specialties-live').innerText(),/versão não permite/);
-                await page.locator('[data-specialties-close]').click();
               }
               await page.screenshot({path:'/tmp/pv-prints/atendimento-container-'+width+'.png',fullPage:true});
               console.log('Contêiner externo validado:',width+'px');
