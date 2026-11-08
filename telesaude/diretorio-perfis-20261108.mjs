@@ -32,6 +32,18 @@ const CATEGORY_IMAGES=Object.freeze({
  "Ginecologia":"https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg",
  "Pet (cães e gatos)":"https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg"
 });
+/* Apelidos e nomes profissionais aceitos na pesquisa unificada.
+   O acesso a profissionais continua limitado ao catálogo autorizado. */
+const CATEGORY_SEARCH=Object.freeze({
+ "Clínico geral":["clinico","clinicos","medico","medicos","medicina geral","plantonista","plantao","adulto"],
+ "Psicologia":["psico","psicologo","psicologos","psicologa","psicologas","psicoterapia","terapia","saude mental"],
+ "Nutrição":["nutri","nutricionista","nutricionistas","alimentacao"],
+ "Treinamento físico":["treinador","treinadora","educacao fisica","personal","atividade fisica","exercicios"],
+ "Pediatria":["pediatra","pediatras","crianca","criancas","infantil"],
+ "Dermatologia":["dermato","dermatologista","dermatologistas","pele"],
+ "Ginecologia":["gineco","ginecologista","ginecologistas","saude da mulher"],
+ "Pet (cães e gatos)":["pet","pets","veterinaria","veterinario","veterinarios","cao","caes","gato","gatos"]
+});
 const EXTRA={key:"Outras especialidades",desc:"Outros serviços autorizados",kind:"Consultar disponibilidade",detail:"Veja os profissionais disponíveis para este acesso."};
 const ENDPOINT="https://backend.promovie.tv.br/api/promovie/directory/v1/catalog-profile";
 const norm=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR").replace(/\s+/g," ").trim();
@@ -119,7 +131,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
  '<button id="hub-top-back" class="hub-exit" type="button" hidden>← Voltar às especialidades</button></div>',
  '<section id="hub-categories" class="hub-pane" aria-label="Selecionar especialidade">',
- '<label class="hub-search hub-search-global"><span aria-hidden="true">⌕</span><input id="hub-global-query" type="search" autocomplete="off" placeholder="Buscar pelo nome" aria-label="Pesquisar profissional pelo nome"></label>',
+ '<label class="hub-search hub-search-global"><span aria-hidden="true">⌕</span><input id="hub-global-query" type="search" autocomplete="off" placeholder="Buscar profissional ou especialidade" aria-label="Pesquisar profissionais e especialidades" aria-controls="hub-global-results"></label>',
  '<div id="hub-global-results" class="hub-list hub-global-results" hidden></div>',
  '<div id="hub-category-grid" class="hub-grid"></div><p id="hub-note" class="hub-note"></p></section>',
  '<section id="hub-professionals" class="hub-pane" aria-label="Escolher profissional" hidden>',
@@ -208,22 +220,61 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    globalResults.hidden=!term;
    globalResults.replaceChildren();
    if(!term)return;
+
+   // Termos como "psico", "psicólogo", "dermato" e variações com acento.
+   const specialities=SERVICES.filter(info=>
+     [info.key,info.desc,...(CATEGORY_SEARCH[info.key]||[])]
+       .some(label=>norm(label).includes(term)));
+   const bySpeciality=new Set(specialities.map(info=>info.key));
+   if(specialities.length){
+     globalResults.append(node("p","hub-search-group-title","Especialidades"));
+     for(const info of specialities){
+       const item=node("button","hub-search-category");
+       item.type="button";item.dataset.speciality=info.key;
+       const badge=node("span","hub-search-category-mark","✦");
+       badge.setAttribute("aria-hidden","true");
+       const copy=node("span","hub-person-copy");
+       const qty=catalog.filter(p=>p.category===info.key).length;
+       const detail=loaded?
+         (qty?qty+" "+(qty===1?"profissional":"profissionais"):
+          info.key==="Clínico geral"||info.key==="Pediatria"?
+            "Acesso pelo Chat Médico":"Consultar atendimento"):
+         info.desc;
+       copy.append(node("strong",null,info.key),
+         node("small",null,detail));
+       item.append(badge,copy,node("span","hub-person-arrow","Ver profissionais ›"));
+       globalResults.append(item);
+     }
+   }
    if(!loaded){
-     globalResults.append(node("p","hub-empty","Carregando os profissionais disponíveis..."));
+     globalResults.append(node("p","hub-search-info","Carregando profissionais..."));
      return;
    }
-   const matches=catalog.filter(p=>norm(p.name).includes(term))
+   // A busca por nome funciona sempre. Com três caracteres, uma busca
+   // por especialidade também localiza profissionais vinculados a ela.
+   const matches=catalog.filter(p=>
+     norm(p.name).includes(term)||
+     (term.length>=3&&(bySpeciality.has(p.category)||
+       norm(p.title).includes(term)||norm(p.category).includes(term))))
      .sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
-   if(!matches.length){
-     globalResults.append(node("p","hub-empty","Nenhum profissional com este nome no catálogo disponível para seu acesso."));
-     return;
-   }
-   for(const p of matches){
-     const item=node("button","hub-person");item.type="button";item.dataset.id=p.id;
-     const copy=node("span","hub-person-copy");
-     copy.append(node("strong",null,p.name),node("small",null,p.title||p.category));
-     item.append(profileAvatar(p,"small"),copy,node("span","hub-person-arrow","Abrir no Chat Médico ›"));
-     globalResults.append(item);
+   if(matches.length){
+     globalResults.append(node("p","hub-search-group-title","Profissionais"));
+     for(const p of matches.slice(0,12)){
+       const item=node("button","hub-person");
+       item.type="button";item.dataset.id=p.id;
+       const copy=node("span","hub-person-copy");
+       copy.append(node("strong",null,p.name),node("small",null,p.title||p.category));
+       item.append(profileAvatar(p,"small"),copy,
+         node("span","hub-person-arrow","Abrir no Chat Médico ›"));
+       globalResults.append(item);
+     }
+     if(matches.length>12){
+       globalResults.append(node("p","hub-search-info",
+         "Exibindo 12 de "+matches.length+" profissionais. Selecione a especialidade para ver todos."));
+     }
+   }else if(!specialities.length){
+     globalResults.append(node("p","hub-empty",
+       "Nenhuma especialidade ou profissional corresponde a esta pesquisa."));
    }
  }
  function showGroup(key){
@@ -379,6 +430,11 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  globalQuery.addEventListener("input",renderGlobalSearch);
  globalResults.addEventListener("click",event=>{
+   const category=event.target.closest("button.hub-search-category");
+   if(category&&SERVICES.some(info=>info.key===category.dataset.speciality)){
+     showGroup(category.dataset.speciality);
+     return;
+   }
    const item=event.target.closest("button.hub-person");
    if(!item)return;
    const p=catalog.find(person=>person.id===item.dataset.id);
