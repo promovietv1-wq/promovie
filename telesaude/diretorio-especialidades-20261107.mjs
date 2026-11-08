@@ -90,7 +90,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    categories.hidden=pane!=="categories";professionals.hidden=pane!=="professionals";profile.hidden=pane!=="profile";
    nav.hidden=pane==="categories";
    const clinical=pane==="professionals"&&chosenService==="Clínico geral";
-   headTitle.textContent=clinical?"Clínico geral: atendimento adulto e infantil":"Como podemos cuidar de você?";
+   headTitle.textContent=clinical?"Plantão com médico clínico geral adulto e infantil":"Como podemos cuidar de você?";
    headSubtitle.textContent=clinical?
      "Atendimento com médicos plantonistas, sem agendamento.":
      "Selecione uma especialidade para conhecer os profissionais.";
@@ -144,8 +144,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      onlineDot.setAttribute("aria-hidden","true");
      legend.append(onlineDot,
        document.createTextNode("A bolinha verde identifica os profissionais que estão on-line."));
-     box.append(node("strong","hub-fallback-title","Como encontrar um médico de plantão"),
-       node("p",null,"Para consultar um clínico geral, acesse o Chat Médico."),legend);
+     box.append(node("strong","hub-fallback-title","Para consultar um clínico geral em até 10 minutos, acesse o Chat Médico e entre em contato com o clínico geral plantonista."),legend);
      list.append(box);
      return;
    }
