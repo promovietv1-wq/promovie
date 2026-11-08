@@ -1,4 +1,4 @@
-// Prototipo isolado: lista ELEGIVEL por paciente, exatamente a mesma usada no Widget.
+// Diretorio autorizado: lista de profissionais por paciente autenticado, sem acesso a mensagens.
 // Nunca guardar tokens SDK, prontuarios ou mensagens; consulta somente GET /professionals.
 const PREFIX="/api/promovie/directory/v1",MAX=160,SESSION_SECONDS=15*60;
 const enc=new TextEncoder();
