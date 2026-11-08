@@ -42,12 +42,15 @@ try{
     const page=await createPage(width,[
       {id:"p01",name:"Psicóloga Exemplo",title:"Psicologia"}
     ]);
-    assert.equal(await page.locator("#hub-category-grid .hub-category").count(),9);
+    assert.equal(await page.locator("#hub-category-grid .hub-category").count(),8);
     const cards=page.locator("#hub-category-grid .hub-category");
     assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
-    assert.equal(await cards.nth(8).locator("strong").innerText(),"Agendamento");
+    assert.equal(await page.locator("#hub-shortcut-specialties").count(),0);
+    assert.equal(await page.locator("#hub-shortcut-appointments").innerText(),"Agendamentos");
+    assert.equal(await page.locator("#hub-shortcut-space").innerText(),"Meu Espaço de Saúde");
+    assert.equal(await page.locator(".hub-shortcuts button").count(),2);
     await page.waitForFunction(()=>window.__widgetOpens===1);
-    await cards.nth(8).click();
+    await page.locator("#hub-shortcut-appointments").click();
     await page.locator("#appointments-dialog[open]").waitFor();
     assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
     assert.equal(await page.locator(".agenda-modal-link").first().getAttribute("href"),
@@ -77,10 +80,12 @@ try{
   ]);
   await navigation.waitForFunction(()=>window.__widgetOpens===1);
   const navCards=navigation.locator("#hub-category-grid .hub-category");
-  assert.equal(await navCards.count(),10);
+  assert.equal(await navCards.count(),9);
   assert.equal(await navCards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
-  assert.equal(await navCards.nth(8).locator("strong").innerText(),"Agendamento");
-  assert.equal(await navCards.nth(9).locator("strong").innerText(),"Outras especialidades");
+  assert.equal(await navCards.nth(8).locator("strong").innerText(),"Outras especialidades");
+  assert.equal(await navCards.nth(8).locator(".hub-category-mark").innerText(),"09");
+  assert.equal(await navigation.locator("#hub-shortcut-specialties").count(),0);
+  assert.equal(await navigation.locator(".hub-shortcuts button").count(),2);
   await navCards.nth(7).click();
   assert.equal(await navigation.locator("#hub-service-title").innerText(),"Pet (cães e gatos)");
   assert.equal(await navigation.locator(".hub-person").count(),1);
