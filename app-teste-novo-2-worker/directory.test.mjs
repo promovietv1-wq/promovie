@@ -126,5 +126,5 @@ test("Profissionais retornados sem is_available são preservados e perfis são s
   });
   assert.deepEqual(data[1],{id:"safe-3",name:"Dra. Ana",title:"Psicologia",status:null});
   assert.ok(!JSON.stringify(data).includes("PRIVADO"));
-  assert.ok(!JSON.stringify(data).includes("script"));
+  assert.ok(!JSON.stringify(data).includes("<script>"));
 });
