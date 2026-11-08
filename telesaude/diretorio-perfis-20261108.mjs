@@ -19,6 +19,19 @@ const SERVICES=[
  {key:"Pet (cães e gatos)",pattern:/veterinar|veterinary/,
   desc:"Orientação de saúde para pets",kind:"Consultar disponibilidade",detail:"Consulte o atendimento e os horários disponíveis."}
 ];
+
+/* Imagens originais da seção TeleSaúde do site oficial PromoVie.
+   Uso ilustrativo: não representam necessariamente médicos plantonistas. */
+const CATEGORY_IMAGES=Object.freeze({
+ "Clínico geral":"https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg",
+ "Psicologia":"https://static.wixstatic.com/media/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_9f18304381da41df9cd6b4de3296510a~mv2.jpg",
+ "Nutrição":"https://static.wixstatic.com/media/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_ed9bfd930b8a40bcb7a2ba19653a8848~mv2.jpg",
+ "Treinamento físico":"https://static.wixstatic.com/media/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4167b1bf6d6241abbd0c2284024de025~mv2.jpg",
+ "Pediatria":"https://static.wixstatic.com/media/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_4165a6f5bdea484ca54cbce4ac2d42ba~mv2.jpg",
+ "Dermatologia":"https://static.wixstatic.com/media/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_f20e162c4a874ff8b7f77c37f2f27e07~mv2.jpg",
+ "Ginecologia":"https://static.wixstatic.com/media/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_89eb9cace0394a9783156d5c9d3e05c1~mv2.jpg",
+ "Pet (cães e gatos)":"https://static.wixstatic.com/media/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_332637580c72430295e77ea81c0d6e2a~mv2.jpg"
+});
 const EXTRA={key:"Outras especialidades",desc:"Outros serviços autorizados",kind:"Consultar disponibilidade",detail:"Veja os profissionais disponíveis para este acesso."};
 const ENDPOINT="https://backend.promovie.tv.br/api/promovie/directory/v1/catalog-profile";
 const norm=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR").replace(/\s+/g," ").trim();
@@ -160,22 +173,30 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    for(const [index,key] of keys.entries()){
      const info=providerService(key);
      const count=catalog.filter(p=>p.category===key).length;
-     const card=node("button","hub-category");card.type="button";card.dataset.key=key;
+     const card=node("button","hub-category hub-category-photo");card.type="button";card.dataset.key=key;
+     const imageArea=node("span","hub-category-visual");
+     const image=node("img","hub-category-image");
+     image.src=CATEGORY_IMAGES[key];image.alt="";
+     image.loading=index<4?"eager":"lazy";image.decoding="async";
+     image.onerror=()=>{image.remove();imageArea.classList.add("hub-category-image-unavailable");};
      const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(index+1).padStart(2,"0");
+     const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
+     imageArea.append(image,mark,arrow);
+     const body=node("span","hub-category-body");
      const heading=node("strong",null,key),desc=node("small",null,info.desc);
      if(key==="Pet (cães e gatos)"){
        heading.replaceChildren(document.createTextNode("Pet "),
          node("span","hub-pet-detail","(cães e gatos)"));
      }
      const meta=node("span","hub-kind",info.kind);
-     const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
-     card.append(mark,heading,desc,meta,arrow);
+     body.append(heading,desc,meta);
      if(loaded){
        const withoutNames=key==="Clínico geral"?"Acesso pelo Chat Médico 24h":
          key==="Pediatria"?"Acesso pelo Chat Médico":"Profissionais não listados";
        const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):withoutNames);
-       card.append(quantity);
+       body.append(quantity);
      }
+     card.append(imageArea,body);
      grid.append(card);
    }
    note.textContent=loaded?
