@@ -57,7 +57,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  dialog.classList.add("hub-dialog");
  dialog.innerHTML=[
  '<div class="hub-head"><div><small class="hub-eyebrow">TELESAÚDE PROMOVIE</small>',
- '<h2 id="directory-title">Como podemos cuidar de você?</h2>',
+ '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
  '<a class="hub-exit" href="/telesaude/?teste=20261107-especialidades" aria-label="Sair da TeleSaúde">Sair da TeleSaúde</a></div>',
  '<div id="hub-nav" class="hub-nav" hidden><button id="hub-back" type="button">← Especialidades</button><span id="hub-step"></span></div>',
@@ -82,7 +82,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  ].join("");
  const nav=el("hub-nav"),back=el("hub-back"),step=el("hub-step");
  const categories=el("hub-categories"),grid=el("hub-category-grid"),note=el("hub-note");
- const globalQuery=el("hub-global-query"),globalResults=el("hub-global-results"),chatSearch=el("chat-search-name");
+ const globalQuery=el("hub-global-query"),globalResults=el("hub-global-results");
+ const chatSearch=el("chat-search-name"),chatResults=el("chat-search-results"),chatShell=el("chat-search-shell");
  const professionals=el("hub-professionals"),serviceTitle=el("hub-service-title"),serviceLead=el("hub-service-lead");
  const list=el("hub-list"),query=el("hub-query");
  const profile=el("hub-profile"),profileBody=el("hub-profile-body"),open=el("hub-open");
@@ -98,7 +99,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    categories.hidden=pane!=="categories";professionals.hidden=pane!=="professionals";profile.hidden=pane!=="profile";
    nav.hidden=pane==="categories";
    const clinical=pane==="professionals"&&chosenService==="Clínico geral";
-   headTitle.textContent=clinical?"Plantão com médico clínico geral adulto e infantil":"Como podemos cuidar de você?";
+   headTitle.textContent=clinical?"Plantão com médico clínico geral adulto e infantil":"Vamos te ajudar a cuidar de você.";
    headSubtitle.textContent=clinical?
      "Atendimento com médicos plantonistas, sem agendamento.":
      "Selecione uma especialidade para conhecer os profissionais.";
@@ -296,16 +297,88 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    const p=catalog.find(person=>person.id===item.dataset.id);
    if(p)showProfile(p,true);
  });
- if(chatSearch){
+ // Resultados permanecem imediatamente abaixo da pesquisa, sobre o Chat Médico,
+ // sem abrir um segundo diálogo, sem o cabeçalho roxo e sem ler o iframe.
+ let chatSelected=null,chatOpening=false;
+ function renderChatSearch(){
+   if(!chatSearch||!chatResults)return;
+   const term=norm(chatSearch.value);
+   chatSelected=null;
+   chatResults.replaceChildren();
+   chatResults.hidden=!term;
+   if(!term)return;
+   if(!loaded){
+     chatResults.append(node("p","hub-empty","Carregando os profissionais disponíveis..."));
+     return;
+   }
+   const matches=catalog.filter(p=>norm(p.name).includes(term))
+     .sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+   if(!matches.length){
+     chatResults.append(node("p","hub-empty",
+       "Nenhum profissional com esse nome no catálogo disponível para seu acesso."));
+     return;
+   }
+   for(const p of matches){
+     const item=node("button","hub-person chat-search-person");item.type="button";
+     item.dataset.chatId=p.id;
+     const label=node("span","hub-person-copy");
+     label.append(node("strong",null,p.name),node("small",null,p.title||p.category));
+     item.append(profileAvatar(p,"small"),label,node("span","hub-person-arrow","Ver perfil ›"));
+     chatResults.append(item);
+   }
+ }
+ function showChatProfile(p){
+   if(!chatResults)return;
+   chatSelected=p;chatResults.hidden=false;chatResults.replaceChildren();
+   const head=node("div","chat-inline-profile");
+   const details=node("div","hub-person-copy");
+   details.append(node("strong",null,p.name),node("small",null,p.title||p.category));
+   head.append(profileAvatar(p,"large"),details);
+   const summary=node("p","chat-inline-summary",
+     p.description||("Profissional de "+p.category.toLocaleLowerCase("pt-BR")+"."));
+   const actions=node("div","chat-inline-actions");
+   const go=node("button","chat-inline-open","Acessar atendimento");
+   go.type="button";go.dataset.action="open";
+   const backToResults=node("button","chat-inline-back","Voltar aos resultados");
+   backToResults.type="button";backToResults.dataset.action="back";
+   actions.append(go,backToResults);
+   chatResults.append(head,summary,actions);
+ }
+ if(chatSearch&&chatResults){
+   chatSearch.addEventListener("input",renderChatSearch);
    chatSearch.addEventListener("focus",()=>{
-     globalQuery.value=chatSearch.value;
-     reopen();
-     globalQuery.focus({preventScroll:true});
+     if(norm(chatSearch.value))renderChatSearch();
    });
-   chatSearch.addEventListener("input",()=>{
-     globalQuery.value=chatSearch.value;
-     reopen();
-     globalQuery.focus({preventScroll:true});
+   chatSearch.addEventListener("keydown",event=>{
+     if(event.key==="Escape"){chatSearch.value="";renderChatSearch();chatSearch.blur();}
+   });
+   chatResults.addEventListener("click",async event=>{
+     const item=event.target.closest("button[data-chat-id]");
+     if(item){
+       const p=catalog.find(entry=>entry.id===item.dataset.chatId);
+       if(p)showChatProfile(p);
+       return;
+     }
+     const action=event.target.closest("button[data-action]");
+     if(!action)return;
+     if(action.dataset.action==="back"){renderChatSearch();chatSearch.focus({preventScroll:true});return;}
+     if(action.dataset.action==="open"&&chatSelected&&!chatOpening){
+       chatOpening=true;action.disabled=true;
+       const p=chatSelected;
+       action.textContent="Abrindo atendimento...";
+       try{
+         const route="/professionals/"+encodeURIComponent(p.id)+"/room";
+         if(typeof widget.navigate==="function")await Promise.resolve(widget.navigate(route));
+         else if(typeof widget.open_room==="function")await Promise.resolve(widget.open_room(p.id));
+         else throw Error("Navegação individual indisponível");
+         chatSearch.value="";chatResults.hidden=true;chatResults.replaceChildren();
+       }catch{
+         action.textContent="Tentar novamente";
+       }finally{action.disabled=false;chatOpening=false;}
+     }
+   });
+   document.addEventListener("pointerdown",event=>{
+     if(chatShell&&!chatShell.contains(event.target))chatResults.hidden=true;
    });
  }
  grid.addEventListener("click",event=>{
@@ -332,14 +405,22 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(!profile.hidden)showPane("professionals");
    else if(!professionals.hidden)showPane("categories");
  });
- function openNative(){
-   // Busca externa ao iframe: só o paciente com acesso vê o catálogo autorizado.
+ async function openNative(){
+   // Não abre a interface médica na carga inicial. Somente após clique explícito.
    if(dialog.open)dialog.close();
-   document.body.classList.remove("pv-navigation-mode");
-   document.documentElement.classList.add("pv-chat-mode");
-   document.getElementById("chat-search-shell")?.removeAttribute("hidden");
+   if(chatResults){chatResults.hidden=true;chatResults.replaceChildren();}
    if(chatSearch)chatSearch.value="";
-   try{if(typeof widget.open==="function")widget.open();}catch{}
+   try{
+     if(typeof widget.open!=="function")throw Error("Widget indisponível");
+     await Promise.resolve(widget.open());
+     document.body.classList.remove("pv-navigation-mode");
+     document.documentElement.classList.add("pv-chat-mode");
+     chatShell?.removeAttribute("hidden");
+   }catch{
+     document.body.classList.add("pv-navigation-mode");
+     reopen();
+     say("Não foi possível abrir o Chat Médico. Você pode continuar em Especialidades.");
+   }
  }
  native.addEventListener("click",openNative);
  el("hub-shortcut-appointments").addEventListener("click",openAppointments);
@@ -364,26 +445,20 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  appointmentTrigger?.addEventListener("click",()=>{
    document.body.classList.add("pv-navigation-mode");
  },{capture:true});
- open.addEventListener("click",()=>{
+ open.addEventListener("click",async()=>{
    if(!chosenPerson||busy)return;
    busy=true;open.disabled=true;say("Abrindo o atendimento de "+chosenPerson.name+"...");
    try{
-     // A rota abaixo foi COPIADA do teste de 7/11 que o usuário confirmou funcionar.
-     // Não substituí-la silenciosamente pelo seletor posterior.
+     // Preserva o mesmo caminho individual da versão funcional 07/11.
+     // O SDK só é aberto depois que a pessoa seleciona o profissional.
      const route="/professionals/"+encodeURIComponent(chosenPerson.id)+"/room";
-     let result;
-     if(typeof widget.navigate==="function")result=widget.navigate(route);
-     else if(typeof widget.open_room==="function")result=widget.open_room(chosenPerson.id);
+     if(typeof widget.navigate==="function")await Promise.resolve(widget.navigate(route));
+     else if(typeof widget.open_room==="function")await Promise.resolve(widget.open_room(chosenPerson.id));
      else throw new Error("Nenhum método individual disponível");
-     // O widget controla o chat; não esperaremos evento interno não documentado
-     // para fechar a apresentação nem alegaremos consulta confirmada.
-     Promise.resolve(result).catch(()=>{
-       say("Não foi possível confirmar a abertura. Você pode usar Chat Médico.");
-     });
      dialog.close();
      document.body.classList.remove("pv-navigation-mode");
      document.documentElement.classList.add("pv-chat-mode");
-     document.getElementById("chat-search-shell")?.removeAttribute("hidden");
+     chatShell?.removeAttribute("hidden");
    }catch{
      say("Não foi possível abrir este profissional. Tente o Chat Médico.");
    }finally{busy=false;open.disabled=false;}

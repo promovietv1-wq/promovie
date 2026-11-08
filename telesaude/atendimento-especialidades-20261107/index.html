@@ -257,9 +257,9 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=pet-saida-9">
+<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=entrada-chat-inline-11">
 </head>
-<body>
+<body class="pv-navigation-mode">
 <header class="topbar">
   <div class="identity">
     <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="56" height="56" alt="Coração PromoVie">
@@ -282,8 +282,10 @@ html body .mediquo-launcher{display:none!important}
   <label class="chat-search-bar">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
     <input id="chat-search-name" type="search" placeholder="Buscar pelo nome" autocomplete="off"
-      aria-label="Pesquisar profissional pelo nome no Chat Médico">
+      aria-label="Pesquisar profissional pelo nome no Chat Médico"
+      aria-controls="chat-search-results" aria-autocomplete="list">
   </label>
+  <div id="chat-search-results" class="chat-search-results" aria-label="Resultados da pesquisa de profissionais" hidden></div>
 </section>
 <main class="stage" aria-label="Área de atendimentos">
   <section id="status" class="status loading" role="status" aria-live="polite">
@@ -588,35 +590,68 @@ html body .mediquo-launcher{display:none!important}
       return;
     }
     enableSpaceSingleSignOn(handoff.spaceBootstrap);
-    try{
-      const widget=await loadSdk();
-      await Promise.resolve(widget.init({
-        apiKey:handoff.apiKey,
-        accessToken:handoff.accessToken,
-        adapter:"web",
-        environment:"production",
-        show:"always",
-        isMobileView:true,
-        theme:{
-          launcher:"hidden",locale:"pt",hideCloseButton:"true",
-          text:{title:"Médicos e Especialistas"},
-          colors:{primary:"#4b0c8f"}
-        }
-      }));
-      if(typeof widget.open!=="function")throw new Error("Não foi possível abrir a interface de atendimento.");
-      // A interface PromoVie aparece antes de revelar a lista nativa.
-      // Mesmo SDK, token, autenticação e conector direto da versão 20261107.
-      try{
-        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=meu-espaco-voltar-10");
-        module.initSpecialtyDirectory(widget,handoff.directoryToken,handoff.accessToken);
-      }catch{
-        const feedback=document.getElementById("directory-feedback");
-        if(feedback)feedback.textContent="Não foi possível carregar a seleção. A lista original permanece acessível.";
+    // Apresenta Especialidades antes de iniciar o Widget, sem exibir sua lista
+    // nem abrir uma conversa médica automaticamente.
+    let sdkReady=null,widgetOpened=false,openPromise=null;
+    function prepareSdk(){
+      if(!sdkReady)sdkReady=loadSdk().then(async widget=>{
+        await Promise.resolve(widget.init({
+          apiKey:handoff.apiKey,
+          accessToken:handoff.accessToken,
+          adapter:"web",
+          environment:"production",
+          show:"always",
+          isMobileView:true,
+          theme:{
+            launcher:"hidden",locale:"pt",hideCloseButton:"true",
+            text:{title:"Médicos e Especialistas"},
+            colors:{primary:"#4b0c8f"}
+          }
+        }));
+        if(typeof widget.open!=="function")throw Error("Interface médica indisponível.");
+        return widget;
+      });
+      return sdkReady;
+    }
+    async function activateWidget(){
+      const widget=await prepareSdk();
+      if(widgetOpened)return widget;
+      if(!openPromise){
+        openPromise=Promise.resolve().then(()=>widget.open()).then(()=>{
+          widgetOpened=true;return widget;
+        }).catch(error=>{openPromise=null;throw error;});
       }
-      await Promise.resolve(widget.open());
+      return openPromise;
+    }
+    // A mesma rota individual do conector 20261107 é preservada.
+    // Só abre o Widget após uma escolha explícita de Chat ou profissional.
+    const medicalBridge={
+      open:activateWidget,
+      navigate:async path=>{
+        const widget=await activateWidget();
+        if(typeof widget.navigate==="function")return widget.navigate(path);
+        const match=path.match(/^\/professionals\/([A-Za-z0-9_-]{1,128})\/room$/);
+        if(match&&typeof widget.open_room==="function")
+          return widget.open_room(match[1]);
+        throw Error("Abertura individual indisponível neste Widget.");
+      },
+      open_room:async id=>{
+        const widget=await activateWidget();
+        if(typeof widget.open_room==="function")return widget.open_room(id);
+        if(typeof widget.navigate==="function")
+          return widget.navigate("/professionals/"+encodeURIComponent(id)+"/room");
+        throw Error("Abertura individual indisponível neste Widget.");
+      }
+    };
+    try{
+      const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=entrada-chat-inline-11");
+      module.initSpecialtyDirectory(medicalBridge,handoff.directoryToken,handoff.accessToken);
       status.hidden=true;
+      // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.
+      // Qualquer falha é comunicada quando o beneficiário optar por abrir o Chat.
+      prepareSdk().catch(()=>{});
     }catch{
-      errorState("Não conseguimos carregar a TeleSaúde nesta página. Retorne ao acesso e tente novamente.");
+      errorState("Não conseguimos carregar as especialidades. Retorne ao acesso e tente novamente.");
     }
   }
   openAttendance();
