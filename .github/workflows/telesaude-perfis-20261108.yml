@@ -1,0 +1,49 @@
+name: TeleSaude - teste isolado de perfis e fotos
+on:
+  push:
+    branches:
+      - main
+      - feat/telesaude-perfis-fotos-20261108
+    paths:
+      - 'telesaude/atendimento-perfis-20261108/**'
+      - 'telesaude/diretorio-perfis-20261108.*'
+      - 'telesaude/index.html'
+      - 'app-teste-novo-2-worker/src/directory.mjs'
+      - 'app-teste-novo-2-worker/directory.test.mjs'
+      - '.github/scripts/validate-telesaude-perfis-20261108.mjs'
+      - '.github/workflows/telesaude-perfis-20261108.yml'
+  pull_request:
+    paths:
+      - 'telesaude/atendimento-perfis-20261108/**'
+      - 'telesaude/diretorio-perfis-20261108.*'
+      - 'telesaude/index.html'
+      - 'app-teste-novo-2-worker/src/directory.mjs'
+      - '.github/scripts/validate-telesaude-perfis-20261108.mjs'
+      - '.github/workflows/telesaude-perfis-20261108.yml'
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sintaxe do novo diretório e da projeção
+        run: |
+          node --check telesaude/diretorio-perfis-20261108.mjs
+          node --check app-teste-novo-2-worker/src/directory.mjs
+          node --check .github/scripts/validate-telesaude-perfis-20261108.mjs
+      - name: Verificar escopo e autenticação das consultas aos perfis públicos
+        run: node --test app-teste-novo-2-worker/directory.test.mjs
+      - name: Instalar navegador de teste
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Simular escolha de perfil, fotos, busca e navegação em desktop e celular
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/pv-perfis-test.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-telesaude-perfis-20261108.mjs

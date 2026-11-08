@@ -10,7 +10,8 @@
       const params=new URLSearchParams(location.search);
       permitted=window.parent===window.top&&
         window.parent.location.origin===location.origin&&
-        ["/telesaude/atendimento/","/telesaude/atendimento-especialidades-20261107/"]
+        ["/telesaude/atendimento/","/telesaude/atendimento-especialidades-20261107/",
+          "/telesaude/atendimento-perfis-20261108/"]
           .includes(window.parent.location.pathname)&&
         params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
         /^#pv-handoff=[0-9a-f-]{36}$/i.test(location.hash);

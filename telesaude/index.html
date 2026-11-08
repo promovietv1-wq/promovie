@@ -924,7 +924,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   const legacyDirectoryTest=new URLSearchParams(location.search).get("teste")==="anterior";
   const originalWorkingTest=new URLSearchParams(location.search).get("teste")==="20261107";
   const specialtyFlowTest=new URLSearchParams(location.search).get("teste")==="20261107-especialidades";
-  if(directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest)document.getElementById("directory-test-login").hidden=false;
+  const richProfilesTest=new URLSearchParams(location.search).get("teste")==="20261108-perfis";
+  if(directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest)document.getElementById("directory-test-login").hidden=false;
   const SPACE="/api/promovie/space/v1";
   const button=document.getElementById("install-now");
   const accessForm=document.getElementById("access-form");
@@ -1062,7 +1063,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     try{
       const response=await fetch(BACKEND_URL+ACCESS+"/session",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
+        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
         cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
       const result=await getJson(response);
@@ -1093,7 +1094,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           accessToken:result.access_token,
           environment:result.environment,
           createdAt:Date.now(),
-          ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
+          ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
             {directoryToken:result.directory_token}:{}),
           ...(spaceBootstrap?{spaceBootstrap}:{})
         }));
@@ -1101,7 +1102,9 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
         throw new Error("Seu navegador bloqueou a abertura segura do atendimento. Verifique as permissoes de armazenamento temporario e tente novamente.");
       }
       try{
-        if(specialtyFlowTest){
+        if(richProfilesTest){
+          window.location.assign("/telesaude/atendimento-perfis-20261108/");
+        }else if(specialtyFlowTest){
           window.location.assign("/telesaude/atendimento-especialidades-20261107/");
         }else if(legacyDirectoryTest){
           window.location.assign("/telesaude/atendimento-anterior/");
