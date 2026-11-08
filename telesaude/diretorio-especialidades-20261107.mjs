@@ -139,8 +139,13 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    serviceHead.hidden=clinicalFallback;
    if(clinicalFallback){
      const box=node("div","hub-empty hub-clinical-fallback");
+     const legend=node("p","hub-online-legend");
+     const onlineDot=node("span","hub-online-dot");
+     onlineDot.setAttribute("aria-hidden","true");
+     legend.append(onlineDot,
+       document.createTextNode("A bolinha verde identifica os profissionais que estão on-line."));
      box.append(node("strong","hub-fallback-title","Como encontrar um médico de plantão"),
-       node("p",null,"Para consultar um clínico geral, acesse o Chat Médico. A bolinha verde identifica os profissionais que estão on-line."));
+       node("p",null,"Para consultar um clínico geral, acesse o Chat Médico."),legend);
      list.append(box);
      return;
    }
