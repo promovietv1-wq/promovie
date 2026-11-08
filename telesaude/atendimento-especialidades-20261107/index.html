@@ -120,8 +120,26 @@ button{font:inherit}
   background:#f9f7fc;overflow:hidden
 }
 .space-embedded iframe{
-  display:block;width:100%;height:100%;height:100dvh;
+  display:block;width:100%;height:calc(100vh - 56px);height:calc(100dvh - 56px);
   border:0;background:#f9f7fc
+}
+.space-embedded-toolbar{
+  height:56px;min-height:56px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left));
+  border-bottom:1px solid #e7dcef;background:#fff;color:#3f176f;
+}
+.space-embedded-toolbar button{
+  display:inline-flex;align-items:center;justify-content:center;min-height:39px;
+  padding:9px 14px;border:1px solid #cdb8e6;border-radius:10px;
+  background:#f7f2fd;color:#461682;font:800 12px/1.25 Inter,Arial,sans-serif;cursor:pointer
+}
+.space-embedded-toolbar button:hover{background:#efe3fa}
+.space-embedded-toolbar button:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+.space-embedded-toolbar strong{font:800 12px/1.25 Inter,Arial,sans-serif;text-align:right}
+@media(max-width:420px){
+  .space-embedded-toolbar{padding-inline:10px;gap:8px}
+  .space-embedded-toolbar button{font-size:11px;padding-inline:9px}
+  .space-embedded-toolbar strong{font-size:10px}
 }
 .space-open-help[hidden]{display:none!important}
 .space-open-help{
@@ -291,6 +309,10 @@ html body .mediquo-launcher{display:none!important}
   </a>
 </nav>
 <section id="space-embedded" class="space-embedded" hidden role="region" aria-label="Meu Espaço de Saúde integrado ao atendimento">
+  <header class="space-embedded-toolbar">
+    <button id="space-embedded-back" type="button">← Voltar às Especialidades</button>
+    <strong>Meu Espaço de Saúde</strong>
+  </header>
   <iframe id="space-embedded-frame" title="Meu Espaço de Saúde" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
 </section>
 <section id="space-open-help" class="space-open-help" hidden role="alert" aria-live="assertive">
@@ -411,19 +433,27 @@ html body .mediquo-launcher{display:none!important}
     let openedSpace=null,embeddedLoaded=false;
     const embeddedLayer=document.getElementById("space-embedded");
     const embeddedFrame=document.getElementById("space-embedded-frame");
+    const embeddedBack=document.getElementById("space-embedded-back");
     const closeEmbedded=function(){
       if(!embeddedLayer||embeddedLayer.hidden)return;
       embeddedLayer.hidden=true;
-      link.focus({preventScroll:true});
+      const destination=embeddedLayer.dataset.returnTo==="chat"?"chat":"specialties";
+      window.dispatchEvent(new CustomEvent("promovie:space-return",{detail:{destination}}));
     };
     // O botão Voltar do celular ou navegador fecha somente os registros.
     const showEmbedded=function(){
       if(!embeddedLayer||!embeddedFrame)return;
+      if(embeddedBack)embeddedBack.textContent=embeddedLayer.dataset.returnTo==="chat"?
+        "← Voltar ao Chat Médico":"← Voltar às Especialidades";
       if(embeddedLayer.hidden){
         history.pushState({promovieSpaceOverlay:true},"",location.href);
         embeddedLayer.hidden=false;
       }
     };
+    embeddedBack?.addEventListener("click",function(){
+      if(history.state?.promovieSpaceOverlay)history.back();
+      else closeEmbedded();
+    });
     window.addEventListener("popstate",function(){
       if(embeddedLayer&&!embeddedLayer.hidden)closeEmbedded();
     });
@@ -459,6 +489,7 @@ html body .mediquo-launcher{display:none!important}
       // Abrir dentro da mesma tela em todos os celulares, mesmo sem PWA instalado.
       // Assim o retorno depende de um botão local, não da troca de abas do navegador.
       const installedApp=Boolean(
+        location.pathname==="/telesaude/atendimento-especialidades-20261107/"||
         (typeof window.matchMedia==="function"&&
           (window.matchMedia("(display-mode: standalone)").matches||
            window.matchMedia("(max-width:700px)").matches))||
@@ -576,7 +607,7 @@ html body .mediquo-launcher{display:none!important}
       // A interface PromoVie aparece antes de revelar a lista nativa.
       // Mesmo SDK, token, autenticação e conector direto da versão 20261107.
       try{
-        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=pet-saida-9");
+        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=meu-espaco-voltar-10");
         module.initSpecialtyDirectory(widget,handoff.directoryToken,handoff.accessToken);
       }catch{
         const feedback=document.getElementById("directory-feedback");
