@@ -117,8 +117,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<div class="hub-head"><div><small class="hub-eyebrow">TELESAÚDE PROMOVIE</small>',
  '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
- '<a class="hub-exit" href="/telesaude/?teste=20261108-perfis" aria-label="Sair da TeleSaúde">Sair da TeleSaúde</a></div>',
- '<div id="hub-nav" class="hub-nav" hidden><button id="hub-back" type="button">← Especialidades</button><span id="hub-step"></span></div>',
+ '<button id="hub-top-back" class="hub-exit" type="button" hidden>← Voltar às especialidades</button></div>',
  '<section id="hub-categories" class="hub-pane" aria-label="Selecionar especialidade">',
  '<label class="hub-search hub-search-global"><span aria-hidden="true">⌕</span><input id="hub-global-query" type="search" autocomplete="off" placeholder="Buscar pelo nome" aria-label="Pesquisar profissional pelo nome"></label>',
  '<div id="hub-global-results" class="hub-list hub-global-results" hidden></div>',
@@ -139,7 +138,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<button type="button" id="hub-shortcut-space">Meu Espaço de Saúde</button>',
  '</div><button type="button" id="hub-native" class="hub-native-full">Chat Médico</button></nav>'
  ].join("");
- const nav=el("hub-nav"),back=el("hub-back"),step=el("hub-step");
+ const topBack=el("hub-top-back");
  const categories=el("hub-categories"),grid=el("hub-category-grid"),note=el("hub-note");
  const globalQuery=el("hub-global-query"),globalResults=el("hub-global-results");
  const chatSearch=el("chat-search-name"),chatResults=el("chat-search-results"),chatShell=el("chat-search-shell");
@@ -156,14 +155,12 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  const say=message=>{feedback.textContent=message||"";};
  function showPane(pane){
    categories.hidden=pane!=="categories";professionals.hidden=pane!=="professionals";profile.hidden=pane!=="profile";
-   nav.hidden=pane==="categories";
+   topBack.hidden=pane==="categories";
    const clinical=pane==="professionals"&&chosenService==="Clínico geral";
    headTitle.textContent=clinical?"Plantão com médico clínico geral adulto e infantil":"Vamos te ajudar a cuidar de você.";
    headSubtitle.textContent=clinical?
      "Atendimento com médicos plantonistas, sem agendamento.":
      "Selecione uma especialidade para conhecer os profissionais.";
-   step.textContent=pane==="profile"?"Conheça o profissional":(chosenService||"");
-   back.textContent=pane==="profile"?"← Voltar aos profissionais":"← Voltar às especialidades";
    dialog.scrollTop=0;
  }
  function renderCategories(){
@@ -464,10 +461,11 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(p)openProfessional(p);
  });
  query.addEventListener("input",renderPeople);
- back.addEventListener("click",()=>{
-   if(!profile.hidden&&profileFromSearch){showPane("categories");globalQuery.focus({preventScroll:true});}
-   else if(!profile.hidden){showPane("professionals");}
-   else {chosenService=null;showPane("categories");}
+ topBack.addEventListener("click",()=>{
+   chosenService=null;
+   showPane("categories");
+   say("");
+   globalQuery.focus({preventScroll:true});
  });
  el("hub-other").addEventListener("click",()=>{
    if(profileFromSearch){showPane("categories");globalQuery.focus({preventScroll:true});}
