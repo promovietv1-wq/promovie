@@ -7,6 +7,7 @@ on:
       - research/inspect-widget.mjs
       - research/inspect-routing.mjs
       - research/inspect-route-deep.mjs
+      - research/inspect-auth-routing.mjs
       - .github/workflows/investigar-widget-publico.yml
   workflow_dispatch:
 
@@ -34,11 +35,13 @@ jobs:
         run: node research/inspect-routing.mjs
       - name: Mapear rotas do modulo principal sem login
         run: node research/inspect-route-deep.mjs
+      - name: Estudar autenticacao e equivalencia das listas no codigo publico
+        run: node research/inspect-auth-routing.mjs
       - name: Guardar resultado somente nesta ramificacao de pesquisa
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add research/widget-navigation-inspection.md research/widget-routing-inspection.md research/widget-routing-deep.md
+          git add research/widget-navigation-inspection.md research/widget-routing-inspection.md research/widget-routing-deep.md research/widget-auth-routing-inspection.md
           if ! git diff --cached --quiet; then
             git commit -m "docs(research): registrar comportamento publico do widget"
             git push origin HEAD:research/mediquo-widget-navigation-20261107
