@@ -15,7 +15,7 @@ async function createPage(width,items){
   const page=await browser.newPage({viewport:{width,height:850}});
   await page.route("https://widget.mediquo.com/js/1.0.0/mediquo.js",route=>route.fulfill({
     status:200,contentType:"application/javascript",
-    body:"window.MediquoWidget={init:async()=>{},open:async()=>{window.__widgetOpens=(window.__widgetOpens||0)+1},navigate:path=>{window.__navigation=path},open_room:id=>{window.__room=id}};"
+    body:"window.MediquoWidget={init:async()=>{window.__widgetInits=(window.__widgetInits||0)+1},open:async()=>{window.__widgetOpens=(window.__widgetOpens||0)+1},navigate:path=>{window.__navigation=path},open_room:id=>{window.__room=id}};"
   }));
   await page.addInitScript(rows=>{
     sessionStorage.setItem("promovie:mediquo:handoff:v1",JSON.stringify({
@@ -49,6 +49,12 @@ async function createPage(width,items){
   await page.goto("http://127.0.0.1:8779/telesaude/atendimento-especialidades-20261107/",{waitUntil:"domcontentloaded"});
   await page.locator("#directory-dialog[open]").waitFor();
   await page.locator(".hub-category").first().waitFor();
+  await page.waitForFunction(()=>window.__widgetInits===1);
+  assert.equal(await page.locator("#directory-title").innerText(),"Vamos te ajudar a cuidar de você.");
+  assert.equal(await page.evaluate(()=>window.__widgetOpens||0),0,
+    "Abertura automática do Chat Médico antes do clique");
+  assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),true);
+  assert.equal(await page.evaluate(()=>document.body.classList.contains("pv-navigation-mode")),true);
   return page;
 }
 try{
@@ -69,7 +75,7 @@ try{
     assert.equal(await page.locator("#hub-shortcut-appointments").innerText(),"Agendamentos");
     assert.equal(await page.locator("#hub-shortcut-space").innerText(),"Meu Espaço de Saúde");
     assert.equal(await page.locator(".hub-shortcuts button").count(),2);
-    await page.waitForFunction(()=>window.__widgetOpens===1);
+    assert.equal(await page.evaluate(()=>window.__widgetOpens||0),0);
     await page.locator("#hub-shortcut-appointments").click();
     await page.locator("#appointments-dialog[open]").waitFor();
     assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
@@ -78,7 +84,7 @@ try{
     // Fechar a agenda deve voltar à seleção, sem abrir a interface médica.
     await page.locator("[data-agenda-close]").click();
     await page.locator("#directory-dialog[open]").waitFor();
-    assert.equal(await page.evaluate(()=>window.__widgetOpens),1);
+    assert.equal(await page.evaluate(()=>window.__widgetOpens||0),0);
     await cards.first().click();
     await page.locator(".hub-clinical-fallback").waitFor();
     assert.equal(await page.locator("#directory-title").innerText(),"Plantão com médico clínico geral adulto e infantil");
@@ -88,7 +94,7 @@ try{
     assert.equal(await page.locator("#hub-native").innerText(),"Chat Médico");
     await page.locator("#hub-native").click();
     await page.waitForFunction(()=>!document.getElementById("directory-dialog").open);
-    assert.ok(await page.evaluate(()=>window.__widgetOpens>=2));
+    assert.equal(await page.evaluate(()=>window.__widgetOpens),1);
     assert.equal(await page.evaluate(()=>window.__navigation||null),null);
     assert.equal(await page.locator("#chat-search-shell").isVisible(),true);
     assert.equal(await page.locator("#chat-search-name").getAttribute("placeholder"),"Buscar pelo nome");
@@ -100,7 +106,7 @@ try{
     {id:"veter-1",name:"Dra. Veterinária",title:"Veterinária"},
     {id:"other-1",name:"Dr. Outra Área",title:"Cardiologia"}
   ]);
-  await navigation.waitForFunction(()=>window.__widgetOpens===1);
+  assert.equal(await navigation.evaluate(()=>window.__widgetOpens||0),0);
   const navCards=navigation.locator("#hub-category-grid .hub-category");
   assert.equal(await navCards.count(),8);
   assert.equal(await navCards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
@@ -126,7 +132,7 @@ try{
   await navigation.locator("#appointments-dialog[open]").waitFor();
   await navigation.locator("#appointments-specialties").click();
   await navigation.locator("#directory-dialog[open]").waitFor();
-  assert.equal(await navigation.evaluate(()=>window.__widgetOpens),1);
+  assert.equal(await navigation.evaluate(()=>window.__widgetOpens||0),0);
   // Entrar no Meu Espaço a partir de uma especialidade e voltar à MESMA lista.
   await navigation.locator("#hub-category-grid .hub-category").nth(7).click();
   await navigation.locator(".space-footer:not([hidden])").waitFor();
@@ -138,12 +144,12 @@ try{
   await navigation.locator("#directory-dialog[open]").waitFor();
   assert.equal(await navigation.locator("#hub-service-title").innerText(),"Pet (cães e gatos)");
   assert.equal(await navigation.locator("#hub-professionals").isVisible(),true);
-  assert.equal(await navigation.evaluate(()=>window.__widgetOpens),1);
+  assert.equal(await navigation.evaluate(()=>window.__widgetOpens||0),0);
   await navigation.locator("#hub-back").click();
   await navigation.locator("#hub-shortcut-appointments").click();
   await navigation.locator("#appointments-dialog[open]").waitFor();
   await navigation.locator("#appointments-chat").click();
-  await navigation.waitForFunction(()=>window.__widgetOpens===2);
+  await navigation.waitForFunction(()=>window.__widgetOpens===1);
   assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
   assert.equal(await navigation.locator("#appointments-dialog").evaluate(el=>el.open),false);
   assert.equal(await navigation.locator("#chat-search-shell").isVisible(),true);
@@ -156,14 +162,26 @@ try{
   await navigation.waitForFunction(()=>document.getElementById("space-embedded").hidden);
   assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
   assert.equal(await navigation.locator("#chat-search-shell").isVisible(),true);
-  assert.equal(await navigation.evaluate(()=>window.__widgetOpens),2);
+  assert.equal(await navigation.evaluate(()=>window.__widgetOpens),1);
   await navigation.locator("#chat-search-name").click();
-  await navigation.locator("#directory-dialog[open]").waitFor();
-  await navigation.locator("#hub-global-query").fill("Veterinária");
-  assert.match(await navigation.locator("#hub-global-results .hub-person").first().innerText(),/Dra. Veterinária/);
-  await navigation.locator("#hub-global-query").fill("");
-  await navigation.locator("#hub-native").click();
-  await navigation.locator("#chat-search-shell").waitFor();
+  assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false,
+    "A busca no Chat Médico não pode abrir a tela de Especialidades");
+  await navigation.locator("#chat-search-name").fill("Veterinária");
+  await navigation.locator("#chat-search-results .chat-search-person").first().waitFor();
+  assert.match(await navigation.locator("#chat-search-results .chat-search-person").first().innerText(),
+    /Dra. Veterinária/);
+  assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
+  await navigation.locator("#chat-search-results .chat-search-person").first().click();
+  assert.match(await navigation.locator("#chat-search-results .chat-inline-profile").innerText(),
+    /Dra. Veterinária/);
+  assert.equal(await navigation.locator("#chat-search-results .chat-inline-profile").isVisible(),true);
+  assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
+  await navigation.locator("#chat-search-results [data-action=back]").click();
+  await navigation.locator("#chat-search-results .chat-search-person").first().click();
+  await navigation.locator("#chat-search-results [data-action=open]").click();
+  await navigation.waitForFunction(()=>window.__navigation==="/professionals/veter-1/room");
+  assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
+  assert.equal(await navigation.locator("#chat-search-results").isVisible(),false);
   await navigation.locator("#directory-open").click();
   await navigation.locator("#directory-dialog[open]").waitFor();
   await navigation.close();
@@ -193,6 +211,8 @@ try{
   await direct.locator("#hub-open").click();
   await direct.waitForFunction(()=>!document.getElementById("directory-dialog").open);
   assert.equal(await direct.evaluate(()=>window.__navigation),"/professionals/professional-123/room");
+  assert.equal(await direct.evaluate(()=>window.__widgetOpens),1,
+    "Ao selecionar um profissional deve abrir o Widget somente naquele momento");
   assert.equal(await direct.evaluate(()=>document.body.classList.contains("pv-navigation-mode")),false);
   await direct.close();
   console.log("Profissional clínico individual: rota original simulada.");
