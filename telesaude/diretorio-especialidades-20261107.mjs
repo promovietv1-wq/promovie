@@ -62,6 +62,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<a class="hub-exit" href="/telesaude/?teste=20261107-especialidades" aria-label="Sair do atendimento">Sair</a></div>',
  '<div id="hub-nav" class="hub-nav" hidden><button id="hub-back" type="button">← Especialidades</button><span id="hub-step"></span></div>',
  '<section id="hub-categories" class="hub-pane" aria-label="Selecionar especialidade">',
+ '<label class="hub-search hub-search-global"><span aria-hidden="true">⌕</span><input id="hub-global-query" type="search" autocomplete="off" placeholder="Buscar pelo nome" aria-label="Pesquisar profissional pelo nome"></label>',
+ '<div id="hub-global-results" class="hub-list hub-global-results" hidden></div>',
  '<div id="hub-category-grid" class="hub-grid"></div><p id="hub-note" class="hub-note"></p></section>',
  '<section id="hub-professionals" class="hub-pane" aria-label="Escolher profissional" hidden>',
  '<div class="hub-section-title"><h3 id="hub-service-title"></h3><p id="hub-service-lead"></p></div>',
@@ -80,6 +82,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  ].join("");
  const nav=el("hub-nav"),back=el("hub-back"),step=el("hub-step");
  const categories=el("hub-categories"),grid=el("hub-category-grid"),note=el("hub-note");
+ const globalQuery=el("hub-global-query"),globalResults=el("hub-global-results"),chatSearch=el("chat-search-name");
  const professionals=el("hub-professionals"),serviceTitle=el("hub-service-title"),serviceLead=el("hub-service-lead");
  const list=el("hub-list"),query=el("hub-query");
  const profile=el("hub-profile"),profileBody=el("hub-profile-body"),open=el("hub-open");
@@ -87,7 +90,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  const appointmentDialog=el("appointments-dialog"),appointmentTrigger=el("appointments-trigger");
  const headTitle=el("directory-title"),headSubtitle=el("hub-subtitle");
  const serviceHead=serviceTitle.parentElement, searchField=query.closest(".hub-search");
- let catalog=[],chosenService=null,chosenPerson=null,loaded=false,busy=false;
+ let catalog=[],chosenService=null,chosenPerson=null,loaded=false,busy=false,profileFromSearch=false;
  let appointmentReturn="specialties";
  const providerService=key=>SERVICES.find(s=>s.key===key)||EXTRA;
  const say=message=>{feedback.textContent=message||"";};
@@ -107,8 +110,6 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    grid.replaceChildren();
    // A grade contém somente especialidades, sem repetir Agendamentos do rodapé.
    const keys=SERVICES.map(s=>s.key);
-   // Não oculta profissionais de outras áreas vinculados ao beneficiário.
-   if(catalog.some(p=>p.category===EXTRA.key))keys.push(EXTRA.key);
    for(const [index,key] of keys.entries()){
      const info=providerService(key);
      const count=catalog.filter(p=>p.category===key).length;
@@ -127,6 +128,32 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    note.textContent=loaded?
      "As modalidades são informativas e podem variar conforme o seu plano e a disponibilidade do profissional.":
      "Consultando os profissionais autorizados para seu acesso...";
+   renderGlobalSearch();
+ }
+ function renderGlobalSearch(){
+   const term=norm(globalQuery.value);
+   grid.hidden=Boolean(term);
+   note.hidden=Boolean(term);
+   globalResults.hidden=!term;
+   globalResults.replaceChildren();
+   if(!term)return;
+   if(!loaded){
+     globalResults.append(node("p","hub-empty","Carregando os profissionais disponíveis..."));
+     return;
+   }
+   const matches=catalog.filter(p=>norm(p.name).includes(term))
+     .sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+   if(!matches.length){
+     globalResults.append(node("p","hub-empty","Nenhum profissional com este nome no catálogo disponível para seu acesso."));
+     return;
+   }
+   for(const p of matches){
+     const item=node("button","hub-person");item.type="button";item.dataset.id=p.id;
+     const copy=node("span","hub-person-copy");
+     copy.append(node("strong",null,p.name),node("small",null,p.title||p.category));
+     item.append(profileAvatar(p,"small"),copy,node("span","hub-person-arrow","Ver perfil ›"));
+     globalResults.append(item);
+   }
  }
  function showGroup(key){
    chosenService=key;chosenPerson=null;query.value="";
@@ -173,7 +200,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      list.append(item);
    }
  }
- function showProfile(p){
+ function showProfile(p,fromSearch=false){
+   profileFromSearch=fromSearch;
    chosenPerson=p;profileBody.replaceChildren();
    const info=providerService(p.category);
    const head=node("div","hub-profile-head");
@@ -191,6 +219,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  function reopen(){
    renderCategories();showPane("categories");say("");
    document.body.classList.add("pv-navigation-mode");
+   document.documentElement.classList.remove("pv-chat-mode");
+   document.getElementById("chat-search-shell")?.setAttribute("hidden","");
    if(!dialog.open)dialog.showModal();
  }
  function openAppointments(){
@@ -227,6 +257,25 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    }
  }
  trigger.hidden=false;trigger.addEventListener("click",reopen);
+ globalQuery.addEventListener("input",renderGlobalSearch);
+ globalResults.addEventListener("click",event=>{
+   const item=event.target.closest("button.hub-person");
+   if(!item)return;
+   const p=catalog.find(person=>person.id===item.dataset.id);
+   if(p)showProfile(p,true);
+ });
+ if(chatSearch){
+   chatSearch.addEventListener("focus",()=>{
+     globalQuery.value=chatSearch.value;
+     reopen();
+     globalQuery.focus({preventScroll:true});
+   });
+   chatSearch.addEventListener("input",()=>{
+     globalQuery.value=chatSearch.value;
+     reopen();
+     globalQuery.focus({preventScroll:true});
+   });
+ }
  grid.addEventListener("click",event=>{
    const card=event.target.closest("button.hub-category");
    if(card)showGroup(card.dataset.key);
@@ -237,18 +286,27 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(p)showProfile(p);
  });
  query.addEventListener("input",renderPeople);
- back.addEventListener("click",()=>{if(!profile.hidden){showPane("professionals");}
-   else {chosenService=null;showPane("categories");}});
- el("hub-other").addEventListener("click",()=>showPane("professionals"));
+ back.addEventListener("click",()=>{
+   if(!profile.hidden&&profileFromSearch){showPane("categories");globalQuery.focus({preventScroll:true});}
+   else if(!profile.hidden){showPane("professionals");}
+   else {chosenService=null;showPane("categories");}
+ });
+ el("hub-other").addEventListener("click",()=>{
+   if(profileFromSearch){showPane("categories");globalQuery.focus({preventScroll:true});}
+   else showPane("professionals");
+ });
  dialog.addEventListener("cancel",e=>{
    e.preventDefault(); // não revelar a lista nativa antes de uma escolha explícita
    if(!profile.hidden)showPane("professionals");
    else if(!professionals.hidden)showPane("categories");
  });
  function openNative(){
-   // Chat Médico somente por uma escolha explícita do beneficiário.
+   // Busca externa ao iframe: só o paciente com acesso vê o catálogo autorizado.
    if(dialog.open)dialog.close();
    document.body.classList.remove("pv-navigation-mode");
+   document.documentElement.classList.add("pv-chat-mode");
+   document.getElementById("chat-search-shell")?.removeAttribute("hidden");
+   if(chatSearch)chatSearch.value="";
    try{if(typeof widget.open==="function")widget.open();}catch{}
  }
  native.addEventListener("click",openNative);
@@ -292,6 +350,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      });
      dialog.close();
      document.body.classList.remove("pv-navigation-mode");
+     document.documentElement.classList.add("pv-chat-mode");
+     document.getElementById("chat-search-shell")?.removeAttribute("hidden");
    }catch{
      say("Não foi possível abrir este profissional. Tente o Chat Médico.");
    }finally{busy=false;open.disabled=false;}

@@ -239,7 +239,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=rodape-duplo-6">
+<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=busca-geral-chat-7">
 </head>
 <body>
 <header class="topbar">
@@ -260,6 +260,13 @@ html body .mediquo-launcher{display:none!important}
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </a>
 </header>
+<section id="chat-search-shell" class="chat-search-shell" aria-label="Pesquisar profissionais no Chat Médico" hidden>
+  <label class="chat-search-bar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
+    <input id="chat-search-name" type="search" placeholder="Buscar pelo nome" autocomplete="off"
+      aria-label="Pesquisar profissional pelo nome no Chat Médico">
+  </label>
+</section>
 <main class="stage" aria-label="Área de atendimentos">
   <section id="status" class="status loading" role="status" aria-live="polite">
     <div class="status-card">
@@ -569,7 +576,7 @@ html body .mediquo-launcher{display:none!important}
       // A interface PromoVie aparece antes de revelar a lista nativa.
       // Mesmo SDK, token, autenticação e conector direto da versão 20261107.
       try{
-        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=rodape-duplo-6");
+        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=busca-geral-chat-7");
         module.initSpecialtyDirectory(widget,handoff.directoryToken,handoff.accessToken);
       }catch{
         const feedback=document.getElementById("directory-feedback");

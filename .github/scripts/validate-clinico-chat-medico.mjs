@@ -43,6 +43,7 @@ try{
       {id:"p01",name:"Psicóloga Exemplo",title:"Psicologia"}
     ]);
     assert.equal(await page.locator("#hub-category-grid .hub-category").count(),8);
+    assert.equal(await page.locator("#hub-global-query").getAttribute("placeholder"),"Buscar pelo nome");
     const cards=page.locator("#hub-category-grid .hub-category");
     assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
     assert.equal(await page.locator("#hub-shortcut-specialties").count(),0);
@@ -63,13 +64,15 @@ try{
     await page.locator(".hub-clinical-fallback").waitFor();
     assert.equal(await page.locator("#directory-title").innerText(),"Plantão com médico clínico geral adulto e infantil");
     assert.match(await page.locator(".hub-clinical-fallback").innerText(),/bolinha verde identifica/);
-    assert.equal(await page.locator(".hub-search").isVisible(),false);
+    assert.equal(await page.locator("#hub-professionals .hub-search").isVisible(),false);
     assert.equal(await page.locator(".hub-section-title").isVisible(),false);
     assert.equal(await page.locator("#hub-native").innerText(),"Chat Médico");
     await page.locator("#hub-native").click();
     await page.waitForFunction(()=>!document.getElementById("directory-dialog").open);
     assert.ok(await page.evaluate(()=>window.__widgetOpens>=2));
     assert.equal(await page.evaluate(()=>window.__navigation||null),null);
+    assert.equal(await page.locator("#chat-search-shell").isVisible(),true);
+    assert.equal(await page.locator("#chat-search-name").getAttribute("placeholder"),"Buscar pelo nome");
     await page.close();
     console.log("Clínico 24h sem lista individual, Chat Médico simulado:",width);
   }
@@ -80,10 +83,19 @@ try{
   ]);
   await navigation.waitForFunction(()=>window.__widgetOpens===1);
   const navCards=navigation.locator("#hub-category-grid .hub-category");
-  assert.equal(await navCards.count(),9);
+  assert.equal(await navCards.count(),8);
   assert.equal(await navCards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
-  assert.equal(await navCards.nth(8).locator("strong").innerText(),"Outras especialidades");
-  assert.equal(await navCards.nth(8).locator(".hub-category-mark").innerText(),"09");
+  assert.equal(await navigation.locator("#hub-category-grid .hub-category", {hasText:"Outras especialidades"}).count(),0);
+  // A especialidade extra deixa de ser um cartão, mas seus profissionais ainda são pesquisáveis.
+  await navigation.locator("#hub-global-query").fill("Outra");
+  await navigation.locator("#hub-global-results .hub-person").first().waitFor();
+  assert.match(await navigation.locator("#hub-global-results .hub-person").first().innerText(),/Dr. Outra Área/);
+  assert.equal(await navigation.locator("#hub-category-grid").isVisible(),false);
+  await navigation.locator("#hub-global-results .hub-person").first().click();
+  assert.match(await navigation.locator("#hub-profile .hub-profile-copy h3").innerText(),/Dr. Outra Área/);
+  await navigation.locator("#hub-back").click();
+  await navigation.locator("#hub-global-query").fill("");
+  assert.equal(await navigation.locator("#hub-category-grid").isVisible(),true);
   assert.equal(await navigation.locator("#hub-shortcut-specialties").count(),0);
   assert.equal(await navigation.locator(".hub-shortcuts button").count(),2);
   await navCards.nth(7).click();
@@ -114,6 +126,14 @@ try{
   await navigation.waitForFunction(()=>window.__widgetOpens===2);
   assert.equal(await navigation.locator("#directory-dialog").evaluate(el=>el.open),false);
   assert.equal(await navigation.locator("#appointments-dialog").evaluate(el=>el.open),false);
+  assert.equal(await navigation.locator("#chat-search-shell").isVisible(),true);
+  await navigation.locator("#chat-search-name").click();
+  await navigation.locator("#directory-dialog[open]").waitFor();
+  await navigation.locator("#hub-global-query").fill("Veterinária");
+  assert.match(await navigation.locator("#hub-global-results .hub-person").first().innerText(),/Dra. Veterinária/);
+  await navigation.locator("#hub-global-query").fill("");
+  await navigation.locator("#hub-native").click();
+  await navigation.locator("#chat-search-shell").waitFor();
   await navigation.locator("#directory-open").click();
   await navigation.locator("#directory-dialog[open]").waitFor();
   await navigation.close();
@@ -125,7 +145,7 @@ try{
     {id:"nutrition-222",name:"Nutri Exemplo",title:"Nutrição"}
   ]);
   await direct.locator("#hub-category-grid .hub-category").first().click();
-  assert.equal(await direct.locator(".hub-search").isVisible(),true);
+  assert.equal(await direct.locator("#hub-professionals .hub-search").isVisible(),true);
   await direct.locator("button.hub-person").first().click();
   assert.equal(await direct.locator("#hub-profile .hub-profile-copy h3").innerText(),"Dr. Teste");
   await direct.locator("#hub-open").click();
