@@ -100,17 +100,20 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  }
  function renderCategories(){
    grid.replaceChildren();
-   const keys=SERVICES.map(s=>s.key);
-   if(catalog.some(p=>p.category===EXTRA.key))keys.push(EXTRA.key);
-   for(const key of keys){
-     const info=providerService(key),count=catalog.filter(p=>p.category===key).length;
+   // Card 09 é um atalho à mesma janela de agendamentos do cabeçalho.
+   // Não cria uma segunda agenda nem altera o SDK ou o catálogo autenticado.
+   const keys=[...SERVICES.map(s=>s.key),"Agendamento"];
+   for(const [index,key] of keys.entries()){
+     const isBooking=key==="Agendamento";
+     const info=isBooking?{desc:"Escolha o profissional e o horário",kind:"Agendar consulta"}:providerService(key);
+     const count=isBooking?0:catalog.filter(p=>p.category===key).length;
      const card=node("button","hub-category");card.type="button";card.dataset.key=key;
-     const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(keys.indexOf(key)+1).padStart(2,"0");
+     const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(index+1).padStart(2,"0");
      const heading=node("strong",null,key),desc=node("small",null,info.desc);
      const meta=node("span","hub-kind",info.kind);
      const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
      card.append(mark,heading,desc,meta,arrow);
-     if(loaded){
+     if(loaded&&!isBooking){
        const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):(key==="Clínico geral"?"Acesso pelo Chat Médico 24h":"Profissionais não listados"));
        card.append(quantity);
      }
@@ -183,7 +186,16 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  function reopen(){renderCategories();showPane("categories");say("");if(!dialog.open)dialog.showModal();}
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  grid.addEventListener("click",event=>{
-   const card=event.target.closest("button.hub-category");if(card)showGroup(card.dataset.key);
+   const card=event.target.closest("button.hub-category");
+   if(!card)return;
+   if(card.dataset.key==="Agendamento"){
+     // Usa o mesmo gatilho já funcional do agendamento do Chat Médico.
+     // Fechar o diretório antes evita empilhar dois dialogs modais.
+     if(dialog.open)dialog.close();
+     document.getElementById("appointments-trigger")?.click();
+     return;
+   }
+   showGroup(card.dataset.key);
  });
  list.addEventListener("click",event=>{
    const item=event.target.closest("button.hub-person");if(!item)return;
