@@ -257,7 +257,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=cards-proporcao-5">
+<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=janela-70pct-6">
 </head>
 <body class="pv-navigation-mode">
 <header class="topbar">
@@ -644,7 +644,7 @@ html body .mediquo-launcher{display:none!important}
       }
     };
     try{
-      const module=await import("/telesaude/diretorio-perfis-20261108.mjs?v=cards-fotos-4");
+      const module=await import("/telesaude/diretorio-perfis-20261108.mjs?v=janela-70pct-6");
       module.initSpecialtyDirectory(medicalBridge,handoff.directoryToken,handoff.accessToken);
       status.hidden=true;
       // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.
