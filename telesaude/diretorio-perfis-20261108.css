@@ -288,7 +288,10 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
 
 /* Apenas o novo teste: fotos e dados profissionais disponibilizados pela Médiquo. */
 .hub-avatar{position:relative}
-.hub-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.hub-avatar .hub-avatar-initials{display:grid;place-items:center;width:100%;height:100%}
+.hub-avatar .hub-avatar-initials[hidden]{display:none!important}
+.hub-avatar img{position:absolute;inset:0;display:block;width:100%;height:100%;
+ object-fit:cover;object-position:center;transition:opacity .15s ease}
 .hub-avatar.photo-ready{background:#e9e5f0}
 .hub-person{min-height:86px}
 .hub-person-copy strong{font-size:13px}
