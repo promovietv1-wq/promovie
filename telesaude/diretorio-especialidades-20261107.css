@@ -186,9 +186,10 @@
  border-radius:50%;background:#13a65d;box-shadow:0 0 0 3px #dff6e9}
 
 /* Navegação independente do Chat Médico: camada visual, sem alterar o SDK. */
-body.pv-navigation-mode .stage::after{
- content:"";position:absolute;inset:0;z-index:20;
- background:#fbf9ff;pointer-events:none;
+body.pv-navigation-mode::before{
+ content:"";position:fixed;
+ top:var(--bar-h);right:0;bottom:var(--space-h);left:0;
+ z-index:1001;background:#fbf9ff;pointer-events:none;
 }
 .agenda-modal .agenda-modal-nav{
  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
