@@ -2,7 +2,7 @@
    Camada de apresentação do experimento 20261107. Nunca modifica o SDK, 
    não reproduz tokens nem envia mensagens clínicas. */
 const SERVICES=[
- {key:"Clínico geral",pattern:/clinico|medicin(a|e) general|general (medic|pract|doctor)|primary care|family medic/,
+ {key:"Clínico geral",pattern:/clinico|medic[oa] (?:geral|generalista|de plantao|da familia)|medicina (?:geral|de familia)|pronto.?atendimento|plantao medico|general (medic|pract|doctor)|primary care|family medic/,
   desc:"Orientação médica on-line",kind:"24 horas · até 10 minutos",detail:"Atendimento 24 horas, todos os dias, sem agendamento."},
  {key:"Psicologia",pattern:/psicolog|psycholog|psicoterap|mental health/,
   desc:"Escuta e saúde mental",kind:"Agendamento",detail:"Atendimento mediante agendamento de horário."},
@@ -104,7 +104,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
      card.append(mark,heading,desc,meta,arrow);
      if(loaded){
-       const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):"Sem profissionais nesta categoria");
+       const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):(key==="Clínico geral"?"Acesso pelo Chat Médico 24h":"Profissionais não listados"));
        card.append(quantity);
      }
      grid.append(card);
@@ -126,7 +126,19 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      list.append(node("p","hub-empty","Carregando os profissionais disponíveis..."));return;
    }
    if(!filtered.length){
-     list.append(node("p","hub-empty",query.value?"Nenhum profissional corresponde a esta pesquisa.":"Não encontramos profissionais desta especialidade para o seu acesso."));
+     if(chosenService==="Clínico geral"&&!query.value){
+       const box=node("div","hub-empty hub-clinical-fallback");
+       box.append(node("strong","hub-fallback-title","Clínico geral 24h"),
+         node("p",null,"Os nomes dos plantonistas não vieram no catálogo personalizado. Você pode iniciar pelo Chat Médico."));
+       const direct=node("button","hub-clinical-native","Abrir Chat Médico 24h");
+       direct.type="button";direct.addEventListener("click",openNative);
+       box.append(direct,node("small","hub-fallback-note","Na plataforma, escolha Clínico geral para iniciar seu atendimento."));
+       list.append(box);
+     }else{
+       list.append(node("p","hub-empty",query.value?
+         "Nenhum profissional corresponde a esta pesquisa.":
+         "Nenhum profissional foi listado nesta especialidade para o seu acesso."));
+     }
      return;
    }
    filtered.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
@@ -173,13 +185,13 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(!profile.hidden)showPane("professionals");
    else if(!professionals.hidden)showPane("categories");
  });
- native.addEventListener("click",()=>{
-   dialog.close();
-   // Alternativa opcional: a própria Médiquo administra a seleção.
-   try{if(typeof widget.open_list==="function")widget.open_list();
-     else if(typeof widget.open==="function")widget.open();
-   }catch{}
- });
+ function openNative(){
+   // Mantém a sessão em funcionamento. open_list() é caixa de mensagens,
+   // não um seletor de profissionais. A interface nativa já foi inicializada.
+   if(dialog.open)dialog.close();
+   try{if(typeof widget.open==="function")widget.open();}catch{}
+ }
+ native.addEventListener("click",openNative);
  open.addEventListener("click",()=>{
    if(!chosenPerson||busy)return;
    busy=true;open.disabled=true;say("Abrindo o atendimento de "+chosenPerson.name+"...");
