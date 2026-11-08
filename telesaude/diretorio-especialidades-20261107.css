@@ -213,3 +213,42 @@ body.pv-navigation-mode::before{
  .agenda-modal .agenda-modal-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
  .agenda-modal .agenda-modal-nav #appointments-chat{grid-column:1/-1}
 }
+
+/* Pesquisa geral da PromoVie: não toca nem lê o iframe da Médiquo. */
+.hub-dialog .hub-search-global{margin:0 0 18px;width:100%;max-width:none}
+.hub-dialog .hub-global-results[hidden]{display:none!important}
+.hub-dialog .hub-global-results{margin:0 0 8px}
+.hub-dialog .hub-grid[hidden],.hub-dialog .hub-note[hidden]{display:none!important}
+/* Quando o paciente ESCOLHE o Chat Médico, há uma pesquisa por nome acima
+   do widget. Ajustamos somente os limites do contêiner externo. */
+.chat-search-shell[hidden]{display:none!important}
+.chat-search-shell{
+ position:fixed;top:var(--bar-h);left:0;right:0;z-index:2147483635;
+ display:flex;align-items:center;justify-content:center;
+ height:54px;padding:5px max(12px,env(safe-area-inset-right)) 5px max(12px,env(safe-area-inset-left));
+ border-bottom:1px solid #e5d8f3;background:#faf7ff;
+}
+.chat-search-bar{
+ display:flex;align-items:center;gap:8px;width:min(1180px,100%);
+ height:43px;padding:0 12px;border:1px solid #d6c3eb;border-radius:11px;
+ background:#fff;color:#6b38a4;
+}
+.chat-search-bar svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;
+ stroke-linecap:round;fill:none;flex:none}
+.chat-search-bar input{
+ flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;
+ font:500 13px/1.35 Inter,Arial,sans-serif;color:#302349
+}
+.chat-search-bar:focus-within{border-color:#955acb;box-shadow:0 0 0 2px #eadaff}
+/* Limitamos a faixa à busca quando o usuário realmente entra no chat.
+   O SDK e a sala continuam sem alterações funcionais. */
+html.pv-chat-mode body .stage{top:calc(var(--bar-h) + 54px)}
+html.pv-chat-mode body #MediquoContainer,
+html.pv-chat-mode body .MediquoContainer,
+html.pv-chat-mode body #mediquo-container,
+html.pv-chat-mode body .mediquo-container,
+html.pv-chat-mode body [id^="MediquoContainer"],
+html.pv-chat-mode body [class~="MediquoContainer"]{
+ top:calc(var(--bar-h) + 54px)!important;
+ height:calc(100dvh - var(--bar-h) - var(--space-h) - 54px)!important
+}
