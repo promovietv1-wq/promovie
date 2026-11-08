@@ -558,3 +558,83 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
   font-size:10px;
  }
 }
+
+
+/* Janela de Especialidades 30% mais estreita que a anterior (1160 -> 812px).
+   Mantém largura útil em smartphones para não prejudicar a leitura. */
+.hub-dialog{
+ width:min(812px,calc(100vw - 24px));
+ max-width:812px;
+}
+.hub-dialog .hub-head{
+ padding:19px clamp(14px,2.4vw,25px) 18px;
+ gap:12px;
+}
+.hub-dialog .hub-head h2{
+ font-size:clamp(20px,2.7vw,26px);
+ margin:6px 0 6px;
+}
+.hub-dialog .hub-head p{font-size:12px}
+.hub-dialog #hub-categories{
+ padding:14px clamp(12px,2.4vw,22px) 10px;
+}
+.hub-dialog #hub-categories .hub-search-global{
+ margin-bottom:12px;
+}
+.hub-dialog #hub-categories .hub-search-global input{
+ min-height:40px;
+}
+.hub-dialog #hub-categories .hub-grid{
+ gap:10px;
+}
+.hub-dialog #hub-categories .hub-category.hub-category-photo{
+ border-radius:16px;
+}
+.hub-dialog #hub-categories .hub-category-photo .hub-category-body{
+ min-height:83px;
+ padding:9px 9px 10px;
+ gap:4px;
+}
+.hub-dialog #hub-categories .hub-category-photo .hub-category-body strong{
+ font-size:12px;
+}
+.hub-dialog #hub-categories .hub-category-photo .hub-category-body small{
+ font-size:10px;
+}
+.hub-dialog #hub-categories .hub-category-photo .hub-category-body .hub-kind{
+ font-size:9px;
+ padding:4px 7px;
+}
+.hub-dialog #hub-categories .hub-category-photo .hub-category-body .hub-count{
+ font-size:9px;
+}
+.hub-dialog .hub-note{margin-top:10px}
+.hub-dialog .hub-footer{
+ padding:10px clamp(12px,2.4vw,22px) 13px;
+ gap:7px;
+ margin-top:5px;
+}
+.hub-dialog .hub-shortcuts button{min-height:36px;font-size:11px}
+.hub-dialog .hub-footer .hub-native-full{min-height:36px;font-size:12px}
+.hub-dialog .hub-head #hub-top-back{
+ font-size:11px;
+ padding:7px 10px;
+ min-height:35px;
+ text-align:center;
+ max-width:180px;
+}
+@media(max-width:540px){
+ .hub-dialog{width:calc(100vw - 16px);max-width:calc(100vw - 16px)}
+ .hub-dialog .hub-head{padding:17px 14px}
+ .hub-dialog .hub-head h2{font-size:21px}
+ .hub-dialog #hub-categories{padding:13px 12px 10px}
+ .hub-dialog #hub-categories .hub-category-photo .hub-category-body{
+  min-height:88px;
+  padding:10px 12px 11px;
+ }
+ .hub-dialog #hub-categories .hub-category-photo .hub-category-body strong{font-size:13px}
+ .hub-dialog #hub-categories .hub-category-photo .hub-category-body small{font-size:11px}
+ .hub-dialog #hub-categories .hub-category-photo .hub-category-body .hub-kind,
+ .hub-dialog #hub-categories .hub-category-photo .hub-category-body .hub-count{font-size:10px}
+ .hub-dialog .hub-head #hub-top-back{max-width:135px;font-size:10px}
+}
