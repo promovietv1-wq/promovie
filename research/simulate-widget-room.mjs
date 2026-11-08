@@ -41,7 +41,11 @@ try{
   await page.addScriptTag({url:"https://widget.mediquo.com/js/1.0.0/mediquo.js",timeout:20000});
   const init=await page.evaluate(()=>Promise.race([
     window.MediquoWidget.init({
-      apiKey:"FAKE-PUBLIC-KEY-FOR-LAB",accessToken:"FAKE-SDK-TOKEN-LAB-ONLY",
+      apiKey:"FAKE-PUBLIC-KEY-FOR-LAB",accessToken:[
+        Buffer.from(JSON.stringify({alg:"none",typ:"JWT"})).toString("base64url"),
+        Buffer.from(JSON.stringify({sub:"test-patient-01",iat:1700000000,exp:4102444800,hash:"test-patient-01"})).toString("base64url"),
+        "simulated-signature"
+      ].join("."),
       adapter:"web",environment:"production",show:"always",isMobileView:true,
       theme:{launcher:"hidden",locale:"pt"}
     }).then(()=>"resolved",e=>"rejected: "+String(e).slice(0,130)),
