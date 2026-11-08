@@ -16,7 +16,7 @@ const SERVICES=[
   desc:"Cuidados com a pele",kind:"Agendamento",detail:"Verifique os horários de agendamento disponíveis."},
  {key:"Ginecologia",pattern:/ginecol|gynecol|gynaecol/,
   desc:"Saúde e cuidado da mulher",kind:"Até 10 min · em horário disponível",detail:"Atendimento em horários específicos, conforme disponibilidade."},
- {key:"Veterinária",pattern:/veterinar|veterinary/,
+ {key:"Pet (cães e gatos)",pattern:/veterinar|veterinary/,
   desc:"Orientação de saúde para pets",kind:"Consultar disponibilidade",detail:"Consulte o atendimento e os horários disponíveis."}
 ];
 const EXTRA={key:"Outras especialidades",desc:"Outros serviços autorizados",kind:"Consultar disponibilidade",detail:"Veja os profissionais disponíveis para este acesso."};
@@ -73,7 +73,11 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<button id="hub-other" class="hub-secondary" type="button">Ver outros profissionais</button>',
  '</div></section>',
  '<p id="hub-feedback" class="hub-feedback" role="status" aria-live="polite"></p>',
- '<div class="hub-footer"><button type="button" id="hub-native">Chat Médico</button></div>'
+ '<nav class="hub-footer" aria-label="Navegação da TeleSaúde"><div class="hub-shortcuts">',
+ '<button type="button" id="hub-shortcut-specialties">Especialidades</button>',
+ '<button type="button" id="hub-shortcut-appointments">Agendamentos</button>',
+ '<button type="button" id="hub-shortcut-space">Meu Espaço de Saúde</button>',
+ '</div><button type="button" id="hub-native" class="hub-native-full">Chat Médico</button></nav>'
  ].join("");
  const nav=el("hub-nav"),back=el("hub-back"),step=el("hub-step");
  const categories=el("hub-categories"),grid=el("hub-category-grid"),note=el("hub-note");
@@ -81,9 +85,11 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  const list=el("hub-list"),query=el("hub-query");
  const profile=el("hub-profile"),profileBody=el("hub-profile-body"),open=el("hub-open");
  const feedback=el("hub-feedback"),native=el("hub-native");
+ const appointmentDialog=el("appointments-dialog"),appointmentTrigger=el("appointments-trigger");
  const headTitle=el("directory-title"),headSubtitle=el("hub-subtitle");
  const serviceHead=serviceTitle.parentElement, searchField=query.closest(".hub-search");
  let catalog=[],chosenService=null,chosenPerson=null,loaded=false,busy=false;
+ let appointmentReturn="specialties";
  const providerService=key=>SERVICES.find(s=>s.key===key)||EXTRA;
  const say=message=>{feedback.textContent=message||"";};
  function showPane(pane){
@@ -100,17 +106,21 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  }
  function renderCategories(){
    grid.replaceChildren();
-   const keys=SERVICES.map(s=>s.key);
+   // O cartão 09 abre o agendamento já existente, sem criar novo serviço.
+   const keys=[...SERVICES.map(s=>s.key),"Agendamento"];
+   // Preserva acesso a profissionais reais de outras categorias, quando houver.
    if(catalog.some(p=>p.category===EXTRA.key))keys.push(EXTRA.key);
-   for(const key of keys){
-     const info=providerService(key),count=catalog.filter(p=>p.category===key).length;
+   for(const [index,key] of keys.entries()){
+     const booking=key==="Agendamento";
+     const info=booking?{desc:"Escolha um horário para sua consulta",kind:"Agendar consulta"}:providerService(key);
+     const count=booking?0:catalog.filter(p=>p.category===key).length;
      const card=node("button","hub-category");card.type="button";card.dataset.key=key;
-     const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(keys.indexOf(key)+1).padStart(2,"0");
+     const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(index+1).padStart(2,"0");
      const heading=node("strong",null,key),desc=node("small",null,info.desc);
      const meta=node("span","hub-kind",info.kind);
      const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
      card.append(mark,heading,desc,meta,arrow);
-     if(loaded){
+     if(loaded&&!booking){
        const quantity=node("span","hub-count",count?count+" "+(count===1?"profissional":"profissionais"):(key==="Clínico geral"?"Acesso pelo Chat Médico 24h":"Profissionais não listados"));
        card.append(quantity);
      }
@@ -180,10 +190,50 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    showPane("profile");
    open.focus({preventScroll:true});
  }
- function reopen(){renderCategories();showPane("categories");say("");if(!dialog.open)dialog.showModal();}
+ function reopen(){
+   renderCategories();showPane("categories");say("");
+   document.body.classList.add("pv-navigation-mode");
+   if(!dialog.open)dialog.showModal();
+ }
+ function openAppointments(){
+   if(dialog.open)dialog.close();
+   appointmentReturn="specialties";
+   document.body.classList.add("pv-navigation-mode");
+   if(appointmentTrigger)appointmentTrigger.click();
+ }
+ function openMySpace(){
+   const link=document.querySelector(".space-entry");
+   const footer=document.querySelector(".space-footer");
+   if(!link||!footer||footer.hidden){
+     const target=appointmentDialog?.open?el("appointments-space-feedback"):feedback;
+     if(target)target.textContent="Meu Espaço de Saúde não está disponível para este acesso.";
+     return;
+   }
+   if(dialog.open)dialog.close();
+   if(appointmentDialog?.open){
+     appointmentReturn="space";
+     appointmentDialog.close();
+   }
+   document.body.classList.remove("pv-navigation-mode");
+   // Reaproveita o acesso protegido já instalado: sem duplicar ou transmitir tokens.
+   link.click();
+   const embedded=el("space-embedded");
+   if(embedded&&!embedded.hidden){
+     const observer=new MutationObserver(()=>{
+       if(embedded.hidden){observer.disconnect();reopen();}
+     });
+     observer.observe(embedded,{attributes:true,attributeFilter:["hidden"]});
+   }else{
+     // O Meu Espaço abre em uma aba própria. A página de origem permanece nas especialidades.
+     requestAnimationFrame(()=>{if(!dialog.open&&!appointmentDialog?.open)reopen();});
+   }
+ }
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  grid.addEventListener("click",event=>{
-   const card=event.target.closest("button.hub-category");if(card)showGroup(card.dataset.key);
+   const card=event.target.closest("button.hub-category");
+   if(!card)return;
+   if(card.dataset.key==="Agendamento"){openAppointments();return;}
+   showGroup(card.dataset.key);
  });
  list.addEventListener("click",event=>{
    const item=event.target.closest("button.hub-person");if(!item)return;
@@ -200,12 +250,35 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    else if(!professionals.hidden)showPane("categories");
  });
  function openNative(){
-   // Mantém a sessão em funcionamento. open_list() é caixa de mensagens,
-   // não um seletor de profissionais. A interface nativa já foi inicializada.
+   // Chat Médico somente por uma escolha explícita do beneficiário.
    if(dialog.open)dialog.close();
+   document.body.classList.remove("pv-navigation-mode");
    try{if(typeof widget.open==="function")widget.open();}catch{}
  }
  native.addEventListener("click",openNative);
+ el("hub-shortcut-specialties").addEventListener("click",reopen);
+ el("hub-shortcut-appointments").addEventListener("click",openAppointments);
+ el("hub-shortcut-space").addEventListener("click",openMySpace);
+ // Fechar Agendamentos devolve às Especialidades, nunca ao chat de forma involuntária.
+ if(appointmentDialog){
+   appointmentDialog.addEventListener("close",()=>{
+     const destination=appointmentReturn;
+     appointmentReturn="specialties";
+     if(destination==="chat"||destination==="space")return;
+     requestAnimationFrame(reopen);
+   });
+   el("appointments-specialties")?.addEventListener("click",()=>appointmentDialog.close());
+   el("appointments-space")?.addEventListener("click",openMySpace);
+   el("appointments-chat")?.addEventListener("click",()=>{
+     appointmentReturn="chat";
+     appointmentDialog.close();
+     openNative();
+   });
+ }
+ // No Chat Médico, os atalhos superiores seguem independentes.
+ appointmentTrigger?.addEventListener("click",()=>{
+   document.body.classList.add("pv-navigation-mode");
+ },{capture:true});
  open.addEventListener("click",()=>{
    if(!chosenPerson||busy)return;
    busy=true;open.disabled=true;say("Abrindo o atendimento de "+chosenPerson.name+"...");
@@ -223,6 +296,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
        say("Não foi possível confirmar a abertura. Você pode usar Chat Médico.");
      });
      dialog.close();
+     document.body.classList.remove("pv-navigation-mode");
    }catch{
      say("Não foi possível abrir este profissional. Tente o Chat Médico.");
    }finally{busy=false;open.disabled=false;}

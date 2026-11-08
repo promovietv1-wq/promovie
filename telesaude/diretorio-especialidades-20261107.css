@@ -116,15 +116,22 @@
  font-size:12px;color:#6a319f;line-height:1.45}
 .hub-feedback:empty{display:none}
 .hub-footer{
- padding:17px clamp(18px,4vw,40px) 20px;margin-top:9px;
- border-top:1px solid #ece5f5;display:flex;align-items:center;justify-content:space-between;gap:15px
+ padding:15px clamp(18px,4vw,40px) 19px;margin-top:9px;
+ border-top:1px solid #ece5f5;display:flex;flex-direction:column;gap:10px;
 }
-.hub-footer button{display:flex;align-items:center;justify-content:center;width:100%;
- border:1px solid #4b0c8f;border-radius:12px;
- background:#4b0c8f;color:#fff;padding:12px 16px;min-height:46px;
- font-weight:800;font-size:13px;letter-spacing:.01em}
-.hub-footer button:hover{background:#3d0977}
-.hub-footer span{color:#81768b;font-size:10px;line-height:1.45;text-align:right}
+.hub-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.hub-shortcuts button{
+ display:flex;align-items:center;justify-content:center;text-align:center;
+ min-height:42px;padding:8px 10px;border:1px solid #cfc0e8;border-radius:10px;
+ background:#fff;color:#4b267d;font-size:12px;font-weight:800;line-height:1.3;
+}
+.hub-shortcuts button:hover{border-color:#a58ac9;background:#f5effd}
+.hub-footer .hub-native-full{
+ display:flex;align-items:center;justify-content:center;width:100%;
+ min-height:40px;padding:9px 16px;border:1px solid #4b0c8f;border-radius:10px;
+ background:#4b0c8f;color:#fff;font-size:13px;font-weight:800;letter-spacing:.01em;
+}
+.hub-footer .hub-native-full:hover{background:#39086e}
 @media(max-width:860px){.hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){
  .clinic-tools{gap:6px}
@@ -177,3 +184,33 @@
  gap:9px;flex-wrap:wrap;color:#4d4260}
 .hub-clinical-fallback .hub-online-dot{display:inline-block;flex:none;width:11px;height:11px;
  border-radius:50%;background:#13a65d;box-shadow:0 0 0 3px #dff6e9}
+
+/* Navegação independente do Chat Médico: camada visual, sem alterar o SDK. */
+body.pv-navigation-mode::before{
+ content:"";position:fixed;
+ top:var(--bar-h);right:0;bottom:var(--space-h);left:0;
+ z-index:1001;background:#fbf9ff;pointer-events:none;
+}
+.agenda-modal .agenda-modal-nav{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+ padding-top:15px;margin-top:17px;border-top:1px solid #e5ddf1;
+}
+.agenda-modal .agenda-modal-nav button{
+ display:flex;align-items:center;justify-content:center;min-height:43px;
+ padding:9px 7px;text-align:center;font-size:11px;font-weight:800;
+ color:#4b217f;background:#fff;border:1px solid #d5c6e8;border-radius:10px;
+ cursor:pointer;line-height:1.35;
+}
+.agenda-modal .agenda-modal-nav button:hover{background:#f3ebfd}
+.agenda-modal .agenda-modal-nav #appointments-chat{
+ background:#4b0c8f;color:#fff;border-color:#4b0c8f;
+}
+.agenda-modal .agenda-modal-nav #appointments-chat:hover{background:#39086e}
+.agenda-modal .agenda-modal-nav-feedback{font-size:11px;color:#79449f;margin:9px 0 0}
+.agenda-modal .agenda-modal-nav-feedback:empty{display:none}
+@media(max-width:480px){
+ .hub-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hub-shortcuts #hub-shortcut-space{grid-column:1/-1}
+ .agenda-modal .agenda-modal-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .agenda-modal .agenda-modal-nav #appointments-chat{grid-column:1/-1}
+}
