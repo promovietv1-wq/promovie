@@ -30,8 +30,8 @@ function harness(){
     TELESAUDE_V3_SYNC_TOKEN:"SIMULATED-SESSION-PEPPER-123456789"
   }};
 }
-function req(grant,token=sdkToken,originHeader=origin){
-  return new Request("https://backend.promovie.tv.br/api/promovie/directory/v1/catalog",{
+function req(grant,token=sdkToken,originHeader=origin,profile=false){
+  return new Request("https://backend.promovie.tv.br/api/promovie/directory/v1/"+(profile?"catalog-profile":"catalog"),{
     method:"POST",headers:{Origin:originHeader,"Content-Type":"application/json",Authorization:"Bearer "+grant},
     body:JSON.stringify({sdk_access_token:token})
   });
@@ -127,4 +127,47 @@ test("Profissionais retornados sem is_available são preservados e perfis são s
   assert.deepEqual(data[1],{id:"safe-3",name:"Dra. Ana",title:"Psicologia",status:null});
   assert.ok(!JSON.stringify(data).includes("PRIVADO"));
   assert.ok(!JSON.stringify(data).includes("<script>"));
+});
+
+
+test("Perfil público expandido usa mesma autorização e conserva o catálogo anterior intacto",async()=>{
+  const {env}=harness(),grant=await issueDirectoryGrant(env,"owner",accessHash,sdkToken);
+  const previous=globalThis.fetch;let calls=0;
+  globalThis.fetch=async(url,options)=>{
+    calls++;
+    assert.equal(url,"https://sdk.mediquo.com/v1/professionals");
+    assert.equal(options.headers.Authorization,"Bearer "+sdkToken);
+    return Response.json({data:[
+      {hash:"doctor-01",name:"Dra. Alicia Rodrigues",title:"Psicologia",
+       description:"Psicóloga clínica. Trabalho com terapia do esquema e autoconhecimento. ".repeat(12),
+       avatar:"/public/doctor-01.jpg",collegiate_number:"CRP-04/77069",status:"online",
+       languages:["Português"],is_available:true,
+       private_notes:"DADO SENSIVEL",room:{messages:["NAO EXPORTAR"]}},
+      {hash:"doctor-02",name:"Dr. Restrito",title:"Psicologia",is_available:false},
+      {hash:"doctor-03",name:"Dr. Sem imagem",title:"Dermatologia",
+       avatar:"https://tracker.example.org/photo.jpg",
+       description:"Atendimento dermatológico."}
+    ]});
+  };
+  try{
+    assert.equal((await handleDirectory(req("A".repeat(43),sdkToken,origin,true),env)).status,401);
+    assert.equal((await handleDirectory(req(grant,"OTHER-USER-FAKE-SDK-EXAMPLE",origin,true),env)).status,401);
+    assert.equal((await handleDirectory(req(grant,sdkToken,"https://attacker.example",true),env)).status,403);
+    const r=await handleDirectory(req(grant,sdkToken,origin,true),env);
+    assert.equal(r.status,200);
+    const data=await r.json();
+    assert.equal(data.items.length,2);
+    assert.equal(data.items[0].avatar,"https://api.mediquo.com/public/doctor-01.jpg");
+    assert.equal(data.items[0].collegiate_number,"CRP-04/77069");
+    assert.ok(data.items[0].description.length>500);
+    assert.deepEqual(data.items[0].languages,["Português"]);
+    assert.equal(data.items[1].avatar,undefined);
+    assert.ok(!JSON.stringify(data).includes("DADO SENSIVEL"));
+    assert.ok(!JSON.stringify(data).includes("NAO EXPORTAR"));
+    const legacy=await (await handleDirectory(req(grant),env)).json();
+    assert.equal(legacy.items[0].collegiate_number,undefined);
+    assert.equal(legacy.items[0].avatar,undefined);
+    assert.equal(legacy.items[0].description.length,500);
+    assert.equal(calls,2);
+  }finally{globalThis.fetch=previous;}
 });
