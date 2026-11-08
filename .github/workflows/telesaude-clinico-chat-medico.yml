@@ -1,0 +1,39 @@
+name: TeleSaúde - Clínico geral e Chat Médico
+on:
+  push:
+    branches:
+      - main
+      - fix/clinico-geral-fallback-chat-medico-20261108
+    paths:
+      - 'telesaude/diretorio-especialidades-20261107.mjs'
+      - 'telesaude/diretorio-especialidades-20261107.css'
+      - 'telesaude/atendimento-especialidades-20261107/**'
+      - '.github/scripts/validate-clinico-chat-medico.mjs'
+      - '.github/workflows/telesaude-clinico-chat-medico.yml'
+  pull_request:
+    paths:
+      - 'telesaude/diretorio-especialidades-20261107.mjs'
+      - 'telesaude/diretorio-especialidades-20261107.css'
+      - '.github/scripts/validate-clinico-chat-medico.mjs'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe do módulo
+        run: node --check telesaude/diretorio-especialidades-20261107.mjs
+      - name: Preparar navegador de teste
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar encaminhamento clínico sem sessão real
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/clinico-lab.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-clinico-chat-medico.mjs
