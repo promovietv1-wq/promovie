@@ -42,8 +42,8 @@ try{
   const init=await page.evaluate(()=>Promise.race([
     window.MediquoWidget.init({
       apiKey:"FAKE-PUBLIC-KEY-FOR-LAB",accessToken:[
-        Buffer.from(JSON.stringify({alg:"none",typ:"JWT"})).toString("base64url"),
-        Buffer.from(JSON.stringify({sub:"test-patient-01",iat:1700000000,exp:4102444800,hash:"test-patient-01"})).toString("base64url"),
+        btoa(JSON.stringify({alg:"none",typ:"JWT"})).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""),
+        btoa(JSON.stringify({sub:"test-patient-01",iat:1700000000,exp:4102444800,hash:"test-patient-01"})).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""),
         "simulated-signature"
       ].join("."),
       adapter:"web",environment:"production",show:"always",isMobileView:true,
