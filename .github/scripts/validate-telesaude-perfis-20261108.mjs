@@ -15,7 +15,10 @@ assert.match(portal,/atendimento-perfis-20261108/);
 assert.doesNotMatch(original,/diretorio-perfis-20261108/);
 assert.doesNotMatch(current,/diretorio-perfis-20261108/);
 assert.doesNotMatch(normal,/diretorio-perfis-20261108/);
-assert.match(profiles,/\/professionals\/"\+encodeURIComponent\(chosenPerson.id\)\+"\/room"/);
+assert.match(profiles,/\/professionals\/"\+encodeURIComponent\(p.id\)\+"\/room"/);
+assert.match(profiles,/Abrir no Chat Médico ›/);
+assert.doesNotMatch(profiles,/if\(p\)showProfile\(p\)/);
+assert.doesNotMatch(profiles,/if\(p\)showChatProfile\(p\)/);
 
 const fakeProfiles=[
  {id:"p-psicologia-01",name:"Alicia Rodrigues",title:"Psicologia",
@@ -71,45 +74,40 @@ try{
    await alice.locator(".hub-avatar.photo-ready img").waitFor();
    assert.equal(await alice.locator(".hub-avatar img").getAttribute("alt"),"Foto de Alicia Rodrigues");
    assert.equal(await page.evaluate(()=>window.__sdkOpen||0),0);
+   assert.equal(await alice.locator(".hub-person-arrow").innerText(),"Abrir no Chat Médico ›");
    await alice.click();
-   await page.locator("#hub-profile").waitFor();
-   assert.match(await page.locator("#hub-profile .hub-profile-description").innerText(),/terapia do esquema/);
-   assert.match(await page.locator("#hub-profile .pv-profile-data").innerText(),/CRP-04\/77069/);
-   await page.locator("#hub-profile .hub-avatar.photo-ready img").waitFor();
-   assert.equal(await page.evaluate(()=>window.__sdkOpen||0),0);
-   const button=page.locator("#hub-open");
-   assert.match(await button.innerText(),/Acessar atendimento com Alicia Rodrigues/);
-   await button.click();
    await page.waitForFunction(()=>window.__sdkRoute==="/professionals/p-psicologia-01/room");
    assert.equal(await page.evaluate(()=>window.__sdkOpen),1);
+   assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
+   assert.equal(await page.locator("#hub-profile").isVisible(),false);
    await page.close();
-   console.log("Foto oficial, descrição e registro antes de chamar conversa:",width);
+   console.log("Foto e clique direto no profissional sem prévia intermediária:",width);
  }
  const page=await setup(390);
+ await page.locator("#hub-global-query").fill("Ana Paula");
+ const general=page.locator("#hub-global-results .hub-person").first();
+ await general.waitFor();
+ assert.equal(await page.evaluate(()=>window.__sdkOpen||0),0);
+ await general.click();
+ await page.waitForFunction(()=>window.__sdkRoute==="/professionals/p-nutricao-02/room");
+ assert.equal(await page.evaluate(()=>window.__sdkOpen),1);
+ assert.equal(await page.locator("#hub-profile").isVisible(),false);
+ await page.locator("#directory-open").click();
+ await page.locator("#directory-dialog[open]").waitFor();
  await page.locator("#hub-native").click();
- await page.waitForFunction(()=>window.__sdkOpen===1);
+ assert.equal(await page.evaluate(()=>window.__sdkOpen),1);
  await page.locator("#chat-search-name").fill("Alicia");
  const search=page.locator("#chat-search-results");
  await search.locator(".chat-search-person").first().waitFor();
- await search.locator(".chat-search-person").first().click();
- await search.locator(".chat-inline-profile .hub-avatar.photo-ready img").waitFor();
- assert.match(await search.locator(".chat-inline-summary").innerText(),/terapia do esquema/);
- assert.match(await search.locator(".pv-profile-data").innerText(),/CRP-04\/77069/);
- assert.equal(await page.evaluate(()=>window.__sdkOpen),1);
  assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
- await search.locator("[data-action=open]").click();
+ await search.locator(".chat-search-person").first().click();
  await page.waitForFunction(()=>window.__sdkRoute==="/professionals/p-psicologia-01/room");
  assert.equal(await page.evaluate(()=>window.__sdkOpen),1);
- await page.locator("#directory-open").click();
- await page.locator("#directory-dialog[open]").waitFor();
- await page.locator("#hub-global-query").fill("Ana Clara");
- await page.locator("#hub-global-results .hub-person").first().click();
- assert.match(await page.locator("#hub-profile .hub-profile-description").innerText(),
- /Não conseguimos carregar a descrição/);
- assert.equal(await page.locator("#hub-profile .hub-avatar img").count(),0);
+ assert.equal(await search.isVisible(),false);
+ assert.equal(await page.locator("#hub-profile").isVisible(),false);
  await page.close();
- console.log("Busca inline, perfil sem biografia e inicial como fallback: OK.");
+ console.log("Busca geral e busca inline abriram conversa diretamente, sem tela intermediária.");
 }finally{
  await browser.close();
 }
-console.log("Novo laboratório aprovado com dados fictícios. Nenhum paciente real foi consultado.");
+console.log("Fluxo de clique direto verificado com SDK simulado. Atendimento real não foi verificado.");
