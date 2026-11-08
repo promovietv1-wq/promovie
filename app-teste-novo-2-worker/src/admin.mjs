@@ -1,7 +1,6 @@
 // Painel privado PromoVie | Cloudflare D1.
 // Cadastro administrativo não é prontuário. Não armazenar dados clínicos.
 import {sendAccessEmail,emailDeliveryEnabled} from './access-email.mjs';
-import {issueDirectoryGrant} from './directory.mjs';
 const PREFIX='/api/promovie/admin/v1';
 const COOKIE='__Host-pv_admin';
 const SESSION_TTL=60*60; // 1 hora
@@ -229,10 +228,7 @@ export async function handleBeneficiaryAccess(request,env,cors={}){
     if(!auth.ok||typeof token!=='string'||!token)
       return reply(502,{error:'Não foi possível iniciar o atendimento agora.'},cors);
     await db.prepare('DELETE FROM pv_access_attempts WHERE actor_hash=?').bind(actor).run();
-    // Diretório opcional: falhas ou ausência de catálogo nunca impedem o atendimento.
-    const directoryToken=await issueDirectoryGrant(env,record.id,submittedHash);
-    return reply(200,{access_token:token,apiKey:val(env,'MEDIQUO_V3_WIDGET_API_KEY'),
-      environment:'production',...(directoryToken?{directory_token:directoryToken}:{})},cors);
+    return reply(200,{access_token:token,apiKey:val(env,'MEDIQUO_V3_WIDGET_API_KEY'),environment:'production'},cors);
   }catch(e){
     const status=[400,413,415].includes(e?.status)?e.status:502;
     return reply(status,{error:'Não foi possível concluir a autenticação.'},cors);
