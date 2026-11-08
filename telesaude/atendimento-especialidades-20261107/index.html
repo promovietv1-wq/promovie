@@ -563,7 +563,7 @@ html body .mediquo-launcher{display:none!important}
       // A interface PromoVie aparece antes de revelar a lista nativa.
       // Mesmo SDK, token, autenticação e conector direto da versão 20261107.
       try{
-        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=plantao-texto-4");
+        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=agendamento-09-5");
         module.initSpecialtyDirectory(widget,handoff.directoryToken,handoff.accessToken);
       }catch{
         const feedback=document.getElementById("directory-feedback");
