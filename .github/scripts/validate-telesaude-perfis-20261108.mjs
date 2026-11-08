@@ -80,7 +80,7 @@ async function setup(width){
  return page;
 }
 try{
- for(const width of [375,1280]){
+ for(const width of [375,900,1280]){
    const page=await setup(width);
    const cards=page.locator("#hub-category-grid .hub-category");
    assert.equal(await cards.count(),8);
@@ -97,7 +97,15 @@ try{
    assert.equal(await cards.nth(7).locator(".hub-pet-detail").evaluate(el=>getComputedStyle(el).fontWeight),"400");
    assert.equal(await cards.nth(4).locator(".hub-kind").innerText(),"Até 10 min · em horário disponível");
    assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector(".hub-category-image")).objectFit),"cover");
-   assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector(".hub-grid")).gridTemplateColumns.split(" ").length),width>=700?4:2);
+   const expectedColumns=width>=1091?4:width>=746?3:width>=541?2:1;
+   assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector(".hub-grid")).gridTemplateColumns.split(" ").length),expectedColumns);
+   const picture=await cards.first().locator(".hub-category-image").boundingBox();
+   const tile=await cards.first().boundingBox();
+   assert.ok(picture&&tile,"Imagem e card precisam aparecer em tamanho calculável");
+   assert.ok(Math.abs(picture.width/picture.height-16/9)<0.08,
+     "Imagem da especialidade deve permanecer horizontal, 16:9, sem distorção");
+   assert.ok(tile.width/tile.height>=0.92,
+     "O card não pode ficar excessivamente alto ou estreito");
    await cards.nth(1).click();
    assert.equal(await page.locator("#hub-professionals .hub-person").count(),2);
    const alice=page.locator("#hub-professionals .hub-person").filter({hasText:"Alicia Rodrigues"}).first();
@@ -113,6 +121,9 @@ try{
    await page.close();
    console.log("Foto e clique direto no profissional sem prévia intermediária:",width);
  }
+ const tablet=await setup(700);
+ assert.equal(await tablet.evaluate(()=>getComputedStyle(document.querySelector(".hub-grid")).gridTemplateColumns.split(" ").length),2);
+ await tablet.close();
  const tiny=await setup(320);
  assert.equal(await tiny.locator(".hub-category-photo .hub-category-image").count(),8);
  assert.equal(await tiny.evaluate(()=>getComputedStyle(document.querySelector(".hub-grid")).gridTemplateColumns.split(" ").length),1);
