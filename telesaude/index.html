@@ -922,7 +922,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   const ACCESS="/api/promovie/access/v1";
   const directoryTest=new URLSearchParams(location.search).get("teste")==="profissionais";
   const legacyDirectoryTest=new URLSearchParams(location.search).get("teste")==="anterior";
-  if(directoryTest||legacyDirectoryTest)document.getElementById("directory-test-login").hidden=false;
+  const originalWorkingTest=new URLSearchParams(location.search).get("teste")==="20261107";
+  if(directoryTest||legacyDirectoryTest||originalWorkingTest)document.getElementById("directory-test-login").hidden=false;
   const SPACE="/api/promovie/space/v1";
   const button=document.getElementById("install-now");
   const accessForm=document.getElementById("access-form");
@@ -1060,7 +1061,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     try{
       const response=await fetch(BACKEND_URL+ACCESS+"/session",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify((directoryTest||legacyDirectoryTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
+        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
         cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
       const result=await getJson(response);
@@ -1091,7 +1092,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           accessToken:result.access_token,
           environment:result.environment,
           createdAt:Date.now(),
-          ...((directoryTest||legacyDirectoryTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
+          ...((directoryTest||legacyDirectoryTest||originalWorkingTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
             {directoryToken:result.directory_token}:{}),
           ...(spaceBootstrap?{spaceBootstrap}:{})
         }));
@@ -1103,6 +1104,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           window.location.assign("/telesaude/atendimento-anterior/");
         }else if(directoryTest){
           window.location.assign("/telesaude/atendimento-teste/");
+        }else if(originalWorkingTest){
+          window.location.assign("/telesaude/atendimento-20261107/");
         }else{
           window.location.assign("/telesaude/atendimento/");
         }
