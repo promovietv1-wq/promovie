@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - feature/homologacao-profissionais-20261107
+      - feature/homologacao-especialidades-20261108
     paths:
       - 'telesaude/index.html'
       - 'telesaude/atendimento-teste/**'
