@@ -239,6 +239,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
+<link rel="stylesheet" href="/telesaude/especialidades.css?v=20261108-1">
 </head>
 <body>
 <header class="topbar">
@@ -249,6 +250,7 @@ html body .mediquo-launcher{display:none!important}
     </div>
   </div>
   <div class="clinic-tools">
+    <button type="button" id="pv-specialties-toggle" class="pv-specialties-toggle" aria-label="Abrir especialidades" aria-expanded="false" aria-controls="pv-specialties" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="pv-specialties-toggle-label">Especialidades</span></button>
     <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos</button>
   </div>
   <a class="back" href="/telesaude/" id="back-access" aria-label="Sair e voltar ao acesso" title="Sair">
@@ -265,6 +267,38 @@ html body .mediquo-launcher{display:none!important}
     </div>
   </section>
 </main>
+<section id="pv-specialties" class="pv-specialties" hidden aria-labelledby="pv-specialties-title">
+  <div class="pv-specialties-inner">
+    <p class="pv-specialties-kicker">Médicos e especialistas</p>
+    <div id="pv-specialties-intro" class="pv-specialties-intro">
+      <h1 id="pv-specialties-title" tabindex="-1">Como podemos cuidar de você?</h1>
+      <p class="pv-specialties-lead">Escolha a especialidade para encontrar o atendimento de que precisa.</p>
+    </div>
+    <div id="pv-specialties-grid" class="pv-specialties-grid" aria-label="Especialidades disponíveis"></div>
+    <section id="pv-specialties-detail" class="pv-specialties-detail" aria-label="Detalhes da especialidade" hidden>
+      <button type="button" class="pv-detail-back" id="pv-detail-back">‹ Voltar às especialidades</button>
+      <div class="pv-detail-card">
+        <div class="pv-detail-head">
+          <span id="pv-detail-icon" class="pv-detail-icon" aria-hidden="true"></span>
+          <div>
+            <h2 id="pv-detail-name" tabindex="-1"></h2>
+            <p class="pv-detail-subtitle">TeleSaúde PromoVie</p>
+          </div>
+        </div>
+        <span id="pv-detail-type" class="pv-detail-pill"></span>
+        <p id="pv-detail-text" class="pv-detail-copy"></p>
+        <p class="pv-detail-notice">Os nomes, as fotos e a disponibilidade dos profissionais são apresentados no aplicativo oficial da Médiquo. Após abrir, escolha esta especialidade na lista da Médiquo. Esta tela ainda não filtra automaticamente os profissionais.</p>
+        <div class="pv-detail-actions">
+          <button type="button" id="pv-to-widget" class="pv-detail-primary">Ver profissionais na Médiquo</button>
+        </div>
+      </div>
+    </section>
+    <div class="pv-specialties-bottom">
+      <button id="pv-original-list" type="button" class="pv-specialties-original">Ver lista tradicional de profissionais</button>
+    </div>
+    <p class="pv-specialties-footnote">Disponibilidade, modalidade e prazos de atendimento conforme as condições do serviço.</p>
+  </div>
+</section>
 <nav class="space-footer" hidden aria-label="Acesso ao Meu Espaço de Saúde">
   <a class="space-entry" href="/telesaude/meu-espaco/?atendimento=aberto" target="_blank" rel="opener" referrerpolicy="no-referrer"
      aria-label="Abrir Meu Espaço de Saúde em outra aba, sem encerrar o atendimento">
@@ -307,6 +341,7 @@ html body .mediquo-launcher{display:none!important}
   </section>
 </dialog>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
+<script defer src="/telesaude/especialidades.js?v=20261108-1"></script>
 <script>
 (function(){
   "use strict";
@@ -536,6 +571,11 @@ html body .mediquo-launcher{display:none!important}
       if(typeof widget.open!=="function")throw new Error("Não foi possível abrir a interface de atendimento.");
       await Promise.resolve(widget.open());
       status.hidden=true;
+      // A nova apresentação é independente. Se falhar, o SDK original segue disponível.
+      if(window.PromoVieSpecialties?.init)window.PromoVieSpecialties.init();
+      else document.addEventListener("promovie:specialties-loaded",function(){
+        window.PromoVieSpecialties?.init();
+      },{once:true});
     }catch{
       errorState("Não conseguimos carregar a TeleSaúde nesta página. Retorne ao acesso e tente novamente.");
     }
