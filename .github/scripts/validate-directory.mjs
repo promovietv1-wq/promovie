@@ -20,7 +20,7 @@ try{
       window.__calls=[];
       window.fetch=async()=>Response.json({available:true,items:entries});
       const module=await import("/telesaude/diretorio.mjs");
-      return module.initDirectory({open_room(id){window.__calls.push(id);}}, "A".repeat(43));
+      return module.initDirectory({open_room(id){window.__calls.push(id);}}, "A".repeat(43), "TEST-VENDOR-PATIENT-TOKEN-12345");
     },mock);
     assert.equal(enabled,true);
     assert.equal(await page.locator("#directory-open").isVisible(),true);
@@ -50,7 +50,7 @@ try{
   await page.goto("http://127.0.0.1:8767/telesaude/atendimento/",{waitUntil:"domcontentloaded"});
   const activated=await page.evaluate(async()=>{
     window.fetch=async()=>Response.json({available:false,items:[]});
-    return (await import("/telesaude/diretorio.mjs")).initDirectory({open_room(){}}, "A".repeat(43));
+    return (await import("/telesaude/diretorio.mjs")).initDirectory({open_room(){}}, "A".repeat(43), "TEST-VENDOR-PATIENT-TOKEN-12345");
   });
   assert.equal(activated,false);
   assert.equal(await page.locator("#directory-open").isHidden(),true,"Não mostrar busca vazia");

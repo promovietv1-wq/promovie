@@ -230,7 +230,7 @@ export async function handleBeneficiaryAccess(request,env,cors={}){
       return reply(502,{error:'Não foi possível iniciar o atendimento agora.'},cors);
     await db.prepare('DELETE FROM pv_access_attempts WHERE actor_hash=?').bind(actor).run();
     // Diretório opcional: falhas ou ausência de catálogo nunca impedem o atendimento.
-    const directoryToken=await issueDirectoryGrant(env,record.id,submittedHash);
+    const directoryToken=await issueDirectoryGrant(env,record.id,submittedHash,token);
     return reply(200,{access_token:token,apiKey:val(env,'MEDIQUO_V3_WIDGET_API_KEY'),
       environment:'production',...(directoryToken?{directory_token:directoryToken}:{})},cors);
   }catch(e){

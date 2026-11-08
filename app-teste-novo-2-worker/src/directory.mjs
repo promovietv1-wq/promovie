@@ -1,121 +1,111 @@
-// Diretório PromoVie: leitura do catálogo MediQuo SDK por sessão pessoal autenticada.
-// Não altera o widget, pacientes, licenças, conversas ou tokens SDK.
-const PREFIX="/api/promovie/directory/v1";
-const SESSION_SECONDS=20*60;
-const LIMIT=120;
-const encoder=new TextEncoder();
-const configured=env=>String(env.PROMOVIE_DIRECTORY_ENABLED||"")==="true"&&
+// Prototipo isolado: lista ELEGIVEL por paciente, exatamente a mesma usada no Widget.
+// Nunca guardar tokens SDK, prontuarios ou mensagens; consulta somente GET /professionals.
+const PREFIX="/api/promovie/directory/v1",MAX=160,SESSION_SECONDS=15*60;
+const enc=new TextEncoder();
+function setting(env,k){return typeof env[k]==="string"?env[k].trim():"";}
+function ready(env){return setting(env,"PROMOVIE_DIRECTORY_ENABLED")==="true"&&
   Boolean(env.PROMOVIE_BENEFICIARIOS_DB?.prepare)&&
-  String(env.MEDIQUO_V3_PLAN||"")==="345"&&
-  String(env.MEDIQUO_V3_BASE_URL||"").replace(/\/+$/,"")==="https://sdk.mediquo.com/v1"&&
-  String(env.MEDIQUO_V3_WIDGET_API_KEY||"").length>0&&
-  String(env.MEDIQUO_V3_SDK_SECRET_KEY||"").length>0&&
-  String(env.TELESAUDE_V3_SYNC_TOKEN||"").length>=24;
+  setting(env,"MEDIQUO_V3_PLAN")==="345"&&
+  setting(env,"MEDIQUO_V3_BASE_URL").replace(/\/+$/,"")==="https://sdk.mediquo.com/v1"&&
+  !!setting(env,"MEDIQUO_V3_WIDGET_API_KEY")&&setting(env,"TELESAUDE_V3_SYNC_TOKEN").length>=24;}
 const reply=(status,body,cors={})=>new Response(JSON.stringify(body),{status,headers:{
   "Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store, max-age=0",
   "X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer",
   "Content-Security-Policy":"default-src 'none'",...cors}});
-function b64(bytes){
-  let v="";for(const byte of bytes)v+=String.fromCharCode(byte);
-  return btoa(v).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
-}
-async function sha(value){
-  return [...new Uint8Array(await crypto.subtle.digest("SHA-256",encoder.encode(value)))]
-    .map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-async function tokenHash(env,token){
-  return sha("PromoVie|DiretorioProfissionais|v1|"+token+"|"+env.TELESAUDE_V3_SYNC_TOKEN);
-}
+function b64(bytes){let s="";for(const b of bytes)s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+async function sha(s){return [...new Uint8Array(await crypto.subtle.digest("SHA-256",enc.encode(s)))]
+  .map(x=>x.toString(16).padStart(2,"0")).join("");}
+async function grantHash(env,token){return sha("PromoVie|Directory|v2|"+token+"|"+env.TELESAUDE_V3_SYNC_TOKEN);}
+async function sdkHash(env,token){return sha("PromoVie|DirectorySDK|v2|"+token+"|"+env.TELESAUDE_V3_SYNC_TOKEN);}
 let schemaReady=false;
-async function schema(db){
+async function ensureSchema(db){
   if(schemaReady)return;
-  await db.exec(
-    "CREATE TABLE IF NOT EXISTS pv_directory_sessions ("+
-      "token_hash TEXT PRIMARY KEY,beneficiario_id TEXT NOT NULL,"+
-      "access_hash TEXT NOT NULL,expires_at INTEGER NOT NULL);\n"+
-    "CREATE INDEX IF NOT EXISTS idx_pv_directory_exp ON pv_directory_sessions(expires_at);"
-  );
+  await db.exec("CREATE TABLE IF NOT EXISTS pv_directory_sessions_v2 ("+
+    "token_hash TEXT PRIMARY KEY,beneficiario_id TEXT NOT NULL,"+
+    "access_hash TEXT NOT NULL,sdk_hash TEXT NOT NULL,expires_at INTEGER NOT NULL);\n"+
+    "CREATE INDEX IF NOT EXISTS idx_pv_directory_v2_exp ON pv_directory_sessions_v2(expires_at);");
   schemaReady=true;
 }
-// Chamado somente após validação do código individual e do paciente SDK ativo.
-export async function issueDirectoryGrant(env,beneficiaryId,accessHash){
-  if(!configured(env)||typeof beneficiaryId!=="string"||!beneficiaryId||
-    !/^[a-f0-9]{64}$/.test(accessHash||""))return null;
+function validSdkToken(t){return typeof t==="string"&&t.length>=24&&t.length<=4096&&
+  !/[\s<>"']/g.test(t);}
+export async function issueDirectoryGrant(env,beneficiaryId,accessHash,sdkToken){
+  if(!ready(env)||typeof beneficiaryId!=="string"||!beneficiaryId||
+    !/^[a-f0-9]{64}$/.test(accessHash||"")||!validSdkToken(sdkToken))return null;
   try{
-    const db=env.PROMOVIE_BENEFICIARIOS_DB;
-    await schema(db);
-    const bytes=crypto.getRandomValues(new Uint8Array(32)),token=b64(bytes);
-    const now=Math.floor(Date.now()/1000);
-    await db.prepare("INSERT INTO pv_directory_sessions (token_hash,beneficiario_id,access_hash,expires_at) VALUES (?,?,?,?)")
-      .bind(await tokenHash(env,token),beneficiaryId,accessHash,now+SESSION_SECONDS).run();
+    const db=env.PROMOVIE_BENEFICIARIOS_DB;await ensureSchema(db);
+    const token=b64(crypto.getRandomValues(new Uint8Array(32)));
+    await db.prepare("INSERT INTO pv_directory_sessions_v2 "+
+      "(token_hash,beneficiario_id,access_hash,sdk_hash,expires_at) VALUES (?,?,?,?,?)")
+      .bind(await grantHash(env,token),beneficiaryId,accessHash,
+        await sdkHash(env,sdkToken),Math.floor(Date.now()/1000)+SESSION_SECONDS).run();
     return token;
-  }catch{
-    // O diretório é opcional: nunca interromper a sessão clínica.
-    return null;
-  }
+  }catch{return null;}
 }
-function cleanText(value,max=120){
-  return typeof value==="string"?value.trim().replace(/\s+/g," ").slice(0,max):"";
-}
-function normalizeCatalogue(data){
-  let list=data;
-  for(let i=0;i<4&&!Array.isArray(list);i++){
+function text(s){return typeof s==="string"?s.trim().replace(/\s+/g," "):"";}
+export function projectPatientProfessionals(payload){
+  let list=payload;
+  for(let i=0;i<3&&!Array.isArray(list);i++){
     if(!list||typeof list!=="object")return [];
-    list=list.data??list.consultants??list.professionals??list.items??null;
+    list=list.data??list.professionals??list.items??null;
   }
   if(!Array.isArray(list))return [];
-  const found=new Set(),out=[];
-  for(const person of list.slice(0,LIMIT*3)){
-    if(!person||typeof person!=="object"||Array.isArray(person))continue;
-    const id=String(person.hash??person.professional_id??"");
-    const name=cleanText(person.name,90);
-    if(!/^[A-Za-z0-9_-]{1,128}$/.test(id)||name.length<2||/[<>]/.test(name)||found.has(id))continue;
-    found.add(id);
-    const title=cleanText(person.title??person.speciality?.name??person.specialty?.name??"",90);
-    const status=person.status==="online"?"online":person.status==="offline"?"offline":null;
-    out.push({id,name,title,specialityId:String(person.speciality_id??"").slice(0,30),status});
-    if(out.length>=LIMIT)break;
+  const ids=new Set(),out=[];
+  for(const p of list.slice(0,MAX*3)){
+    if(!p||typeof p!=="object"||p.is_available!==true)continue;
+    const hash=text(p.hash),name=text(p.name),title=text(p.title);
+    if(!/^[A-Za-z0-9_-]{1,128}$/.test(hash)||ids.has(hash)||
+      name.length<2||name.length>90||/[<>]/.test(name)||
+      title.length>90||/[<>]/.test(title))continue;
+    ids.add(hash);
+    out.push({id:hash,name,title,
+      status:p.status==="online"?"online":p.status==="offline"?"offline":null});
+    if(out.length>=MAX)break;
   }
   return out;
 }
 export async function handleDirectory(request,env,cors={}){
-  const url=new URL(request.url),path=url.pathname;
-  // Defesa contra solicitações fora do portal, independente do CORS superior.
-  const origin=request.headers.get("Origin")||"";
-  if(!String(env.ALLOWED_ORIGINS||"").split(",").map(s=>s.trim()).includes(origin))
+  const url=new URL(request.url);
+  const o=request.headers.get("Origin")||"";
+  if(!setting(env,"ALLOWED_ORIGINS").split(",").map(x=>x.trim()).includes(o))
     return reply(403,{error:"Origem não autorizada."},cors);
-  if(path!==PREFIX+"/catalog"||request.method!=="GET")
+  if(url.pathname!==PREFIX+"/catalog"||request.method!=="POST")
     return reply(404,{error:"Rota não encontrada."},cors);
-  if(!configured(env))return reply(503,{available:false},cors);
-  const token=(request.headers.get("Authorization")||"").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
-  if(!token)return reply(401,{error:"Sessão não autorizada."},cors);
+  if(!ready(env))return reply(503,{available:false},cors);
+  const grant=(request.headers.get("Authorization")||"").match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];
+  if(!grant)return reply(401,{error:"Acesso não autorizado."},cors);
+  if(!/^application\/json(?:\s*;|$)/i.test(request.headers.get("Content-Type")||""))
+    return reply(415,{error:"Formato inválido."},cors);
   try{
-    const db=env.PROMOVIE_BENEFICIARIOS_DB;
-    await schema(db);
-    const key=await tokenHash(env,token),now=Math.floor(Date.now()/1000);
+    const content=await request.text();
+    if(content.length>5000)return reply(413,{error:"Requisição grande demais."},cors);
+    const token=JSON.parse(content)?.sdk_access_token;
+    if(!validSdkToken(token))return reply(401,{error:"Acesso não autorizado."},cors);
+    const db=env.PROMOVIE_BENEFICIARIOS_DB;await ensureSchema(db);
     const row=await db.prepare(
-      "SELECT s.access_hash,c.code_hash,p.code_hash AS pending_hash "+
-      "FROM pv_directory_sessions s JOIN pv_beneficiarios b ON b.id=s.beneficiario_id "+
+      "SELECT s.sdk_hash,s.access_hash,c.code_hash,p.code_hash AS pending_hash "+
+      "FROM pv_directory_sessions_v2 s "+
+      "JOIN pv_beneficiarios b ON b.id=s.beneficiario_id "+
       "LEFT JOIN pv_access_codes c ON c.beneficiario_id=b.id "+
       "LEFT JOIN pv_access_codes_pending p ON p.beneficiario_id=b.id "+
       "WHERE s.token_hash=? AND s.expires_at>? AND b.situacao='ativo' AND b.plano='345'"
-    ).bind(key,now).first();
-    if(!row||(!row.code_hash&&!row.pending_hash)||
-      (row.access_hash!==row.code_hash&&row.access_hash!==row.pending_hash))
+    ).bind(await grantHash(env,grant),Math.floor(Date.now()/1000)).first();
+    if(!row||(row.access_hash!==row.code_hash&&row.access_hash!==row.pending_hash)||
+      row.sdk_hash!==await sdkHash(env,token))
       return reply(401,{error:"Sessão não autorizada."},cors);
-    const response=await fetch("https://sdk.mediquo.com/v1/consultants",{
+    // Replicar SOMENTE a chamada GET que o próprio Widget Web faz para o paciente.
+    const r=await fetch("https://sdk.mediquo.com/v1/professionals",{
       method:"GET",headers:{
-        "X-API-Key":String(env.MEDIQUO_V3_WIDGET_API_KEY),
-        "X-Secret-Key":String(env.MEDIQUO_V3_SDK_SECRET_KEY),
-        "Accept":"application/json"
-      },signal:AbortSignal.timeout(8000)
+        "X-API-Key":setting(env,"MEDIQUO_V3_WIDGET_API_KEY"),
+        "Authorization":"Bearer "+token,
+        "Accept-Language":"pt","Content-Type":"application/json"
+      },signal:AbortSignal.timeout(9000)
     });
-    if(!response.ok)return reply(503,{available:false},cors);
-    const length=Number(response.headers.get("Content-Length")||0);
-    if(length>300000)return reply(502,{available:false},cors);
-    const raw=await response.text();
-    if(raw.length>300000)return reply(502,{available:false},cors);
-    const items=normalizeCatalogue(JSON.parse(raw));
+    if(!r.ok)return reply(503,{available:false},cors);
+    if(Number(r.headers.get("Content-Length")||0)>350000)return reply(502,{available:false},cors);
+    const raw=await r.text();
+    if(raw.length>350000)return reply(502,{available:false},cors);
+    const items=projectPatientProfessionals(JSON.parse(raw));
     return reply(200,{available:items.length>0,items},cors);
   }catch{return reply(503,{available:false},cors);}
 }

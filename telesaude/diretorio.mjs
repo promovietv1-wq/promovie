@@ -23,9 +23,10 @@ function validPerson(x){
     typeof x.name==="string"&&x.name.trim().length>1&&x.name.length<=90&&
     typeof x.title==="string"&&x.title.length<=90;
 }
-export async function initDirectory(widget,grant){
+export async function initDirectory(widget,grant,sdkToken){
   if(!widget||typeof widget.open_room!=="function"||
-    typeof grant!=="string"||!/^[A-Za-z0-9_-]{43}$/.test(grant))return false;
+    typeof grant!=="string"||!/^[A-Za-z0-9_-]{43}$/.test(grant)||
+    typeof sdkToken!=="string"||sdkToken.length<24||sdkToken.length>4096)return false;
   const trigger=document.getElementById("directory-open");
   const dialog=document.getElementById("directory-dialog");
   const query=document.getElementById("directory-query");
@@ -37,7 +38,9 @@ export async function initDirectory(widget,grant){
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),9000);
   try{
-    const response=await fetch(BASE,{method:"GET",headers:{Authorization:"Bearer "+grant},
+    const response=await fetch(BASE,{method:"POST",
+      headers:{Authorization:"Bearer "+grant,"Content-Type":"application/json"},
+      body:JSON.stringify({sdk_access_token:sdkToken}),
       cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer",signal:controller.signal});
     if(!response.ok)return false;
     const data=await response.json();

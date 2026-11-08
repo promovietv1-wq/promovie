@@ -563,7 +563,7 @@ html body .mediquo-launcher{display:none!important}
          typeof widget.open_room==="function"){
         try{
           const module=await import("/telesaude/diretorio.mjs?v=20261107-1");
-          await module.initDirectory(widget,handoff.directoryToken);
+          await module.initDirectory(widget,handoff.directoryToken,handoff.accessToken);
         }catch{/* Nenhum erro do diretório deve afetar a consulta. */}
       }
     }catch{
