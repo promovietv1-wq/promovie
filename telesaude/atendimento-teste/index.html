@@ -239,7 +239,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-teste.css?v=20261107-2">
+<link rel="stylesheet" href="/telesaude/diretorio-teste.css?v=20261108-etapas-1">
 </head>
 <body>
 <header class="topbar">
@@ -250,9 +250,9 @@ html body .mediquo-launcher{display:none!important}
     </div>
   </div>
   <div class="clinic-tools">
-    <button type="button" class="directory-open" id="directory-open" aria-label="Pesquisar profissionais" title="Pesquisar profissionais" aria-haspopup="dialog" aria-controls="directory-dialog" hidden>
+    <button type="button" class="directory-open" id="directory-open" aria-label="Ver especialidades" title="Ver especialidades" aria-haspopup="dialog" aria-controls="directory-dialog" hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
-      <span>Profissionais</span>
+      <span>Especialidades</span>
     </button>
     <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos</button>
   </div>
@@ -313,24 +313,27 @@ html body .mediquo-launcher{display:none!important}
 </dialog>
 <dialog class="directory-dialog" id="directory-dialog" aria-labelledby="directory-title">
   <div class="directory-head">
-    <div>
-      <h2 id="directory-title">Teste de busca por profissionais</h2>
-      <p>Lista real do seu acesso, organizada por especialidade.</p>
+    <div class="directory-headings">
+      <span class="directory-kicker">TELESAÚDE PROMOVIE | AMBIENTE DE TESTES</span>
+      <h2 id="directory-title" tabindex="-1">Escolha uma especialidade</h2>
+      <p id="directory-subtitle">Encontre o cuidado que você precisa.</p>
     </div>
-    <button type="button" class="directory-close" id="directory-close" aria-label="Fechar">×</button>
+    <button type="button" class="directory-close" id="directory-close" aria-label="Fechar e mostrar a Médiquo">×</button>
   </div>
-  <label class="directory-search">
+  <button type="button" id="directory-back" class="directory-back" hidden>‹ Voltar às especialidades</button>
+  <label class="directory-search" id="directory-search-wrap" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
-    <input type="search" id="directory-query" aria-label="Nome ou especialidade" placeholder="Nome ou especialidade" autocomplete="off">
+    <input type="search" id="directory-query" aria-label="Buscar profissional" placeholder="Buscar pelo nome do profissional" autocomplete="off">
   </label>
-  <p class="test-explanation">Ambiente experimental. Nenhum profissional é simulado. A conversa só será considerada confirmada após um sinal do widget da Médiquo.</p>
-  <div id="directory-results" class="directory-results"></div>
+  <div id="directory-results" class="directory-results" aria-live="off"></div>
   <p id="directory-feedback" class="directory-feedback" role="status" aria-live="polite"></p>
-  <button type="button" id="directory-alternative" class="directory-alternative" hidden>Tentar abertura alternativa</button>
+  <button type="button" id="directory-alternative" class="directory-alternative" hidden>Tentar outra forma de abrir a conversa</button>
+  <div class="directory-bottom">
+    <button type="button" id="directory-show-widget" class="directory-show-widget">Ver lista original da Médiquo</button>
+    <button type="button" id="directory-copy-status" class="directory-copy-status">Copiar diagnóstico</button>
+  </div>
   <p id="directory-diagnostics" class="directory-diagnostics"></p>
-  <button type="button" id="directory-copy-status" class="directory-copy-status">Copiar diagnóstico</button>
-  <a class="test-normal-link" href="/telesaude/">Voltar ao acesso normal</a>
-  <p class="directory-hint">A consulta e os agendamentos continuam sob responsabilidade da Médiquo. Esta página não envia mensagens automaticamente.</p>
+  <p class="directory-hint">Somente profissionais retornados para sua sessão pela Médiquo. A área de teste não envia mensagens, não realiza agendamentos e não altera o atendimento original.</p>
 </dialog>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
@@ -564,7 +567,7 @@ html body .mediquo-launcher{display:none!important}
       status.hidden=true;
       // Camada isolada de homologação; nunca bloqueia a consulta nem altera o SDK.
       try{
-        const module=await import("/telesaude/diretorio-teste.mjs?v=20261107-2");
+        const module=await import("/telesaude/diretorio-teste.mjs?v=20261108-etapas-1");
         await module.initDirectory(widget,handoff.directoryToken,handoff.accessToken);
       }catch{
         const trigger=document.getElementById("directory-open");
