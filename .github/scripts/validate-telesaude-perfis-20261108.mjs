@@ -30,12 +30,28 @@ const fakeProfiles=[
   avatar:"",status:"offline"},
  {id:"p-psicologia-03",name:"Ana Clara Vieira",title:"Psicologia",description:"",avatar:""}
 ];
+const originalCategoryImages=[
+ "00b6385598f04689b78e7cee1297814d",
+ "9f18304381da41df9cd6b4de3296510a",
+ "ed9bfd930b8a40bcb7a2ba19653a8848",
+ "4167b1bf6d6241abbd0c2284024de025",
+ "4165a6f5bdea484ca54cbce4ac2d42ba",
+ "f20e162c4a874ff8b7f77c37f2f27e07",
+ "89eb9cace0394a9783156d5c9d3e05c1",
+ "332637580c72430295e77ea81c0d6e2a"
+];
 const browser=await chromium.launch({headless:true});
 async function setup(width){
  const page=await browser.newPage({viewport:{width,height:850}});
  await page.route("https://widget.mediquo.com/js/1.0.0/mediquo.js",r=>r.fulfill({
    status:200,contentType:"application/javascript",
    body:"window.MediquoWidget={init:async()=>{window.__sdkInit=(window.__sdkInit||0)+1},open:async()=>{window.__sdkOpen=(window.__sdkOpen||0)+1},navigate:path=>{window.__sdkRoute=path}};"
+ }));
+ // Fotografias ilustrativas retiradas da página principal PromoVie.
+ // Fazemos mock apenas no navegador de CI, mantendo o código de produção intacto.
+ await page.route("https://static.wixstatic.com/media/**",r=>r.fulfill({
+   status:200,contentType:"image/gif",
+   body:Buffer.from("R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==","base64")
  }));
  await page.route("https://api.mediquo.com/profile/test.svg",r=>r.fulfill({
    status:200,contentType:"image/svg+xml",
@@ -68,6 +84,20 @@ try{
    const page=await setup(width);
    const cards=page.locator("#hub-category-grid .hub-category");
    assert.equal(await cards.count(),8);
+   assert.equal(await page.locator(".hub-category-photo .hub-category-image").count(),8);
+   for(let i=0;i<8;i++){
+     const card=cards.nth(i);
+     const image=card.locator(".hub-category-image");
+     assert.match(await image.getAttribute("src"),new RegExp(originalCategoryImages[i]));
+     assert.equal(await image.getAttribute("alt"),"");
+     assert.equal(await card.locator(".hub-category-body").count(),1);
+     assert.equal(await card.locator(".hub-category-mark").count(),1);
+   }
+   assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
+   assert.equal(await cards.nth(7).locator(".hub-pet-detail").evaluate(el=>getComputedStyle(el).fontWeight),"400");
+   assert.equal(await cards.nth(4).locator(".hub-kind").innerText(),"Até 10 min · em horário disponível");
+   assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector(".hub-category-image")).objectFit),"cover");
+   assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector(".hub-grid")).gridTemplateColumns.split(" ").length),width>=700?4:2);
    await cards.nth(1).click();
    assert.equal(await page.locator("#hub-professionals .hub-person").count(),2);
    const alice=page.locator("#hub-professionals .hub-person").filter({hasText:"Alicia Rodrigues"}).first();
@@ -83,6 +113,10 @@ try{
    await page.close();
    console.log("Foto e clique direto no profissional sem prévia intermediária:",width);
  }
+ const tiny=await setup(320);
+ assert.equal(await tiny.locator(".hub-category-photo .hub-category-image").count(),8);
+ assert.equal(await tiny.evaluate(()=>getComputedStyle(document.querySelector(".hub-grid")).gridTemplateColumns.split(" ").length),1);
+ await tiny.close();
  const page=await setup(390);
  await page.locator("#hub-global-query").fill("Ana Paula");
  const general=page.locator("#hub-global-results .hub-person").first();
@@ -110,4 +144,4 @@ try{
 }finally{
  await browser.close();
 }
-console.log("Fluxo de clique direto verificado com SDK simulado. Atendimento real não foi verificado.");
+console.log("Cards com oito imagens do site oficial e fluxo de clique direto testados com SDK simulado. Atendimento real não foi verificado.");
