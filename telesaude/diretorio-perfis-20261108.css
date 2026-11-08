@@ -186,11 +186,21 @@
 .hub-clinical-fallback .hub-online-dot{display:inline-block;flex:none;width:11px;height:11px;
  border-radius:50%;background:#13a65d;box-shadow:0 0 0 3px #dff6e9}
 
-/* Navegação independente do Chat Médico: camada visual, sem alterar o SDK. */
+/* Fundo institucional contínuo para Especialidades e Agendamentos.
+   Cobre toda a viewport, incluindo topo, rodapé e elementos do Widget.
+   Os dialogs modais ficam na camada nativa superior; o SDK permanece intacto. */
 body.pv-navigation-mode::before{
- content:"";position:fixed;
- top:var(--bar-h);right:0;bottom:var(--space-h);left:0;
- z-index:1001;background:#fbf9ff;pointer-events:none;
+ content:"";position:fixed;inset:0;
+ z-index:2147483644;pointer-events:none;
+ background:
+  radial-gradient(ellipse 72% 56% at 17% 13%,rgba(158,140,205,.22),transparent 75%),
+  radial-gradient(ellipse 66% 60% at 89% 85%,rgba(131,146,192,.18),transparent 76%),
+  linear-gradient(132deg,#5c566f 0%,#6f6683 49%,#534e6b 100%);
+}
+/* A própria tela de Especialidades já tem separação visual e sombra.
+   O fundo opaco dispensa escurecer novamente o degradê. */
+body.pv-navigation-mode .hub-dialog::backdrop{
+ background:transparent;
 }
 .agenda-modal .agenda-modal-nav{
  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
