@@ -38,7 +38,9 @@ const node=(tag,cls,text)=>{
 };
 function profileAvatar(person,size){
  const initials=person.name.split(/\s+/).slice(0,2).map(w=>w.charAt(0)).join("").toUpperCase();
- const element=node("div","hub-avatar "+(size||""),initials);
+ const element=node("div","hub-avatar "+(size||""));
+ const fallback=node("span","hub-avatar-initials",initials);
+ element.append(fallback);
  // O próprio catálogo autorizado da Médiquo fornece a URL da fotografia.
  // A imagem entra somente após carregar: caso falhe, as iniciais continuam.
  if(typeof person.avatar==="string"&&person.avatar){
@@ -51,11 +53,17 @@ function profileAvatar(person,size){
        const img=node("img");
        img.alt="Foto de "+person.name;
        img.loading="lazy";img.decoding="async";img.referrerPolicy="no-referrer";
+       img.style.opacity="0";
        img.addEventListener("load",()=>{
-         if(img.naturalWidth>0){element.classList.add("photo-ready");element.replaceChildren(img);}
+         if(img.naturalWidth>0){
+           element.classList.add("photo-ready");
+           img.style.opacity="1";fallback.hidden=true;
+         }
        },{once:true});
-       // Não remover o fallback de iniciais se houver erro no arquivo do provedor.
-       img.addEventListener("error",()=>{}, {once:true});
+       // A imagem precisa estar no DOM para o carregamento lazy começar.
+       // Se falhar, removemos só a imagem e preservamos as iniciais.
+       img.addEventListener("error",()=>img.remove(),{once:true});
+       element.append(img);
        img.src=url.href;
      }
    }catch{}
