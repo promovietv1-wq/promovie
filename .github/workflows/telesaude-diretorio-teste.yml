@@ -1,0 +1,38 @@
+name: TeleSaude - homologacao isolada do diretorio
+on:
+  push:
+    branches:
+      - main
+      - feature/homologacao-profissionais-20261107
+    paths:
+      - 'telesaude/index.html'
+      - 'telesaude/atendimento-teste/**'
+      - 'telesaude/diretorio-teste.*'
+      - 'app-teste-novo-2-worker/src/directory.mjs'
+      - '.github/scripts/validate-directory-lab.mjs'
+      - '.github/workflows/telesaude-diretorio-teste.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  homologacao:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe do diretorio
+        run: node --check telesaude/diretorio-teste.mjs
+      - name: Instalar navegador de testes
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar login opt-in e busca simulada com integracao original isolada
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/dir-lab.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-directory-lab.mjs
