@@ -126,7 +126,10 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  if(!dialog||!trigger)return false;
  dialog.classList.add("hub-dialog");
  dialog.innerHTML=[
- '<div class="hub-head"><div><small class="hub-eyebrow">TELESAÚDE PROMOVIE</small>',
+ '<div class="hub-brand-strip" aria-label="TeleSaúde PromoVie">',
+ '<img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="47" height="47" alt="">',
+ '<strong>TeleSaúde PromoVie</strong></div>',
+ '<div class="hub-head"><div>',
  '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
  '<button id="hub-top-back" class="hub-exit" type="button" hidden>← Voltar às especialidades</button></div>',
@@ -188,9 +191,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      image.src=CATEGORY_IMAGES[key];image.alt="";
      image.loading=index<4?"eager":"lazy";image.decoding="async";
      image.onerror=()=>{image.remove();imageArea.classList.add("hub-category-image-unavailable");};
-     const mark=node("span","hub-category-mark");mark.setAttribute("aria-hidden","true");mark.textContent=String(index+1).padStart(2,"0");
-     const arrow=node("span","hub-arrow","›");arrow.setAttribute("aria-hidden","true");
-     imageArea.append(image,mark,arrow);
+     // A fotografia inteira é clicável. Não é preciso numerá-la ou
+     // sobrepor uma seta; o texto do cartão continua intacto.
+     imageArea.append(image);
      const body=node("span","hub-category-body");
      const heading=node("strong",null,key),desc=node("small",null,info.desc);
      if(key==="Pet (cães e gatos)"){

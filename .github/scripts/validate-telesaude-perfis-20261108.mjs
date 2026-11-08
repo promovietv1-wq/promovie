@@ -120,14 +120,22 @@ try{
    assert.equal(await page.locator("a[aria-label='Sair da TeleSaúde']").count(),0);
    const modal=await page.locator("#directory-dialog").boundingBox();
    assert.ok(modal&&modal.width<=813,"A janela deve ter até 812px no desktop");
+   const brand=page.locator("#directory-dialog .hub-brand-strip");
+   assert.equal(await brand.count(),1);
+   assert.equal(await brand.locator("strong").innerText(),"TeleSaúde PromoVie");
+   assert.match(await brand.locator("img").getAttribute("src"),/coracao-promovie-com-logo\.webp/);
+   assert.equal(await brand.locator("img").getAttribute("alt"),"");
    assert.equal(await page.locator(".hub-category-photo .hub-category-image").count(),8);
+   assert.equal(await page.locator(".hub-category-photo .hub-category-mark").count(),0);
+   assert.equal(await page.locator(".hub-category-photo .hub-arrow").count(),0);
    for(let i=0;i<8;i++){
      const card=cards.nth(i);
      const image=card.locator(".hub-category-image");
      assert.match(await image.getAttribute("src"),new RegExp(originalCategoryImages[i]));
      assert.equal(await image.getAttribute("alt"),"");
      assert.equal(await card.locator(".hub-category-body").count(),1);
-     assert.equal(await card.locator(".hub-category-mark").count(),1);
+     assert.equal(await card.locator(".hub-category-mark").count(),0);
+     assert.equal(await card.locator(".hub-arrow").count(),0);
    }
    assert.equal(await cards.nth(7).locator("strong").innerText(),"Pet (cães e gatos)");
    assert.equal(await cards.nth(7).locator(".hub-pet-detail").evaluate(el=>getComputedStyle(el).fontWeight),"400");
@@ -244,6 +252,25 @@ try{
      "O Meu Espaço não pode abrir outra aba no laboratório de perfis");
    assert.match(await space.locator("#space-embedded-frame").getAttribute("src")||await space.locator("#space-embedded-frame").evaluate(el=>el.contentWindow.location.href),
      /\/telesaude\/meu-espaco\//);
+   // A página de carregamento interna nunca deve aparecer enquanto o
+   // usuário aguarda o Meu Espaço; só exibimos o iframe já preparado.
+   await space.frameLocator("#space-embedded-frame").locator("#loading-view").waitFor({state:"attached"});
+   const loadingState=await space.locator("#space-embedded").evaluate(layer=>({
+     preparing:layer.classList.contains("is-preparing"),
+     wait:layer.querySelector("#space-embedded-wait").hidden,
+     iframeVisibility:getComputedStyle(layer.querySelector("iframe")).visibility
+   }));
+   if(loadingState.preparing){
+     assert.equal(loadingState.wait,false);
+     assert.equal(loadingState.iframeVisibility,"hidden");
+     await space.frameLocator("#space-embedded-frame").locator("#loading-view").evaluate(el=>{
+       el.hidden=true;
+       document.getElementById("workspace-view").hidden=false;
+     });
+     await space.waitForFunction(()=>!document.getElementById("space-embedded").classList.contains("is-preparing"));
+   }
+   assert.equal(await space.locator("#space-embedded-wait").isVisible(),false);
+   assert.equal(await space.locator("#space-embedded-frame").evaluate(el=>getComputedStyle(el).visibility),"visible");
    await space.locator("#space-embedded-back").click();
    await space.locator("#directory-dialog[open]").waitFor();
    assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),true);

@@ -123,6 +123,24 @@ button{font:inherit}
   display:block;width:100%;height:calc(100vh - 56px);height:calc(100dvh - 56px);
   border:0;background:#f9f7fc
 }
+/* Durante a autenticação compartilhada, a página interna carrega fora da
+   vista: só fica visível quando o formulário ou os registros estão prontos. */
+.space-embedded.is-preparing iframe{visibility:hidden}
+.space-embedded-wait[hidden]{display:none!important}
+.space-embedded-wait{
+  position:absolute;inset:56px 0 0;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:13px;
+  background:radial-gradient(ellipse at 30% 15%,#eee8fc,transparent 64%),#f9f7fc;
+  color:#4b1a85;font:700 14px/1.5 Inter,Arial,sans-serif;
+  text-align:center;padding:22px
+}
+.space-embedded-wait-indicator{
+  width:29px;height:29px;border-radius:50%;
+  border:3px solid #e3d5f4;border-top-color:#6326aa;
+  animation:space-embedded-spin .85s linear infinite
+}
+@keyframes space-embedded-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.space-embedded-wait-indicator{animation:none}}
 .space-embedded-toolbar{
   height:56px;min-height:56px;display:flex;align-items:center;justify-content:space-between;
   gap:12px;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left));
@@ -257,7 +275,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=busca-integrada-8">
+<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=identidade-9">
 </head>
 <body class="pv-navigation-mode">
 <header class="topbar">
@@ -315,6 +333,10 @@ html body .mediquo-launcher{display:none!important}
     <button id="space-embedded-back" type="button">← Voltar às Especialidades</button>
     <strong>Meu Espaço de Saúde</strong>
   </header>
+  <div id="space-embedded-wait" class="space-embedded-wait" role="status" aria-live="polite" hidden>
+    <span class="space-embedded-wait-indicator" aria-hidden="true"></span>
+    <span>Abrindo Meu Espaço de Saúde...</span>
+  </div>
   <iframe id="space-embedded-frame" title="Meu Espaço de Saúde" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
 </section>
 <section id="space-open-help" class="space-open-help" hidden role="alert" aria-live="assertive">
@@ -447,6 +469,38 @@ html body .mediquo-launcher{display:none!important}
     const embeddedLayer=document.getElementById("space-embedded");
     const embeddedFrame=document.getElementById("space-embedded-frame");
     const embeddedBack=document.getElementById("space-embedded-back");
+    const embeddedWait=document.getElementById("space-embedded-wait");
+    let embeddedInterfaceReady=false,embeddedReadyObserver=null;
+    // Observamos SOMENTE se o formulário ou os registros já ficaram visíveis.
+    // Não lemos, copiamos, nem transmitimos informações médicas do iframe.
+    function revealSpaceWhenReady(){
+      if(embeddedInterfaceReady||!embeddedFrame||!embeddedLayer)return;
+      let doc;
+      try{
+        const frameWindow=embeddedFrame.contentWindow;
+        if(frameWindow.location.origin!==location.origin||
+           frameWindow.location.pathname!=="/telesaude/meu-espaco/")return;
+        doc=embeddedFrame.contentDocument;
+      }catch{return;}
+      const loading=doc?.getElementById("loading-view");
+      if(!loading)return;
+      const ready=loading.hidden&&["workspace-view","unlock-view","login-view"]
+        .some(id=>{const view=doc.getElementById(id);return view&&!view.hidden;});
+      if(ready){
+        embeddedInterfaceReady=true;
+        embeddedReadyObserver?.disconnect();
+        embeddedReadyObserver=null;
+        embeddedLayer.classList.remove("is-preparing");
+        if(embeddedWait)embeddedWait.hidden=true;
+        return;
+      }
+      embeddedReadyObserver?.disconnect();
+      embeddedReadyObserver=new MutationObserver(revealSpaceWhenReady);
+      embeddedReadyObserver.observe(doc.documentElement,{
+        attributes:true,attributeFilter:["hidden"],subtree:true
+      });
+    }
+    embeddedFrame?.addEventListener("load",revealSpaceWhenReady);
     const closeEmbedded=function(){
       if(!embeddedLayer||embeddedLayer.hidden)return;
       embeddedLayer.hidden=true;
@@ -458,6 +512,13 @@ html body .mediquo-launcher{display:none!important}
       if(!embeddedLayer||!embeddedFrame)return;
       if(embeddedBack)embeddedBack.textContent=embeddedLayer.dataset.returnTo==="chat"?
         "← Voltar ao Chat Médico":"← Voltar às Especialidades";
+      if(!embeddedInterfaceReady){
+        embeddedLayer.classList.add("is-preparing");
+        if(embeddedWait)embeddedWait.hidden=false;
+      }else{
+        embeddedLayer.classList.remove("is-preparing");
+        if(embeddedWait)embeddedWait.hidden=true;
+      }
       if(embeddedLayer.hidden){
         history.pushState({promovieSpaceOverlay:true},"",location.href);
         embeddedLayer.hidden=false;
@@ -558,7 +619,8 @@ html body .mediquo-launcher{display:none!important}
       if(installedApp&&embeddedLayer&&embeddedFrame){
         event.preventDefault();
         showEmbedded();
-        // Evita criar uma etapa extra no histórico do quadro.
+        // Evita etapa extra no histórico; a página interna só aparece quando
+        // conclui a preparação do formulário ou dos dados pessoais.
         embeddedFrame.contentWindow.location.replace(url.href);
         openedSpace=embeddedFrame.contentWindow;
         embeddedLoaded=true;
@@ -658,7 +720,7 @@ html body .mediquo-launcher{display:none!important}
       }
     };
     try{
-      const module=await import("/telesaude/diretorio-perfis-20261108.mjs?v=busca-integrada-8");
+      const module=await import("/telesaude/diretorio-perfis-20261108.mjs?v=identidade-9");
       module.initSpecialtyDirectory(medicalBridge,handoff.directoryToken,handoff.accessToken);
       status.hidden=true;
       // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.

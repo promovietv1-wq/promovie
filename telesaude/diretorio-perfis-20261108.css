@@ -688,3 +688,34 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
   width:36px;height:36px;flex-basis:36px
  }
 }
+
+
+/* Cabeçalho do diretório com a mesma assinatura visual do site:
+   coração PromoVie e título violeta sobre fundo branco. */
+.hub-dialog .hub-brand-strip{
+ display:flex;align-items:center;gap:10px;min-height:60px;
+ padding:7px clamp(14px,2.4vw,24px);
+ border-bottom:1px solid #e9e2f5;
+ background:linear-gradient(112deg,#fff 0%,#fbf9ff 65%,#f2ebff 100%);
+ color:#3f197a;
+}
+.hub-dialog .hub-brand-strip img{
+ display:block;flex:none;width:47px;height:47px;object-fit:contain;
+ filter:drop-shadow(0 4px 7px rgba(85,27,156,.13));
+}
+.hub-dialog .hub-brand-strip strong{
+ font:800 19px/1.25 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ letter-spacing:-.035em;color:#3f197a;
+}
+.hub-dialog .hub-head{padding-top:17px;padding-bottom:17px}
+.hub-dialog .hub-head h2{margin-top:0}
+.hub-dialog #hub-categories .hub-category-visual{
+ /* Sem números ou setas sobrepondo as fotografias. */
+ overflow:hidden;
+}
+@media(max-width:540px){
+ .hub-dialog .hub-brand-strip{min-height:58px;padding:8px 14px;gap:9px}
+ .hub-dialog .hub-brand-strip img{width:42px;height:42px}
+ .hub-dialog .hub-brand-strip strong{font-size:17px}
+ .hub-dialog .hub-head{padding-top:15px;padding-bottom:15px}
+}
