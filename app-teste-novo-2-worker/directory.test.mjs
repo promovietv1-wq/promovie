@@ -1,0 +1,106 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {webcrypto} from "node:crypto";
+import {issueDirectoryGrant,handleDirectory,projectPatientProfessionals} from "./src/directory.mjs";
+if(!globalThis.crypto)globalThis.crypto=webcrypto;
+const origin="https://www.promovie.tv.br",accessHash="b".repeat(64);
+const sdkToken="TEST-PATIENT-SDK-JWT-TOKEN-WITH-FAKE-CONTENT";
+function harness(){
+  const sessions=new Map();
+  const db={async exec(){return {success:true};},prepare(sql){
+    let args=[];
+    return {bind(...v){args=v;return this;},
+      async run(){
+        if(sql.startsWith("INSERT INTO pv_directory_sessions_v2"))
+          sessions.set(args[0],{access_hash:args[2],sdk_hash:args[3],expires_at:args[4]});
+        return {success:true};
+      },
+      async first(){
+        assert.match(sql,/FROM pv_directory_sessions_v2/);
+        const s=sessions.get(args[0]);
+        return s&&s.expires_at>args[1]?{access_hash:s.access_hash,sdk_hash:s.sdk_hash,
+          code_hash:accessHash,pending_hash:null}:null;
+      }};
+  }};
+  return {sessions,env:{
+    PROMOVIE_DIRECTORY_ENABLED:"true",PROMOVIE_BENEFICIARIOS_DB:db,
+    ALLOWED_ORIGINS:origin,MEDIQUO_V3_PLAN:"345",
+    MEDIQUO_V3_BASE_URL:"https://sdk.mediquo.com/v1",
+    MEDIQUO_V3_WIDGET_API_KEY:"WIDGET-TEST-PUBLIC",
+    TELESAUDE_V3_SYNC_TOKEN:"SIMULATED-SESSION-PEPPER-123456789"
+  }};
+}
+function req(grant,token=sdkToken,originHeader=origin){
+  return new Request("https://backend.promovie.tv.br/api/promovie/directory/v1/catalog",{
+    method:"POST",headers:{Origin:originHeader,"Content-Type":"application/json",Authorization:"Bearer "+grant},
+    body:JSON.stringify({sdk_access_token:token})
+  });
+}
+test("Sem autorização ou com token de outro paciente nunca chama a API",async()=>{
+  const {env}=harness();const grant=await issueDirectoryGrant(env,"test-beneficiary",accessHash,sdkToken);
+  assert.match(grant,/^[A-Za-z0-9_-]{43}$/);
+  const old=globalThis.fetch;let calls=0;
+  globalThis.fetch=()=>{calls++;throw Error("unexpected");};
+  try{
+    assert.equal((await handleDirectory(req("A".repeat(43)),env)).status,401);
+    assert.equal((await handleDirectory(req(grant,"OTHER-PATIENT-ACCESS-TOKEN-EXAMPLE"),env)).status,401);
+    assert.equal((await handleDirectory(req(grant,sdkToken,"https://other.example"),env)).status,403);
+    assert.equal((await handleDirectory(req(grant,sdkToken),{...env,PROMOVIE_DIRECTORY_ENABLED:"false"})).status,503);
+    assert.equal(calls,0);
+  }finally{globalThis.fetch=old;}
+});
+test("Consulta apenas os profissionais realmente elegíveis para o paciente autenticado",async()=>{
+  const {env}=harness();const grant=await issueDirectoryGrant(env,"owner",accessHash,sdkToken);
+  const old=globalThis.fetch;let count=0;
+  globalThis.fetch=async(url,options)=>{
+    count++;
+    assert.equal(url,"https://sdk.mediquo.com/v1/professionals");
+    assert.equal(options.method,"GET");
+    assert.equal(options.headers.Authorization,"Bearer "+sdkToken);
+    assert.equal(options.headers["X-API-Key"],env.MEDIQUO_V3_WIDGET_API_KEY);
+    assert.equal(options.headers["X-Secret-Key"],undefined);
+    return Response.json({data:[
+      {hash:"doctor-01",name:"Joana Souza",title:"Psychology",is_available:true,status:"online"},
+      {hash:"doctor-02",name:"Carlos Silva",title:"General Medicine",is_available:false,status:"offline"},
+      {hash:"doctor-03",name:"Ana Pereira",title:"Nutrition",is_available:true,status:"offline"},
+      {hash:"doctor-01",name:"Duplicado",title:"Psychology",is_available:true},
+      {hash:"unsafe<>",name:"Ataque",title:"Psicologia",is_available:true}
+    ]});
+  };
+  try{
+    const res=await handleDirectory(req(grant),env);
+    assert.equal(res.status,200);
+    const data=await res.json();
+    assert.equal(data.available,true);
+    assert.deepEqual(data.items.map(x=>[x.id,x.name,x.title]),
+      [["doctor-01","Joana Souza","Psychology"],["doctor-03","Ana Pereira","Nutrition"]]);
+    assert.equal(count,1);
+    assert.ok(!JSON.stringify(data).includes(sdkToken));
+  }finally{globalThis.fetch=old;}
+});
+test("Lista sem profissionais elegíveis mantém a interface oculta",async()=>{
+  const {env}=harness();const grant=await issueDirectoryGrant(env,"owner",accessHash,sdkToken);
+  const old=globalThis.fetch;
+  try{
+    globalThis.fetch=async()=>Response.json({data:[
+      {hash:"doctor-01",name:"Joana Souza",title:"Psychology",is_available:false}
+    ]});
+    let r=await handleDirectory(req(grant),env);
+    assert.equal(r.status,200);
+    assert.deepEqual(await r.json(),{available:false,items:[]});
+    globalThis.fetch=async()=>new Response("",{status:503});
+    r=await handleDirectory(req(grant),env);
+    assert.equal(r.status,503);
+    assert.deepEqual(await r.json(),{available:false});
+  }finally{globalThis.fetch=old;}
+});
+test("Projeta dados autorizados sem HTML, duplicados ou campos sensíveis",()=>{
+  const data=projectPatientProfessionals({data:[
+    {hash:"1",name:" Dr. José ",title:" Psicologia ",is_available:true,room:{messages:["privado"]}},
+    {hash:"2",name:"Pessoa não elegível",title:"Clínico",is_available:false},
+    {hash:"3",name:"Não validado",title:"Clínico"},
+    {hash:"4",name:"<script>",title:"Clínico",is_available:true}
+  ]});
+  assert.deepEqual(data,[{id:"1",name:"Dr. José",title:"Psicologia",status:null}]);
+  assert.ok(!JSON.stringify(data).includes("privado"));
+});

@@ -1,6 +1,7 @@
 import { handleV3 } from "./v3.mjs";
 import { handleAdmin, handleBeneficiaryAccess } from "./admin.mjs";
 import { handleHealthSpace } from "./health-space.mjs";
+import { handleDirectory } from "./directory.mjs";
 // PromoVie TeleSaúde — backend Cloudflare Workers (homologação).
 // Alternativa à execução Node.js do kit Médiquo: não hiberna por inatividade.
 // NÃO é autenticação de beneficiários reais. Usa apenas um paciente fictício.
@@ -111,6 +112,10 @@ export default {
     }
     if (url.pathname.startsWith("/api/promovie/space/v1/")) {
       return handleHealthSpace(request, env, cors);
+    }
+    // Experimento isolado, somente leitura. A rota só responde a uma sessão autorizada.
+    if (url.pathname.startsWith("/api/promovie/directory/v1/")) {
+      return handleDirectory(request, env, cors);
     }
     // Acesso pessoal, com CPF + código individual emitido pelo painel.
     // Nenhuma credencial administrativa ou chave privada é enviada ao browser.

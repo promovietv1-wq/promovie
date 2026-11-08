@@ -19,6 +19,8 @@
     "PROMOVIE_BENEFICIARY_ACCESS_ENABLED": "true",
     // Cofre pessoal isolado. Conteúdo de saúde cifrado no navegador com consentimento específico.
     "PROMOVIE_SPACE_ENABLED": "true",
+    // Diretório somente-leitura: ativado exclusivamente com login de teste autorizado.
+    "PROMOVIE_DIRECTORY_ENABLED": "true",
     "MEDIQUO_TEST_PATIENT_CODE": "promovie-homologacao-001",
     // Controles de escrita, atendimento e múltiplos beneficiários permanecem no painel Cloudflare.
     // keep_vars evita apagar valores configurados durante atualizações do código.
