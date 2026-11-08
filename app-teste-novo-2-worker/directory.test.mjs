@@ -78,7 +78,7 @@ test("Consulta apenas os profissionais realmente elegíveis para o paciente aute
     assert.ok(!JSON.stringify(data).includes(sdkToken));
   }finally{globalThis.fetch=old;}
 });
-test("Lista sem profissionais elegíveis mantém a interface oculta",async()=>{
+test("Disponibilidade explicitamente negada não retorna profissionais",async()=>{
   const {env}=harness();const grant=await issueDirectoryGrant(env,"owner",accessHash,sdkToken);
   const old=globalThis.fetch;
   try{
@@ -101,6 +101,30 @@ test("Projeta dados autorizados sem HTML, duplicados ou campos sensíveis",()=>{
     {hash:"3",name:"Não validado",title:"Clínico"},
     {hash:"4",name:"<script>",title:"Clínico",is_available:true}
   ]});
-  assert.deepEqual(data,[{id:"1",name:"Dr. José",title:"Psicologia",status:null}]);
+  assert.deepEqual(data,[
+    {id:"1",name:"Dr. José",title:"Psicologia",status:null},
+    {id:"3",name:"Não validado",title:"Clínico",status:null}
+  ]);
   assert.ok(!JSON.stringify(data).includes("privado"));
+});
+
+test("Profissionais retornados sem is_available são preservados e perfis são saneados",()=>{
+  const data=projectPatientProfessionals({data:[
+    {hash:"safe-1",name:"Dra. Maria",title:"Dermatologia",status:"offline",
+      description:"Atendimento clínico e orientação em saúde.",
+      avatar:"https://api.mediquo.com/img/profile.png",speciality_id:"11",
+      chat:{messages:["DADO CLINICO PRIVADO"]}},
+    {hash:"safe-2",name:"Dr. Pedro",title:"Pediatria",is_available:false},
+    {hash:"safe-3",name:"Dra. Ana",title:"Psicologia",is_available:true,
+      description:"<script>alert(1)</script>",avatar:"https://example.org/avatar.jpg"}
+  ]});
+  assert.equal(data.length,2);
+  assert.deepEqual(data[0],{
+    id:"safe-1",name:"Dra. Maria",title:"Dermatologia",status:"offline",
+    description:"Atendimento clínico e orientação em saúde.",
+    avatar:"https://api.mediquo.com/img/profile.png",speciality_id:"11"
+  });
+  assert.deepEqual(data[1],{id:"safe-3",name:"Dra. Ana",title:"Psicologia",status:null});
+  assert.ok(!JSON.stringify(data).includes("PRIVADO"));
+  assert.ok(!JSON.stringify(data).includes("script"));
 });
