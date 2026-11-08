@@ -113,6 +113,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<section id="hub-professionals" class="hub-pane" aria-label="Escolher profissional" hidden>',
  '<div class="hub-section-title"><h3 id="hub-service-title"></h3><p id="hub-service-lead"></p></div>',
  '<label class="hub-search"><span aria-hidden="true">⌕</span><input id="hub-query" type="search" autocomplete="off" placeholder="Buscar pelo nome" aria-label="Pesquisar profissional"></label>',
+ '<p class="hub-original-profile-help">Ao abrir o profissional no Chat Médico, toque no nome ou na foto para consultar seu perfil original. Use Voltar para retornar à conversa.</p>',
  '<div id="hub-list" class="hub-list"></div></section>',
  '<section id="hub-profile" class="hub-pane" aria-label="Prévia do profissional" hidden>',
  '<div id="hub-profile-body"></div><div class="hub-profile-actions">',
@@ -203,7 +204,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      const item=node("button","hub-person");item.type="button";item.dataset.id=p.id;
      const copy=node("span","hub-person-copy");
      copy.append(node("strong",null,p.name),node("small",null,p.title||p.category));
-     item.append(profileAvatar(p,"small"),copy,node("span","hub-person-arrow","Ver perfil ›"));
+     item.append(profileAvatar(p,"small"),copy,node("span","hub-person-arrow","Abrir no Chat Médico ›"));
      globalResults.append(item);
    }
  }
@@ -251,10 +252,31 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      const item=node("button","hub-person");item.type="button";item.dataset.id=p.id;
      const copy=node("span","hub-person-copy");
      copy.append(node("strong",null,p.name),node("small",null,p.title||chosenService));
-     const arrow=node("span","hub-person-arrow","Ver perfil ›");
+     const arrow=node("span","hub-person-arrow","Abrir no Chat Médico ›");
      item.append(profileAvatar(p,"small"),copy,arrow);
      list.append(item);
    }
+ }
+ async function openProfessional(p){
+   if(!p||busy)return;
+   busy=true;
+   say("Abrindo o atendimento de "+p.name+"...");
+   try{
+     const route="/professionals/"+encodeURIComponent(p.id)+"/room";
+     if(typeof widget.navigate==="function")await Promise.resolve(widget.navigate(route));
+     else if(typeof widget.open_room==="function")await Promise.resolve(widget.open_room(p.id));
+     else throw Error("Abertura individual indisponível neste Widget.");
+     if(dialog.open)dialog.close();
+     document.body.classList.remove("pv-navigation-mode");
+     document.documentElement.classList.add("pv-chat-mode");
+     chatShell?.removeAttribute("hidden");
+     if(chatResults){chatResults.hidden=true;chatResults.replaceChildren();}
+     if(chatSearch)chatSearch.value="";
+     say("");
+   }catch{
+     if(!dialog.open)reopen();
+     say("Não foi possível abrir este profissional. Tente novamente ou use Chat Médico.");
+   }finally{busy=false;}
  }
  function showProfile(p,fromSearch=false){
    profileFromSearch=fromSearch;
@@ -342,7 +364,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    const item=event.target.closest("button.hub-person");
    if(!item)return;
    const p=catalog.find(person=>person.id===item.dataset.id);
-   if(p)showProfile(p,true);
+   if(p)openProfessional(p);
  });
  // Resultados permanecem imediatamente abaixo da pesquisa, sobre o Chat Médico,
  // sem abrir um segundo diálogo, sem o cabeçalho roxo e sem ler o iframe.
@@ -370,7 +392,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      item.dataset.chatId=p.id;
      const label=node("span","hub-person-copy");
      label.append(node("strong",null,p.name),node("small",null,p.title||p.category));
-     item.append(profileAvatar(p,"small"),label,node("span","hub-person-arrow","Ver perfil ›"));
+     item.append(profileAvatar(p,"small"),label,node("span","hub-person-arrow","Abrir no Chat Médico ›"));
      chatResults.append(item);
    }
  }
@@ -401,30 +423,11 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    chatSearch.addEventListener("keydown",event=>{
      if(event.key==="Escape"){chatSearch.value="";renderChatSearch();chatSearch.blur();}
    });
-   chatResults.addEventListener("click",async event=>{
+   chatResults.addEventListener("click",event=>{
      const item=event.target.closest("button[data-chat-id]");
-     if(item){
-       const p=catalog.find(entry=>entry.id===item.dataset.chatId);
-       if(p)showChatProfile(p);
-       return;
-     }
-     const action=event.target.closest("button[data-action]");
-     if(!action)return;
-     if(action.dataset.action==="back"){renderChatSearch();chatSearch.focus({preventScroll:true});return;}
-     if(action.dataset.action==="open"&&chatSelected&&!chatOpening){
-       chatOpening=true;action.disabled=true;
-       const p=chatSelected;
-       action.textContent="Abrindo atendimento...";
-       try{
-         const route="/professionals/"+encodeURIComponent(p.id)+"/room";
-         if(typeof widget.navigate==="function")await Promise.resolve(widget.navigate(route));
-         else if(typeof widget.open_room==="function")await Promise.resolve(widget.open_room(p.id));
-         else throw Error("Navegação individual indisponível");
-         chatSearch.value="";chatResults.hidden=true;chatResults.replaceChildren();
-       }catch{
-         action.textContent="Tentar novamente";
-       }finally{action.disabled=false;chatOpening=false;}
-     }
+     if(!item)return;
+     const p=catalog.find(entry=>entry.id===item.dataset.chatId);
+     if(p)openProfessional(p);
    });
    document.addEventListener("pointerdown",event=>{
      if(chatShell&&!chatShell.contains(event.target))chatResults.hidden=true;
@@ -437,7 +440,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  list.addEventListener("click",event=>{
    const item=event.target.closest("button.hub-person");if(!item)return;
    const p=catalog.find(person=>person.id===item.dataset.id&&person.category===chosenService);
-   if(p)showProfile(p);
+   if(p)openProfessional(p);
  });
  query.addEventListener("input",renderPeople);
  back.addEventListener("click",()=>{
