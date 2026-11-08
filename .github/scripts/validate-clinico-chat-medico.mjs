@@ -5,7 +5,7 @@ const moduleCode=await readFile("telesaude/diretorio-especialidades-20261107.mjs
 const base=await readFile("telesaude/atendimento-especialidades-20261107/index.html","utf8");
 const prod=await readFile("telesaude/atendimento/index.html","utf8");
 const original=await readFile("telesaude/atendimento-20261107/index.html","utf8");
-assert.match(moduleCode,/Abrir Chat Médico 24h/);
+assert.match(moduleCode,/A bolinha verde identifica os profissionais que estão on-line/);
 assert.match(moduleCode,/\/professionals\/"\+encodeURIComponent\(chosenPerson\.id\)\+"\/room"/);
 assert.match(base,/MediquoWidget/);
 assert.doesNotMatch(prod,/diretorio-especialidades-20261107/);
@@ -45,9 +45,13 @@ try{
     assert.equal(await page.locator("#hub-category-grid .hub-category").count(),8);
     const cards=page.locator("#hub-category-grid .hub-category");
     await cards.first().click();
-    await page.locator(".hub-clinical-native").waitFor();
-    assert.match(await page.locator(".hub-clinical-fallback").innerText(),/Clínico geral 24h/);
-    await page.locator(".hub-clinical-native").click();
+    await page.locator(".hub-clinical-fallback").waitFor();
+    assert.equal(await page.locator("#directory-title").innerText(),"Clínico geral: atendimento adulto e infantil");
+    assert.match(await page.locator(".hub-clinical-fallback").innerText(),/bolinha verde identifica/);
+    assert.equal(await page.locator(".hub-search").isVisible(),false);
+    assert.equal(await page.locator(".hub-section-title").isVisible(),false);
+    assert.equal(await page.locator("#hub-native").innerText(),"Chat Médico");
+    await page.locator("#hub-native").click();
     await page.waitForFunction(()=>!document.getElementById("directory-dialog").open);
     assert.ok(await page.evaluate(()=>window.__widgetOpens>=2));
     assert.equal(await page.evaluate(()=>window.__navigation||null),null);
@@ -60,6 +64,7 @@ try{
     {id:"nutrition-222",name:"Nutri Exemplo",title:"Nutrição"}
   ]);
   await direct.locator("#hub-category-grid .hub-category").first().click();
+  assert.equal(await direct.locator(".hub-search").isVisible(),true);
   await direct.locator("button.hub-person").first().click();
   assert.equal(await direct.locator("#hub-profile .hub-profile-copy h3").innerText(),"Dr. Teste");
   await direct.locator("#hub-open").click();
