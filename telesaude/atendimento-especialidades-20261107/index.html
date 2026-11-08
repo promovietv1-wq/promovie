@@ -239,7 +239,7 @@ html body .mediquo-launcher{display:none!important}
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
-<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=busca-geral-chat-7">
+<link rel="stylesheet" href="/telesaude/diretorio-especialidades-20261107.css?v=pet-saida-9">
 </head>
 <body>
 <header class="topbar">
@@ -576,7 +576,7 @@ html body .mediquo-launcher{display:none!important}
       // A interface PromoVie aparece antes de revelar a lista nativa.
       // Mesmo SDK, token, autenticação e conector direto da versão 20261107.
       try{
-        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=pediatria-psicologia-8");
+        const module=await import("/telesaude/diretorio-especialidades-20261107.mjs?v=pet-saida-9");
         module.initSpecialtyDirectory(widget,handoff.directoryToken,handoff.accessToken);
       }catch{
         const feedback=document.getElementById("directory-feedback");
