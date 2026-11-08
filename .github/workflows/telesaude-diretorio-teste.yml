@@ -5,9 +5,12 @@ on:
       - main
       - feature/homologacao-profissionais-20261107
       - feature/homologacao-especialidades-20261108
+      - fix/telemedicina-selecao-anterior-20261108
     paths:
       - 'telesaude/index.html'
       - 'telesaude/atendimento-teste/**'
+      - 'telesaude/atendimento-anterior/**'
+      - 'telesaude/diretorio-anterior.*'
       - 'telesaude/diretorio-teste.*'
       - 'app-teste-novo-2-worker/src/directory.mjs'
       - '.github/scripts/validate-directory-lab.mjs'
@@ -27,7 +30,9 @@ jobs:
         with:
           node-version: '22'
       - name: Validar sintaxe do diretorio
-        run: node --check telesaude/diretorio-teste.mjs
+        run: |
+          node --check telesaude/diretorio-teste.mjs
+          node --check telesaude/diretorio-anterior.mjs
       - name: Instalar navegador de testes
         run: |
           npm install --no-save playwright
