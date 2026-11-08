@@ -42,11 +42,21 @@ try{
     const page=await createPage(width,[
       {id:"p01",name:"Psicóloga Exemplo",title:"Psicologia"}
     ]);
-    assert.equal(await page.locator("#hub-category-grid .hub-category").count(),8);
+    assert.equal(await page.locator("#hub-category-grid .hub-category").count(),9);
     const cards=page.locator("#hub-category-grid .hub-category");
+    assert.equal(await cards.nth(8).locator("strong").innerText(),"Agendamento");
+    assert.equal(await cards.nth(8).locator(".hub-kind").innerText(),"Agendar consulta");
+    await cards.nth(8).click();
+    await page.locator("#appointments-dialog[open]").waitFor();
+    assert.equal(await page.locator('#appointments-dialog .agenda-modal-link').first().getAttribute("href"),
+      "https://tinyurl.com/agendamq");
+    assert.equal(await page.locator("#directory-dialog").evaluate(el=>el.open),false);
+    await page.locator("#appointments-dialog [data-agenda-close]").click();
+    await page.locator("#directory-open").click();
+    await page.locator("#directory-dialog[open]").waitFor();
     await cards.first().click();
     await page.locator(".hub-clinical-fallback").waitFor();
-    assert.equal(await page.locator("#directory-title").innerText(),"Clínico geral: atendimento adulto e infantil");
+    assert.equal(await page.locator("#directory-title").innerText(),"Plantão com médico clínico geral adulto e infantil");
     assert.match(await page.locator(".hub-clinical-fallback").innerText(),/bolinha verde identifica/);
     assert.equal(await page.locator(".hub-search").isVisible(),false);
     assert.equal(await page.locator(".hub-section-title").isVisible(),false);
