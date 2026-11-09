@@ -14,6 +14,7 @@
           "/telesaude/atendimento-perfis-20261108/",
           "/telesaude/atendimento-perfis-20261109/",
           "/telesaude/atendimento-perfis-20261109-limpo/",
+         "/telesaude/atendimento-perfis-20261109-consentimento/"
           "/telesaude/atendimento-chat-original-20261108/"]
           .includes(window.parent.location.pathname)&&
         params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
@@ -31,7 +32,8 @@
       return window.parent!==window&&window.parent===window.top&&
         window.parent.location.origin===location.origin&&
         ["/telesaude/atendimento-perfis-20261109/",
-         "/telesaude/atendimento-perfis-20261109-limpo/"].includes(window.parent.location.pathname);
+         "/telesaude/atendimento-perfis-20261109-limpo/",
+         "/telesaude/atendimento-perfis-20261109-consentimento/"].includes(window.parent.location.pathname);
     }catch{return false;}
   })();
   const serviceName=brandedSpace?"Telessaúde":"TeleSaúde";
@@ -69,13 +71,15 @@
         window.parent.location.origin===location.origin&&
         ["/telesaude/atendimento-perfis-20261108/",
          "/telesaude/atendimento-perfis-20261109/",
-         "/telesaude/atendimento-perfis-20261109-limpo/"].includes(window.parent.location.pathname);
+         "/telesaude/atendimento-perfis-20261109-limpo/",
+         "/telesaude/atendimento-perfis-20261109-consentimento/"].includes(window.parent.location.pathname);
     }catch{}
     if(approvedTest){
       // Apenas o novo teste 09/11 usa a nomenclatura combinada neste atalho.
       try{
         if(["/telesaude/atendimento-perfis-20261109/",
-          "/telesaude/atendimento-perfis-20261109-limpo/"].includes(window.parent.location.pathname)){
+          "/telesaude/atendimento-perfis-20261109-limpo/",
+         "/telesaude/atendimento-perfis-20261109-consentimento/"].includes(window.parent.location.pathname)){
           appointmentsLink.textContent="Agendamentos e Suporte";
         }
       }catch{}
