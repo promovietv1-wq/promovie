@@ -14,7 +14,7 @@
           "/telesaude/atendimento-perfis-20261108/",
           "/telesaude/atendimento-perfis-20261109/",
           "/telesaude/atendimento-perfis-20261109-limpo/",
-         "/telesaude/atendimento-perfis-20261109-consentimento/"
+         "/telesaude/atendimento-perfis-20261109-consentimento/",
           "/telesaude/atendimento-chat-original-20261108/"]
           .includes(window.parent.location.pathname)&&
         params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
