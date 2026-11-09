@@ -1,0 +1,40 @@
+/* Acesso discreto aos currículos, na faixa roxa da tela Especialidades.
+   Exclusivo da versão currículos. Não altera widget, consentimento ou consulta. */
+.hub-dialog .hub-head > div:first-child{flex:1 1 auto;min-width:0}
+.hub-dialog .hub-head-tools{
+ display:flex;flex:0 0 auto;align-items:flex-end;justify-content:flex-start;
+ flex-direction:column;gap:9px;min-width:40px
+}
+.hub-dialog .hub-professionals-link{
+ display:grid;place-items:center;flex:0 0 40px;
+ width:40px;height:40px;min-width:40px;border-radius:11px;
+ text-decoration:none;color:#fff;
+ background:rgba(255,255,255,.13);
+ border:1px solid rgba(255,255,255,.42);
+ box-shadow:0 2px 12px rgba(31,7,70,.09);
+ transition:background .16s ease,box-shadow .16s ease,transform .16s ease
+}
+.hub-dialog .hub-professionals-link svg{
+ display:block;width:21px;height:21px;fill:none;stroke:currentColor;
+ stroke-width:2.1;stroke-linejoin:round;stroke-linecap:round
+}
+.hub-dialog .hub-professionals-link:hover{
+ background:rgba(255,255,255,.26);
+ box-shadow:0 5px 18px rgba(31,7,70,.16);
+ transform:translateY(-1px)
+}
+.hub-dialog .hub-professionals-link:focus-visible{
+ outline:3px solid #67dcfa;outline-offset:3px
+}
+@media(max-width:540px){
+ .hub-dialog .hub-head{gap:8px}
+ .hub-dialog .hub-head-tools{gap:8px;min-width:36px}
+ .hub-dialog .hub-professionals-link{
+   width:36px;height:36px;min-width:36px;flex-basis:36px;border-radius:10px
+ }
+ .hub-dialog .hub-professionals-link svg{width:19px;height:19px}
+}
+@media(prefers-reduced-motion:reduce){
+ .hub-dialog .hub-professionals-link{transition:none}
+ .hub-dialog .hub-professionals-link:hover{transform:none}
+}
