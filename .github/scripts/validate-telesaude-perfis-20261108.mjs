@@ -290,7 +290,9 @@ try{
    await embeddedSpace.locator("#allergies").fill("Anotação local de teste, sem dados reais");
    await embeddedSpace.locator("#space-appointments").click();
    await space.locator("#appointments-dialog[open]").waitFor();
-   assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),2);
+   assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),1);
+   assert.equal(await space.locator("#appointments-dialog").innerText().then(text=>/suporte e dúvidas/i.test(text)),false);
+   assert.equal(await space.locator("#appointments-dialog a[href*=AgndrCon]").count(),0);
    assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),false);
    assert.equal(await space.evaluate(()=>window.__sdkOpen||0),0,
      "Agendamentos não deve ativar o Chat Médico");
