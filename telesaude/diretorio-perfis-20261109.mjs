@@ -149,7 +149,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '</div></section>',
  '<p id="hub-feedback" class="hub-feedback" role="status" aria-live="polite"></p>',
  '<nav class="hub-footer" aria-label="Navegação da Telessaúde"><div class="hub-shortcuts">',
- '<button type="button" id="hub-shortcut-appointments">Agendamentos e suporte</button>',
+ '<button type="button" id="hub-shortcut-appointments">Agendamentos e Suporte</button>',
  '<button type="button" id="hub-shortcut-space">Meu Espaço de Saúde</button>',
  '</div><button type="button" id="hub-native" class="hub-native-full">Chat Médico</button></nav>'
  ].join("");
