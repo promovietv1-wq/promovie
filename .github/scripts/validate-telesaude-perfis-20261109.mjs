@@ -286,6 +286,11 @@ try{
    // Agendamentos abre o painel oficial da própria TeleSaúde, sobre os
    // registros ainda abertos. Fechar devolve ao mesmo Meu Espaço.
    const embeddedSpace=space.frameLocator("#space-embedded-frame");
+   assert.equal(await embeddedSpace.locator(".identity strong").textContent(),"Telessaúde PromoVie",
+     "Somente o novo quadro de Meu Espaço deve adotar a nova identidade");
+   assert.equal(await embeddedSpace.locator("#login-view .muted").textContent(),
+     "Utilize o mesmo CPF e código pessoal da sua Telessaúde.");
+
    // O teste não possui um cofre real. A autenticação sintética do iframe
    // pode passar depois da exibição simulada e ocultar novamente os registros.
    // Fixar somente o estado visual de trabalho antes do clique de navegação.
