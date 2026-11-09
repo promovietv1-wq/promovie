@@ -20,7 +20,7 @@ const SERVICES=[
   desc:"Orientação de saúde para pets",kind:"Consultar disponibilidade",detail:"Consulte o atendimento e os horários disponíveis."}
 ];
 
-/* Imagens originais da seção TeleSaúde do site oficial PromoVie.
+/* Imagens originais da seção Telessaúde do site oficial PromoVie.
    Uso ilustrativo: não representam necessariamente médicos plantonistas. */
 const CATEGORY_IMAGES=Object.freeze({
  "Clínico geral":"https://static.wixstatic.com/media/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg/v1/fill/w_480,h_288,al_c,q_72,usm_0.66_1.00_0.01,enc_auto/279d86_00b6385598f04689b78e7cee1297814d~mv2.jpg",
@@ -126,9 +126,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  if(!dialog||!trigger)return false;
  dialog.classList.add("hub-dialog");
  dialog.innerHTML=[
- '<div class="hub-brand-strip" aria-label="TeleSaúde PromoVie">',
+ '<div class="hub-brand-strip" aria-label="Telessaúde PromoVie">',
  '<img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="47" height="47" alt="">',
- '<strong>TeleSaúde PromoVie</strong></div>',
+ '<strong>Telessaúde PromoVie</strong></div>',
  '<div class="hub-head"><div>',
  '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
@@ -148,7 +148,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<button id="hub-other" class="hub-secondary" type="button">Ver outros profissionais</button>',
  '</div></section>',
  '<p id="hub-feedback" class="hub-feedback" role="status" aria-live="polite"></p>',
- '<nav class="hub-footer" aria-label="Navegação da TeleSaúde"><div class="hub-shortcuts">',
+ '<nav class="hub-footer" aria-label="Navegação da Telessaúde"><div class="hub-shortcuts">',
  '<button type="button" id="hub-shortcut-appointments">Agendamentos</button>',
  '<button type="button" id="hub-shortcut-space">Meu Espaço de Saúde</button>',
  '</div><button type="button" id="hub-native" class="hub-native-full">Chat Médico</button></nav>'
