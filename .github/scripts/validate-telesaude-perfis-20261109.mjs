@@ -20,7 +20,7 @@ assert.match(preserved,/>TeleSaúde PromoVie<\/strong>/);
 assert.match(preservedModule,/>Agendamentos<\/button>/);
 assert.match(next,/marca-telessaude-20261109\.css/);
 assert.doesNotMatch(next,/TeleSaúde PromoVie/);
-assert.match(next,/id="appointments-title">Agendamentos e suporte/);
+assert.match(next,/id="appointments-title">Agendamentos e Suporte/);
 assert.doesNotMatch(original,/diretorio-perfis-20261109/);
 assert.doesNotMatch(current,/diretorio-perfis-20261109/);
 assert.doesNotMatch(normal,/diretorio-perfis-20261109/);
@@ -134,7 +134,7 @@ try{
    assert.equal(await brand.locator("strong.pv-brand-badge").innerText(),"Telessaúde");
     assert.equal(await brand.locator(".pv-brand-suffix").innerText(),"PromoVie");
     assert.equal(await page.locator(".topbar .identity-copy .pv-brand-badge").innerText(),"Telessaúde");
-    assert.equal(await page.locator("#appointments-trigger").innerText(),"Agendamentos e suporte");
+    assert.equal(await page.locator("#appointments-trigger").innerText(),"Agendamentos e Suporte");
    assert.match(await brand.locator("img").getAttribute("src"),/coracao-promovie-com-logo\.webp/);
    assert.equal(await brand.locator("img").getAttribute("alt"),"");
    assert.equal(await page.locator(".hub-category-photo .hub-category-image").count(),8);
@@ -303,13 +303,13 @@ try{
      "Agendamentos deve estar habilitado somente no laboratório de perfis");
    assert.equal(await embeddedSpace.locator("#space-appointments").isVisible(),true,
      "O atalho deve estar visível enquanto Meus registros estiver aberto");
-   assert.equal(await embeddedSpace.locator("#space-appointments").innerText(),"Agendamentos e suporte");
+   assert.equal(await embeddedSpace.locator("#space-appointments").innerText(),"Agendamentos e Suporte");
    await embeddedSpace.locator("#allergies").fill("Anotação local de teste, sem dados reais");
    await embeddedSpace.locator("#space-appointments").click();
    await space.locator("#appointments-dialog[open]").waitFor();
    assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),1);
-   assert.equal(await space.locator("#appointments-title").innerText(),"Agendamentos e suporte");
-   assert.equal(await space.locator("#hub-shortcut-appointments").innerText(),"Agendamentos e suporte");
+   assert.equal(await space.locator("#appointments-title").innerText(),"Agendamentos e Suporte");
+   assert.equal(await space.locator("#hub-shortcut-appointments").innerText(),"Agendamentos e Suporte");
    assert.equal(await space.locator("#appointments-dialog").innerText().then(text=>/suporte e dúvidas/i.test(text)),false);
    assert.equal(await space.locator("#appointments-dialog a[href*=AgndrCon]").count(),0);
    const contato=space.locator("#promovie-contato-whatsapp");
@@ -320,7 +320,7 @@ try{
    assert.equal(whatsapp.pathname,"/5527999417458");
    const texto=whatsapp.searchParams.get("text")||"";
    assert.match(texto,/Telessaúde PromoVie/);
-   assert.match(texto,/Agendamentos e suporte/);
+   assert.match(texto,/Agendamentos e Suporte/);
    assert.equal(await contato.getAttribute("target"),"_blank");
    assert.match(await contato.getAttribute("rel"),/noopener/);
    assert.equal(await space.locator("#promovie-mensagem-dialog").count(),0);
