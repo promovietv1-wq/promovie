@@ -273,6 +273,25 @@ html body .mediquo-launcher{display:none!important}
   }
 }
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
+/* Caixa de mensagens da PromoVie, exclusiva do experimento de perfis. */
+.pv-mensagem-atalho{display:flex;width:100%;min-height:47px;align-items:center;justify-content:center;padding:12px 14px;border:1px solid #d9cee8;border-radius:12px;background:#f8f5fe;color:#48217f;font:750 14px/1.4 Inter,Arial,sans-serif;cursor:pointer}
+.pv-mensagem-atalho:hover{background:#efe8f9}
+.pv-mensagem-dialog{width:min(480px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:22px;border:1px solid #ded4ec;border-radius:21px;background:#fff;color:#302349;box-shadow:0 30px 90px rgba(32,13,60,.32);overflow:auto}
+.pv-mensagem-dialog::backdrop{background:rgba(22,10,40,.57)}
+.pv-mensagem-cabecalho{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.pv-mensagem-cabecalho h2{font:800 22px/1.25 Inter,Arial,sans-serif;color:#42167a;margin:0 0 5px}
+.pv-mensagem-cabecalho p{font:400 13px/1.55 Inter,Arial,sans-serif;color:#6c607b;margin:0 0 15px}
+.pv-mensagem-fechar{border:0;border-radius:10px;background:#f3effa;color:#48217f;min-width:37px;min-height:37px;font-size:24px;cursor:pointer}
+.pv-mensagem-historico{min-height:145px;max-height:35dvh;overflow:auto;border:1px solid #ece4f7;background:#faf8fe;border-radius:14px;padding:16px;margin:0 0 15px}
+.pv-mensagem-inicial{color:#706583;font-size:13px;line-height:1.55;margin:0}
+.pv-mensagem-formulario label{display:block;color:#40206f;font-size:13px;font-weight:800;margin:0 0 8px}
+.pv-mensagem-formulario textarea{width:100%;min-height:95px;resize:vertical;border:1px solid #d6c9e8;border-radius:12px;padding:12px;color:#2f2544;background:#fff;font:400 14px/1.5 Inter,Arial,sans-serif}
+.pv-mensagem-formulario textarea:disabled{background:#f9f7fb}
+.pv-mensagem-formulario button{display:block;width:100%;margin-top:10px;min-height:44px;padding:10px;border:0;border-radius:12px;color:#fff;background:#5520a0;font:750 14px Inter,Arial,sans-serif}
+.pv-mensagem-formulario button:disabled{opacity:.45;cursor:not-allowed}
+.pv-mensagem-estado{margin:12px 0 0;font-size:12px;line-height:1.5;color:#725c86}
+.pv-mensagem-privacidade{font-size:11px;line-height:1.5;color:#7c7288;margin:9px 0 0}
+@media(max-width:700px){.pv-mensagem-dialog{padding:18px}.pv-mensagem-cabecalho h2{font-size:20px}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
 <link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=identidade-9">
@@ -355,6 +374,7 @@ html body .mediquo-launcher{display:none!important}
   <p class="agenda-modal-lead">Escolha um profissional e agende sua consulta.</p>
   <div class="agenda-modal-actions">
     <a class="agenda-modal-link" href="https://tinyurl.com/agendamq" target="_blank" rel="noopener noreferrer"><span>Agendar consulta</span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    <button type="button" id="promovie-mensagem-abrir" class="pv-mensagem-atalho" aria-haspopup="dialog" aria-controls="promovie-mensagem-dialog">Enviar mensagem à PromoVie</button>
   </div>
   <section class="agenda-modal-guide" aria-label="Orientações para agendar">
     <h3>Como funciona</h3>
@@ -367,6 +387,22 @@ html body .mediquo-launcher{display:none!important}
     <button type="button" id="appointments-chat">Chat Médico</button>
   </nav>
   <p id="appointments-space-feedback" class="agenda-modal-nav-feedback" role="status" aria-live="polite"></p>
+</dialog>
+<dialog id="promovie-mensagem-dialog" class="pv-mensagem-dialog" aria-labelledby="promovie-mensagem-title">
+  <header class="pv-mensagem-cabecalho">
+    <div><h2 id="promovie-mensagem-title">Fale com a PromoVie</h2><p>Um espaço reservado para suas dúvidas e orientações sobre nossos serviços.</p></div>
+    <button type="button" id="promovie-mensagem-fechar" class="pv-mensagem-fechar" aria-label="Fechar">×</button>
+  </header>
+  <div id="promovie-mensagem-historico" class="pv-mensagem-historico" role="log" aria-live="polite" aria-label="Conversa com a PromoVie">
+    <p class="pv-mensagem-inicial">Suas mensagens e as respostas da PromoVie aparecerão aqui quando o canal estiver disponível.</p>
+  </div>
+  <form id="promovie-mensagem-formulario" class="pv-mensagem-formulario">
+    <label for="promovie-mensagem-texto">Sua mensagem</label>
+    <textarea id="promovie-mensagem-texto" rows="3" maxlength="1000" placeholder="Escreva sua dúvida..." required disabled></textarea>
+    <button id="promovie-mensagem-enviar" type="submit" disabled>Enviar mensagem</button>
+  </form>
+  <p id="promovie-mensagem-estado" class="pv-mensagem-estado" role="status">O envio e as respostas estão em configuração. Nenhuma mensagem será enviada nesta prévia.</p>
+  <p class="pv-mensagem-privacidade">Não envie informações clínicas, exames, senhas ou documentos nesta conversa.</p>
 </dialog>
 <dialog class="directory-dialog" id="directory-dialog" aria-labelledby="directory-title">
   <div class="directory-head">
@@ -389,6 +425,21 @@ html body .mediquo-launcher{display:none!important}
   <a class="test-normal-link" href="/telesaude/">Voltar ao acesso normal</a>
   <p class="directory-hint">A consulta e os agendamentos continuam sob responsabilidade da Médiquo. Esta página não envia mensagens automaticamente.</p>
 </dialog>
+<script>
+(function(){
+  "use strict";
+  const open=document.getElementById("promovie-mensagem-abrir");
+  const modal=document.getElementById("promovie-mensagem-dialog");
+  const close=document.getElementById("promovie-mensagem-fechar");
+  if(!open||!modal)return;
+  open.addEventListener("click",()=>{
+    if(typeof modal.showModal==="function"&&!modal.open)modal.showModal();
+  });
+  close?.addEventListener("click",()=>modal.close());
+  modal.addEventListener("click",event=>{if(event.target===modal)modal.close();});
+  document.getElementById("promovie-mensagem-formulario")?.addEventListener("submit",event=>event.preventDefault());
+})();
+</script>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
 (function(){
