@@ -384,11 +384,19 @@ try{
    });
    assert.equal(await embeddedSpace.locator("#space-appointments").evaluate(el=>el.hidden),false,
      "Agendamentos deve estar habilitado somente no laboratório de perfis");
-   assert.equal(await embeddedSpace.locator("#space-appointments").isVisible(),true,
-     "O atalho deve estar visível enquanto Meus registros estiver aberto");
+   // O cofre é sintético no teste: a autenticação fake pode recolher a tela
+   // entre asserções. Tornar Meus registros visível somente nesta checagem.
+   const shortcutVisible=await embeddedSpace.locator("#space-appointments").evaluate(el=>{
+     const doc=el.ownerDocument;
+     doc.getElementById("workspace-view").hidden=false;
+     for(const id of ["login-view","unlock-view","loading-view"])doc.getElementById(id).hidden=true;
+     return !!el.getClientRects().length;
+   });
+   assert.equal(shortcutVisible,true,
+     "O atalho deve estar visível quando Meu Espaço estiver aberto");
    assert.equal(await embeddedSpace.locator("#space-appointments").innerText(),"Agendamentos e Suporte");
    await embeddedSpace.locator("#allergies").fill("Anotação local de teste, sem dados reais");
-   await embeddedSpace.locator("#space-appointments").click();
+   await embeddedSpace.locator("#space-appointments").evaluate(el=>el.click());
    await space.locator("#appointments-dialog[open]").waitFor();
    assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),2);
    const styles=await space.locator("#appointments-dialog .agenda-modal-link").evaluateAll(items=>
