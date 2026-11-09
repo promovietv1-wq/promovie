@@ -72,7 +72,7 @@
       // Apenas o novo teste 09/11 usa a nomenclatura combinada neste atalho.
       try{
         if(window.parent.location.pathname==="/telesaude/atendimento-perfis-20261109/"){
-          appointmentsLink.textContent="Agendamentos e suporte";
+          appointmentsLink.textContent="Agendamentos e Suporte";
         }
       }catch{}
       appointmentsLink.hidden=false;
