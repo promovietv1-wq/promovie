@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
 <meta http-equiv="Cache-Control" content="no-store">
-<title>Perfis profissionais | TeleSaúde PromoVie TESTE</title>
+<title>Perfis profissionais | Telessaúde PromoVie TESTE</title>
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -292,7 +292,7 @@ html body .mediquo-launcher{display:none!important}
   <div class="identity">
     <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="56" height="56" alt="Coração PromoVie">
     <div class="identity-copy">
-      <strong>TeleSaúde PromoVie</strong><small class="test-badge">TESTE</small>
+      <strong>Telessaúde PromoVie</strong><small class="test-badge">TESTE</small>
     </div>
   </div>
   <div class="clinic-tools">
@@ -320,7 +320,7 @@ html body .mediquo-launcher{display:none!important}
     <div class="status-card">
       <div class="status-icon" aria-hidden="true">+</div>
       <h1 id="status-title">Preparando seu atendimento</h1>
-      <p id="status-message">Estamos abrindo a TeleSaúde em uma página exclusiva.</p>
+      <p id="status-message">Estamos abrindo a Telessaúde em uma página exclusiva.</p>
       <a id="retry" href="/telesaude/" hidden>Voltar e acessar novamente</a>
     </div>
   </section>
@@ -372,7 +372,7 @@ html body .mediquo-launcher{display:none!important}
     <p>Escolha o profissional e o horário disponível. No dia da consulta, envie uma mensagem no chat do profissional agendado para liberar o contato.</p>
     <p>Na psicologia, geralmente são exibidos horários dos próximos 7 dias. Se não houver horário com um profissional, consulte outro. Agendamentos podem ser recorrentes, a cada 15 dias.</p>
   </section>
-  <nav class="agenda-modal-nav" aria-label="Navegar pela TeleSaúde">
+  <nav class="agenda-modal-nav" aria-label="Navegar pela Telessaúde">
     <button type="button" id="appointments-specialties">Especialidades</button>
     <button type="button" id="appointments-space">Meu Espaço de Saúde</button>
     <button type="button" id="appointments-chat">Chat Médico</button>
@@ -701,7 +701,7 @@ html body .mediquo-launcher{display:none!important}
   async function openAttendance(){
     const handoff=receiveOnce();
     if(!handoff){
-      errorState("Por segurança, abra a TeleSaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
+      errorState("Por segurança, abra a Telessaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
       return;
     }
     enableSpaceSingleSignOn(handoff.spaceBootstrap);
