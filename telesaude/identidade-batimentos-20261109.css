@@ -1,0 +1,36 @@
+/* Refinamento visual exclusivo do teste 09/11 batimentos.
+   Moldura PromoVie e link de currículos, sem editar o iframe ou o SDK Médiquo. */
+.hub-dialog .hub-professionals-link{
+  color:#fff;
+  background:#6732bf;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:9px;
+  box-shadow:0 3px 10px rgba(24,7,71,.2)
+}
+.hub-dialog .hub-professionals-link:hover{background:#7a42d0;box-shadow:0 5px 16px rgba(24,7,71,.24)}
+.hub-dialog .hub-professionals-link:focus-visible{outline:3px solid #dcc6ff;outline-offset:3px}
+.hub-dialog .hub-professionals-link svg{stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+/* Uniformizar os tons externos visíveis ao abrir o atendimento.
+   Não tentar sobrescrever bordas ou documentos dentro do iframe do parceiro. */
+html,body{background:#f7f2fd}
+.topbar::before{background:linear-gradient(90deg,#4b0c8f,#7133ca 60%,#b699e9)}
+.back:focus-visible,.space-embedded-toolbar button:focus-visible{outline-color:#8b4bd5}
+.hub-dialog button:focus-visible,.hub-dialog a:focus-visible,.hub-dialog input:focus-visible{
+  outline-color:#b08adf
+}
+.stage{background:linear-gradient(120deg,#f8f4ff 0%,#f5effd 50%,#eee3fa 100%)}
+@media(min-width:1100px){
+  html body .stage{
+    background:linear-gradient(110deg,#faf6ff 0%,#f3eafd 50%,#eadcf8 100%)
+  }
+  html body #MediquoContainer,
+  html body .MediquoContainer,
+  html body #mediquo-container,
+  html body .mediquo-container,
+  html body [id^="MediquoContainer"],
+  html body [class~="MediquoContainer"]{
+    border-left-color:#dfcbea!important;
+    border-right-color:#dfcbea!important;
+    box-shadow:0 20px 60px rgba(75,12,143,.1)!important
+  }
+}
