@@ -1,0 +1,48 @@
+name: Telessaude - experiencia limpa 09-11
+on:
+  push:
+    branches: [main, feature/telessaude-perfis-clean-20261109]
+    paths:
+      - 'telesaude/atendimento-perfis-20261109-limpo/**'
+      - 'telesaude/diretorio-perfis-20261109-limpo.mjs'
+      - 'telesaude/marca-telessaude-20261109-limpo.css'
+      - 'telesaude/index.html'
+      - 'telesaude/meu-espaco/space.js'
+      - '.github/scripts/validate-telesaude-perfis-20261109-limpo.mjs'
+      - '.github/workflows/telesaude-perfis-20261109-limpo.yml'
+  pull_request:
+    paths:
+      - 'telesaude/atendimento-perfis-20261109-limpo/**'
+      - 'telesaude/diretorio-perfis-20261109-limpo.mjs'
+      - 'telesaude/marca-telessaude-20261109-limpo.css'
+      - 'telesaude/index.html'
+      - 'telesaude/meu-espaco/space.js'
+      - '.github/scripts/validate-telesaude-perfis-20261109-limpo.mjs'
+      - '.github/workflows/telesaude-perfis-20261109-limpo.yml'
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Conferir sintaxe do novo diretorio e dos testes
+        run: |
+          node --check telesaude/diretorio-perfis-20261109-limpo.mjs
+          node --check telesaude/meu-espaco/space.js
+          node --check .github/scripts/validate-telesaude-perfis-20261109-limpo.mjs
+      - name: Validar autenticacao dos perfis
+        run: node --test app-teste-novo-2-worker/directory.test.mjs
+      - name: Instalar navegador de testes
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Validar telas desktop e mobile, grafia e fluxo
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/pv-perfis-clean-09.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-telesaude-perfis-20261109-limpo.mjs
