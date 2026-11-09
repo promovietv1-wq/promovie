@@ -299,7 +299,7 @@ try{
    await space.locator("#promovie-mensagem-dialog[open]").waitFor();
    assert.equal(await space.locator("#promovie-mensagem-texto").isDisabled(),true,
      "Não permitir envio sem canal bidirecional seguro configurado");
-   assert.equal(await space.locator("#promovie-mensagem-dialog a[href*=wa.me]").count(),0);
+   assert.equal(await space.locator('#promovie-mensagem-dialog a[href*="wa.me"]').count(),0);
    await space.locator("#promovie-mensagem-fechar").click();
    await space.waitForFunction(()=>!document.getElementById("promovie-mensagem-dialog").open);
    assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),false);
