@@ -16,6 +16,7 @@
           "/telesaude/atendimento-perfis-20261109-limpo/",
          "/telesaude/atendimento-perfis-20261109-consentimento/",
           "/telesaude/atendimento-perfis-20261109-curriculos/",
+          "/telesaude/atendimento-perfis-20261109-batimentos/",
           "/telesaude/atendimento-chat-original-20261108/"]
           .includes(window.parent.location.pathname)&&
         params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
@@ -35,7 +36,8 @@
         ["/telesaude/atendimento-perfis-20261109/",
          "/telesaude/atendimento-perfis-20261109-limpo/",
          "/telesaude/atendimento-perfis-20261109-consentimento/",
-          "/telesaude/atendimento-perfis-20261109-curriculos/"].includes(window.parent.location.pathname);
+          "/telesaude/atendimento-perfis-20261109-curriculos/",
+          "/telesaude/atendimento-perfis-20261109-batimentos/"].includes(window.parent.location.pathname);
     }catch{return false;}
   })();
   const serviceName=brandedSpace?"Telessaúde":"TeleSaúde";
@@ -75,7 +77,8 @@
          "/telesaude/atendimento-perfis-20261109/",
          "/telesaude/atendimento-perfis-20261109-limpo/",
          "/telesaude/atendimento-perfis-20261109-consentimento/",
-          "/telesaude/atendimento-perfis-20261109-curriculos/"].includes(window.parent.location.pathname);
+          "/telesaude/atendimento-perfis-20261109-curriculos/",
+          "/telesaude/atendimento-perfis-20261109-batimentos/"].includes(window.parent.location.pathname);
     }catch{}
     if(approvedTest){
       // Apenas o novo teste 09/11 usa a nomenclatura combinada neste atalho.
@@ -83,7 +86,8 @@
         if(["/telesaude/atendimento-perfis-20261109/",
           "/telesaude/atendimento-perfis-20261109-limpo/",
          "/telesaude/atendimento-perfis-20261109-consentimento/",
-          "/telesaude/atendimento-perfis-20261109-curriculos/"].includes(window.parent.location.pathname)){
+          "/telesaude/atendimento-perfis-20261109-curriculos/",
+          "/telesaude/atendimento-perfis-20261109-batimentos/"].includes(window.parent.location.pathname)){
           appointmentsLink.textContent="Agendamentos e Suporte";
         }
       }catch{}
