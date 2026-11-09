@@ -1,7 +1,7 @@
 {
-  "name": "TeleSaúde PromoVie",
-  "short_name": "TeleSaúde",
-  "description": "Acesse os serviços da TeleSaúde PromoVie.",
+  "name": "Telessaúde PromoVie",
+  "short_name": "Telessaúde",
+  "description": "Acesse os serviços da Telessaúde PromoVie.",
   "lang": "pt-BR",
   "id": "/telesaude/",
   "start_url": "/telesaude/",
