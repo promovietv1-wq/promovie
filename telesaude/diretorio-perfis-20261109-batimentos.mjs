@@ -440,63 +440,6 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    }
  }
 
- // Currículos são exibidos sem sair desta sessão. A seta no topo e o
- // botão Voltar do navegador retornam à grade, sem recriar tokens médicos.
- const curriculumLink=el("hub-professionals-link");
- if(curriculumLink){
-   curriculumLink.setAttribute("aria-label","Conheça nossos profissionais e volte às especialidades");
-   curriculumLink.removeAttribute("target");
-   curriculumLink.removeAttribute("rel");
-   curriculumLink.addEventListener("click",event=>{
-     if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-     event.preventDefault();
-     if(document.getElementById("pv-curriculum-viewer"))return;
-     if(!document.getElementById("pv-curriculum-style")){
-       const style=document.createElement("style");
-       style.id="pv-curriculum-style";
-       style.textContent=`
-         #pv-curriculum-viewer{position:fixed;inset:0;z-index:2147483000;background:#fff;color:#261643;display:flex;flex-direction:column;font-family:Inter,system-ui,sans-serif}
-         #pv-curriculum-viewer .pv-curriculum-top{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;background:#fff;border-bottom:1px solid #e9e2f1;min-height:58px;box-sizing:border-box}
-         #pv-curriculum-viewer .pv-curriculum-back{background:#f2edfa;border:0;border-radius:11px;padding:10px 14px;font-size:14px;font-weight:700;color:#4b0c8f;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
-         #pv-curriculum-viewer .pv-curriculum-back:focus-visible{outline:3px solid #7043c2;outline-offset:2px}
-         #pv-curriculum-viewer .pv-curriculum-name{font-size:14px;font-weight:700;color:#4b0c8f}
-         #pv-curriculum-viewer iframe{display:block;flex:1 1 auto;min-height:0;width:100%;border:0;background:#fff}
-         @media(max-width:480px){#pv-curriculum-viewer .pv-curriculum-top{padding-left:10px;padding-right:10px}#pv-curriculum-viewer .pv-curriculum-back{font-size:13px}}
-       `;
-       document.head.appendChild(style);
-     }
-     const viewer=document.createElement("section");
-     viewer.id="pv-curriculum-viewer";
-     viewer.setAttribute("role","dialog");
-     viewer.setAttribute("aria-modal","true");
-     viewer.setAttribute("aria-label","Currículos dos profissionais");
-     viewer.innerHTML='<div class="pv-curriculum-top"><button type="button" class="pv-curriculum-back" aria-label="Voltar às especialidades">← Voltar às especialidades</button><strong class="pv-curriculum-name">Telessaúde</strong></div><iframe title="Currículos dos profissionais" referrerpolicy="no-referrer"></iframe>';
-     const iframe=viewer.querySelector("iframe");
-     let closed=false;
-     const onBack=()=>closeViewer();
-     function closeViewer(){
-       if(closed)return;
-       closed=true;
-       window.removeEventListener("popstate",onBack);
-       iframe.removeAttribute("src");
-       viewer.remove();
-       reopen();
-     }
-     viewer.querySelector(".pv-curriculum-back").addEventListener("click",()=>{
-       closeViewer();
-       if(history.state?.promovieCurriculumOverlay)history.back();
-     });
-     if(dialog.open)dialog.close();
-     document.body.appendChild(viewer);
-     try{
-       history.pushState({...((history.state&&typeof history.state==="object")?history.state:{}),promovieCurriculumOverlay:true},"",location.href);
-       window.addEventListener("popstate",onBack);
-     }catch{/* O botão visível de retorno permanece disponível. */}
-     iframe.src=curriculumLink.href;
-     viewer.querySelector(".pv-curriculum-back").focus({preventScroll:true});
-   });
- }
-
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  globalQuery.addEventListener("input",renderGlobalSearch);
  globalResults.addEventListener("click",event=>{
