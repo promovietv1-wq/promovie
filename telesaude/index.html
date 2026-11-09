@@ -928,6 +928,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   const brandedProfilesTest=new URLSearchParams(location.search).get("teste")==="20261109-perfis";
   const cleanProfilesTest=new URLSearchParams(location.search).get("teste")==="20261109-perfis-limpo";
   const consentProfilesTest=new URLSearchParams(location.search).get("teste")==="20261109-consentimento";
+  const curriculumProfilesTest=new URLSearchParams(location.search).get("teste")==="20261109-curriculos";
   const originalChatTest=new URLSearchParams(location.search).get("teste")==="20261108-chat-original";
   if(directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||originalChatTest)document.getElementById("directory-test-login").hidden=false;
   // Somente o novo link 09/11 usa a grafia Telessaúde. Não muda o site oficial
@@ -951,7 +952,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   }
   // Nova experiência, com identidade limpa, sem aviso de teste na interface.
   // Os demais links e a autenticação original permanecem inalterados.
-  if(cleanProfilesTest||consentProfilesTest){
+  if(cleanProfilesTest||consentProfilesTest||curriculumProfilesTest){
     document.title="PromoVie | Telessaúde";
     const names={
       ".list-heading strong":"Telessaúde",
@@ -1106,7 +1107,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     try{
       const response=await fetch(BACKEND_URL+ACCESS+"/session",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||cleanProfilesTest||consentProfilesTest||originalChatTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
+        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||cleanProfilesTest||consentProfilesTest||curriculumProfilesTest||originalChatTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
         cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
       const result=await getJson(response);
@@ -1137,7 +1138,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           accessToken:result.access_token,
           environment:result.environment,
           createdAt:Date.now(),
-          ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||cleanProfilesTest||consentProfilesTest||originalChatTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
+          ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||cleanProfilesTest||consentProfilesTest||curriculumProfilesTest||originalChatTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
             {directoryToken:result.directory_token}:{}),
           ...(spaceBootstrap?{spaceBootstrap}:{})
         }));
@@ -1147,6 +1148,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       try{
         if(originalChatTest){
           window.location.assign("/telesaude/atendimento-chat-original-20261108/");
+        }else if(curriculumProfilesTest){
+          window.location.assign("/telesaude/atendimento-perfis-20261109-curriculos/");
         }else if(consentProfilesTest){
           window.location.assign("/telesaude/atendimento-perfis-20261109-consentimento/");
         }else if(cleanProfilesTest){
