@@ -1,4 +1,4 @@
-/* Instalação da TeleSaúde PromoVie. Sem cache, sem login, sem SDK e sem dados de pacientes. */
+/* Instalação da Telessaúde PromoVie. Sem cache, sem login, sem SDK e sem dados de pacientes. */
 self.addEventListener('install',function(){self.skipWaiting();});
 self.addEventListener('activate',function(event){event.waitUntil(self.clients.claim());});
 self.addEventListener('fetch',function(event){
