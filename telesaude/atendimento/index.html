@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
 <meta http-equiv="Cache-Control" content="no-store">
-<title>Atendimentos | TeleSaúde PromoVie</title>
+<title>Atendimentos | Telessaúde PromoVie</title>
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -245,7 +245,7 @@ html body .mediquo-launcher{display:none!important}
   <div class="identity">
     <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="56" height="56" alt="Coração PromoVie">
     <div class="identity-copy">
-      <strong>TeleSaúde PromoVie</strong>
+      <strong>Telessaúde PromoVie</strong>
     </div>
   </div>
   <div class="clinic-tools">
@@ -260,7 +260,7 @@ html body .mediquo-launcher{display:none!important}
     <div class="status-card">
       <div class="status-icon" aria-hidden="true">+</div>
       <h1 id="status-title">Preparando seu atendimento</h1>
-      <p id="status-message">Estamos abrindo a TeleSaúde em uma página exclusiva.</p>
+      <p id="status-message">Estamos abrindo a Telessaúde em uma página exclusiva.</p>
       <a id="retry" href="/telesaude/" hidden>Voltar e acessar novamente</a>
     </div>
   </section>
@@ -514,7 +514,7 @@ html body .mediquo-launcher{display:none!important}
   async function openAttendance(){
     const handoff=receiveOnce();
     if(!handoff){
-      errorState("Por segurança, abra a TeleSaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
+      errorState("Por segurança, abra a Telessaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
       return;
     }
     enableSpaceSingleSignOn(handoff.spaceBootstrap);
@@ -537,7 +537,7 @@ html body .mediquo-launcher{display:none!important}
       await Promise.resolve(widget.open());
       status.hidden=true;
     }catch{
-      errorState("Não conseguimos carregar a TeleSaúde nesta página. Retorne ao acesso e tente novamente.");
+      errorState("Não conseguimos carregar a Telessaúde nesta página. Retorne ao acesso e tente novamente.");
     }
   }
   openAttendance();
