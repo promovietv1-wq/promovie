@@ -440,6 +440,20 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    }
  }
 
+ // O link externo abre na mesma aba. Ao usar o Voltar nativo,
+ // recupera a grade de especialidades quando o navegador restaura esta sessão.
+ // Nenhum dado médico ou token é persistido para esta navegação.
+ let leftForCurricula=false;
+ const curriculumLink=el("hub-professionals-link");
+ curriculumLink?.addEventListener("click",event=>{
+   if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   leftForCurricula=true;
+ });
+ window.addEventListener("pageshow",event=>{
+   if(!leftForCurricula||!event.persisted)return;
+   leftForCurricula=false;
+   reopen();
+ });
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  globalQuery.addEventListener("input",renderGlobalSearch);
  globalResults.addEventListener("click",event=>{
