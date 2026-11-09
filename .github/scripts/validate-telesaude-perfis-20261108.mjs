@@ -293,15 +293,18 @@ try{
    assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),1);
    assert.equal(await space.locator("#appointments-dialog").innerText().then(text=>/suporte e dúvidas/i.test(text)),false);
    assert.equal(await space.locator("#appointments-dialog a[href*=AgndrCon]").count(),0);
-   assert.equal(await space.locator("#promovie-mensagem-abrir").count(),1,
-     "Deve oferecer mensagens PromoVie sem acesso externo ao fornecedor");
-   await space.locator("#promovie-mensagem-abrir").click();
-   await space.locator("#promovie-mensagem-dialog[open]").waitFor();
-   assert.equal(await space.locator("#promovie-mensagem-texto").isDisabled(),true,
-     "Não permitir envio sem canal bidirecional seguro configurado");
-   assert.equal(await space.locator('#promovie-mensagem-dialog a[href*="wa.me"]').count(),0);
-   await space.locator("#promovie-mensagem-fechar").click();
-   await space.waitForFunction(()=>!document.getElementById("promovie-mensagem-dialog").open);
+   const contato=space.locator("#promovie-contato-whatsapp");
+   assert.equal(await contato.count(),1,"O atalho de contato PromoVie deve existir");
+   const destino=await contato.getAttribute("href");
+   const whatsapp=new URL(destino);
+   assert.equal(whatsapp.origin,"https://wa.me");
+   assert.equal(whatsapp.pathname,"/5527999417458");
+   const texto=whatsapp.searchParams.get("text")||"";
+   assert.match(texto,/TeleSaúde PromoVie/);
+   assert.match(texto,/Agendamentos/);
+   assert.equal(await contato.getAttribute("target"),"_blank");
+   assert.match(await contato.getAttribute("rel"),/noopener/);
+   assert.equal(await space.locator("#promovie-mensagem-dialog").count(),0);
    assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),false);
    assert.equal(await space.evaluate(()=>window.__sdkOpen||0),0,
      "Agendamentos não deve ativar o Chat Médico");
