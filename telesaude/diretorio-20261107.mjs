@@ -44,7 +44,7 @@ export async function initDirectory(widget,grant,accessToken){
  close.addEventListener("click",()=>{if(dialog.open)dialog.close();});
  dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
  copy.addEventListener("click",()=>{
-   const text="TeleSaúde PromoVie | Teste de profissionais\n"+
+   const text="Telessaúde PromoVie | Teste de profissionais\n"+
      "Estado: "+state+"\nProfissionais encontrados: "+catalog.length+
      "\nÚltimo método: "+(lastAttempt||"nenhum")+"\nSem CPF, senha ou token.";
    navigator.clipboard?.writeText(text).then(()=>{
