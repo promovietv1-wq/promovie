@@ -1,0 +1,35 @@
+name: Telessaude - entrada independente de especialidades
+on:
+  pull_request:
+    paths:
+      - 'telesaude/entrar-especialidades/**'
+      - '.github/scripts/validate-telesaude-entrada-especialidades.mjs'
+      - '.github/workflows/telesaude-entrada-independente.yml'
+  push:
+    branches: [main, fix/telessaude-entrada-independente-batimentos-20261109]
+    paths:
+      - 'telesaude/entrar-especialidades/**'
+      - '.github/scripts/validate-telesaude-entrada-especialidades.mjs'
+      - '.github/workflows/telesaude-entrada-independente.yml'
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Conferir sintaxe do teste
+        run: node --check .github/scripts/validate-telesaude-entrada-especialidades.mjs
+      - name: Instalar navegador
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Verificar acesso sem perda do destino
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/pv-specialties-entry.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-telesaude-entrada-especialidades.mjs
