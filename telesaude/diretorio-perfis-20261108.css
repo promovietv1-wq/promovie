@@ -342,7 +342,7 @@ html.pv-chat-mode body [class~="MediquoContainer"]{
 }
 
 
-/* Identidade visual dos oito cards de TeleSaúde do site PromoVie.
+/* Identidade visual dos oito cards de Telessaúde do site PromoVie.
    Aplicada SOMENTE à tela de Especialidades deste teste, sem alterar o SDK. */
 .hub-grid{
  gap:15px;
