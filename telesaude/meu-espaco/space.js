@@ -42,7 +42,7 @@
           "/telessaude/atendimento/"].includes(window.parent.location.pathname);
     }catch{return false;}
   })();
-  const serviceName=brandedSpace?"Telessaúde":"TeleSaúde";
+  const serviceName=brandedSpace?"Telessaúde":"Telessaúde";
   if(brandedSpace){
     document.title="Meu Espaço de Saúde | Telessaúde PromoVie";
     const identity=document.querySelector(".identity");
@@ -67,8 +67,8 @@
   const names={pergunta:"Pergunta",sintoma:"Sintoma ou observação",outro:"Anotação"};
 
   // No laboratório de Especialidades aprovado, o botão Agendamentos reutiliza
-  // a janela de agendamentos da própria TeleSaúde, sem abrir outro acesso.
-  // Na TeleSaúde original e nos demais testes, não altera a interface.
+  // a janela de agendamentos da própria Telessaúde, sem abrir outro acesso.
+  // Na Telessaúde original e nos demais testes, não altera a interface.
   const appointmentsLink=$("space-appointments");
   if(appointmentsLink&&window.parent!==window){
     let approvedTest=false;
