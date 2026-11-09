@@ -290,7 +290,21 @@ try{
    await embeddedSpace.locator("#allergies").fill("Anotação local de teste, sem dados reais");
    await embeddedSpace.locator("#space-appointments").click();
    await space.locator("#appointments-dialog[open]").waitFor();
-   assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),2);
+   assert.equal(await space.locator("#appointments-dialog .agenda-modal-link").count(),1);
+   assert.equal(await space.locator("#appointments-dialog").innerText().then(text=>/suporte e dúvidas/i.test(text)),false);
+   assert.equal(await space.locator("#appointments-dialog a[href*=AgndrCon]").count(),0);
+   const contato=space.locator("#promovie-contato-whatsapp");
+   assert.equal(await contato.count(),1,"O atalho de contato PromoVie deve existir");
+   const destino=await contato.getAttribute("href");
+   const whatsapp=new URL(destino);
+   assert.equal(whatsapp.origin,"https://wa.me");
+   assert.equal(whatsapp.pathname,"/5527999417458");
+   const texto=whatsapp.searchParams.get("text")||"";
+   assert.match(texto,/TeleSaúde PromoVie/);
+   assert.match(texto,/Agendamentos/);
+   assert.equal(await contato.getAttribute("target"),"_blank");
+   assert.match(await contato.getAttribute("rel"),/noopener/);
+   assert.equal(await space.locator("#promovie-mensagem-dialog").count(),0);
    assert.equal(await space.locator("#space-embedded").evaluate(el=>el.hidden),false);
    assert.equal(await space.evaluate(()=>window.__sdkOpen||0),0,
      "Agendamentos não deve ativar o Chat Médico");

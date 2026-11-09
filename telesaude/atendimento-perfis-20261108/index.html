@@ -273,6 +273,16 @@ html body .mediquo-launcher{display:none!important}
   }
 }
 @media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
+/* Contato institucional exclusivo do laboratório de perfis, sem suporte externo da Médiquo. */
+.pv-contato-atalho{display:flex;width:100%;min-height:59px;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;border:1px solid #d9cee8;border-radius:13px;background:#f8f5fe;color:#48217f;text-decoration:none;transition:background .2s,border-color .2s,box-shadow .2s}
+.pv-contato-atalho:hover,.pv-contato-atalho:focus-visible{background:#efe6fb;border-color:#c9b3e4;box-shadow:0 6px 16px rgba(80,38,143,.09)}
+.pv-contato-atalho .pv-contato-icone{width:37px;height:37px;border-radius:11px;display:grid;place-items:center;background:#e7dcf8;color:#5520a0;flex:none}
+.pv-contato-atalho .pv-contato-icone svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pv-contato-atalho .pv-contato-texto{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.pv-contato-atalho .pv-contato-texto strong{font:750 13.5px/1.35 Inter,Arial,sans-serif}
+.pv-contato-atalho .pv-contato-texto small{font:500 11px/1.35 Inter,Arial,sans-serif;color:#756488}
+.pv-contato-atalho .pv-contato-seta{font-size:21px;line-height:1;opacity:.7;flex:none}
+@media(max-width:700px){.pv-contato-atalho{min-height:58px;padding:10px 12px}}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
 <link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=identidade-9">
@@ -352,16 +362,15 @@ html body .mediquo-launcher{display:none!important}
     <h2 id="appointments-title">Agendamentos</h2>
     <button type="button" class="agenda-modal-close" data-agenda-close aria-label="Fechar">×</button>
   </div>
-  <p class="agenda-modal-lead">Agende uma consulta ou fale com a equipe de suporte.</p>
+  <p class="agenda-modal-lead">Escolha um profissional e agende sua consulta.</p>
   <div class="agenda-modal-actions">
     <a class="agenda-modal-link" href="https://tinyurl.com/agendamq" target="_blank" rel="noopener noreferrer"><span>Agendar consulta</span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
-    <a class="agenda-modal-link" href="https://tinyurl.com/AgndrCon" target="_blank" rel="noopener noreferrer"><span>Suporte e dúvidas</span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    <a id="promovie-contato-whatsapp" class="pv-contato-atalho" href="https://wa.me/5527999417458?text=Ol%C3%A1!%20Vim%20pela%20TeleSa%C3%BAde%20PromoVie%2C%20na%20%C3%A1rea%20de%20Agendamentos%2C%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida." target="_blank" rel="noopener noreferrer" aria-label="Dúvidas e orientações: conversar com a PromoVie pelo WhatsApp"><span class="pv-contato-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.4a8.2 8.2 0 0 1-8.6 8.5 8.5 8.5 0 0 1-3.6-1L3 20l1.3-4.7a8.5 8.5 0 1 1 15.7-3.9Z"/><path d="M8 11.3h8M8 14.5h5.5"/></svg></span><span class="pv-contato-texto"><strong>Dúvidas e orientações</strong><small>Conversar com a PromoVie pelo WhatsApp</small></span><span class="pv-contato-seta" aria-hidden="true">↗</span></a>
   </div>
   <section class="agenda-modal-guide" aria-label="Orientações para agendar">
     <h3>Como funciona</h3>
     <p>Escolha o profissional e o horário disponível. No dia da consulta, envie uma mensagem no chat do profissional agendado para liberar o contato.</p>
     <p>Na psicologia, geralmente são exibidos horários dos próximos 7 dias. Se não houver horário com um profissional, consulte outro. Agendamentos podem ser recorrentes, a cada 15 dias.</p>
-    <p>O link de agendamento não é atendimento humano. Para outras solicitações, use <strong>Suporte e dúvidas</strong>.</p>
   </section>
   <nav class="agenda-modal-nav" aria-label="Navegar pela TeleSaúde">
     <button type="button" id="appointments-specialties">Especialidades</button>
@@ -391,6 +400,7 @@ html body .mediquo-launcher{display:none!important}
   <a class="test-normal-link" href="/telesaude/">Voltar ao acesso normal</a>
   <p class="directory-hint">A consulta e os agendamentos continuam sob responsabilidade da Médiquo. Esta página não envia mensagens automaticamente.</p>
 </dialog>
+
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
 (function(){
