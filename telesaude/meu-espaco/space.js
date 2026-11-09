@@ -13,6 +13,7 @@
         ["/telesaude/atendimento/","/telesaude/atendimento-especialidades-20261107/",
           "/telesaude/atendimento-perfis-20261108/",
           "/telesaude/atendimento-perfis-20261109/",
+          "/telesaude/atendimento-perfis-20261109-limpo/",
           "/telesaude/atendimento-chat-original-20261108/"]
           .includes(window.parent.location.pathname)&&
         params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
@@ -29,7 +30,8 @@
     try{
       return window.parent!==window&&window.parent===window.top&&
         window.parent.location.origin===location.origin&&
-        window.parent.location.pathname==="/telesaude/atendimento-perfis-20261109/";
+        ["/telesaude/atendimento-perfis-20261109/",
+         "/telesaude/atendimento-perfis-20261109-limpo/"].includes(window.parent.location.pathname);
     }catch{return false;}
   })();
   const serviceName=brandedSpace?"Telessaúde":"TeleSaúde";
@@ -66,12 +68,14 @@
       approvedTest=document.documentElement.classList.contains("pv-space-embedded")&&
         window.parent.location.origin===location.origin&&
         ["/telesaude/atendimento-perfis-20261108/",
-         "/telesaude/atendimento-perfis-20261109/"].includes(window.parent.location.pathname);
+         "/telesaude/atendimento-perfis-20261109/",
+         "/telesaude/atendimento-perfis-20261109-limpo/"].includes(window.parent.location.pathname);
     }catch{}
     if(approvedTest){
       // Apenas o novo teste 09/11 usa a nomenclatura combinada neste atalho.
       try{
-        if(window.parent.location.pathname==="/telesaude/atendimento-perfis-20261109/"){
+        if(["/telesaude/atendimento-perfis-20261109/",
+          "/telesaude/atendimento-perfis-20261109-limpo/"].includes(window.parent.location.pathname)){
           appointmentsLink.textContent="Agendamentos e Suporte";
         }
       }catch{}
