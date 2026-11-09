@@ -59,7 +59,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<div class="hub-head"><div><small class="hub-eyebrow">TELESAÚDE PROMOVIE</small>',
  '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
- '<a class="hub-exit" href="/telesaude/?teste=20261107-especialidades" aria-label="Sair da TeleSaúde">Sair da TeleSaúde</a></div>',
+ '<a class="hub-exit" href="/telesaude/?teste=20261107-especialidades" aria-label="Sair da Telessaúde">Sair da Telessaúde</a></div>',
  '<div id="hub-nav" class="hub-nav" hidden><button id="hub-back" type="button">← Especialidades</button><span id="hub-step"></span></div>',
  '<section id="hub-categories" class="hub-pane" aria-label="Selecionar especialidade">',
  '<label class="hub-search hub-search-global"><span aria-hidden="true">⌕</span><input id="hub-global-query" type="search" autocomplete="off" placeholder="Buscar pelo nome" aria-label="Pesquisar profissional pelo nome"></label>',
@@ -75,7 +75,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<button id="hub-other" class="hub-secondary" type="button">Ver outros profissionais</button>',
  '</div></section>',
  '<p id="hub-feedback" class="hub-feedback" role="status" aria-live="polite"></p>',
- '<nav class="hub-footer" aria-label="Navegação da TeleSaúde"><div class="hub-shortcuts">',
+ '<nav class="hub-footer" aria-label="Navegação da Telessaúde"><div class="hub-shortcuts">',
  '<button type="button" id="hub-shortcut-appointments">Agendamentos</button>',
  '<button type="button" id="hub-shortcut-space">Meu Espaço de Saúde</button>',
  '</div><button type="button" id="hub-native" class="hub-native-full">Chat Médico</button></nav>'
