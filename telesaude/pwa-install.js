@@ -30,7 +30,7 @@
       safari:{steps:[
         "Toque em Compartilhar e escolha Adicionar à Tela de Início.",
         "Na tela seguinte, DESATIVE a opção Abrir como app web.",
-        "Toque em Adicionar. O atalho abrirá a TeleSaúde no navegador, com as abas."
+        "Toque em Adicionar. O atalho abrirá a Telessaúde no navegador, com as abas."
       ],note:"Importante: mantenha Abrir como app web desligado, como no exemplo. O atalho não deve abrir em uma janela de aplicativo.",photo:picApple,credit:"Captura de interface do Safari. Fonte: Apple.",source:apple},
       chrome:{steps:[
         "No Google Chrome, toque em Compartilhar e procure Adicionar à Tela de Início.",
@@ -45,14 +45,14 @@
       edge:{steps:[
         "No Edge, abra Compartilhar e procure Adicionar à Tela de Início.",
         "Se aparecer Abrir como app web, deixe desativado.",
-        "Se a opção não estiver disponível, salve a TeleSaúde nos favoritos do Edge."
+        "Se a opção não estiver disponível, salve a Telessaúde nos favoritos do Edge."
       ],note:"Não escolha instalação de aplicativo.",source:apple}
     },
     android:{
       chrome:{steps:[
         "No Google Chrome, toque em ⋮ > Instalar e criar atalho > Criar atalho.",
         "Confirme em Adicionar. Escolha Criar atalho, nunca Instalar.",
-        "Se aparecer apenas Instalar, não prossiga: na Nova guia do Google Chrome, use Adicionar novo > Adicionar atalho e informe o endereço da TeleSaúde."
+        "Se aparecer apenas Instalar, não prossiga: na Nova guia do Google Chrome, use Adicionar novo > Adicionar atalho e informe o endereço da Telessaúde."
       ],note:"O atalho com o símbolo do Google Chrome abre no próprio navegador e preserva a navegação por abas.",source:chromeAndroid},
       firefox:{steps:[
         "Abra o menu do Firefox e escolha Adicionar à tela do dispositivo.",
@@ -71,29 +71,29 @@
     windows:{
       chrome:{steps:[
         "No Google Chrome, clique em ⋮ > Transmitir, salvar e compartilhar > Criar atalho.",
-        "Escolha o nome TeleSaúde e clique em Criar.",
+        "Escolha o nome Telessaúde e clique em Criar.",
         "Não selecione Instalar página como aplicativo."
       ],note:"O atalho comum abre o endereço no navegador. Evite o modo de janela de aplicativo.",source:chromeDesktop},
       edge:{steps:[
         "Na área de trabalho do Windows, clique com o botão direito > Novo > Atalho.",
         "Cole https://www.promovie.tv.br/telesaude/ e avance.",
-        "Dê o nome TeleSaúde e conclua. Não use Instalar este site como aplicativo."
+        "Dê o nome Telessaúde e conclua. Não use Instalar este site como aplicativo."
       ],note:"O atalho abre no navegador padrão. Se utiliza Edge na consulta, mantenha-o como navegador padrão.",source:windows},
       firefox:{steps:[
         "Deixe uma parte da área de trabalho visível.",
-        "Arraste o cadeado ao lado do endereço da TeleSaúde para a área de trabalho.",
+        "Arraste o cadeado ao lado do endereço da Telessaúde para a área de trabalho.",
         "Solte para criar o atalho. Não instale um aplicativo."
       ],note:"O atalho abre no navegador padrão.",source:firefoxDesktop}
     },
     mac:{
       safari:{steps:[
         "Reduza um pouco a janela do Safari para deixar a Mesa visível.",
-        "Arraste o endereço da TeleSaúde da barra do Safari para a Mesa.",
+        "Arraste o endereço da Telessaúde da barra do Safari para a Mesa.",
         "Use esse atalho do site. Não selecione Adicionar ao Dock como aplicativo."
       ],note:"O atalho abre no navegador padrão, sem janela de aplicativo independente.",source:safariMac},
       chrome:{steps:[
         "No Google Chrome, clique em ⋮ > Transmitir, salvar e compartilhar > Criar atalho.",
-        "Nomeie como TeleSaúde e confirme em Criar.",
+        "Nomeie como Telessaúde e confirme em Criar.",
         "Não escolha Instalar página como aplicativo."
       ],note:"É um atalho comum para a página, não um aplicativo.",source:chromeDesktop},
       edge:{steps:[
