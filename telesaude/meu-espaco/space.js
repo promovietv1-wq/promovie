@@ -12,6 +12,7 @@
         window.parent.location.origin===location.origin&&
         ["/telesaude/atendimento/","/telesaude/atendimento-especialidades-20261107/",
           "/telesaude/atendimento-perfis-20261108/",
+          "/telesaude/atendimento-perfis-20261109/",
           "/telesaude/atendimento-chat-original-20261108/"]
           .includes(window.parent.location.pathname)&&
         params.get("atendimento")==="aberto"&&params.get("integrado")==="1"&&
@@ -41,9 +42,16 @@
     try{
       approvedTest=document.documentElement.classList.contains("pv-space-embedded")&&
         window.parent.location.origin===location.origin&&
-        window.parent.location.pathname==="/telesaude/atendimento-perfis-20261108/";
+        ["/telesaude/atendimento-perfis-20261108/",
+         "/telesaude/atendimento-perfis-20261109/"].includes(window.parent.location.pathname);
     }catch{}
     if(approvedTest){
+      // Apenas o novo teste 09/11 usa a nomenclatura combinada neste atalho.
+      try{
+        if(window.parent.location.pathname==="/telesaude/atendimento-perfis-20261109/"){
+          appointmentsLink.textContent="Agendamentos e suporte";
+        }
+      }catch{}
       appointmentsLink.hidden=false;
       appointmentsLink.addEventListener("click",event=>{
         event.preventDefault();
