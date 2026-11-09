@@ -925,8 +925,28 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   const originalWorkingTest=new URLSearchParams(location.search).get("teste")==="20261107";
   const specialtyFlowTest=new URLSearchParams(location.search).get("teste")==="20261107-especialidades";
   const richProfilesTest=new URLSearchParams(location.search).get("teste")==="20261108-perfis";
+  const brandedProfilesTest=new URLSearchParams(location.search).get("teste")==="20261109-perfis";
   const originalChatTest=new URLSearchParams(location.search).get("teste")==="20261108-chat-original";
-  if(directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||originalChatTest)document.getElementById("directory-test-login").hidden=false;
+  if(directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||originalChatTest)document.getElementById("directory-test-login").hidden=false;
+  // Somente o novo link 09/11 usa a grafia Telessaúde. Não muda o site oficial
+  // nem a apresentação do teste de perfis 08/11.
+  if(brandedProfilesTest){
+    document.title="PromoVie | Telessaúde (teste)";
+    const names={
+      ".list-heading strong":"Telessaúde",
+      ".patient-login-title":"Acesse sua Telessaúde",
+      ".access-result-brand":"PromoVie | Telessaúde"
+    };
+    for(const [selector,value] of Object.entries(names)){
+      const el=document.querySelector(selector);if(el)el.textContent=value;
+    }
+    const phone=document.querySelector(".phone");
+    if(phone)phone.setAttribute("aria-label","Prévia ilustrativa dos serviços de Telessaúde. Selecione um serviço para saber como acessar");
+    document.querySelector(".pwa-install-actions")?.setAttribute("aria-label","Adicionar atalho para a Telessaúde");
+    const lab=document.getElementById("directory-test-login");
+    const heading=lab?.querySelector("strong");
+    if(heading)heading.textContent="Teste da Telessaúde: perfis e identidade";
+  }
   const SPACE="/api/promovie/space/v1";
   const button=document.getElementById("install-now");
   const accessForm=document.getElementById("access-form");
@@ -1064,7 +1084,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     try{
       const response=await fetch(BACKEND_URL+ACCESS+"/session",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||originalChatTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
+        body:JSON.stringify((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||originalChatTest)?{cpf,codigo,directoryTest:true}:{cpf,codigo}),
         cache:"no-store",credentials:"omit",referrerPolicy:"no-referrer"
       });
       const result=await getJson(response);
@@ -1095,7 +1115,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           accessToken:result.access_token,
           environment:result.environment,
           createdAt:Date.now(),
-          ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||originalChatTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
+          ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||originalChatTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
             {directoryToken:result.directory_token}:{}),
           ...(spaceBootstrap?{spaceBootstrap}:{})
         }));
@@ -1105,6 +1125,8 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       try{
         if(originalChatTest){
           window.location.assign("/telesaude/atendimento-chat-original-20261108/");
+        }else if(brandedProfilesTest){
+          window.location.assign("/telesaude/atendimento-perfis-20261109/");
         }else if(richProfilesTest){
           window.location.assign("/telesaude/atendimento-perfis-20261108/");
         }else if(specialtyFlowTest){
