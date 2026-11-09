@@ -1,0 +1,27 @@
+{
+  "name": "Telessaúde PromoVie",
+  "short_name": "Telessaúde",
+  "description": "Atendimento e especialidades da Telessaúde PromoVie.",
+  "lang": "pt-BR",
+  "id": "/telessaude/",
+  "start_url": "/telessaude/",
+  "scope": "/telessaude/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#4b0c8f",
+  "icons": [
+    {
+      "src": "/app/icons/heart-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/icons/heart-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "prefer_related_applications": false
+}
