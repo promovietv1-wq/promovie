@@ -23,6 +23,29 @@
     // Evitar um segundo botão aparente dentro do quadro de registros.
     document.documentElement.classList.add("pv-space-embedded");
   }
+  // No quadro 09/11, uniformizar apenas os textos institucionais.
+  // Nunca alterar conteúdo médico, CPF, registros pessoais ou o fluxo de autenticação.
+  const brandedSpace=(()=>{
+    try{
+      return window.parent!==window&&window.parent===window.top&&
+        window.parent.location.origin===location.origin&&
+        window.parent.location.pathname==="/telesaude/atendimento-perfis-20261109/";
+    }catch{return false;}
+  })();
+  const serviceName=brandedSpace?"Telessaúde":"TeleSaúde";
+  if(brandedSpace){
+    document.title="Meu Espaço de Saúde | Telessaúde PromoVie";
+    const identity=document.querySelector(".identity");
+    if(identity){
+      identity.setAttribute("aria-label","Telessaúde PromoVie, página de acesso");
+      const label=identity.querySelector("strong");
+      if(label)label.textContent="Telessaúde PromoVie";
+    }
+    const back=document.getElementById("back-to-access");
+    if(back)back.textContent="Voltar à Telessaúde";
+    const help=document.querySelector("#login-view .muted");
+    if(help)help.textContent="Utilize o mesmo CPF e código pessoal da sua Telessaúde.";
+  }
   const BASE="https://backend.promovie.tv.br/api/promovie/space/v1";
   const MAX_FILE=500*1024;
   const LIMIT_NOTES=50;
@@ -264,7 +287,7 @@
         $("legacy-wrap").hidden=true;$("vault-passphrase").required=false;
         $("consent-row").hidden=false;$("privacy-consent").required=true;
         $("unlock-title").textContent="Meu Espaço de Saúde";
-        $("unlock-description").textContent="Você já está identificado. Ative seu espaço com o mesmo código da TeleSaúde.";
+        $("unlock-description").textContent="Você já está identificado. Ative seu espaço com o mesmo código da "+serviceName+".";
         $("unlock-submit").textContent="Ativar meu espaço";
         view("unlock");return;
       }
@@ -426,7 +449,7 @@
     const decision=prompt("Esta ação apaga permanentemente informações e documentos. Para confirmar, digite EXCLUIR:");
     if(decision!=="EXCLUIR")return;
     // Exclusão permanece protegida por nova confirmação do código validada pelo backend.
-    const codigo=prompt("Confirme o mesmo código pessoal da TeleSaúde para excluir os dados:");
+    const codigo=prompt("Confirme o mesmo código pessoal da "+serviceName+" para excluir os dados:");
     if(!codigo)throw Error("Operação cancelada.");
     await api("/vault",{method:"DELETE",data:{codigo}});reset();
     notice("Seu conteúdo pessoal foi excluído deste espaço.","success");
@@ -503,7 +526,7 @@
       const health=await api("/health");
       if(!health.disponivel){
         $("login-form").querySelector("button").disabled=true;
-        notice("Este espaço está em preparação. O atendimento médico continua disponível na TeleSaúde.","error");
+        notice("Este espaço está em preparação. O atendimento médico continua disponível na "+serviceName+".","error");
       }
     }catch{
       $("login-form").querySelector("button").disabled=true;
