@@ -20,7 +20,7 @@ assert.match(attendance,/diretorio-perfis-20261109-batimentos\.mjs/);
 assert.match(attendance,/location\.pathname==="\/telessaude\/atendimento\//);
 assert.match(attendance,/Agendamentos e Suporte/);
 assert.match(attendance,/promovie-contato-whatsapp/);
-assert.match(directory,/profissionais-telessaude\.vercel\.app/);
+assert.match(directory,/\/telesaude\/curriculos\//);
 assert.match(directory,/M2\.5 12h3\.7/);
 assert.match(workspace,/\/telessaude\/atendimento\//);
 assert.match(legacy,/const pulseProfilesTest=new URLSearchParams/);
@@ -65,7 +65,7 @@ try{
       "O handoff deve ser consumido ao abrir a área de atendimento");
     await page.locator("#hub-professionals-link").waitFor({timeout:12000});
     assert.equal(await page.locator("#hub-professionals-link").getAttribute("href"),
-      "https://profissionais-telessaude.vercel.app/?theme=light");
+      "/telesaude/curriculos/");
     assert.equal(await page.locator("#appointments-trigger").textContent(),"Agendamentos e Suporte");
     assert.equal(await page.locator("#back-access").getAttribute("href"),"/telessaude/");
     const style=await page.locator(".stage").evaluate(el=>getComputedStyle(el).backgroundImage);
