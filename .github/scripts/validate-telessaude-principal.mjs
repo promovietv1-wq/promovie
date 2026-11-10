@@ -65,7 +65,7 @@ try{
       "O handoff deve ser consumido ao abrir a área de atendimento");
     await page.locator("#hub-professionals-link").waitFor({timeout:12000});
     assert.equal(await page.locator("#hub-professionals-link").getAttribute("href"),
-      "https://profissionais-telessaude.vercel.app/");
+      "https://profissionais-telessaude.vercel.app/?theme=light");
     assert.equal(await page.locator("#appointments-trigger").textContent(),"Agendamentos e Suporte");
     assert.equal(await page.locator("#back-access").getAttribute("href"),"/telessaude/");
     const style=await page.locator(".stage").evaluate(el=>getComputedStyle(el).backgroundImage);
