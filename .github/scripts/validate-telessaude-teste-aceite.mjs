@@ -16,6 +16,8 @@ assert.equal(Buffer.from(pngBase64,"base64").subarray(0,8).toString("hex"),"8950
 assert.match(entry,/window\.location\.assign\("\/telessaude\/teste-aceite\/atendimento\/"\)/);
 assert.match(entry,/Teste do consentimento real/);
 assert.match(test,/id="pv-brand-intro"/);
+assert.doesNotMatch(test,/id="pv-brand-intro-next"/);
+assert.match(test,/id="pv-brand-intro-back">Voltar às especialidades/);
 assert.match(test,/Sua saúde merece uma experiência excelente/);
 assert.match(test,/class="pv-lockup-name">PromoVie<\/span>/);
 assert.match(test,/class="pv-topbar-lockup"/);
@@ -36,6 +38,8 @@ assert.match(information,/<span class="eyebrow">Informações<\/span>/);
 assert.match(information,/Uma experiência para ajudar você a cuidar da sua saúde/);
 assert.match(information,/class="pv-heading-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
 assert.match(information,/class="pv-consent-banner"/);
+assert.doesNotMatch(information,/pv-consent-banner:before/);
+assert.match(information,/id="close-info" class="top-link" type="button">Especialidades/);
 assert.match(information,/class="pv-promo-name">PromoVie<\/strong>/);
 assert.match(information,/class="pv-footer-lockup"/);
 assert.match(information,/Ao iniciar o Chat Médico, você será convidado/);
@@ -58,6 +62,8 @@ assert.match(test,/environment:"production"/);
 assert.match(test,/widget\.init\(\{/);
 assert.match(test,/accessToken:handoff\.accessToken/);
 assert.match(test,/ensurePromoVieIntro/);
+assert.match(test,/introViewed=true/);
+assert.match(test,/new BroadcastChannel\("pv-telessaude-teste-informacoes-v1"\)/);
 assert.match(test,/await ensurePromoVieIntro\(\)/);
 assert.match(test,/PV_BRAND_INTRO_CANCELLED/);
 assert.match(directory,/PV_BRAND_INTRO_CANCELLED/);
@@ -103,9 +109,20 @@ try{
   assert.ok(Math.abs(directoryRect.width/directoryRect.height-178/29)<.35,
     "Marca do catálogo deformada");
   assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
-  assert.equal(await page.locator("#pv-brand-intro").evaluate(d=>d.open),false);
-  await page.locator("#hub-native").click();
   await page.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
+  assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
+  const introVisual=await page.locator("#pv-brand-intro").evaluate(node=>{
+    const heart=node.querySelector(".pv-brand-intro-body > img:first-child");
+    const back=node.querySelector("#pv-brand-intro-back");
+    const hr=heart.getBoundingClientRect(),bg=getComputedStyle(back);
+    return {heartWidth:hr.width,heartHeight:hr.height,backBg:bg.backgroundColor,
+      backText:bg.color,buttons:node.querySelectorAll("button").length};
+  });
+  assert.ok(introVisual.heartWidth>=130,"Coração não foi ampliado: "+JSON.stringify(introVisual));
+  assert.ok(introVisual.heartHeight>=130,"Coração pequeno: "+JSON.stringify(introVisual));
+  assert.equal(introVisual.buttons,1,"A apresentação deve ter só o botão voltar");
+  assert.match(introVisual.backText,/rgb\(255, 255, 255\)/);
+
   await page.waitForFunction(()=>{
     const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
     return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
@@ -194,14 +211,12 @@ try{
     "A página de informações não deve ter rolagem horizontal");
   assert.equal(await page.locator("#pv-brand-intro").evaluate(d=>d.open),true,
     "Ler informações em outra aba não deve dispensar apresentação nem consentimento");
-  await popup.close();
+  await popup.locator("#close-info").click();
+  await page.waitForFunction(()=>!document.querySelector("#pv-brand-intro").open);
+  await page.locator("#directory-dialog[open]").waitFor();
   assert.equal(await page.evaluate(()=>Boolean(window.__sdkConfig)),false);
   assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
-  await page.locator("#pv-brand-intro-back").click();
-  await page.locator("#directory-dialog[open]").waitFor();
-  assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
   await page.locator("#hub-native").click();
-  await page.locator("#pv-brand-intro-next").click();
   await page.waitForFunction(()=>window.__sdkOpened===1,{timeout:15000});
   const cfg=await page.evaluate(()=>window.__sdkConfig);
   assert.deepEqual(cfg,{locale:"pt",environment:"production",hasTerms:false,hasPrivacy:false});
