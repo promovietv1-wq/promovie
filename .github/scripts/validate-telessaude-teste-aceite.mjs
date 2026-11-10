@@ -11,11 +11,17 @@ const information=await readFile("telessaude/teste-aceite/informacoes/index.html
 const lettering=await readFile("telessaude/teste-aceite/assets/telessaude-lettering.svg","utf8");
 const pngBase64=lettering.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/)?.[1];
 assert.ok(pngBase64,"Wordmark must retain embedded raster from user supplied example");
+assert.match(lettering,/flood-color="#4b0c8f"/);
+assert.match(lettering,/feComposite in="promoVieColor" in2="SourceAlpha" operator="in"/);
+assert.match(lettering,/filter="url\(#pv-purple-ink\)"/);
 assert.equal(Buffer.from(pngBase64,"base64").subarray(0,8).toString("hex"),"89504e470d0a1a0a");
 assert.match(entry,/window\.location\.assign\("\/telessaude\/teste-aceite\/atendimento\/"\)/);
 assert.match(entry,/Teste do consentimento real/);
 assert.match(test,/id="pv-brand-intro"/);
 assert.match(test,/Sua saúde merece uma experiência excelente/);
+assert.match(test,/class="pv-lockup-name">PromoVie<\/span>/);
+assert.match(test,/class="pv-topbar-lockup"/);
+assert.match(test,/class="pv-lockup"/);
 assert.match(test,/A <img class="pv-lettering-inline"/);
 assert.match(test,/PromoVie reúne acesso a profissionais de saúde, orientação e suporte/);
 assert.match(test,/class="pv-brand-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
@@ -30,10 +36,14 @@ assert.match(information,/<span class="eyebrow">Informações<\/span>/);
 assert.match(information,/Uma experiência para ajudar você a cuidar da sua saúde/);
 assert.match(information,/class="pv-heading-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
 assert.match(information,/class="pv-consent-banner"/);
+assert.match(information,/class="pv-promo-name">PromoVie<\/strong>/);
+assert.match(information,/class="pv-footer-lockup"/);
 assert.match(information,/Ao iniciar o Chat Médico, você será convidado/);
 assert.match(information,/Leia abaixo a essência desse conteúdo/);
 assert.match(information,/document\.querySelector\("\.pv-consent-banner"\)/);
 assert.match(directory,/class="pv-directory-lettering"/);
+assert.match(directory,/pv-directory-lockup/);
+assert.match(directory,/class="pv-lockup-name">PromoVie<\/span>/);
 assert.match(information,/Como funciona o atendimento/);
 assert.match(information,/Privacidade e consentimento/);
 assert.equal((information.match(/<details>/g)||[]).length,2);
@@ -96,6 +106,21 @@ try{
     const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
     return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
   });
+  assert.equal((await page.locator("#pv-brand-intro .pv-lockup-name").textContent()).trim(),"PromoVie");
+  assert.equal((await page.locator(".topbar .pv-lockup-name").textContent()).trim(),"PromoVie");
+  await page.waitForFunction(()=>{
+    const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
+    try{
+      const canvas=document.createElement("canvas"); canvas.width=178; canvas.height=29;
+      const ctx=canvas.getContext("2d",{willReadFrequently:true});
+      ctx.drawImage(mark,0,0,178,29);
+      const rgba=ctx.getImageData(0,0,178,29).data;
+      for(let i=0;i<rgba.length;i+=4){
+        if(rgba[i+3]>150 && rgba[i]<155 && rgba[i+1]<105 && rgba[i+2]>75 && rgba[i+2]<195)return true;
+      }
+    }catch(error){return false}
+    return false;
+  },{timeout:10000});
   assert.equal(await page.evaluate(()=>document.querySelector("#pv-brand-intro-title").textContent.trim()),
     "Sua saúde merece uma experiência excelente.");
   const popupPromise=page.waitForEvent("popup");
