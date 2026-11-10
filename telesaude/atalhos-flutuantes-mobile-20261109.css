@@ -1,6 +1,28 @@
 /* Telessaúde PromoVie: dock acessível somente no mobile da tela de Especialidades.
    Mantém os botões, IDs e listeners originais, sem acessar o SDK/iframe médico. */
+.pv-hub-close-x{display:none}
 @media (max-width:700px){
+  /* O início só pode ser acessado pelo X, nunca pelo Voltar do dispositivo. */
+  .hub-dialog[open] .hub-brand-strip .pv-hub-close-x{
+    display:grid;
+    place-items:center;
+    margin-left:auto;
+    flex:0 0 35px;
+    width:35px;
+    height:35px;
+    border:1px solid #d5c6ea;
+    border-radius:10px;
+    background:#fff;
+    color:#4b0c8f;
+    font-size:27px;
+    line-height:1;
+    text-decoration:none;
+  }
+  .hub-dialog[open] .hub-brand-strip .pv-hub-close-x:focus-visible{
+    outline:3px solid #7043c2;
+    outline-offset:2px;
+  }
+
   /* O diálogo ocupa a área útil; somente o conteúdo central rola. */
   .hub-dialog[open]{
     display:flex;
