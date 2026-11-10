@@ -108,6 +108,21 @@ try{
   });
   assert.equal((await page.locator("#pv-brand-intro .pv-lockup-name").textContent()).trim(),"PromoVie");
   assert.equal((await page.locator(".topbar .pv-lockup-name").textContent()).trim(),"PromoVie");
+
+  const proportions=await page.evaluate(()=>{
+    const measure=selector=>{
+      const rect=document.querySelector(selector)?.getBoundingClientRect();
+      return rect&&{w:rect.width,h:rect.height,x:rect.x,right:rect.right};
+    };
+    return [measure(".pv-topbar-lettering"),measure(".pv-brand-lettering"),measure(".pv-directory-lettering")];
+  });
+  for(const mark of proportions){
+    assert.ok(mark && mark.w>65 && mark.h>9,"Lettering muito pequeno ou ausente");
+    assert.ok(Math.abs(mark.w/mark.h-178/29)<0.35,"Lettering deformado "+JSON.stringify(mark));
+    assert.ok(mark.x>=0 && mark.right<=width+2,"Lettering fora da tela "+JSON.stringify(mark));
+  }
+  console.log("Proporções corretas do lettering:",width,JSON.stringify(proportions));
+
   await page.waitForFunction(()=>{
     const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
     try{
