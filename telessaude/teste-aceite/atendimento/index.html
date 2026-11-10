@@ -309,6 +309,71 @@ html body .mediquo-launcher{display:none!important}
 .pv-brand-info-card a:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
 .pv-brand-intro-body small{font-size:11px;line-height:1.45;color:#655a73;margin-top:5px}
 @media(max-width:600px){.pv-brand-intro{width:calc(100vw - 24px);border-radius:20px}.pv-brand-intro-body{padding:22px;gap:11px}}
+
+/* Correção responsiva isolada: imagens horizontais da identidade não herdam
+   dimensões quadradas dos ícones ou do coração da marca. */
+.topbar .identity-copy{flex:0 1 auto;min-width:0}
+.topbar .identity .pv-topbar-lockup{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;width:max-content;max-width:100%;flex-shrink:1}
+.topbar .identity img.pv-topbar-lettering{
+  display:block!important;width:142px!important;height:auto!important;
+  max-width:100%!important;aspect-ratio:178 / 29;min-width:0;
+  filter:none!important;object-fit:contain;flex:0 1 auto
+}
+.topbar .identity .pv-topbar-lockup .pv-lockup-name{
+  display:block;font:700 11px/1.15 Inter,Arial,sans-serif;
+  color:#4b0c8f;letter-spacing:0;white-space:nowrap
+}
+.hub-dialog .hub-brand-strip strong.pv-brand-name.pv-directory-lockup{
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  gap:2px;min-width:0;max-width:calc(100% - 100px);
+  background:none;border:0;padding:0;box-shadow:none;line-height:1
+}
+.hub-dialog .hub-brand-strip img.pv-directory-lettering{
+  display:block!important;width:142px!important;height:auto!important;
+  max-width:100%!important;aspect-ratio:178 / 29;
+  object-fit:contain;filter:none!important;flex:0 1 auto
+}
+.hub-dialog .hub-brand-strip .pv-directory-lockup .pv-lockup-name{
+  display:block;font:700 11px/1.2 Inter,Arial,sans-serif;letter-spacing:0;
+  white-space:nowrap;color:#4b0c8f
+}
+.pv-brand-intro-body img.pv-brand-lettering{
+  display:block;width:178px!important;height:auto!important;
+  max-width:100%;aspect-ratio:178 / 29;object-fit:contain;filter:none
+}
+.pv-brand-intro-body > img:first-child{width:60px;height:60px;flex:none}
+.pv-brand-intro-body .pv-lockup{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pv-brand-intro-body .pv-lockup-name{font:750 14px/1.2 Inter,Arial,sans-serif;color:#4b0c8f}
+.pv-brand-intro-body{gap:11px}
+.pv-brand-intro-body p{overflow-wrap:break-word;text-wrap:pretty}
+.pv-brand-intro-body h2{text-wrap:balance}
+@media(max-width:700px){
+  .topbar .identity img.pv-topbar-lettering{width:110px!important}
+  .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:124px!important}
+  .pv-brand-intro{max-height:calc(100dvh - 20px)}
+  .pv-brand-intro-body{padding:20px;gap:10px}
+  .pv-brand-intro-body > img:first-child{width:54px;height:54px}
+  .pv-brand-intro-body h2{font-size:clamp(20px,5.4vw,25px);line-height:1.24}
+  .pv-brand-intro-body p{font-size:14px;line-height:1.52}
+  .pv-brand-info-card{padding:13px 14px}
+  .pv-brand-intro-body .pv-lockup-name{font-size:13px}
+}
+@media(max-width:390px){
+  .topbar .identity img.pv-topbar-lettering{width:94px!important}
+  .topbar .identity .pv-topbar-lockup .pv-lockup-name{font-size:10px}
+  .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:113px!important}
+  .pv-brand-intro-body{padding:17px;gap:9px}
+}
+@media(max-width:345px){
+  .topbar .identity img.pv-topbar-lettering{width:81px!important}
+  .topbar .identity .pv-topbar-lockup .pv-lockup-name{font-size:9px}
+}
+@media(max-width:700px){
+  html.pv-chat-mode .topbar .identity img.pv-topbar-lettering{width:91px!important;height:auto!important}
+}
+@media(max-width:345px){
+  html.pv-chat-mode .topbar .identity img.pv-topbar-lettering{width:75px!important}
+}
 </style></head>
 <body class="pv-navigation-mode">
 <header class="topbar">
@@ -434,11 +499,11 @@ html body .mediquo-launcher{display:none!important}
   <span class="pv-lockup-name">PromoVie</span>
 </div>
 <h2 id="pv-brand-intro-title">Sua saúde merece uma experiência excelente.</h2>
-<p id="pv-brand-intro-desc">A <img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada e organizada para você.</p>
+<p id="pv-brand-intro-desc">A Telessaúde PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada e organizada para você.</p>
 <p class="pv-brand-intro-assertion">Conte com a PromoVie na sua jornada de saúde.</p>
 <div class="pv-brand-info-card" aria-label="Informações em português sobre o atendimento">
   <strong>Informações sobre o seu atendimento</strong>
-  <p>Conheça o funcionamento da <img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> e consulte informações e orientações sobre o atendimento.</p>
+  <p>Conheça o funcionamento da Telessaúde e consulte informações e orientações sobre o atendimento.</p>
   <a id="pv-brand-info-link" href="/telessaude/teste-aceite/informacoes/" target="_blank" rel="noopener noreferrer">Ler informações <span aria-hidden="true">↗</span></a>
 </div>
 <button type="button" id="pv-brand-intro-next">Continuar para o atendimento</button>
