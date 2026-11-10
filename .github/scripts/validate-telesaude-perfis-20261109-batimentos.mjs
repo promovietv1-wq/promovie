@@ -192,7 +192,7 @@ try{
    const professionalLink=page.locator("#hub-professionals-link");
    assert.equal(await professionalLink.count(),1);
    assert.equal(await professionalLink.isVisible(),true);
-   assert.equal(await professionalLink.getAttribute("href"),"https://profissionais-telessaude.vercel.app/");
+   assert.equal(await professionalLink.getAttribute("href"),"/telesaude/curriculos/");
    assert.equal(await professionalLink.getAttribute("target"),"_blank");
    const rel=await professionalLink.getAttribute("rel");
    assert.match(rel,/noopener/);
