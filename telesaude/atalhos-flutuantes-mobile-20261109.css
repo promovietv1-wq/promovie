@@ -160,6 +160,37 @@
     margin:0;
   }
 }
+/* Contraste consistente no mobile, inclusive após estilos de versões antigas em cache. */
+@media (max-width:700px){
+  .hub-dialog[open] .hub-footer #hub-shortcut-appointments,
+  .hub-dialog[open] .hub-footer #hub-native,
+  .hub-dialog[open] .hub-footer #hub-shortcut-space{
+    background:#6228a7!important;
+    border:1px solid #6228a7!important;
+    color:#fff!important;
+    box-shadow:0 2px 7px rgba(75,12,143,.14)!important;
+  }
+  .hub-dialog[open] .hub-footer #hub-shortcut-appointments:hover,
+  .hub-dialog[open] .hub-footer #hub-native:hover,
+  .hub-dialog[open] .hub-footer #hub-shortcut-space:hover{
+    background:#51208e!important;
+    border-color:#51208e!important;
+  }
+  html.pv-chat-mode .topbar .clinic-tools .directory-open,
+  html.pv-chat-mode .topbar .clinic-tools .agenda-open{
+    background:#f0e8fb!important;
+    border:1px solid #a684d0!important;
+    color:#4b0c8f!important;
+    box-shadow:inset 0 0 0 1px rgba(103,55,169,.08)!important;
+  }
+  html.pv-chat-mode .topbar .clinic-tools .directory-open:hover,
+  html.pv-chat-mode .topbar .clinic-tools .agenda-open:hover{
+    background:#e6d8f8!important;
+    border-color:#825bb8!important;
+  }
+  /* Antigo link de retorno ao formulário não deve aparecer no mobile. */
+  .directory-dialog .test-normal-link{display:none!important}
+}
 @media (max-width:360px){
   .hub-dialog .hub-footer{gap:5px;margin-left:7px;margin-right:7px;padding:6px}
   .hub-dialog .hub-shortcuts{gap:5px}
