@@ -149,3 +149,40 @@ dialog::backdrop{background:rgba(28,15,57,.5)}
 .space-appointments-link:focus-visible{outline:3px solid #44cce8;outline-offset:3px}
 .space-appointments-link[hidden]{display:none!important}
 @media(max-width:580px){.toolbar-actions .space-appointments-link{flex:1;min-width:120px}}
+
+/* Navegação do Meu Espaço no celular: retorno ao início somente pelo X.
+   A ação de invalidar a sessão pessoal continua acessível por segurança. */
+@media(max-width:700px){
+  .topbar .top-link.pv-mobile-exit-x{
+    display:inline-grid;
+    place-items:center;
+    width:38px;
+    height:38px;
+    min-width:38px;
+    padding:0;
+    border:1px solid #d6c5eb;
+    border-radius:10px;
+    background:#fff;
+    color:#4b0c8f;
+    font-size:27px;
+    font-weight:500;
+    line-height:1;
+    text-decoration:none;
+  }
+  button#logout.pv-mobile-logout-link{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    min-height:38px;
+    padding:4px 8px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    color:#5d3587;
+    font-size:12px;
+    font-weight:650;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+}
