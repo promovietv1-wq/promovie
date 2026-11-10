@@ -80,14 +80,14 @@
     box-shadow:0 2px 7px rgba(75,12,143,.14);
   }
   .hub-dialog .hub-footer #hub-native{
-    background:#3e087f;
-    border-color:#3e087f;
+    background:#6228a7;
+    border-color:#6228a7;
     color:#ffffff;
-    box-shadow:0 3px 11px rgba(62,8,127,.2);
+    box-shadow:0 2px 7px rgba(75,12,143,.14);
   }
   .hub-dialog .hub-footer #hub-shortcut-appointments:hover,
   .hub-dialog .hub-footer #hub-shortcut-space:hover{background:#51208e;border-color:#51208e}
-  .hub-dialog .hub-footer #hub-native:hover{background:#300466;border-color:#300466}
+  .hub-dialog .hub-footer #hub-native:hover{background:#51208e;border-color:#51208e}
   /* Chat: nome, marca, Especialidades, Agendamentos e sair na mesma linha. */
   html.pv-chat-mode{--bar-h:76px}
   html.pv-chat-mode .topbar{
@@ -136,6 +136,19 @@
     text-align:center;
     white-space:normal;
     overflow-wrap:normal;
+  }
+  /* Mesma superfície lilás suave e borda roxa nos dois atalhos do Chat. */
+  html.pv-chat-mode .topbar .directory-open,
+  html.pv-chat-mode .topbar .clinic-tools .agenda-open{
+    background:#f0e8fb;
+    border:1px solid #a684d0;
+    color:#4b0c8f;
+    box-shadow:inset 0 0 0 1px rgba(103,55,169,.08);
+  }
+  html.pv-chat-mode .topbar .directory-open:hover,
+  html.pv-chat-mode .topbar .clinic-tools .agenda-open:hover{
+    background:#e6d8f8;
+    border-color:#825bb8;
   }
   html.pv-chat-mode .topbar .directory-open[hidden]{display:none!important}
   html.pv-chat-mode .topbar .directory-open span{display:inline}
