@@ -29,4 +29,19 @@ for(const color of ["light","dark"]){
   }
   await ctx.close();
 }
+const persistContext=await browser.newContext({colorScheme:"light"});
+const p=await persistContext.newPage();
+try{
+  await p.goto("https://profissionais-telessaude.vercel.app/?theme=light",{waitUntil:"domcontentloaded",timeout:35000});
+  await p.waitForTimeout(900);
+  const before=await p.evaluate(()=>({theme:document.documentElement.dataset.theme,stored:localStorage.getItem("pub_profissionais_v1")?.slice(0,260)}));
+  await p.locator('button[aria-label="Alternar entre tema claro e escuro"]').click();
+  await p.waitForTimeout(400);
+  const after=await p.evaluate(()=>({theme:document.documentElement.dataset.theme,stored:localStorage.getItem("pub_profissionais_v1")?.slice(0,260),background:getComputedStyle(document.body).backgroundColor}));
+  await p.reload({waitUntil:"domcontentloaded"});
+  await p.waitForTimeout(400);
+  const reload=await p.evaluate(()=>({theme:document.documentElement.dataset.theme,stored:localStorage.getItem("pub_profissionais_v1")?.slice(0,260),background:getComputedStyle(document.body).backgroundColor}));
+  console.log("THEME_TOGGLE_PERSISTENCE",JSON.stringify({before,after,reload}));
+}catch(error){console.log("THEME_TOGGLE_ERROR",String(error).slice(0,350))}
+await persistContext.close();
 await browser.close();
