@@ -15,7 +15,7 @@ assert.match(test,/locale:"pt"/);
 assert.match(test,/environment:"production"/);
 assert.match(test,/widget\.init\(\{/);
 assert.match(test,/accessToken:handoff\.accessToken/);
-assert.match(test,/requirePromoVieIntro/);
+assert.match(test,/ensurePromoVieIntro/);
 assert.match(test,/await ensurePromoVieIntro\(\)/);
 assert.match(test,/PV_BRAND_INTRO_CANCELLED/);
 assert.match(directory,/PV_BRAND_INTRO_CANCELLED/);
@@ -43,7 +43,7 @@ try{
   });
   await page.route("https://backend.promovie.tv.br/api/promovie/space/v1/session",route=>
     route.fulfill({status:503,contentType:"application/json",body:"{}"}));
-  await page.route("https://backend.promovie.tv.br/api/promovie/directory/v1/catalog",route=>
+  await page.route("https://backend.promovie.tv.br/api/promovie/directory/v1/catalog-profile",route=>
     route.fulfill({status:200,contentType:"application/json",body:'{"items":[]}'}));
   await page.route("https://widget.mediquo.com/js/1.0.0/mediquo.js",route=>
     route.fulfill({status:200,contentType:"application/javascript",
