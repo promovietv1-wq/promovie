@@ -1,0 +1,37 @@
+name: Telessaude teste do aceite real
+on:
+  pull_request:
+    paths:
+      - 'telessaude/teste-aceite/**'
+      - '.github/scripts/validate-telessaude-teste-aceite.mjs'
+      - '.github/workflows/telessaude-teste-aceite.yml'
+  push:
+    branches: [main, teste/consentimento-real-promoVie-20261110]
+    paths:
+      - 'telessaude/teste-aceite/**'
+      - '.github/scripts/validate-telessaude-teste-aceite.mjs'
+      - '.github/workflows/telessaude-teste-aceite.yml'
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe
+        run: |
+          node --check telessaude/teste-aceite/diretorio.mjs
+          node --check .github/scripts/validate-telessaude-teste-aceite.mjs
+      - name: Instalar navegador
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar acesso e intro PromoVie imediatamente antes do SDK
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/pv-aceite-real.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-telessaude-teste-aceite.mjs
