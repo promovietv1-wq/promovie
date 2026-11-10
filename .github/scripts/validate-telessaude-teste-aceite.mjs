@@ -20,7 +20,9 @@ assert.match(test,/Sua saúde merece uma experiência excelente/);
 assert.match(test,/class="pv-lockup-name">PromoVie<\/span>/);
 assert.match(test,/class="pv-topbar-lockup"/);
 assert.match(test,/class="pv-lockup"/);
-assert.match(test,/A <img class="pv-lettering-inline"/);
+assert.match(test,/A Telessaúde PromoVie reúne acesso/);
+assert.doesNotMatch(test,/class="pv-lettering-inline"/);
+assert.doesNotMatch(information,/class="pv-lettering-inline" src=/);
 assert.match(test,/PromoVie reúne acesso a profissionais de saúde, orientação e suporte/);
 assert.match(test,/class="pv-brand-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
 assert.match(test,/>Ler informações <span aria-hidden="true">/);
@@ -68,7 +70,7 @@ assert.doesNotMatch(test,/MediquoWidget\.destroy\(/);
 
 const browser=await chromium.launch({headless:true});
 try{
- for(const width of [390,1280]){
+ for(const width of [360,390,768,1280]){
   const page=await browser.newPage({viewport:{width,height:850}});
   const pageErrors=[];
   page.on("pageerror",error=>pageErrors.push(error.message));
@@ -96,6 +98,10 @@ try{
   await page.waitForURL(/\/telessaude\/teste-aceite\/atendimento\//,{timeout:15000});
   assert.equal(await page.evaluate(()=>sessionStorage.getItem("promovie:mediquo:handoff:v1")),null);
   await page.locator("#hub-native").waitFor();
+  const directoryRect=await page.locator(".hub-dialog .pv-directory-lettering").boundingBox();
+  assert.ok(directoryRect&&directoryRect.width>80,"Marca do catálogo ilegível");
+  assert.ok(Math.abs(directoryRect.width/directoryRect.height-178/29)<.35,
+    "Marca do catálogo deformada");
   assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
   assert.equal(await page.locator("#pv-brand-intro").evaluate(d=>d.open),false);
   await page.locator("#hub-native").click();
@@ -106,6 +112,22 @@ try{
   });
   assert.equal((await page.locator("#pv-brand-intro .pv-lockup-name").textContent()).trim(),"PromoVie");
   assert.equal((await page.locator(".topbar .pv-lockup-name").textContent()).trim(),"PromoVie");
+
+  const proportions=await page.evaluate(()=>{
+    const measure=selector=>{
+      const rect=document.querySelector(selector)?.getBoundingClientRect();
+      return rect&&{w:rect.width,h:rect.height,x:rect.x,right:rect.right};
+    };
+    return [measure(".pv-topbar-lettering"),measure(".pv-brand-lettering"),measure(".pv-directory-lettering")];
+  });
+  console.log("DEBUG brand geometry before checks:",width,JSON.stringify(proportions));
+  for(const mark of proportions.slice(0,2)){
+    assert.ok(mark && mark.w>65 && mark.h>9,"Lettering muito pequeno ou ausente");
+    assert.ok(Math.abs(mark.w/mark.h-178/29)<0.35,"Lettering deformado "+JSON.stringify(mark));
+    assert.ok(mark.x>=0 && mark.right<=width+2,"Lettering fora da tela "+JSON.stringify(mark));
+  }
+  console.log("Proporções corretas do lettering:",width,JSON.stringify(proportions));
+
   await page.waitForFunction(()=>{
     const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
     try{
@@ -135,6 +157,27 @@ try{
     return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
   });
   assert.equal(await popup.locator(".brand img.pv-heading-lettering").getAttribute("alt"),"Telessaúde");
+
+  for(const vw of [320,360,390,430,600,768,1024,1440]){
+    await popup.setViewportSize({width:vw,height:850});
+    const layout=await popup.evaluate(()=>{
+      const rect=sel=>{const r=document.querySelector(sel)?.getBoundingClientRect();
+        return r&&{x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+      return {scroll:document.documentElement.scrollWidth,
+        logo:rect(".pv-heading-lettering"),footer:rect(".pv-footer-lockup img"),
+        brand:rect(".brand"),button:rect("#close-info")};
+    });
+    assert.ok(layout.scroll<=vw+2,"Rolagem horizontal em "+vw);
+    assert.ok(layout.logo && layout.logo.width>90,"Logo ilegível "+vw);
+    assert.ok(Math.abs(layout.logo.width/layout.logo.height-178/29)<.35,"Logo distorcido "+vw);
+    assert.ok(layout.logo.right<=vw+2 && layout.logo.x>=0,"Logo sai da tela "+vw);
+    assert.ok(Math.abs(layout.footer.width/layout.footer.height-178/29)<.35,"Rodapé distorcido "+vw);
+    assert.ok(layout.brand.bottom<=layout.button.y+1 || layout.brand.right<=layout.button.x+1,
+      "Marca sobreposta ao botão "+vw);
+    console.log("Layout página informações:",vw,JSON.stringify(layout));
+  }
+  await popup.setViewportSize({width,height:850});
+
   const details=popup.locator("#resumo-pt details");
   assert.equal(await details.count(),2);
   assert.equal(await details.nth(0).evaluate(x=>x.open),false);
