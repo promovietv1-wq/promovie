@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Teste de aceite | Telessaúde PromoVie</title>
+<link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script defer src="/telesaude/space-entry.js"></script>
+<style>
+:root{
+  color-scheme:light;
+  --bar-h:76px;
+  --space-h:0px;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-synthesis:none;
+}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;background:#fff}
+body{overflow:hidden;color:#302349}
+a{color:inherit}
+button{font:inherit}
+.topbar{
+  position:fixed;inset:0 0 auto;height:var(--bar-h);
+  padding:0 max(18px,env(safe-area-inset-right)) 0 max(18px,env(safe-area-inset-left));
+  background:linear-gradient(112deg,#fff 0%,#fbf9ff 55%,#f0eafd 100%);
+  border-bottom:1px solid #e8def5;
+  box-shadow:0 5px 24px rgba(59,26,112,.075);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  isolation:isolate;overflow:hidden;z-index:2147483640;
+}
+/* Identidade institucional, visível também acima do atendimento no mobile. */
+.topbar::before{
+  content:"";position:absolute;inset:0 0 auto;height:3px;
+  background:linear-gradient(90deg,#4b0c8f 0%,#7334d8 58%,#00bde8 100%);
+  pointer-events:none
+}
+.topbar::after{
+  content:"";position:absolute;right:15%;top:-128px;width:310px;height:250px;
+  border:1px solid rgba(115,52,216,.10);border-radius:50%;
+  box-shadow:0 0 0 26px rgba(115,52,216,.027),
+             0 0 0 72px rgba(115,52,216,.017);
+  pointer-events:none;z-index:0
+}
+.identity{display:flex;align-items:center;gap:13px;min-width:0;position:relative;z-index:1}
+.identity img{
+  display:block;width:56px;height:56px;object-fit:contain;flex:none;
+  filter:drop-shadow(0 5px 9px rgba(85,27,156,.13))
+}
+.identity-copy{min-width:0;display:flex;align-items:center}
+.identity-copy strong{
+  font-size:19px;line-height:1.22;font-weight:800;letter-spacing:-.035em;
+  color:#3f197a;white-space:nowrap
+}
+.back{
+  position:relative;z-index:1;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:40px;height:40px;min-width:40px;flex:0 0 40px;
+  border:1px solid #ded5ee;border-radius:12px;
+  background:#fff;color:#542aa0;text-decoration:none;
+}
+.back:hover,.back:focus-visible{background:#f7f3fd;border-color:#bda8df}
+.back:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
+.back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:root.space-link-ready{--space-h:calc(48px + env(safe-area-inset-bottom))}
+/* Faixa de acesso PromoVie: mesma cor primária do cabeçalho Médicos e Especialistas,
+   ícone e título no centro, indicador de navegação na direita. Sem tocar no widget. */
+.space-footer[hidden]{display:none!important}
+.space-footer{
+  position:fixed;inset:auto 0 0;height:var(--space-h);
+  z-index:1100;display:flex;align-items:stretch;
+  padding:0;background:#4b0c8f;
+}
+.space-entry{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  gap:9px;width:100%;height:100%;min-height:0;
+  padding:0 max(48px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(48px,env(safe-area-inset-left));
+  border:0;border-radius:0;background:#4b0c8f;
+  text-align:center;text-decoration:none;color:#fff;
+}
+.space-entry:hover{background:#3d0977}
+.space-entry:focus-visible{outline:3px solid #fff;outline-offset:-4px}
+.space-entry svg{
+  display:block;width:19px;height:19px;flex:0 0 19px;
+  fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round
+}
+.space-entry strong{
+  display:block;font-size:15px;font-weight:750;line-height:1.25;
+  color:#fff;white-space:nowrap
+}
+.space-entry .space-arrow{
+  position:absolute;right:max(18px,env(safe-area-inset-right));
+  top:calc((100% - env(safe-area-inset-bottom))/2);
+  width:18px;height:18px;transform:translateY(-50%);
+  pointer-events:none
+}
+@media(max-width:700px){
+  :root.space-link-ready{--space-h:calc(48px + env(safe-area-inset-bottom))}
+  .space-entry{gap:8px}
+  .space-entry strong{font-size:14px}
+}
+@media(min-width:1100px){
+  /* Alinhado a largura externa do aplicativo no desktop. */
+  .space-footer{
+    left:50%;right:auto;width:min(1180px,calc(100vw - 96px));
+    transform:translateX(-50%)
+  }
+}
+.space-embedded[hidden]{display:none!important}
+.space-embedded{
+  position:fixed;inset:0;z-index:2147483647;display:block;
+  background:#f9f7fc;overflow:hidden
+}
+.space-embedded iframe{
+  display:block;width:100%;height:calc(100vh - 56px);height:calc(100dvh - 56px);
+  border:0;background:#f9f7fc
+}
+/* Durante a autenticação compartilhada, a página interna carrega fora da
+   vista: só fica visível quando o formulário ou os registros estão prontos. */
+.space-embedded.is-preparing iframe{visibility:hidden}
+.space-embedded-wait[hidden]{display:none!important}
+.space-embedded-wait{
+  position:absolute;inset:56px 0 0;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:13px;
+  background:radial-gradient(ellipse at 30% 15%,#eee8fc,transparent 64%),#f9f7fc;
+  color:#4b1a85;font:700 14px/1.5 Inter,Arial,sans-serif;
+  text-align:center;padding:22px
+}
+.space-embedded-wait-indicator{
+  width:29px;height:29px;border-radius:50%;
+  border:3px solid #e3d5f4;border-top-color:#6326aa;
+  animation:space-embedded-spin .85s linear infinite
+}
+@keyframes space-embedded-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.space-embedded-wait-indicator{animation:none}}
+.space-embedded-toolbar{
+  height:56px;min-height:56px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left));
+  border-bottom:1px solid #e7dcef;background:#fff;color:#3f176f;
+}
+.space-embedded-toolbar button{
+  display:inline-flex;align-items:center;justify-content:center;min-height:39px;
+  padding:9px 14px;border:1px solid #cdb8e6;border-radius:10px;
+  background:#f7f2fd;color:#461682;font:800 12px/1.25 Inter,Arial,sans-serif;cursor:pointer
+}
+.space-embedded-toolbar button:hover{background:#efe3fa}
+.space-embedded-toolbar button:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+.space-embedded-toolbar strong{font:800 12px/1.25 Inter,Arial,sans-serif;text-align:right}
+@media(max-width:420px){
+  .space-embedded-toolbar{padding-inline:10px;gap:8px}
+  .space-embedded-toolbar button{font-size:11px;padding-inline:9px}
+  .space-embedded-toolbar strong{font-size:10px}
+}
+.space-open-help[hidden]{display:none!important}
+.space-open-help{
+  position:fixed;z-index:1200;left:max(12px,env(safe-area-inset-left));
+  right:max(12px,env(safe-area-inset-right));bottom:calc(var(--space-h) + 10px);
+  width:min(620px,calc(100% - 24px));margin:0 auto;
+  padding:14px 16px;border:2px solid #6c30aa;border-left:6px solid #4b0c8f;
+  border-radius:12px;background:#f3ecff;color:#321052;
+  box-shadow:0 8px 30px rgba(40,13,80,.18);font-size:13px;line-height:1.5
+}
+.space-open-help strong{display:block;margin-bottom:4px;font-size:14px}
+.space-open-help .space-help-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.space-open-help button{min-height:39px;padding:8px 13px;border-radius:9px;
+  border:1px solid #9e82c0;background:white;color:#4b0c8f;font-weight:750;cursor:pointer}
+.space-open-help button:first-child{background:#4b0c8f;color:white;border-color:#4b0c8f}
+.stage{position:fixed;inset:var(--bar-h) 0 var(--space-h);background:#fff}
+.status{
+  position:absolute;inset:0;padding:24px;
+  display:grid;place-items:center;z-index:1;background:#fff;
+}
+.status[hidden]{display:none}
+.status-card{width:min(420px,100%);text-align:center}
+.status-icon{
+  display:grid;place-items:center;margin:0 auto 20px;
+  width:62px;height:62px;border-radius:20px;
+  background:linear-gradient(142deg,#eee7fb,#f5f1fc);
+  color:#542aa0;font-size:27px;font-weight:800;
+}
+.status-card h1{font-size:21px;line-height:1.28;letter-spacing:-.03em;margin:0 0 10px}
+.status-card p{font-size:13px;line-height:1.65;color:#756e80;margin:0}
+.status-card a{
+  display:inline-flex;justify-content:center;margin-top:24px;padding:13px 20px;
+  background:#5424a0;color:#fff;border-radius:12px;
+  font-size:13px;font-weight:700;text-decoration:none;
+}
+.status-card a[hidden]{display:none}
+.loading .status-icon{animation:breathe 1.8s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.7;transform:scale(.96)}}
+/* A Médiquo controla o conteúdo interno. Estilizamos somente o contêiner externo.
+   Os nomes de contêiner são do Widget; nunca alteramos o iframe de atendimento. */
+html body #MediquoContainer,
+html body .MediquoContainer,
+html body #mediquo-container,
+html body .mediquo-container,
+html body [id^="MediquoContainer"],
+html body [class~="MediquoContainer"]{
+  position:fixed!important;
+  top:var(--bar-h)!important;right:0!important;bottom:var(--space-h)!important;left:0!important;
+  width:100vw!important;max-width:none!important;min-width:0!important;
+  height:calc(100vh - var(--bar-h) - var(--space-h))!important;
+  height:calc(100dvh - var(--bar-h) - var(--space-h))!important;
+  max-height:none!important;min-height:0!important;
+  margin:0!important;padding:0!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important;
+  transform:none!important;z-index:1000!important;
+  overflow:hidden!important;background:#fff!important;
+}
+html body #MediquoContainer iframe,
+html body .MediquoContainer iframe,
+html body #mediquo-container iframe,
+html body .mediquo-container iframe{
+  display:block!important;width:100%!important;height:100%!important;
+  max-width:none!important;max-height:none!important;border:0!important;border-radius:0!important;
+}
+html body #MediquoLauncher,
+html body .MediquoLauncher,
+html body #mediquo-launcher,
+html body .mediquo-launcher{display:none!important}
+@media(max-width:700px){
+  :root{--bar-h:62px}
+  :root.space-link-ready{--space-h:calc(48px + env(safe-area-inset-bottom))}
+  .topbar{gap:8px;padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}
+  .topbar::after{right:7%;top:-133px;width:210px;height:190px;opacity:.6}
+  .identity{gap:8px;min-width:0}
+  .identity img{width:43px;height:43px}
+  .identity-copy strong{font-size:13.5px;letter-spacing:-.035em}
+  .back{width:38px;height:38px;min-width:38px;flex-basis:38px}
+  .back svg{width:17px;height:17px}
+}
+@media(max-width:360px){
+  .topbar{padding-inline:9px;gap:6px}
+  .identity{gap:5px}
+  .identity img{width:40px;height:40px}
+  .identity-copy strong{font-size:12px}
+
+}
+/* Composição exclusiva para telas amplas.
+   Centralizamos somente o contêiner externo do widget. O SDK, seu iframe,
+   formulários, navegação e sessões permanecem integralmente sob controle da Médiquo. */
+@media (min-width:1100px){
+  body{background:#f7f5fb}
+  .topbar{
+    padding-left:max(28px,calc((100vw - 1180px)/2));
+    padding-right:max(28px,calc((100vw - 1180px)/2))
+  }
+  /* Fundo contínuo azul e roxo, sem formas, texturas ou sobreposições. */
+  .stage{
+    background:linear-gradient(110deg,#eff9ff 0%,#f8f7ff 46%,#f3edfc 100%)
+  }
+  html body #MediquoContainer,
+  html body .MediquoContainer,
+  html body #mediquo-container,
+  html body .mediquo-container,
+  html body [id^="MediquoContainer"],
+  html body [class~="MediquoContainer"]{
+    left:50%!important;right:auto!important;
+    width:min(1180px,calc(100vw - 96px))!important;
+    max-width:1180px!important;
+    transform:translateX(-50%)!important;
+    border-left:1px solid #ebe5f4!important;
+    border-right:1px solid #ebe5f4!important;
+    box-shadow:0 20px 60px rgba(55,35,95,.09)!important
+  }
+}
+@media(prefers-reduced-motion:reduce){.loading .status-icon{animation:none}}
+</style>
+<link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-setas-2">
+<link rel="stylesheet" href="/telesaude/diretorio-perfis-20261108.css?v=identidade-9">
+<link rel="stylesheet" href="/telesaude/marca-telessaude-20261109-consentimento.css?v=1">
+<link rel="stylesheet" href="/telesaude/atalho-curriculos-20261109.css?v=1">
+<link rel="stylesheet" href="/telesaude/identidade-batimentos-20261109.css?v=1">
+<link rel="stylesheet" href="/telesaude/atalhos-flutuantes-mobile-20261109.css?v=x-discreto-6">
+<style>
+.pv-brand-intro{box-sizing:border-box;width:min(92vw,480px);max-height:90dvh;margin:auto;border:1px solid #e8def8;border-radius:24px;padding:0;background:white;color:#291946;box-shadow:0 24px 90px rgba(34,20,68,.28);font-family:Inter,Arial,sans-serif;overflow:auto}
+.pv-brand-intro::backdrop{background:rgba(22,13,51,.70);backdrop-filter:blur(4px)}
+.pv-brand-intro-body{padding:clamp(22px,6vw,35px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px}
+.pv-brand-intro-body img{object-fit:contain}
+.pv-brand-intro-label{font-size:11px;letter-spacing:.13em;color:#6a40a1}
+.pv-brand-intro-body h2{margin:0;font-size:clamp(22px,4vw,29px);line-height:1.2;color:#36166b;font-weight:800}
+.pv-brand-intro-body p{margin:0;line-height:1.58;font-size:15px}
+.pv-brand-intro-body .pv-brand-intro-assertion{font-weight:750;color:#4b0c8f;margin:3px 0 7px}
+.pv-brand-intro-body button{width:100%;min-height:49px;border-radius:13px;font:750 14px Inter,Arial,sans-serif;cursor:pointer}
+#pv-brand-intro-next{border:1px solid #4b0c8f;color:#fff;background:linear-gradient(115deg,#4b0c8f,#7334d8)}
+#pv-brand-intro-back{border:1px solid #e4d8ef;color:#4b0c8f;background:#f7f2fd}
+.pv-brand-intro-body small{font-size:11px;line-height:1.45;color:#655a73;margin-top:5px}
+@media(max-width:600px){.pv-brand-intro{width:calc(100vw - 24px);border-radius:20px}.pv-brand-intro-body{padding:22px;gap:11px}}
+</style></head>
+<body class="pv-navigation-mode">
+<header class="topbar">
+  <div class="identity">
+    <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="56" height="56" alt="Coração PromoVie">
+    <div class="identity-copy">
+      <strong class="pv-brand-name">Telessaúde</strong>
+    </div>
+  </div>
+  <div class="clinic-tools">
+    <button type="button" class="directory-open" id="directory-open" aria-label="Voltar às especialidades" title="Abrir especialidades" aria-haspopup="dialog" aria-controls="directory-dialog" hidden>
+      <span>Especialidades</span>
+    </button>
+    <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos e Suporte</button>
+  </div>
+  <a class="back" href="/telessaude/" id="back-access" aria-label="Fechar a Telessaúde e voltar ao início" title="Fechar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </a>
+</header>
+<section id="chat-search-shell" class="chat-search-shell" aria-label="Pesquisar profissionais no Chat Médico" hidden>
+  <label class="chat-search-bar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
+    <input id="chat-search-name" type="search" placeholder="Buscar pelo nome" autocomplete="off"
+      aria-label="Pesquisar profissional pelo nome no Chat Médico"
+      aria-controls="chat-search-results" aria-autocomplete="list">
+  </label>
+  <div id="chat-search-results" class="chat-search-results" aria-label="Resultados da pesquisa de profissionais" hidden></div>
+</section>
+<main class="stage" aria-label="Área de atendimentos">
+  <section id="status" class="status loading" role="status" aria-live="polite">
+    <div class="status-card">
+      <div class="status-icon" aria-hidden="true">+</div>
+      <h1 id="status-title">Preparando seu atendimento</h1>
+      <p id="status-message">Estamos abrindo a Telessaúde em uma página exclusiva.</p>
+      <a id="retry" href="/telessaude/" hidden>Voltar e acessar novamente</a>
+    </div>
+  </section>
+</main>
+<nav class="space-footer" hidden aria-label="Acesso ao Meu Espaço de Saúde">
+  <a class="space-entry" href="/telesaude/meu-espaco/?atendimento=aberto" target="_blank" rel="opener" referrerpolicy="no-referrer"
+     aria-label="Abrir Meu Espaço de Saúde e voltar ao atendimento">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <path d="M14 2v6h6M8 13h8M8 17h8"/>
+    </svg>
+    <strong>Meu Espaço de Saúde</strong>
+    <svg class="space-arrow" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m9 18 6-6-6-6"/>
+    </svg>
+  </a>
+</nav>
+<section id="space-embedded" class="space-embedded" hidden role="region" aria-label="Meu Espaço de Saúde integrado ao atendimento">
+  <header class="space-embedded-toolbar">
+    <button id="space-embedded-back" type="button">← Voltar às Especialidades</button>
+    <strong>Meu Espaço de Saúde</strong>
+  </header>
+  <div id="space-embedded-wait" class="space-embedded-wait" role="status" aria-live="polite" hidden>
+    <span class="space-embedded-wait-indicator" aria-hidden="true"></span>
+    <span>Abrindo Meu Espaço de Saúde...</span>
+  </div>
+  <iframe id="space-embedded-frame" title="Meu Espaço de Saúde" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
+</section>
+<section id="space-open-help" class="space-open-help" hidden role="alert" aria-live="assertive">
+  <strong>Seu atendimento continua aberto.</strong>
+  <span>Não foi possível abrir seus registros aqui. A consulta permanece ativa. Se necessário, copie o endereço para acessar em outro navegador.</span>
+  <div class="space-help-actions">
+    <button id="space-copy-link" type="button">Copiar endereço</button>
+    <button id="space-hide-help" type="button">Fechar aviso</button>
+  </div>
+</section>
+<dialog id="appointments-dialog" class="agenda-modal" aria-labelledby="appointments-title">
+  <div class="agenda-modal-head">
+    <h2 id="appointments-title">Agendamentos e Suporte</h2>
+    <button type="button" class="agenda-modal-close" data-agenda-close aria-label="Fechar">×</button>
+  </div>
+  <p class="agenda-modal-lead">Agende uma consulta ou entre em contato com a PromoVie.</p>
+  <div class="agenda-modal-actions">
+    <a class="agenda-modal-link" href="https://tinyurl.com/agendamq" target="_blank" rel="noopener noreferrer"><span>Agendar consulta</span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    <a id="promovie-contato-whatsapp" class="agenda-modal-link pv-contact-match" href="https://wa.me/5527999417458?text=Ol%C3%A1!%20Vim%20pela%20Telessa%C3%BAde%20PromoVie%2C%20na%20%C3%A1rea%20de%20Agendamentos%20e%20Suporte%2C%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida." target="_blank" rel="noopener noreferrer" aria-label="Dúvidas e orientações: conversar com a PromoVie pelo WhatsApp"><span class="pv-contact-label"><svg class="pv-contact-whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.4 11.6a8.4 8.4 0 0 1-12.3 7.5L3.7 20.3l1.3-4.2a8.4 8.4 0 1 1 15.4-4.5Z"/><path d="M9 8.2c-.4-.5-.9-.4-1.1.1-.8 1.7 2.4 4.9 5 6.4 2.1 1.2 3.2 1.3 4 .4.4-.4.5-.9 0-1.2l-1.8-1a.6.6 0 0 0-.8.1l-.5.7a7 7 0 0 1-3.6-3.5l.6-.6a.6.6 0 0 0 .1-.7Z"/></svg><span>Dúvidas e orientações</span></span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+  </div>
+  <section class="agenda-modal-guide" aria-label="Orientações para agendar">
+    <h3>Como funciona</h3>
+    <p>Escolha o profissional e o horário disponível. No dia da consulta, envie uma mensagem no chat do profissional agendado para liberar o contato.</p>
+    <p>Na psicologia, geralmente são exibidos horários dos próximos 7 dias. Se não houver horário com um profissional, consulte outro. Agendamentos podem ser recorrentes, a cada 15 dias.</p>
+  </section>
+  <nav class="agenda-modal-nav" aria-label="Navegar pela Telessaúde">
+    <button type="button" id="appointments-specialties">Especialidades</button>
+    <button type="button" id="appointments-space">Meu Espaço de Saúde</button>
+    <button type="button" id="appointments-chat">Chat Médico</button>
+  </nav>
+  <p id="appointments-space-feedback" class="agenda-modal-nav-feedback" role="status" aria-live="polite"></p>
+</dialog>
+<dialog class="directory-dialog" id="directory-dialog" aria-labelledby="directory-title">
+  <div class="directory-head">
+    <div>
+      <h2 id="directory-title">Especialidades</h2>
+      <p>Lista real do seu acesso, organizada por especialidade.</p>
+    </div>
+    <button type="button" class="directory-close" id="directory-close" aria-label="Fechar">×</button>
+  </div>
+  <label class="directory-search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg>
+    <input type="search" id="directory-query" aria-label="Nome ou especialidade" placeholder="Nome ou especialidade" autocomplete="off">
+  </label>
+  
+  <div id="directory-results" class="directory-results"></div>
+  <p id="directory-feedback" class="directory-feedback" role="status" aria-live="polite"></p>
+  <button type="button" id="directory-alternative" class="directory-alternative" hidden>Tentar abertura alternativa</button>
+  <p id="directory-diagnostics" class="directory-diagnostics"></p>
+  
+  <a class="test-normal-link" href="/telessaude/">Voltar ao acesso</a>
+  
+</dialog>
+
+<dialog id="pv-brand-intro" class="pv-brand-intro" aria-labelledby="pv-brand-intro-title" aria-describedby="pv-brand-intro-desc">
+<div class="pv-brand-intro-body">
+<img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="PromoVie" width="68" height="68">
+<strong class="pv-brand-intro-label">TEL ESSAÚDE PROMOVIE</strong>
+<h2 id="pv-brand-intro-title">Uma experiência PromoVie, do início ao cuidado.</h2>
+<p id="pv-brand-intro-desc">A Telessaúde PromoVie integra acesso a profissionais habilitados, orientação e suporte em um ambiente pensado para sua jornada de saúde.</p>
+<p class="pv-brand-intro-assertion">A PromoVie é sua referência nesta experiência.</p>
+<button type="button" id="pv-brand-intro-next">Continuar para o atendimento</button>
+<button type="button" id="pv-brand-intro-back">Voltar às especialidades</button>
+<small>Os atendimentos clínicos são realizados por profissionais habilitados, conforme suas atribuições e responsabilidades.</small>
+</div></dialog>
+<script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
+<script>
+(function(){
+  "use strict";
+  const HANDOFF_KEY="promovie:mediquo:handoff:v1";
+  const status=document.getElementById("status");
+  const title=document.getElementById("status-title");
+  const message=document.getElementById("status-message");
+  const retry=document.getElementById("retry");
+  const SDK_SOURCE="https://widget.mediquo.com/js/1.0.0/mediquo.js";
+
+  function errorState(text){
+    // Uma falha de autenticação deve continuar legível, sem a tela decorativa.
+    document.body.classList.remove("pv-navigation-mode");
+    status.hidden=false;
+    status.classList.remove("loading");
+    title.textContent="Não foi possível abrir o atendimento";
+    message.textContent=text;
+    retry.hidden=false;
+  }
+
+  function receiveOnce(){
+    let raw=null;
+    try{
+      raw=window.sessionStorage.getItem(HANDOFF_KEY);
+      window.sessionStorage.removeItem(HANDOFF_KEY);
+    }catch{return null;}
+    if(!raw)return null;
+    try{
+      const data=JSON.parse(raw);
+      if(!data||typeof data!=="object"||
+         typeof data.apiKey!=="string"||!data.apiKey||
+         typeof data.accessToken!=="string"||!data.accessToken||
+         data.environment!=="production"||
+         typeof data.createdAt!=="number"||
+         Date.now()-data.createdAt>60000||
+         data.createdAt-Date.now()>10000)return null;
+      return data;
+    }catch{return null;}
+  }
+
+  // Sessão pessoal opcional, isolada da integração Médiquo.
+  // A chave cifradora permanece na memória depois de consumir o handoff temporário.
+  function enableSpaceSingleSignOn(handoff){
+    const link=document.querySelector(".space-entry");
+    if(!link||!handoff||typeof handoff!=="object"||
+       !/^[A-Za-z0-9_-]{43}$/.test(handoff.token||"")||
+       !["new","existing","recover"].includes(handoff.mode)||
+       !/^c2_[A-Za-z0-9_-]{22}$/.test(handoff.salt||"")||
+       !/^[A-Za-z0-9_-]{43}$/.test(handoff.key||"")||
+       !Number.isFinite(handoff.createdAt)||
+       Date.now()-handoff.createdAt>60000||
+       handoff.createdAt-Date.now()>10000)return;
+    if(typeof BroadcastChannel!=="function")return;
+    const spaceToken=handoff.token,mode=handoff.mode,salt=handoff.salt,createdAt=handoff.createdAt;
+    let binary;
+    try{
+      binary=Uint8Array.from(atob(handoff.key.replace(/-/g,"+").replace(/_/g,"/")),
+        c=>c.charCodeAt(0));
+      if(binary.length!==32)return;
+    }catch{return;}
+    // Converte imediatamente os bytes transitórios em uma chave não exportável.
+    const keyPromise=crypto.subtle.importKey("raw",binary,{name:"AES-GCM"},
+      false,["encrypt","decrypt"]).finally(()=>binary.fill(0));
+    delete handoff.key;
+    // Exibir a entrada apenas quando a chave efêmera da sessão for válida.
+    // A área pessoal nunca exige outra autenticação ao retornar desta tela.
+    keyPromise.then(()=>{
+      const footer=link.closest(".space-footer");
+      if(footer){
+        footer.hidden=false;
+        document.documentElement.classList.add("space-link-ready");
+      }
+    }).catch(()=>{});
+    let openedSpace=null,embeddedLoaded=false;
+    const embeddedLayer=document.getElementById("space-embedded");
+    const embeddedFrame=document.getElementById("space-embedded-frame");
+    const embeddedBack=document.getElementById("space-embedded-back");
+    const embeddedWait=document.getElementById("space-embedded-wait");
+    let embeddedInterfaceReady=false,embeddedReadyObserver=null;
+    // Observamos SOMENTE se o formulário ou os registros já ficaram visíveis.
+    // Não lemos, copiamos, nem transmitimos informações médicas do iframe.
+    function revealSpaceWhenReady(){
+      if(embeddedInterfaceReady||!embeddedFrame||!embeddedLayer)return;
+      let doc;
+      try{
+        const frameWindow=embeddedFrame.contentWindow;
+        if(frameWindow.location.origin!==location.origin||
+           frameWindow.location.pathname!=="/telesaude/meu-espaco/")return;
+        doc=embeddedFrame.contentDocument;
+      }catch{return;}
+      const loading=doc?.getElementById("loading-view");
+      if(!loading)return;
+      const ready=loading.hidden&&["workspace-view","unlock-view","login-view"]
+        .some(id=>{const view=doc.getElementById(id);return view&&!view.hidden;});
+      if(ready){
+        embeddedInterfaceReady=true;
+        embeddedReadyObserver?.disconnect();
+        embeddedReadyObserver=null;
+        embeddedLayer.classList.remove("is-preparing");
+        if(embeddedWait)embeddedWait.hidden=true;
+        return;
+      }
+      embeddedReadyObserver?.disconnect();
+      embeddedReadyObserver=new MutationObserver(revealSpaceWhenReady);
+      embeddedReadyObserver.observe(doc.documentElement,{
+        attributes:true,attributeFilter:["hidden"],subtree:true
+      });
+    }
+    embeddedFrame?.addEventListener("load",revealSpaceWhenReady);
+    const closeEmbedded=function(){
+      if(!embeddedLayer||embeddedLayer.hidden)return;
+      embeddedLayer.hidden=true;
+      const destination=embeddedLayer.dataset.returnTo==="chat"?"chat":"specialties";
+      window.dispatchEvent(new CustomEvent("promovie:space-return",{detail:{destination}}));
+    };
+    // O botão Voltar do celular ou navegador fecha somente os registros.
+    const showEmbedded=function(){
+      if(!embeddedLayer||!embeddedFrame)return;
+      if(embeddedBack)embeddedBack.textContent=embeddedLayer.dataset.returnTo==="chat"?
+        "← Voltar ao Chat Médico":"← Voltar às Especialidades";
+      if(!embeddedInterfaceReady){
+        embeddedLayer.classList.add("is-preparing");
+        if(embeddedWait)embeddedWait.hidden=false;
+      }else{
+        embeddedLayer.classList.remove("is-preparing");
+        if(embeddedWait)embeddedWait.hidden=true;
+      }
+      if(embeddedLayer.hidden){
+        history.pushState({promovieSpaceOverlay:true},"",location.href);
+        embeddedLayer.hidden=false;
+      }
+    };
+    embeddedBack?.addEventListener("click",function(){
+      if(history.state?.promovieSpaceOverlay)history.back();
+      else closeEmbedded();
+    });
+    window.addEventListener("popstate",function(){
+      if(embeddedLayer&&!embeddedLayer.hidden)closeEmbedded();
+    });
+    window.addEventListener("keydown",function(event){
+      if(event.key==="Escape"&&embeddedLayer&&!embeddedLayer.hidden){
+        event.preventDefault();
+        if(history.state?.promovieSpaceOverlay)history.back();
+        else closeEmbedded();
+      }
+    });
+    window.addEventListener("message",function(message){
+      // Aceita somente eventos do Meu Espaço carregado neste iframe,
+      // no mesmo domínio e enquanto a pessoa está visualizando seus registros.
+      if(message.origin!==location.origin||!embeddedFrame||
+         message.source!==embeddedFrame.contentWindow||
+         !embeddedLayer||embeddedLayer.hidden)return;
+      if(message.data?.type==="promovie-space-close"){
+        if(history.state?.promovieSpaceOverlay)history.back();
+        else closeEmbedded();
+      }else if(message.data?.type==="promovie-space-open-appointments"){
+        const agenda=document.getElementById("appointments-dialog");
+        const trigger=document.getElementById("appointments-trigger");
+        if(trigger&&agenda&&!agenda.open){
+          window.dispatchEvent(new CustomEvent("promovie:space-appointments"));
+          trigger.click();
+        }
+      }
+    });
+    // Fechar Agendamentos devolve aos registros. Somente escolhas expressas de
+    // Especialidades ou Chat Médico encerram a sobreposição de Meu Espaço.
+    function leaveSpaceFor(destination){
+      if(!embeddedLayer||embeddedLayer.hidden)return;
+      embeddedLayer.dataset.returnTo=destination;
+      if(history.state?.promovieSpaceOverlay)history.back();
+      else closeEmbedded();
+    }
+    document.getElementById("appointments-specialties")?.addEventListener("click",()=>{
+      leaveSpaceFor("specialties");
+    },{capture:true});
+    document.getElementById("appointments-chat")?.addEventListener("click",()=>{
+      leaveSpaceFor("chat");
+    },{capture:true});
+    document.getElementById("appointments-space")?.addEventListener("click",event=>{
+      if(!embeddedLayer||embeddedLayer.hidden)return;
+      event.preventDefault();event.stopImmediatePropagation();
+      const agenda=document.getElementById("appointments-dialog");
+      if(agenda?.open)agenda.close();
+    },{capture:true});
+    const openHelp=document.getElementById("space-open-help");
+    const hideHelp=document.getElementById("space-hide-help");
+    const copyLink=document.getElementById("space-copy-link");
+    if(hideHelp)hideHelp.addEventListener("click",()=>{openHelp.hidden=true;});
+    if(copyLink)copyLink.addEventListener("click",async function(){
+      try{
+        await navigator.clipboard.writeText(location.origin+"/telesaude/meu-espaco/");
+        copyLink.textContent="Endereço copiado";
+      }catch{
+        copyLink.textContent="Abra www.promovie.tv.br/telesaude/meu-espaco/";
+      }
+    });
+    link.addEventListener("click",function(event){
+      // Abrir dentro da mesma tela em todos os celulares, mesmo sem PWA instalado.
+      // Assim o retorno depende de um botão local, não da troca de abas do navegador.
+      const installedApp=Boolean(
+        // Neste laboratório, inclusive no desktop, Meu Espaço fica na mesma
+        // tela para oferecer Voltar por botão e pelo histórico do navegador.
+        location.pathname==="/telessaude/atendimento/"||
+         location.pathname==="/telesaude/atendimento-perfis-20261109-batimentos/"||
+         location.pathname==="/telesaude/atendimento-perfis-20261109-curriculos/"||
+         location.pathname==="/telesaude/atendimento-perfis-20261109-consentimento/"||
+         location.pathname==="/telesaude/atendimento-perfis-20261109-limpo/"||
+         location.pathname==="/telesaude/atendimento-perfis-20261109/"||
+         location.pathname==="/telesaude/atendimento-perfis-20261108/"||
+        location.pathname==="/telesaude/atendimento-especialidades-20261107/"||
+        (typeof window.matchMedia==="function"&&
+          (window.matchMedia("(display-mode: standalone)").matches||
+           window.matchMedia("(max-width:700px)").matches))||
+        navigator.standalone===true);
+      if(installedApp&&embeddedLayer&&embeddedFrame&&embeddedLoaded){
+        event.preventDefault();
+        showEmbedded();
+        return;
+      }
+      if(Date.now()-createdAt>=29*60*1000){
+        if(installedApp){event.preventDefault();if(openHelp)openHelp.hidden=false;}
+        return;
+      }
+      if(openedSpace&&!openedSpace.closed){
+        event.preventDefault();
+        try{openedSpace.focus();}catch{}
+        return;
+      }
+      const id=crypto.randomUUID(),url=new URL(link.href,location.origin);
+      if(installedApp)url.searchParams.set("integrado","1");
+      url.hash="pv-handoff="+id;
+      const channel=new BroadcastChannel("promovie:telesaude:space-handoff:v1");
+      let done=false;
+      const timeout=setTimeout(()=>{
+        if(!done){
+          channel.close();
+          if(installedApp&&embeddedLayer){
+            embeddedLayer.hidden=true;
+            if(openHelp)openHelp.hidden=false;
+          }
+        }
+      },12000);
+      channel.addEventListener("message",async function(message){
+        if(done||message.data?.type!=="space-ready"||message.data.id!==id)return;
+        try{
+          const page=new URL(openedSpace.location.href);
+          if(page.origin!==location.origin||page.pathname!=="/telesaude/meu-espaco/")return;
+          const key=await keyPromise;
+          if(Date.now()-createdAt>=29*60*1000)return;
+          openedSpace.postMessage({
+            type:"promovie-space-session",id,
+            space:{token:spaceToken,mode,salt,key}
+          },location.origin);
+          done=true;
+          clearTimeout(timeout);channel.close();
+        }catch{}
+      });
+      // Um aplicativo instalado não precisa sair da própria tela.
+      // O quadro usa a sessão efêmera já preparada no login, sem reiniciar o SDK.
+      if(installedApp&&embeddedLayer&&embeddedFrame){
+        event.preventDefault();
+        showEmbedded();
+        // Evita etapa extra no histórico; a página interna só aparece quando
+        // conclui a preparação do formulário ou dos dados pessoais.
+        embeddedFrame.contentWindow.location.replace(url.href);
+        openedSpace=embeddedFrame.contentWindow;
+        embeddedLoaded=true;
+        return;
+      }
+      const popup=window.open(url.href,"_blank");
+      if(!popup){
+        // Em PWAs móveis, especialmente no iOS, window.open pode não abrir
+        // outra janela. Impedir navegação da aba da consulta evita perder o SDK.
+        event.preventDefault();clearTimeout(timeout);channel.close();
+        if(openHelp)openHelp.hidden=false;
+        return;
+      }
+      openedSpace=popup;event.preventDefault();
+      // Preservar vínculo da aba pessoal com a consulta para retorno por clique.
+    });
+  }
+  function loadSdk(){
+    return new Promise(function(resolve,reject){
+      const script=document.createElement("script");
+      script.src=SDK_SOURCE;
+      script.async=true;
+      const timeout=setTimeout(function(){
+        script.remove();reject(new Error("O atendimento não respondeu."));
+      },20000);
+      script.onload=function(){
+        clearTimeout(timeout);
+        if(window.MediquoWidget&&typeof window.MediquoWidget.init==="function"){
+          resolve(window.MediquoWidget);
+        }else{reject(new Error("O atendimento está indisponível."));}
+      };
+      script.onerror=function(){
+        clearTimeout(timeout);reject(new Error("A conexão com o atendimento falhou."));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  async function openAttendance(){
+    const handoff=receiveOnce();
+    if(!handoff){
+      errorState("Por segurança, abra a Telessaúde pelo formulário de CPF e código. Esta página não conserva sua senha ou sessão após atualizar.");
+      return;
+    }
+    enableSpaceSingleSignOn(handoff.spaceBootstrap);
+    // Apresenta Especialidades antes de iniciar o Widget, sem exibir sua lista
+    // nem abrir uma conversa médica automaticamente.
+    let sdkReady=null,widgetOpened=false,openPromise=null;
+    function prepareSdk(){
+      if(!sdkReady)sdkReady=loadSdk().then(async widget=>{
+        await Promise.resolve(widget.init({
+          apiKey:handoff.apiKey,
+          accessToken:handoff.accessToken,
+          adapter:"web",
+          environment:"production",
+          show:"always",
+          isMobileView:true,
+          theme:{
+            launcher:"hidden",locale:"pt",hideCloseButton:"true",
+            // Personalização visual documentada pela Médiquo.
+            // Termos, política de privacidade e aceite permanecem exclusivamente no SDK.
+            text:{title:"Chat Médico"},
+            colors:{
+              primary:"#4b0c8f",
+              primaryContrast:"#ffffff",
+              secondary:"#7334d8",
+              accent:"#00bde8",
+              messageTextSystem:"#432164",
+              bubbleBackgroundSystem:"#f4effc",
+              alertText:"#421c67",
+              alertBackground:"#f5efff"
+            }
+          }
+        }));
+        if(typeof widget.open!=="function")throw Error("Interface médica indisponível.");
+        return widget;
+      });
+      return sdkReady;
+    }
+    async function activateWidget(){
+      const widget=await prepareSdk();
+      if(widgetOpened)return widget;
+      if(!openPromise){
+        openPromise=Promise.resolve().then(()=>widget.open()).then(()=>{
+          widgetOpened=true;return widget;
+        }).catch(error=>{openPromise=null;throw error;});
+      }
+      return openPromise;
+    }
+    // Camada institucional somente deste teste: nenhum aceite é automatizado.
+    let introApproved=false, introRunning=null;
+    async function ensurePromoVieIntro(){
+      if(introApproved)return;
+      if(introRunning)return introRunning;
+      const intro=document.getElementById("pv-brand-intro");
+      const yes=document.getElementById("pv-brand-intro-next");
+      const back=document.getElementById("pv-brand-intro-back");
+      introRunning=new Promise((resolve,reject)=>{
+        function finish(ok){
+          yes.removeEventListener("click",onYes);
+          back.removeEventListener("click",onBack);
+          intro.removeEventListener("cancel",onCancel);
+          if(intro.open)intro.close();
+          if(ok){introApproved=true;resolve();}
+          else reject(new Error("PV_BRAND_INTRO_CANCELLED"));
+        }
+        function onYes(){finish(true);}
+        function onBack(){finish(false);}
+        function onCancel(ev){ev.preventDefault();finish(false);}
+        yes.addEventListener("click",onYes,{once:true});
+        back.addEventListener("click",onBack,{once:true});
+        intro.addEventListener("cancel",onCancel);
+        intro.showModal();
+      }).finally(()=>{introRunning=null;});
+      return introRunning;
+    }
+    // Os métodos e tokens do SDK permanecem idênticos à versão principal.
+    const medicalBridge={
+      open:async()=>{await ensurePromoVieIntro();return activateWidget();},
+      navigate:async path=>{
+        await ensurePromoVieIntro();
+        const widget=await activateWidget();
+        if(typeof widget.navigate==="function")return widget.navigate(path);
+        const match=path.match(/^\/professionals\/([A-Za-z0-9_-]{1,128})\/room$/);
+        if(match&&typeof widget.open_room==="function")
+          return widget.open_room(match[1]);
+        throw Error("Abertura individual indisponível neste Widget.");
+      },
+      open_room:async id=>{
+        await ensurePromoVieIntro();
+        const widget=await activateWidget();
+        if(typeof widget.open_room==="function")return widget.open_room(id);
+        if(typeof widget.navigate==="function")
+          return widget.navigate("/professionals/"+encodeURIComponent(id)+"/room");
+        throw Error("Abertura individual indisponível neste Widget.");
+      }
+    };
+    try{
+      const module=await import("/telessaude/teste-aceite/diretorio.mjs?v=1");
+      module.initSpecialtyDirectory(medicalBridge,handoff.directoryToken,handoff.accessToken);
+      status.hidden=true;
+      // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.
+      // Qualquer falha é comunicada quando o beneficiário optar por abrir o Chat.
+      // No teste, iniciar o SDK apenas depois da introdução PromoVie.
+    }catch{
+      errorState("Não conseguimos carregar as especialidades. Retorne ao acesso e tente novamente.");
+    }
+  }
+  openAttendance();
+})();
+</script>
+</body>
+</html>
