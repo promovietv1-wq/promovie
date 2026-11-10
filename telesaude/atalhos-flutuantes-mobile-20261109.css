@@ -6,20 +6,37 @@
   .hub-dialog[open] .hub-brand-strip .pv-hub-close-x{
     display:grid;
     place-items:center;
+    position:relative;
     margin-left:auto;
-    flex:0 0 35px;
-    width:35px;
-    height:35px;
-    border:1px solid #d5c6ea;
-    border-radius:10px;
-    background:#fff;
-    color:#4b0c8f;
-    font-size:27px;
+    flex:0 0 34px;
+    width:34px;
+    height:34px;
+    border:1px solid rgba(86,44,139,.13);
+    border-radius:11px;
+    background:rgba(255,255,255,.55);
+    color:transparent;
+    font-size:0;
     line-height:1;
     text-decoration:none;
+    transition:background .18s ease,border-color .18s ease;
+  }
+  .hub-dialog[open] .hub-brand-strip .pv-hub-close-x::before,
+  .hub-dialog[open] .hub-brand-strip .pv-hub-close-x::after{
+    content:"";
+    position:absolute;
+    width:13px;
+    height:1.5px;
+    border-radius:2px;
+    background:#826a9e;
+    transform:rotate(45deg);
+  }
+  .hub-dialog[open] .hub-brand-strip .pv-hub-close-x::after{transform:rotate(-45deg)}
+  .hub-dialog[open] .hub-brand-strip .pv-hub-close-x:hover{
+    background:#f5effb;
+    border-color:#c5b1de;
   }
   .hub-dialog[open] .hub-brand-strip .pv-hub-close-x:focus-visible{
-    outline:3px solid #7043c2;
+    outline:2px solid #7043c2;
     outline-offset:2px;
   }
 
@@ -180,6 +197,21 @@
     height:35px;
     min-width:32px;
     margin:0;
+    border:1px solid rgba(86,44,139,.13);
+    border-radius:11px;
+    background:rgba(255,255,255,.55);
+    color:#826a9e;
+    box-shadow:none;
+    transition:background .18s ease,border-color .18s ease;
+  }
+  html.pv-chat-mode .topbar .back svg{
+    width:15px;
+    height:15px;
+    stroke-width:1.5px;
+  }
+  html.pv-chat-mode .topbar .back:hover{
+    background:#f5effb;
+    border-color:#c5b1de;
   }
 }
 /* Contraste consistente no mobile, inclusive após estilos de versões antigas em cache. */
