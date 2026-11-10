@@ -128,7 +128,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  dialog.innerHTML=[
  '<div class="hub-brand-strip" aria-label="Telessaúde PromoVie">',
  '<img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="47" height="47" alt="">',
- '<strong class="pv-brand-name">Telessaúde</strong><a class="pv-hub-close-x" href="/telessaude/teste-aceite/" aria-label="Fechar a Telessaúde e voltar ao início" title="Fechar">×</a></div>',
+ '<strong class="pv-brand-name"><img class="pv-directory-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"></strong><a class="pv-hub-close-x" href="/telessaude/teste-aceite/" aria-label="Fechar a Telessaúde e voltar ao início" title="Fechar">×</a></div>',
  '<div class="hub-head"><div>',
  '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
