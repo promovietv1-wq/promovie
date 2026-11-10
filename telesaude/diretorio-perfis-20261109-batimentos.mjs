@@ -584,7 +584,13 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    appointmentDialog.addEventListener("close",()=>{
      const destination=appointmentReturn;
      appointmentReturn="specialties";
-     if(destination==="chat"||destination==="space")return;
+     if(destination==="space")return;
+     if(destination==="chat"){
+       document.body.classList.remove("pv-navigation-mode");
+       document.documentElement.classList.add("pv-chat-mode");
+       chatShell?.removeAttribute("hidden");
+       return;
+     }
      requestAnimationFrame(reopen);
    });
    el("appointments-specialties")?.addEventListener("click",()=>appointmentDialog.close());
@@ -597,6 +603,10 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  }
  // No Chat Médico, os atalhos superiores seguem independentes.
  appointmentTrigger?.addEventListener("click",()=>{
+   // Ao fechar Agendamentos, devolver à tela de origem, sem perder o Chat.
+   const embedded=el("space-embedded");
+   if(!embedded||embedded.hidden)
+     appointmentReturn=document.documentElement.classList.contains("pv-chat-mode")?"chat":"specialties";
    document.body.classList.add("pv-navigation-mode");
  },{capture:true});
  open.addEventListener("click",async()=>{
@@ -618,6 +628,39 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    }finally{busy=false;open.disabled=false;}
  });
  renderCategories();reopen();
+ // Mobile: o Voltar nativo navega entre as telas locais da PromoVie.
+ // Uma entrada de histórico na mesma URL evita retornar à tela de CPF;
+ // o X do cabeçalho continua sendo o caminho explícito para sair.
+ if(window.matchMedia?.("(max-width:700px)").matches){
+   const guardKey="promovieMobileInternalBack";
+   function armInternalBack(){
+     try{
+       if(history.state?.[guardKey])return;
+       const base=history.state&&typeof history.state==="object"?history.state:{};
+       history.pushState({...base,[guardKey]:true},"",location.href);
+     }catch{/* O botão de retorno visível continua disponível. */}
+   }
+   window.addEventListener("popstate",event=>{
+     // O Meu Espaço já possui histórico próprio. Ao fechá-lo,
+     // retornamos ao estado guardado, sem interferência deste ouvinte.
+     if(event.state?.[guardKey]||event.state?.promovieSpaceOverlay)return;
+     const space=el("space-embedded");
+     if(space&&!space.hidden)return;
+     if(appointmentDialog?.open){
+       appointmentDialog.close();
+     }else if(dialog.open){
+       if(!profile.hidden)showPane(profileFromSearch?"categories":"professionals");
+       else if(!professionals.hidden)showPane("categories");
+       else reopen();
+     }else if(document.documentElement.classList.contains("pv-chat-mode")){
+       reopen();
+     }else{
+       reopen();
+     }
+     armInternalBack();
+   });
+   armInternalBack();
+ }
  if(!/^[A-Za-z0-9_-]{43}$/.test(grant||"")||typeof accessToken!=="string"||accessToken.length<24){
    loaded=true;renderCategories();
    note.textContent="A sessão não liberou o catálogo de profissionais. Use Chat Médico ou volte ao acesso.";
