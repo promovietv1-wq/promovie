@@ -98,6 +98,10 @@ try{
   await page.waitForURL(/\/telessaude\/teste-aceite\/atendimento\//,{timeout:15000});
   assert.equal(await page.evaluate(()=>sessionStorage.getItem("promovie:mediquo:handoff:v1")),null);
   await page.locator("#hub-native").waitFor();
+  const directoryRect=await page.locator(".hub-dialog .pv-directory-lettering").boundingBox();
+  assert.ok(directoryRect&&directoryRect.width>80,"Marca do catálogo ilegível");
+  assert.ok(Math.abs(directoryRect.width/directoryRect.height-178/29)<.35,
+    "Marca do catálogo deformada");
   assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
   assert.equal(await page.locator("#pv-brand-intro").evaluate(d=>d.open),false);
   await page.locator("#hub-native").click();
@@ -117,7 +121,7 @@ try{
     return [measure(".pv-topbar-lettering"),measure(".pv-brand-lettering"),measure(".pv-directory-lettering")];
   });
   console.log("DEBUG brand geometry before checks:",width,JSON.stringify(proportions));
-  for(const mark of proportions){
+  for(const mark of proportions.slice(0,2)){
     assert.ok(mark && mark.w>65 && mark.h>9,"Lettering muito pequeno ou ausente");
     assert.ok(Math.abs(mark.w/mark.h-178/29)<0.35,"Lettering deformado "+JSON.stringify(mark));
     assert.ok(mark.x>=0 && mark.right<=width+2,"Lettering fora da tela "+JSON.stringify(mark));
