@@ -11,9 +11,7 @@ const information=await readFile("telessaude/teste-aceite/informacoes/index.html
 const lettering=await readFile("telessaude/teste-aceite/assets/telessaude-lettering.svg","utf8");
 const pngBase64=lettering.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/)?.[1];
 assert.ok(pngBase64,"Wordmark must retain embedded raster from user supplied example");
-assert.match(lettering,/flood-color="#4b0c8f"/);
-assert.match(lettering,/feComposite in="promoVieColor" in2="SourceAlpha" operator="in"/);
-assert.match(lettering,/filter="url\(#pv-purple-ink\)"/);
+assert.equal(pngBase64.length,2892,"Tinted raster must remain intact");
 assert.equal(Buffer.from(pngBase64,"base64").subarray(0,8).toString("hex"),"89504e470d0a1a0a");
 assert.match(entry,/window\.location\.assign\("\/telessaude\/teste-aceite\/atendimento\/"\)/);
 assert.match(entry,/Teste do consentimento real/);
