@@ -111,7 +111,7 @@ try{
     const mark=document.querySelector(".pv-heading-lettering");
     return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
   });
-  assert.equal((await popup.locator(".brand strong").textContent()).trim(),"Telessaúde");
+  assert.equal(await popup.locator(".brand img.pv-heading-lettering").getAttribute("alt"),"Telessaúde");
   const details=popup.locator("#resumo-pt details");
   assert.equal(await details.count(),2);
   assert.equal(await details.nth(0).evaluate(x=>x.open),false);
