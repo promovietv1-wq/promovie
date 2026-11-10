@@ -1,0 +1,24 @@
+name: Diagnostico isolado tema Vercel curriculos
+on:
+  push:
+    branches: [diagnostico/tema-curriculos-vercel-20261110]
+    paths:
+      - '.github/scripts/diagnosticar-tema-curriculos.mjs'
+      - '.github/workflows/diagnosticar-tema-curriculos.yml'
+permissions:
+  contents: read
+jobs:
+  diagnosticar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Examinar pagina de curriculos separada
+        run: node .github/scripts/diagnosticar-tema-curriculos.mjs
