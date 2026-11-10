@@ -279,7 +279,7 @@ html body .mediquo-launcher{display:none!important}
 <link rel="stylesheet" href="/telesaude/marca-telessaude-20261109-consentimento.css?v=1">
 <link rel="stylesheet" href="/telesaude/atalho-curriculos-20261109.css?v=1">
 <link rel="stylesheet" href="/telesaude/identidade-batimentos-20261109.css?v=1">
-<link rel="stylesheet" href="/telesaude/atalhos-flutuantes-mobile-20261109.css?v=3">
+<link rel="stylesheet" href="/telesaude/atalhos-flutuantes-mobile-20261109.css?v=mobile-voltar-4">
 </head>
 <body class="pv-navigation-mode">
 <header class="topbar">
@@ -295,7 +295,7 @@ html body .mediquo-launcher{display:none!important}
     </button>
     <button type="button" class="agenda-open" id="appointments-trigger" aria-haspopup="dialog" aria-controls="appointments-dialog">Agendamentos e Suporte</button>
   </div>
-  <a class="back" href="/telessaude/" id="back-access" aria-label="Sair e voltar ao acesso" title="Sair">
+  <a class="back" href="/telessaude/" id="back-access" aria-label="Fechar a Telessaúde e voltar ao início" title="Fechar">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </a>
 </header>
@@ -769,7 +769,7 @@ html body .mediquo-launcher{display:none!important}
       }
     };
     try{
-      const module=await import("/telesaude/diretorio-perfis-20261109-batimentos.mjs?v=voltar-nativo-2");
+      const module=await import("/telesaude/diretorio-perfis-20261109-batimentos.mjs?v=mobile-voltar-4");
       module.initSpecialtyDirectory(medicalBridge,handoff.directoryToken,handoff.accessToken);
       status.hidden=true;
       // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.
