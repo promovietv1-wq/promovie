@@ -285,16 +285,9 @@ html body .mediquo-launcher{display:none!important}
 .pv-brand-intro::backdrop{background:rgba(22,13,51,.70);backdrop-filter:blur(4px)}
 .pv-brand-intro-body{padding:clamp(22px,6vw,35px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px}
 .pv-brand-intro-body img{object-fit:contain}
-.pv-brand-lettering{display:block;width:178px;max-width:70%;height:auto;object-fit:contain}
-.pv-lockup{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;max-width:100%}
-.pv-lockup-name{display:block;color:#4b0c8f;font:750 14px/1.3 Inter,Arial,sans-serif;letter-spacing:.012em}
-.pv-topbar-lockup{display:flex;flex-direction:column;align-items:flex-start;gap:1px;justify-content:center}
-.pv-topbar-lockup .pv-lockup-name{font-size:11px;font-weight:700}
-.pv-directory-lockup{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
-.pv-directory-lockup .pv-lockup-name{font-size:11px;font-weight:700}
+.pv-brand-lettering{display:block;width:178px;max-width:100%;height:auto;object-fit:contain}
 .pv-topbar-lettering{display:block;width:143px;max-width:100%;height:auto;object-fit:contain}
 .pv-directory-lettering{display:block;width:145px;max-width:100%;height:auto;object-fit:contain}
-.pv-lettering-inline{display:inline-block;height:1.07em;width:auto;vertical-align:-.09em;max-width:none}
 .pv-brand-intro-body h2{margin:0;font:800 clamp(21px,4vw,28px)/1.25 Sora,Inter,Arial,sans-serif;letter-spacing:-.035em;color:#36166b}
 .pv-brand-intro-body p{margin:0;line-height:1.58;font-size:15px}
 .pv-brand-intro-body .pv-brand-intro-assertion{font-weight:750;color:#4b0c8f;margin:3px 0 7px}
@@ -310,40 +303,38 @@ html body .mediquo-launcher{display:none!important}
 .pv-brand-intro-body small{font-size:11px;line-height:1.45;color:#655a73;margin-top:5px}
 @media(max-width:600px){.pv-brand-intro{width:calc(100vw - 24px);border-radius:20px}.pv-brand-intro-body{padding:22px;gap:11px}}
 
-/* Correção responsiva isolada: imagens horizontais da identidade não herdam
-   dimensões quadradas dos ícones ou do coração da marca. */
-.topbar .identity-copy{flex:0 1 auto;min-width:0}
-.topbar .identity .pv-topbar-lockup{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;width:max-content;max-width:100%;flex-shrink:1}
+/* Assinatura única e responsiva: coração original ao lado do lettering aprovado.
+   Nunca aplicar dimensões quadradas das imagens de ícones ao lettering horizontal. */
+.topbar .identity-copy{display:flex;align-items:center;flex:0 1 auto;min-width:0}
+.topbar .identity .pv-topbar-lockup{display:flex;align-items:center;justify-content:flex-start;min-width:0}
 .topbar .identity img.pv-topbar-lettering{
   display:block!important;width:142px!important;height:auto!important;
-  max-width:100%!important;aspect-ratio:178 / 29;min-width:0;
-  filter:none!important;object-fit:contain;flex:0 1 auto
-}
-.topbar .identity .pv-topbar-lockup .pv-lockup-name{
-  display:block;font:700 11px/1.15 Inter,Arial,sans-serif;
-  color:#4b0c8f;letter-spacing:0;white-space:nowrap;padding-left:14px
+  max-width:100%!important;aspect-ratio:178 / 29;
+  object-fit:contain!important;filter:none!important;flex:0 1 auto;
 }
 .hub-dialog .hub-brand-strip strong.pv-brand-name.pv-directory-lockup{
-  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
-  gap:2px;min-width:0;max-width:calc(100% - 100px);
-  background:none;border:0;padding:0;box-shadow:none;line-height:1
+  display:flex;flex-direction:row;align-items:center;justify-content:flex-start;
+  min-width:0;max-width:calc(100% - 100px);margin:0;padding:0;border:0;
+  background:transparent;box-shadow:none;line-height:1;
 }
 .hub-dialog .hub-brand-strip img.pv-directory-lettering{
   display:block!important;width:142px!important;height:auto!important;
   max-width:100%!important;aspect-ratio:178 / 29;
-  object-fit:contain;filter:none!important;flex:0 1 auto
+  object-fit:contain!important;filter:none!important;flex:0 1 auto;
 }
-.hub-dialog .hub-brand-strip .pv-directory-lockup .pv-lockup-name{
-  display:block;font:700 11px/1.2 Inter,Arial,sans-serif;letter-spacing:0;
-  white-space:nowrap;color:#4b0c8f;padding-left:14px
+.pv-brand-intro-body .pv-lockup{
+  display:flex;flex-direction:row;align-items:center;justify-content:center;
+  gap:clamp(10px,3vw,18px);width:100%;max-width:100%;margin:0;
 }
-.pv-brand-intro-body img.pv-brand-lettering{
-  display:block;width:178px!important;height:auto!important;
-  max-width:100%;aspect-ratio:178 / 29;object-fit:contain;filter:none
+.pv-brand-intro-body .pv-lockup img.pv-lockup-heart{
+  display:block;width:min(44%,180px)!important;height:auto!important;
+  aspect-ratio:1;object-fit:contain!important;flex:0 0 auto;
 }
-.pv-brand-intro-body > img:first-child{width:180px;height:180px;max-width:min(62vw,180px);flex:none}
-.pv-brand-intro-body .pv-lockup{display:flex;flex-direction:column;align-items:center;gap:4px}
-.pv-brand-intro-body .pv-lockup-name{font:750 14px/1.2 Inter,Arial,sans-serif;color:#4b0c8f}
+.pv-brand-intro-body .pv-lockup img.pv-brand-lettering{
+  display:block;width:min(51%,178px)!important;height:auto!important;
+  max-width:100%;aspect-ratio:178 / 29;
+  object-fit:contain!important;filter:none!important;flex:0 0 auto;
+}
 .pv-brand-intro-body{gap:11px}
 .pv-brand-intro-body p{overflow-wrap:break-word;text-wrap:pretty}
 .pv-brand-intro-body h2{text-wrap:balance}
@@ -352,24 +343,18 @@ html body .mediquo-launcher{display:none!important}
   .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:124px!important}
   .pv-brand-intro{max-height:calc(100dvh - 20px)}
   .pv-brand-intro-body{padding:20px;gap:10px}
-  .pv-brand-intro-body > img:first-child{width:162px;height:162px;max-width:min(56vw,162px)}
   .pv-brand-intro-body h2{font-size:clamp(20px,5.4vw,25px);line-height:1.24}
   .pv-brand-intro-body p{font-size:14px;line-height:1.52}
   .pv-brand-info-card{padding:13px 14px}
-  .pv-brand-intro-body .pv-lockup-name{font-size:13px}
 }
 @media(max-width:390px){
   .topbar .identity img.pv-topbar-lettering{width:94px!important}
-  .topbar .identity .pv-topbar-lockup .pv-lockup-name{font-size:10px;padding-left:11px}
-  .hub-dialog .hub-brand-strip .pv-directory-lockup .pv-lockup-name{padding-left:11px}
   .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:113px!important}
   .pv-brand-intro-body{padding:17px;gap:9px}
-  .pv-brand-intro-body > img:first-child{width:150px;height:150px;max-width:55vw}
 }
 @media(max-width:345px){
   .topbar .identity img.pv-topbar-lettering{width:81px!important}
-  .topbar .identity .pv-topbar-lockup .pv-lockup-name{font-size:9px;padding-left:9px}
-  .hub-dialog .hub-brand-strip .pv-directory-lockup .pv-lockup-name{padding-left:10px}
+  .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:102px!important}
 }
 @media(max-width:700px){
   html.pv-chat-mode .topbar .identity img.pv-topbar-lettering{width:91px!important;height:auto!important}
@@ -385,7 +370,6 @@ html body .mediquo-launcher{display:none!important}
     <div class="identity-copy">
       <span class="pv-topbar-lockup">
         <img class="pv-topbar-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" width="178" height="29" alt="Telessaúde">
-        <span class="pv-lockup-name">PromoVie</span>
       </span>
     </div>
   </div>
@@ -496,11 +480,10 @@ html body .mediquo-launcher{display:none!important}
 
 <dialog id="pv-brand-intro" class="pv-brand-intro" aria-labelledby="pv-brand-intro-title" aria-describedby="pv-brand-intro-desc">
 <div class="pv-brand-intro-body">
-<img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="PromoVie" width="68" height="68">
-<div class="pv-lockup">
-  <img class="pv-brand-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29">
-  <span class="pv-lockup-name">PromoVie</span>
-</div>
+  <div class="pv-lockup" role="group" aria-label="Telessaúde PromoVie">
+    <img class="pv-lockup-heart" src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="180" height="180">
+    <img class="pv-brand-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29">
+  </div>
 <h2 id="pv-brand-intro-title">Sua saúde merece uma experiência excelente.</h2>
 <p id="pv-brand-intro-desc">A Telessaúde PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada e organizada para você.</p>
 <p class="pv-brand-intro-assertion">Conte com a PromoVie na sua jornada de saúde.</p>

@@ -19,9 +19,10 @@ assert.match(test,/id="pv-brand-intro"/);
 assert.doesNotMatch(test,/id="pv-brand-intro-next"/);
 assert.match(test,/id="pv-brand-intro-back">Voltar às especialidades/);
 assert.match(test,/Sua saúde merece uma experiência excelente/);
-assert.match(test,/class="pv-lockup-name">PromoVie<\/span>/);
+assert.doesNotMatch(test,/class="pv-lockup-name"|class="pv-promo-name"/);
 assert.match(test,/class="pv-topbar-lockup"/);
-assert.match(test,/class="pv-lockup"/);
+assert.match(test,/class="pv-lockup" role="group" aria-label="Telessaúde PromoVie"/);
+assert.match(test,/class="pv-lockup-heart"/);
 assert.match(test,/A Telessaúde PromoVie reúne acesso/);
 assert.doesNotMatch(test,/class="pv-lettering-inline"/);
 assert.doesNotMatch(information,/class="pv-lettering-inline" src=/);
@@ -40,14 +41,16 @@ assert.match(information,/class="pv-heading-lettering" src="\/telessaude\/teste-
 assert.match(information,/class="pv-consent-banner"/);
 assert.doesNotMatch(information,/pv-consent-banner:before/);
 assert.match(information,/id="close-info" class="top-link" type="button">Especialidades/);
-assert.match(information,/class="pv-promo-name">PromoVie<\/strong>/);
+assert.doesNotMatch(information,/class="pv-promo-name"|class="pv-lockup-name"/);
+assert.match(information,/class="pv-footer-heart"/);
+assert.match(information,/class="pv-footer-lettering"/);
 assert.match(information,/class="pv-footer-lockup"/);
 assert.match(information,/Ao iniciar o Chat Médico, você será convidado/);
 assert.match(information,/Leia abaixo a essência desse conteúdo/);
 assert.match(information,/document\.querySelector\("\.pv-consent-banner"\)/);
 assert.match(directory,/class="pv-directory-lettering"/);
 assert.match(directory,/pv-directory-lockup/);
-assert.match(directory,/class="pv-lockup-name">PromoVie<\/span>/);
+assert.doesNotMatch(directory,/class="pv-lockup-name"/);
 assert.match(information,/Como funciona o atendimento/);
 assert.match(information,/Privacidade e consentimento/);
 assert.equal((information.match(/<details>/g)||[]).length,2);
@@ -112,14 +115,14 @@ try{
   await page.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
   assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
   const introVisual=await page.locator("#pv-brand-intro").evaluate(node=>{
-    const heart=node.querySelector(".pv-brand-intro-body > img:first-child");
+    const heart=node.querySelector(".pv-brand-intro-body .pv-lockup-heart");
     const back=node.querySelector("#pv-brand-intro-back");
     const hr=heart.getBoundingClientRect(),bg=getComputedStyle(back);
     return {heartWidth:hr.width,heartHeight:hr.height,backBg:bg.backgroundColor,
       backText:bg.color,buttons:node.querySelectorAll("button").length};
   });
-  assert.ok(introVisual.heartWidth>=130,"Coração não foi ampliado: "+JSON.stringify(introVisual));
-  assert.ok(introVisual.heartHeight>=130,"Coração pequeno: "+JSON.stringify(introVisual));
+  assert.ok(introVisual.heartWidth>=125,"Coração não foi ampliado: "+JSON.stringify(introVisual));
+  assert.ok(introVisual.heartHeight>=125,"Coração pequeno: "+JSON.stringify(introVisual));
   assert.equal(introVisual.buttons,1,"A apresentação deve ter só o botão voltar");
   assert.match(introVisual.backText,/rgb\(255, 255, 255\)/);
 
@@ -127,8 +130,21 @@ try{
     const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
     return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
   });
-  assert.equal((await page.locator("#pv-brand-intro .pv-lockup-name").textContent()).trim(),"PromoVie");
-  assert.equal((await page.locator(".topbar .pv-lockup-name").textContent()).trim(),"PromoVie");
+  assert.equal(await page.locator("#pv-brand-intro .pv-lockup-name").count(),0);
+  assert.equal(await page.locator(".topbar .pv-lockup-name").count(),0);
+  assert.equal(await page.locator(".hub-brand-strip .pv-lockup-name").count(),0);
+  const lockup=await page.locator("#pv-brand-intro .pv-lockup").evaluate(node=>{
+    const box=sel=>{const r=node.querySelector(sel).getBoundingClientRect();
+      return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom,center:r.y+r.height/2};};
+    const heart=box(".pv-lockup-heart"),word=box(".pv-brand-lettering"),parent=node.getBoundingClientRect();
+    return {heart,word,container:{x:parent.x,right:parent.right,w:parent.width}};
+  });
+  assert.ok(lockup.heart.right<lockup.word.x,"O coração deve ficar à esquerda da palavra");
+  assert.ok(Math.abs(lockup.heart.center-lockup.word.center)<3,"Coração e lettering desalinhados");
+  assert.ok(lockup.heart.x>=lockup.container.x-1&&lockup.word.right<=lockup.container.right+1,
+    "Marca excedeu largura disponível: "+JSON.stringify(lockup));
+  assert.ok(Math.abs(lockup.word.w/lockup.word.h-178/29)<.35,"Lettering da apresentação deformado");
+  console.log("Identidade coração + Telessaúde responsiva:",width,JSON.stringify(lockup));
 
   const proportions=await page.evaluate(()=>{
     const measure=selector=>{
@@ -181,7 +197,8 @@ try{
       const rect=sel=>{const r=document.querySelector(sel)?.getBoundingClientRect();
         return r&&{x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
       return {scroll:document.documentElement.scrollWidth,
-        logo:rect(".pv-heading-lettering"),footer:rect(".pv-footer-lockup img"),
+        logo:rect(".pv-heading-lettering"),footer:rect(".pv-footer-lettering"),
+        footerHeart:rect(".pv-footer-heart"),
         brand:rect(".brand"),button:rect("#close-info")};
     });
     assert.ok(layout.scroll<=vw+2,"Rolagem horizontal em "+vw);
@@ -189,6 +206,10 @@ try{
     assert.ok(Math.abs(layout.logo.width/layout.logo.height-178/29)<.35,"Logo distorcido "+vw);
     assert.ok(layout.logo.right<=vw+2 && layout.logo.x>=0,"Logo sai da tela "+vw);
     assert.ok(Math.abs(layout.footer.width/layout.footer.height-178/29)<.35,"Rodapé distorcido "+vw);
+    assert.ok(layout.footerHeart && Math.abs(layout.footerHeart.width/layout.footerHeart.height-1)<.15,
+      "Coração do rodapé deformado "+vw);
+    assert.ok(layout.footerHeart.right<layout.footer.x,
+      "Coração e lettering do rodapé fora de ordem "+vw);
     assert.ok(layout.brand.bottom<=layout.button.y+1 || layout.brand.right<=layout.button.x+1,
       "Marca sobreposta ao botão "+vw);
     console.log("Layout página informações:",vw,JSON.stringify(layout));
