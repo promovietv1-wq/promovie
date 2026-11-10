@@ -292,6 +292,13 @@ html body .mediquo-launcher{display:none!important}
 .pv-brand-intro-body button{width:100%;min-height:49px;border-radius:13px;font:750 14px Inter,Arial,sans-serif;cursor:pointer}
 #pv-brand-intro-next{border:1px solid #4b0c8f;color:#fff;background:linear-gradient(115deg,#4b0c8f,#7334d8)}
 #pv-brand-intro-back{border:1px solid #e4d8ef;color:#4b0c8f;background:#f7f2fd}
+.pv-brand-info-card{width:100%;display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:8px;background:linear-gradient(135deg,#f6f1ff,#fcfaff);border:1px solid #e7d9f8;border-radius:16px;padding:15px 17px}
+.pv-brand-info-card strong{font-size:13px;line-height:1.4;font-weight:800;color:#4b0c8f}
+.pv-brand-info-card p{font-size:12px;line-height:1.55;color:#635273;margin:0}
+.pv-brand-info-card a{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:40px;padding:9px 11px;background:#fff;color:#491a85;text-decoration:none;border:1px solid #d9c6ef;border-radius:10px;font-size:12px;font-weight:800}
+.pv-brand-info-card a:hover{background:#efe7fb}
+.pv-brand-info-card a:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+.pv-brand-info-card .pv-info-open-note{color:#736481;font-size:10px;line-height:1.4}
 .pv-brand-intro-body small{font-size:11px;line-height:1.45;color:#655a73;margin-top:5px}
 @media(max-width:600px){.pv-brand-intro{width:calc(100vw - 24px);border-radius:20px}.pv-brand-intro-body{padding:22px;gap:11px}}
 </style></head>
@@ -412,9 +419,15 @@ html body .mediquo-launcher{display:none!important}
 <div class="pv-brand-intro-body">
 <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="PromoVie" width="68" height="68">
 <strong class="pv-brand-intro-label">TELESSAÚDE PROMOVIE</strong>
-<h2 id="pv-brand-intro-title">Uma experiência PromoVie, do início ao cuidado.</h2>
-<p id="pv-brand-intro-desc">A Telessaúde PromoVie integra acesso a profissionais habilitados, orientação e suporte em um ambiente pensado para sua jornada de saúde.</p>
-<p class="pv-brand-intro-assertion">A PromoVie é sua referência nesta experiência.</p>
+<h2 id="pv-brand-intro-title">Sua saúde merece uma experiência completa.</h2>
+<p id="pv-brand-intro-desc">A Telessaúde PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada, organizada para você.</p>
+<p class="pv-brand-intro-assertion">Conte com a PromoVie na sua jornada de saúde.</p>
+<div class="pv-brand-info-card" aria-label="Informações em português sobre o atendimento">
+  <strong>Informações sobre o seu atendimento</strong>
+  <p>Conheça o funcionamento da Telessaúde e consulte os documentos originais com orientações em português.</p>
+  <a id="pv-brand-info-link" href="/telessaude/teste-aceite/informacoes/" target="_blank" rel="noopener noreferrer">Ler informações em português <span aria-hidden="true">↗</span></a>
+  <span class="pv-info-open-note">Abre em outra aba, sem interromper esta etapa.</span>
+</div>
 <button type="button" id="pv-brand-intro-next">Continuar para o atendimento</button>
 <button type="button" id="pv-brand-intro-back">Voltar às especialidades</button>
 <small>Os atendimentos clínicos são realizados por profissionais habilitados, conforme suas atribuições e responsabilidades.</small>
