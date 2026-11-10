@@ -25,6 +25,12 @@
     .brand img{width:52px;height:52px;object-fit:contain;flex:none}
     .brand strong{display:block;font:800 clamp(16px,3vw,19px)/1.18 Sora,Inter,sans-serif;color:#38136a}
     .pv-heading-lettering{display:block;width:147px;max-width:100%;height:auto}
+    .pv-info-lockup{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+    .pv-info-lockup .pv-promo-name{font:750 12px/1.2 Inter,Arial,sans-serif;letter-spacing:.012em;color:#4b0c8f}
+    .pv-info-lockup small{font-size:11px;color:#755e8d;font-weight:600;margin-top:2px}
+    .pv-footer-lockup{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;margin-bottom:9px}
+    .pv-footer-lockup img{width:150px;max-width:100%;height:auto;object-fit:contain}
+    .pv-footer-lockup strong{font:750 12px/1.3 Inter,Arial,sans-serif;color:#4b0c8f}
     .pv-lettering-inline{display:inline-block;width:auto;height:1.1em;vertical-align:-.1em;max-width:none}
     .pv-footer-brand{font-weight:800;display:inline-flex;align-items:baseline;gap:4px}
     .pv-footer-brand .pv-lettering-inline{height:1.05em;vertical-align:-.12em}
@@ -67,7 +73,11 @@
     <div class="shell topbar-inner">
       <div class="brand">
         <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="52" height="52">
-        <div><img class="pv-heading-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"><small>Informações para o seu cuidado</small></div>
+        <div class="pv-info-lockup">
+  <img class="pv-heading-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29">
+  <strong class="pv-promo-name">PromoVie</strong>
+  <small>Informações para o seu cuidado</small>
+</div>
       </div>
       <button id="close-info" class="top-link" type="button">Voltar ao atendimento</button>
     </div>
@@ -124,7 +134,10 @@
   </main>
   <footer>
     <div class="shell">
-      <strong class="pv-footer-brand"><img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> PromoVie</strong><br>
+      <div class="pv-footer-lockup">
+  <img src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29">
+  <strong>PromoVie</strong>
+</div>
       Este material é informativo e complementar.
     </div>
   </footer>
