@@ -11,17 +11,25 @@ const information=await readFile("telessaude/teste-aceite/informacoes/index.html
 assert.match(entry,/window\.location\.assign\("\/telessaude\/teste-aceite\/atendimento\/"\)/);
 assert.match(entry,/Teste do consentimento real/);
 assert.match(test,/id="pv-brand-intro"/);
-assert.match(test,/Sua saúde merece uma experiência completa/);
+assert.match(test,/Sua saúde merece uma melhor experiência/);
+assert.match(test,/class="pv-brand-intro-label">Telessaúde<\/strong>/);
+assert.match(test,/>Ler informações <span aria-hidden="true">/);
 assert.match(test,/Conte com a PromoVie na sua jornada de saúde/);
 assert.match(test,/id="pv-brand-info-link"/);
 assert.match(test,/href="\/telessaude\/teste-aceite\/informacoes\/" target="_blank" rel="noopener noreferrer"/);
 assert.match(entry,/class="pv-test-info-link"/);
 assert.match(information,/<html lang="pt-BR">/);
 assert.match(information,/<meta name="robots" content="noindex,nofollow,noarchive">/);
-assert.match(information,/id="pv-doc-terms"/);
-assert.match(information,/id="pv-doc-privacy"/);
-assert.match(information,/target="_blank" rel="noopener noreferrer"/);
-assert.match(information,/tradução automática é um auxílio à leitura/);
+assert.match(information,/<span class="eyebrow">Informações<\/span>/);
+assert.match(information,/Uma experiência para ajudar você a cuidar da sua saúde/);
+assert.match(information,/<strong>Telessaúde<\/strong>/);
+assert.match(information,/Como funciona o atendimento/);
+assert.match(information,/Privacidade e consentimento/);
+assert.equal((information.match(/<details>/g)||[]).length,2);
+assert.match(information,/Você pode copiar o resumo explicativo para consultar depois/);
+assert.match(information,/Este material é informativo e complementar/);
+assert.doesNotMatch(information,/id="pv-doc-terms"|id="pv-doc-privacy"|widget\.mediquo\.com\/privacy|mediquo-api\.s3/);
+assert.doesNotMatch(information,/Consulte os documentos originais|em português|tradução integral/i);
 assert.match(information,/id="copy-summary"/);
 assert.doesNotMatch(information,/MediquoWidget|accessToken:|apiKey:|\/api\/promovie\//);
 assert.match(test,/locale:"pt"/);
@@ -79,15 +87,18 @@ try{
   await popup.waitForLoadState("domcontentloaded");
   assert.equal(new URL(popup.url()).pathname,"/telessaude/teste-aceite/informacoes/");
   assert.equal(await popup.locator("html").getAttribute("lang"),"pt-BR");
-  assert.match(await popup.locator("h1").textContent(),/experiência de cuidado/);
-  const originalTerms=popup.locator("#pv-doc-terms");
-  const originalPrivacy=popup.locator("#pv-doc-privacy");
-  assert.equal(await originalTerms.getAttribute("href"),
-    "https://mediquo-api.s3.eu-central-1.amazonaws.com/filesystem/uploads/terms/TerminosyCondicionesmediQuoversionfinal_37947.html");
-  assert.equal(await originalPrivacy.getAttribute("href"),
-    "https://widget.mediquo.com/privacy/index.html");
-  assert.equal(await originalTerms.getAttribute("target"),"_blank");
-  assert.equal(await originalPrivacy.getAttribute("target"),"_blank");
+  assert.match(await popup.locator("h1").textContent(),/Uma experiência para ajudar você a cuidar da sua saúde/);
+  assert.equal((await popup.locator(".brand strong").textContent()).trim(),"Telessaúde");
+  const details=popup.locator("#resumo-pt details");
+  assert.equal(await details.count(),2);
+  assert.equal(await details.nth(0).evaluate(x=>x.open),false);
+  await details.nth(0).locator("summary").click();
+  assert.equal(await details.nth(0).evaluate(x=>x.open),true);
+  assert.equal(await details.nth(0).locator("h3").first().isVisible(),true);
+  await details.nth(1).locator("summary").click();
+  assert.equal(await details.nth(1).evaluate(x=>x.open),true);
+  assert.equal(await popup.locator("#pv-doc-terms").count(),0);
+  assert.equal(await popup.locator("#pv-doc-privacy").count(),0);
   await popup.locator("#copy-summary").click();
   await popup.locator("#copy-status:not(:empty)").waitFor();
   assert.equal(await popup.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+2),true,

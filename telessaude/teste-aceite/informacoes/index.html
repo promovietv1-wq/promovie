@@ -7,8 +7,8 @@
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#4b0c8f">
-  <meta name="description" content="Informações em português para beneficiários da Telessaúde PromoVie, com acesso aos documentos originais do atendimento.">
-  <title>Informações de atendimento | Telessaúde PromoVie</title>
+  <meta name="description" content="Informações sobre atendimento, privacidade e consentimento para beneficiários da Telessaúde PromoVie.">
+  <title>Informações | Telessaúde PromoVie</title>
   <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,34 +30,28 @@
     .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#efe9fb;border:1px solid #e4d5fb;border-radius:100px;color:#5b278d;padding:7px 13px;font-size:11px;letter-spacing:.06em;font-weight:800;text-transform:uppercase}
     h1{font:800 clamp(26px,5vw,42px)/1.13 Sora,Inter,sans-serif;letter-spacing:-.04em;color:#3b1277;max-width:760px;margin:16px 0 14px}
     .intro{max-width:770px;font-size:clamp(15px,2.5vw,17px);line-height:1.73;color:#5d526c;margin:0}
-    .feature{margin-top:26px;padding:20px 24px;background:linear-gradient(115deg,#4b0c8f,#7140c8 75%,#6a46c0);border-radius:20px;color:#fff;box-shadow:0 14px 45px rgba(75,12,143,.14)}
-    .feature strong{font:750 16px Sora,Inter,sans-serif}
-    .feature p{font-size:14px;line-height:1.65;margin:9px 0 0;color:#f7efff}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin:24px 0}
     .panel{padding:24px;background:#fff;border:1px solid #eee8f8;border-radius:19px;box-shadow:0 8px 32px rgba(39,20,70,.045)}
     h2{font:800 20px/1.3 Sora,Inter,sans-serif;color:#411b71;margin:0 0 14px}
     h3{font:800 15px/1.35 Inter,Arial,sans-serif;color:#3a2366;margin:17px 0 6px}
     p{line-height:1.7}.panel p{font-size:14px;color:#62576e;margin:0 0 10px}
     .panel p:last-child{margin-bottom:0}
-    .docs{margin:25px 0;padding:27px;background:#fff;border:1px solid #e9ddf7;border-radius:22px;box-shadow:0 12px 36px rgba(40,22,70,.06)}
-    .docs-head{display:flex;gap:12px;align-items:center;margin-bottom:10px}
-    .doc-symbol{display:grid;place-items:center;width:46px;height:46px;flex:none;background:#eee5ff;color:#511a94;border-radius:13px;font-size:21px}
-    .docs-head h2{margin:0}
-    .docs-description{margin:0 0 17px;font-size:14px;line-height:1.7;color:#64596f}
-    .doc-links{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .doc-link{padding:17px;border:1px solid #dfd1f3;border-radius:15px;background:#faf7ff;text-decoration:none;display:grid;gap:7px;transition:background .15s,border-color .15s}
-    .doc-link:hover{background:#f0e8fc;border-color:#a98ad8}
-    .doc-link strong{font-size:14px;color:#3f1b71}
-    .doc-link span{font-size:12px;line-height:1.5;color:#655574}
-    .doc-link em{font-size:12px;color:#6b399e;font-style:normal;font-weight:800}
-    .note{margin-top:16px;padding:13px 16px;background:#f6f3fc;border-left:3px solid #9b6ed5;border-radius:10px;font-size:13px;line-height:1.65;color:#61576e}
+    .panel details{border-top:1px solid #eee8f8;margin-top:16px;padding-top:10px}
+    .panel summary{display:inline-flex;align-items:center;gap:9px;min-height:40px;padding:9px 0;color:#56239a;font-size:13px;font-weight:800;cursor:pointer;list-style:none;user-select:none}
+    .panel summary::-webkit-details-marker{display:none}
+    .panel summary:focus-visible{outline:3px solid #00bde8;outline-offset:3px;border-radius:6px}
+    .summary-chevron{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .15s}
+    details[open] .summary-chevron{transform:rotate(225deg)}
+    .panel-more{padding-top:4px}
+    .panel-more h3{margin-top:15px}
+    .panel-more p{line-height:1.75}
     .copy-box{border:1px solid #e7e0f4;background:#fff;border-radius:20px;padding:25px;margin:20px 0 30px}
     .copy-box p{color:#62576e;font-size:14px;margin:0 0 14px}
     .copy-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;background:linear-gradient(110deg,#4b0c8f,#7644c2);border:1px solid #4b0c8f;color:#fff;padding:11px 18px;border-radius:12px;cursor:pointer;font-weight:750;font-size:13px}
     .copy-action:hover{filter:brightness(1.07)}.copy-status{display:block;min-height:1.4em;font-size:12px;color:#55368a;margin-top:10px}
     footer{padding:22px 0 30px;text-align:center;font-size:12px;line-height:1.6;color:#80718e;border-top:1px solid #e6def1}
-    @media(max-width:700px){.shell{width:min(100% - 28px,960px)}.topbar-inner{min-height:76px}.brand img{width:43px;height:43px}.top-link{font-size:11px;padding:10px}.hero{padding:30px 0 20px}.feature{padding:18px}.grid,.doc-links{grid-template-columns:1fr;gap:13px}.panel,.docs,.copy-box{padding:20px}.docs-head{align-items:start}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.doc-link{transition:none}}
+    @media(max-width:700px){.shell{width:min(100% - 28px,960px)}.topbar-inner{min-height:76px}.brand img{width:43px;height:43px}.top-link{font-size:11px;padding:10px}.hero{padding:30px 0 20px}.feature{padding:18px}.grid{grid-template-columns:1fr;gap:13px}.panel,.copy-box{padding:20px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.summary-chevron{transition:none}}
   </style>
 </head>
 <body>
@@ -65,65 +59,62 @@
     <div class="shell topbar-inner">
       <div class="brand">
         <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="52" height="52">
-        <div><strong>Telessaúde PromoVie</strong><small>Informações para o seu cuidado</small></div>
+        <div><strong>Telessaúde</strong><small>Informações para o seu cuidado</small></div>
       </div>
       <button id="close-info" class="top-link" type="button">Voltar ao atendimento</button>
     </div>
   </header>
   <main class="shell">
     <section class="hero" aria-labelledby="info-title">
-      <span class="eyebrow">Informações em português</span>
-      <h1 id="info-title">Uma experiência de cuidado com a identidade da PromoVie.</h1>
-      <p class="intro">A Telessaúde PromoVie une acesso a profissionais habilitados, recursos digitais e suporte em uma experiência organizada para facilitar a sua jornada de saúde. Aqui você encontra informações complementares para entender o atendimento e consultar os documentos originais.</p>
-      <div class="feature">
-        <strong>Seu relacionamento com a Telessaúde começa com a PromoVie.</strong>
-        <p>A PromoVie organiza a experiência digital, disponibiliza os meios de acesso e oferece suporte aos beneficiários. Os atendimentos clínicos são realizados por profissionais habilitados, com autonomia e responsabilidades próprias, por meio de uma plataforma especializada.</p>
-      </div>
+      <span class="eyebrow">Informações</span>
+      <h1 id="info-title">Uma experiência para ajudar você a cuidar da sua saúde.</h1>
+      <p class="intro">A Telessaúde PromoVie une acesso a profissionais habilitados, recursos digitais e suporte em uma experiência organizada para facilitar seus cuidados com a saúde. Aqui você encontra um resumo sobre o atendimento e informações importantes sobre privacidade e consentimento.</p>
     </section>
     <div class="grid" id="resumo-pt">
-      <section class="panel">
-        <h2>Como funciona o atendimento</h2>
-        <p>O acesso à Telessaúde PromoVie é individual, com CPF e código pessoal. Após a identificação, você pode conhecer as especialidades disponíveis, selecionar profissionais e utilizar os recursos autorizados para o seu acesso.</p>
-        <p>As consultas podem oferecer avaliação e orientação clínica, acompanhamento e, quando cabível, prescrições ou encaminhamentos. A disponibilidade e as condutas dependem da especialidade, das regras do serviço e do julgamento do profissional.</p>
-        <p>A telessaúde não substitui os serviços de urgência e emergência. Diante de sinais graves, procure o serviço de urgência local.</p>
+      <section class="panel" aria-labelledby="attendance-title">
+        <h2 id="attendance-title">Como funciona o atendimento</h2>
+        <p>O acesso à Telessaúde é individual. Você pode conhecer as especialidades disponíveis e escolher os profissionais autorizados para o seu atendimento.</p>
+        <p>As consultas a distância podem oferecer avaliação, orientação, acompanhamento e, quando adequado, receitas ou encaminhamentos. A indicação de cada conduta cabe ao profissional de saúde.</p>
+        <details>
+          <summary>Ler mais <span class="summary-chevron" aria-hidden="true"></span></summary>
+          <div class="panel-more">
+            <h3>Possibilidades e limites</h3>
+            <p>O atendimento pode ocorrer por chat, chamada de voz ou vídeo, conforme o serviço disponível. Nem todas as situações permitem um diagnóstico ou tratamento a distância. O profissional pode solicitar informações adicionais, exames ou avaliação presencial.</p>
+            <p>A emissão de receitas, documentos ou pedidos de exames depende da avaliação clínica, das regras do serviço e da legislação aplicável. Nenhum desses documentos é garantido automaticamente.</p>
+            <h3>Segurança e participação</h3>
+            <p>Forneça informações verdadeiras sobre sua saúde e procure realizar a consulta em um local reservado, com conexão adequada. Para crianças e pessoas legalmente representadas, podem ser exigidas verificações adicionais.</p>
+            <p>O atendimento remoto tem limitações e não substitui serviços de urgência e emergência. Se houver sintomas graves ou risco imediato, procure atendimento de urgência.</p>
+          </div>
+        </details>
       </section>
-      <section class="panel">
-        <h2>Privacidade e consentimento</h2>
-        <p>O atendimento pode envolver dados pessoais e informações de saúde, que exigem proteção e tratamento compatíveis com a legislação aplicável.</p>
-        <p>Os documentos do prestador descrevem regras de uso, tratamento de dados, responsabilidades, direitos dos pacientes e condições da assistência à distância.</p>
-        <p>Quando o consentimento for necessário, sua apresentação e o registro do aceite ocorrerão na própria plataforma de atendimento. Esta página não registra nem substitui esse consentimento.</p>
+      <section class="panel" aria-labelledby="privacy-title">
+        <h2 id="privacy-title">Privacidade e consentimento</h2>
+        <p>Para realizar o atendimento, poderão ser tratados dados de identificação, contato, informações de saúde, registros de consultas e documentos compartilhados pelo paciente.</p>
+        <p>Essas informações são utilizadas para viabilizar o cuidado, registrar a assistência e cumprir obrigações aplicáveis. O consentimento para a assistência a distância, quando solicitado, é apresentado e registrado na própria plataforma de atendimento.</p>
+        <details>
+          <summary>Ler mais <span class="summary-chevron" aria-hidden="true"></span></summary>
+          <div class="panel-more">
+            <h3>Uso e proteção dos dados</h3>
+            <p>Profissionais autorizados podem precisar consultar informações clínicas e conversas anteriores para oferecer continuidade e segurança ao atendimento. Dados também podem ser tratados por serviços tecnológicos e compartilhados quando houver fundamento legal e garantias adequadas.</p>
+            <p>Podem ser coletadas informações técnicas, como dados do dispositivo e da conexão. Os registros são mantidos pelo período necessário às finalidades informadas e às obrigações legais aplicáveis, inclusive quando o paciente deixa de utilizar o serviço.</p>
+            <h3>Seus direitos e escolhas</h3>
+            <p>Você pode solicitar informações sobre o uso dos seus dados e exercer direitos como acesso, correção e, nas situações previstas em lei, eliminação, oposição ou portabilidade.</p>
+            <p>O consentimento pode ser retirado quando aplicável, sem invalidar os atendimentos já realizados nem impedir a conservação de registros legalmente exigidos. O uso de determinadas funcionalidades pode exigir consentimentos específicos.</p>
+          </div>
+        </details>
       </section>
     </div>
-    <section class="docs" aria-labelledby="docs-title">
-      <div class="docs-head"><span class="doc-symbol" aria-hidden="true">▤</span><h2 id="docs-title">Consulte os documentos originais</h2></div>
-      <p class="docs-description">Os dois endereços abaixo correspondem aos documentos identificados anteriormente no fluxo de consentimento do fornecedor. O conteúdo original foi encontrado em espanhol. Os links abrem em outra aba, sem interromper a sua navegação na Telessaúde PromoVie.</p>
-      <div class="doc-links">
-        <a id="pv-doc-terms" class="doc-link" href="https://mediquo-api.s3.eu-central-1.amazonaws.com/filesystem/uploads/terms/TerminosyCondicionesmediQuoversionfinal_37947.html" target="_blank" rel="noopener noreferrer">
-          <strong>Termos e Condições de Uso</strong>
-          <span>Documento original do prestador, em espanhol.</span>
-          <em>Abrir documento original ↗</em>
-        </a>
-        <a id="pv-doc-privacy" class="doc-link" href="https://widget.mediquo.com/privacy/index.html" target="_blank" rel="noopener noreferrer">
-          <strong>Política de Privacidade</strong>
-          <span>Documento original do prestador, em espanhol.</span>
-          <em>Abrir documento original ↗</em>
-        </a>
-      </div>
-      <div class="note">
-        <strong>Para ler em português:</strong> ao abrir o documento, utilize o recurso de tradução da página do seu navegador, quando disponível. A tradução automática é um auxílio à leitura e pode conter imprecisões. Não se trata de uma versão oficial ou juridicamente validada em português.
-      </div>
-    </section>
     <section class="copy-box" aria-labelledby="copy-title">
-      <h2 id="copy-title">Guarde as informações da PromoVie</h2>
-      <p>Você pode copiar o resumo explicativo em português para consultar depois. Ele não é uma tradução integral dos documentos jurídicos.</p>
-      <button id="copy-summary" class="copy-action" type="button">Copiar resumo em português</button>
+      <h2 id="copy-title">Copiar resumo</h2>
+      <p>Você pode copiar o resumo explicativo para consultar depois.</p>
+      <button id="copy-summary" class="copy-action" type="button">Copiar resumo</button>
       <span id="copy-status" class="copy-status" role="status" aria-live="polite"></span>
     </section>
   </main>
   <footer>
     <div class="shell">
       <strong>Telessaúde PromoVie</strong><br>
-      Este material é informativo e complementar. Não substitui os termos originais, a política de privacidade ou o consentimento da plataforma assistencial.
+      Este material é informativo e complementar.
     </div>
   </footer>
   <script>
@@ -140,25 +131,30 @@
         close.focus();
       });
       copy.addEventListener("click",async function(){
-        const lines=[
-          "TELESSAÚDE PROMOVIE | INFORMAÇÕES EM PORTUGUÊS",
-          "",
-          "A Telessaúde PromoVie integra acesso a profissionais habilitados, recursos digitais e suporte em uma experiência organizada pela PromoVie.",
-          "",
-          document.getElementById("resumo-pt").innerText.trim(),
-          "",
-          "Consulte os documentos originais do fornecedor:",
-          document.getElementById("pv-doc-terms").href,
-          document.getElementById("pv-doc-privacy").href,
-          "",
-          "Este resumo é informativo, não substitui os documentos originais nem representa tradução oficial."
+        const parts=[
+          "TELESSAÚDE PROMOVIE | INFORMAÇÕES",
+          document.getElementById("info-title").textContent.trim(),
+          document.querySelector(".hero .intro").textContent.trim()
         ];
+        for(const panel of document.querySelectorAll("#resumo-pt .panel")){
+          parts.push("",panel.querySelector("h2").textContent.trim());
+          for(const paragraph of panel.querySelectorAll("h3,p"))parts.push(paragraph.textContent.trim());
+        }
+        parts.push("","Este material é informativo e complementar.");
+        const summary=parts.join("\n\n");
         try{
           if(!navigator.clipboard?.writeText)throw new Error("sem permissão");
-          await navigator.clipboard.writeText(lines.join("\n"));
+          await navigator.clipboard.writeText(summary);
           state.textContent="Resumo copiado. Você pode colá-lo onde preferir.";
         }catch{
-          state.textContent="Não foi possível copiar automaticamente. Selecione os textos desta página para copiar.";
+          const field=document.createElement("textarea");
+          field.value=summary;field.setAttribute("readonly","");
+          field.style.cssText="position:fixed;top:0;left:0;opacity:.01";
+          document.body.appendChild(field);field.focus();field.select();
+          const succeeded=document.execCommand("copy");field.remove();
+          state.textContent=succeeded?
+            "Resumo copiado. Você pode colá-lo onde preferir.":
+            "Não foi possível copiar automaticamente. Selecione o texto da página para copiar.";
         }
       });
     })();
