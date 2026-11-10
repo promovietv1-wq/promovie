@@ -285,7 +285,10 @@ html body .mediquo-launcher{display:none!important}
 .pv-brand-intro::backdrop{background:rgba(22,13,51,.70);backdrop-filter:blur(4px)}
 .pv-brand-intro-body{padding:clamp(22px,6vw,35px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px}
 .pv-brand-intro-body img{object-fit:contain}
-.pv-brand-intro-label{font:800 clamp(18px,4vw,22px)/1.25 Sora,Inter,Arial,sans-serif;letter-spacing:-.025em;color:#4b0c8f}
+.pv-brand-lettering{display:block;width:178px;max-width:70%;height:auto;object-fit:contain}
+.pv-topbar-lettering{display:block;width:143px;max-width:100%;height:auto;object-fit:contain}
+.pv-directory-lettering{display:block;width:145px;max-width:100%;height:auto;object-fit:contain}
+.pv-lettering-inline{display:inline-block;height:1.07em;width:auto;vertical-align:-.09em;max-width:none}
 .pv-brand-intro-body h2{margin:0;font:800 clamp(21px,4vw,28px)/1.25 Sora,Inter,Arial,sans-serif;letter-spacing:-.035em;color:#36166b}
 .pv-brand-intro-body p{margin:0;line-height:1.58;font-size:15px}
 .pv-brand-intro-body .pv-brand-intro-assertion{font-weight:750;color:#4b0c8f;margin:3px 0 7px}
@@ -306,7 +309,7 @@ html body .mediquo-launcher{display:none!important}
   <div class="identity">
     <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="56" height="56" alt="Coração PromoVie">
     <div class="identity-copy">
-      <strong class="pv-brand-name">Telessaúde</strong>
+      <img class="pv-topbar-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" width="178" height="29" alt="Telessaúde">
     </div>
   </div>
   <div class="clinic-tools">
@@ -417,13 +420,13 @@ html body .mediquo-launcher{display:none!important}
 <dialog id="pv-brand-intro" class="pv-brand-intro" aria-labelledby="pv-brand-intro-title" aria-describedby="pv-brand-intro-desc">
 <div class="pv-brand-intro-body">
 <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="PromoVie" width="68" height="68">
-<strong class="pv-brand-intro-label">Telessaúde</strong>
-<h2 id="pv-brand-intro-title">Sua saúde merece uma melhor experiência.</h2>
-<p id="pv-brand-intro-desc">A Telessaúde PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada, organizada para você.</p>
+<img class="pv-brand-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29">
+<h2 id="pv-brand-intro-title">Sua saúde merece uma experiência excelente.</h2>
+<p id="pv-brand-intro-desc">A <img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada e organizada para você.</p>
 <p class="pv-brand-intro-assertion">Conte com a PromoVie na sua jornada de saúde.</p>
 <div class="pv-brand-info-card" aria-label="Informações em português sobre o atendimento">
   <strong>Informações sobre o seu atendimento</strong>
-  <p>Conheça o funcionamento da Telessaúde e consulte informações e orientações sobre o atendimento.</p>
+  <p>Conheça o funcionamento da <img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> e consulte informações e orientações sobre o atendimento.</p>
   <a id="pv-brand-info-link" href="/telessaude/teste-aceite/informacoes/" target="_blank" rel="noopener noreferrer">Ler informações <span aria-hidden="true">↗</span></a>
 </div>
 <button type="button" id="pv-brand-intro-next">Continuar para o atendimento</button>

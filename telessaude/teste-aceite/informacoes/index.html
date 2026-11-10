@@ -24,12 +24,20 @@
     .brand{display:flex;align-items:center;gap:11px;min-width:0}
     .brand img{width:52px;height:52px;object-fit:contain;flex:none}
     .brand strong{display:block;font:800 clamp(16px,3vw,19px)/1.18 Sora,Inter,sans-serif;color:#38136a}
+    .pv-heading-lettering{display:block;width:147px;max-width:100%;height:auto}
+    .pv-lettering-inline{display:inline-block;width:auto;height:1.1em;vertical-align:-.1em;max-width:none}
+    .pv-footer-brand{font-weight:800;display:inline-flex;align-items:baseline;gap:4px}
+    .pv-footer-brand .pv-lettering-inline{height:1.05em;vertical-align:-.12em}
     .brand small{display:block;font-size:12px;color:#755e8d;font-weight:600;margin-top:3px}
     .top-link{white-space:nowrap;border:1px solid #e2d7ef;border-radius:13px;padding:11px 14px;background:#fff;color:#501d8c;font-size:13px;font-weight:750;cursor:pointer}
     .hero{padding:45px 0 26px}
     .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#efe9fb;border:1px solid #e4d5fb;border-radius:100px;color:#5b278d;padding:7px 13px;font-size:11px;letter-spacing:.06em;font-weight:800;text-transform:uppercase}
     h1{font:800 clamp(26px,5vw,42px)/1.13 Sora,Inter,sans-serif;letter-spacing:-.04em;color:#3b1277;max-width:760px;margin:16px 0 14px}
     .intro{max-width:770px;font-size:clamp(15px,2.5vw,17px);line-height:1.73;color:#5d526c;margin:0}
+    .pv-consent-banner{position:relative;overflow:hidden;max-width:840px;margin:23px 0 0;padding:20px 24px;border-radius:17px;background:linear-gradient(114deg,#4b0c8f 0%,#7032bd 70%,#7744c7 100%);border:1px solid rgba(58,15,107,.32);box-shadow:0 12px 30px rgba(64,23,119,.15)}
+    .pv-consent-banner:before{content:"";position:absolute;width:5px;inset:0 auto 0 0;background:#8ce8ff}
+    .pv-consent-banner p{font-size:clamp(14px,2.3vw,16px);line-height:1.65;font-weight:550;color:#fff;margin:0}
+    .pv-consent-banner strong{color:#fff;font-weight:850}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin:24px 0}
     .panel{padding:24px;background:#fff;border:1px solid #eee8f8;border-radius:19px;box-shadow:0 8px 32px rgba(39,20,70,.045)}
     h2{font:800 20px/1.3 Sora,Inter,sans-serif;color:#411b71;margin:0 0 14px}
@@ -50,7 +58,7 @@
     .copy-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;background:linear-gradient(110deg,#4b0c8f,#7644c2);border:1px solid #4b0c8f;color:#fff;padding:11px 18px;border-radius:12px;cursor:pointer;font-weight:750;font-size:13px}
     .copy-action:hover{filter:brightness(1.07)}.copy-status{display:block;min-height:1.4em;font-size:12px;color:#55368a;margin-top:10px}
     footer{padding:22px 0 30px;text-align:center;font-size:12px;line-height:1.6;color:#80718e;border-top:1px solid #e6def1}
-    @media(max-width:700px){.shell{width:min(100% - 28px,960px)}.topbar-inner{min-height:76px}.brand img{width:43px;height:43px}.top-link{font-size:11px;padding:10px}.hero{padding:30px 0 20px}.feature{padding:18px}.grid{grid-template-columns:1fr;gap:13px}.panel,.copy-box{padding:20px}}
+    @media(max-width:700px){.shell{width:min(100% - 28px,960px)}.topbar-inner{min-height:76px}.brand img{width:43px;height:43px}.top-link{font-size:11px;padding:10px}.hero{padding:30px 0 20px}.pv-consent-banner{padding:17px 20px;margin-top:18px}.grid{grid-template-columns:1fr;gap:13px}.panel,.copy-box{padding:20px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.summary-chevron{transition:none}}
   </style>
 </head>
@@ -59,7 +67,7 @@
     <div class="shell topbar-inner">
       <div class="brand">
         <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="52" height="52">
-        <div><strong>Telessaúde</strong><small>Informações para o seu cuidado</small></div>
+        <div><img class="pv-heading-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"><small>Informações para o seu cuidado</small></div>
       </div>
       <button id="close-info" class="top-link" type="button">Voltar ao atendimento</button>
     </div>
@@ -68,12 +76,15 @@
     <section class="hero" aria-labelledby="info-title">
       <span class="eyebrow">Informações</span>
       <h1 id="info-title">Uma experiência para ajudar você a cuidar da sua saúde.</h1>
-      <p class="intro">A Telessaúde PromoVie une acesso a profissionais habilitados, recursos digitais e suporte em uma experiência organizada para facilitar seus cuidados com a saúde. Aqui você encontra um resumo sobre o atendimento e informações importantes sobre privacidade e consentimento.</p>
+      <p class="intro">A <img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> PromoVie une acesso a profissionais habilitados, recursos digitais e suporte em uma experiência organizada para facilitar seus cuidados com a saúde. Aqui você encontra um resumo sobre o atendimento e informações importantes sobre privacidade e consentimento.</p>
+      <aside class="pv-consent-banner" aria-label="Informação importante sobre o aceite">
+        <p>Ao iniciar o Chat Médico, você será convidado a aceitar os termos de privacidade, consentimento e funcionamento do sistema. <strong>Leia abaixo a essência desse conteúdo.</strong></p>
+      </aside>
     </section>
     <div class="grid" id="resumo-pt">
       <section class="panel" aria-labelledby="attendance-title">
         <h2 id="attendance-title">Como funciona o atendimento</h2>
-        <p>O acesso à Telessaúde é individual. Você pode conhecer as especialidades disponíveis e escolher os profissionais autorizados para o seu atendimento.</p>
+        <p>O acesso à <img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> é individual. Você pode conhecer as especialidades disponíveis e escolher os profissionais autorizados para o seu atendimento.</p>
         <p>As consultas a distância podem oferecer avaliação, orientação, acompanhamento e, quando adequado, receitas ou encaminhamentos. A indicação de cada conduta cabe ao profissional de saúde.</p>
         <details>
           <summary>Ler mais <span class="summary-chevron" aria-hidden="true"></span></summary>
@@ -113,7 +124,7 @@
   </main>
   <footer>
     <div class="shell">
-      <strong>Telessaúde PromoVie</strong><br>
+      <strong class="pv-footer-brand"><img class="pv-lettering-inline" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29"> PromoVie</strong><br>
       Este material é informativo e complementar.
     </div>
   </footer>
@@ -131,14 +142,22 @@
         close.focus();
       });
       copy.addEventListener("click",async function(){
+        function readableText(element){
+          const copy=element.cloneNode(true);
+          for(const image of copy.querySelectorAll("img[alt]")){
+            image.replaceWith(document.createTextNode(image.alt));
+          }
+          return copy.textContent.trim().replace(/\s+/g," ");
+        }
         const parts=[
           "TELESSAÚDE PROMOVIE | INFORMAÇÕES",
-          document.getElementById("info-title").textContent.trim(),
-          document.querySelector(".hero .intro").textContent.trim()
+          readableText(document.getElementById("info-title")),
+          readableText(document.querySelector(".hero .intro")),
+          readableText(document.querySelector(".pv-consent-banner"))
         ];
         for(const panel of document.querySelectorAll("#resumo-pt .panel")){
-          parts.push("",panel.querySelector("h2").textContent.trim());
-          for(const paragraph of panel.querySelectorAll("h3,p"))parts.push(paragraph.textContent.trim());
+          parts.push("",readableText(panel.querySelector("h2")));
+          for(const paragraph of panel.querySelectorAll("h3,p"))parts.push(readableText(paragraph));
         }
         parts.push("","Este material é informativo e complementar.");
         const summary=parts.join("\n\n");
