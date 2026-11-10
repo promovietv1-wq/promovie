@@ -152,6 +152,27 @@ try{
     return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
   });
   assert.equal(await popup.locator(".brand img.pv-heading-lettering").getAttribute("alt"),"Telessaúde");
+
+  for(const vw of [320,360,390,430,600,768,1024,1440]){
+    await popup.setViewportSize({width:vw,height:850});
+    const layout=await popup.evaluate(()=>{
+      const rect=sel=>{const r=document.querySelector(sel)?.getBoundingClientRect();
+        return r&&{x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+      return {scroll:document.documentElement.scrollWidth,
+        logo:rect(".pv-heading-lettering"),footer:rect(".pv-footer-lockup img"),
+        brand:rect(".brand"),button:rect("#close-info")};
+    });
+    assert.ok(layout.scroll<=vw+2,"Rolagem horizontal em "+vw);
+    assert.ok(layout.logo && layout.logo.width>90,"Logo ilegível "+vw);
+    assert.ok(Math.abs(layout.logo.width/layout.logo.height-178/29)<.35,"Logo distorcido "+vw);
+    assert.ok(layout.logo.right<=vw+2 && layout.logo.x>=0,"Logo sai da tela "+vw);
+    assert.ok(Math.abs(layout.footer.width/layout.footer.height-178/29)<.35,"Rodapé distorcido "+vw);
+    assert.ok(layout.brand.bottom<=layout.button.y+1 || layout.brand.right<=layout.button.x+1,
+      "Marca sobreposta ao botão "+vw);
+    console.log("Layout página informações:",vw,JSON.stringify(layout));
+  }
+  await popup.setViewportSize({width,height:850});
+
   const details=popup.locator("#resumo-pt details");
   assert.equal(await details.count(),2);
   assert.equal(await details.nth(0).evaluate(x=>x.open),false);
