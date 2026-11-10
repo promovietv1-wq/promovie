@@ -33,7 +33,7 @@ assert.match(information,/class="pv-consent-banner"/);
 assert.match(information,/Ao iniciar o Chat Médico, você será convidado/);
 assert.match(information,/Leia abaixo a essência desse conteúdo/);
 assert.match(information,/document\.querySelector\("\.pv-consent-banner"\)/);
-assert.match(directory,/class=\\"pv-directory-lettering\\"/);
+assert.match(directory,/class="pv-directory-lettering"/);
 assert.match(information,/Como funciona o atendimento/);
 assert.match(information,/Privacidade e consentimento/);
 assert.equal((information.match(/<details>/g)||[]).length,2);
