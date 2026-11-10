@@ -61,6 +61,25 @@
   const LIMIT_NOTES=50;
   const encoder=new TextEncoder(),decoder=new TextDecoder();
   const $=id=>document.getElementById(id);
+  // Mobile: X é a única saída para a tela inicial.
+  // O encerramento da sessão pessoal continua disponível por privacidade,
+  // mas não aparece como botão de navegação denominado "Sair".
+  if(window.matchMedia?.("(max-width:700px)").matches){
+    const startLink=document.getElementById("back-to-access");
+    if(startLink&&!document.documentElement.classList.contains("pv-space-embedded")){
+      startLink.textContent="×";
+      startLink.setAttribute("aria-label","Fechar e voltar ao início");
+      startLink.title="Fechar";
+      startLink.classList.add("pv-mobile-exit-x");
+    }
+    document.querySelector("header.topbar a.identity")?.removeAttribute("href");
+    const logout=document.getElementById("logout");
+    if(logout){
+      logout.textContent="Encerrar sessão";
+      logout.classList.add("pv-mobile-logout-link");
+    }
+  }
+
   const state={token:null,key:null,docKey:null,salt:null,revision:0,record:null,data:null,
     nextKey:null,nextSalt:null,previousSalt:null,recoveryMode:null,dirty:false,busy:false};
   const profileFields=[["allergies","alergias"],["medications","medicamentos"],["history","historico"]];
