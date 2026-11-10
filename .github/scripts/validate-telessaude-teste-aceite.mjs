@@ -116,6 +116,7 @@ try{
     };
     return [measure(".pv-topbar-lettering"),measure(".pv-brand-lettering"),measure(".pv-directory-lettering")];
   });
+  console.log("DEBUG brand geometry before checks:",width,JSON.stringify(proportions));
   for(const mark of proportions){
     assert.ok(mark && mark.w>65 && mark.h>9,"Lettering muito pequeno ou ausente");
     assert.ok(Math.abs(mark.w/mark.h-178/29)<0.35,"Lettering deformado "+JSON.stringify(mark));
