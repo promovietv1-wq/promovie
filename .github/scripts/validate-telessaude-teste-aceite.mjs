@@ -20,7 +20,9 @@ assert.match(test,/Sua saúde merece uma experiência excelente/);
 assert.match(test,/class="pv-lockup-name">PromoVie<\/span>/);
 assert.match(test,/class="pv-topbar-lockup"/);
 assert.match(test,/class="pv-lockup"/);
-assert.match(test,/A <img class="pv-lettering-inline"/);
+assert.match(test,/A Telessaúde PromoVie reúne acesso/);
+assert.doesNotMatch(test,/class="pv-lettering-inline"/);
+assert.doesNotMatch(information,/class="pv-lettering-inline" src=/);
 assert.match(test,/PromoVie reúne acesso a profissionais de saúde, orientação e suporte/);
 assert.match(test,/class="pv-brand-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
 assert.match(test,/>Ler informações <span aria-hidden="true">/);
@@ -68,7 +70,7 @@ assert.doesNotMatch(test,/MediquoWidget\.destroy\(/);
 
 const browser=await chromium.launch({headless:true});
 try{
- for(const width of [390,1280]){
+ for(const width of [360,390,768,1280]){
   const page=await browser.newPage({viewport:{width,height:850}});
   const pageErrors=[];
   page.on("pageerror",error=>pageErrors.push(error.message));
