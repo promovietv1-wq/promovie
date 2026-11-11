@@ -921,7 +921,7 @@ html body .mediquo-launcher{display:none!important}
     function closeInformation(){
       if(!informationDialog.open)return;
       informationDialog.close();
-      informationFrame.removeAttribute("src");
+      // Evita adicionar navegações about:blank ao histórico conjunto do iframe.
     }
     function returnFromInformation(){
       if(history.state?.pvInformationOverlay)history.back();
@@ -933,8 +933,10 @@ html body .mediquo-launcher{display:none!important}
       event.preventDefault();
       if(informationDialog.open)return;
       const previous=history.state&&typeof history.state==="object"?history.state:{};
+      // replace() evita que a navegação interna do iframe consuma o primeiro
+      // toque no Voltar nativo antes de chegar ao histórico do atendimento.
+      informationFrame.contentWindow.location.replace(infoLink.href);
       history.pushState({...previous,pvInformationOverlay:true},"",location.href);
-      informationFrame.src=infoLink.href;
       informationDialog.showModal();
     });
     informationDialog.addEventListener("cancel",event=>{
