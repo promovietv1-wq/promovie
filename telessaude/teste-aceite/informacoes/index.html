@@ -101,10 +101,8 @@
     </div>
   </header>
   <main class="shell">
-    <section class="hero" aria-labelledby="info-title">
+    <section class="hero" aria-label="Informações do atendimento">
       <span class="eyebrow">Informações</span>
-      <h1 id="info-title">Uma experiência para ajudar você a cuidar da sua saúde.</h1>
-      <p class="intro">A Telessaúde PromoVie une acesso a profissionais habilitados, recursos digitais e suporte em uma experiência organizada para facilitar seus cuidados com a saúde. Aqui você encontra um resumo sobre o atendimento e informações importantes sobre privacidade e consentimento.</p>
     </section>
     <div class="grid" id="resumo-pt">
       <section class="panel" aria-labelledby="attendance-title">
@@ -232,8 +230,7 @@
         }
         const parts=[
           "TELESSAÚDE PROMOVIE | INFORMAÇÕES",
-          readableText(document.getElementById("info-title")),
-          readableText(document.querySelector(".hero .intro"))
+          "Informações necessárias para o seu atendimento"
         ];
         for(const panel of document.querySelectorAll("#resumo-pt .panel")){
           parts.push("",readableText(panel.querySelector("h2")));
