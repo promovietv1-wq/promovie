@@ -580,7 +580,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  ].join("");
  document.body.appendChild(curriculaLayer);
  const curriculaFrame=curriculaLayer.querySelector("iframe");
- let curriculumReturnPane="categories";
+ let curriculumReturnPane="categories",curriculumHistoryReturn=false;
  function closeCurricula(){
    if(!curriculaLayer.open)return;
    curriculaLayer.close();
@@ -589,11 +589,14 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    restorePane(curriculumReturnPane);
  }
  function backFromCurricula(){
-   // Fecha a janela imediatamente, mesmo se o navegador demorar ou
-   // consumir uma navegação histórica do iframe interno.
+   // Fechar currículos conserva a sessão e ignora o popstate causado
+   // pelo próprio botão Voltar, para não fechar Especialidades em seguida.
    const overlayWasInHistory=Boolean(history.state?.pvCurriculaOverlay);
    closeCurricula();
-   if(overlayWasInHistory)history.back();
+   if(overlayWasInHistory){
+     curriculumHistoryReturn=true;
+     history.back();
+   }
  }
  curriculaLayer.querySelector(".pv-curricula-close")?.addEventListener("click",backFromCurricula);
  curriculaLayer.addEventListener("cancel",event=>{
@@ -601,7 +604,15 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    backFromCurricula();
  });
  window.addEventListener("popstate",event=>{
-   if(curriculaLayer.open&&!event.state?.pvCurriculaOverlay)closeCurricula();
+   if(curriculumHistoryReturn){
+     curriculumHistoryReturn=false;
+     event.stopImmediatePropagation();
+     return;
+   }
+   if(curriculaLayer.open&&!event.state?.pvCurriculaOverlay){
+     closeCurricula();
+     event.stopImmediatePropagation();
+   }
  });
  window.addEventListener("message",event=>{
    if(event.origin!==location.origin||event.source!==curriculaFrame.contentWindow||
