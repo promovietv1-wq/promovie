@@ -11,7 +11,7 @@ const directory=await readFile("telessaude/teste-aceite/diretorio.mjs","utf8");
 const lettering=await readFile("telessaude/teste-aceite/assets/telessaude-lettering.svg","utf8");
 const encodedPng=lettering.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/)?.[1];
 assert.ok(encodedPng&&encodedPng.length>2000,"Preservar arte original");
-assert.ok(entry.includes('src="data:image/png;base64,'+encodedPng+'"'),"Usar a arte PNG real no acesso");
+assert.ok(entry.includes('src="/telessaude/teste-aceite/assets/telessaude-lettering.png"'),"Usar a arte PNG real no acesso");
 assert.ok(attendance.includes('Informações necessárias para o seu atendimento'));
 assert.ok(information.includes('Eu li as informações acima sobre atendimento, privacidade e consentimento.'));
 assert.ok(attendance.includes('Por gentileza, leia as informações sobre o seu atendimento no botão acima.'));
@@ -94,12 +94,12 @@ try{
    assert.equal(await first.evaluate(()=>window.__sdkConfig.environment),"production");
    await first.close();
 
-   // Mesmo beneficiário + mesmo navegador: acesso direto à grade, sem nova apresentação.
+   // Modo de revisão: mesmo beneficiário também vê apresentação novamente.
    const repeat=await context.newPage();
    repeat.on("pageerror",error=>errors.push(error.message));
    await login(repeat,"12345678909");
-   await repeat.locator("#directory-dialog[open]").waitFor({timeout:10000});
-   assert.equal(await repeat.locator("#pv-brand-intro").evaluate(d=>d.open),false);
+   await repeat.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
+   assert.equal(await repeat.locator("#pv-brand-intro").evaluate(d=>d.open),true);
    await repeat.close();
 
    // Segundo CPF no mesmo navegador não herda indevidamente a ciência do primeiro.
