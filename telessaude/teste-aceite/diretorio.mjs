@@ -534,6 +534,15 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(!anchor)return;
    let url;
    try{url=new URL(anchor.href)}catch{return;}
+   if(url.origin==="https://profissionais-telessaude.vercel.app"){
+     // Quando o link público nasce na página PromoVie, use o mesmo
+     // currículo com tema claro já existente, sem sair da autenticação.
+     if(!curriculumLink)return;
+     event.preventDefault();
+     event.stopImmediatePropagation();
+     curriculumLink.click();
+     return;
+   }
    if(url.origin!=="https://painel-agendazap.vercel.app")return;
    event.preventDefault();
    event.stopImmediatePropagation();
