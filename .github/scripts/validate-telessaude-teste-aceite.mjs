@@ -148,6 +148,35 @@ try{
    await first.evaluate(()=>history.back());
    await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
    assert.equal(await first.locator("#appointments-dialog").evaluate(d=>d.open),false);
+   // Painel externo Meus Agendamentos: apresentação invertida para clara,
+   // sem acesso às informações internas do iframe ou aos tokens Médiquo.
+   await first.locator("#hub-shortcut-appointments").click();
+   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
+   await first.locator("#appointments-my-panel").click();
+   await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
+   const myAppointmentsFrame=first.frameLocator(".pv-appointments-panel-dialog iframe");
+   await myAppointmentsFrame.locator("#pv-appointments-external").waitFor({timeout:10000});
+   const appointmentAppearance=await myAppointmentsFrame.locator("#pv-appointments-external").evaluate(frame=>({
+     filter:getComputedStyle(frame).filter,
+     background:getComputedStyle(document.body).backgroundColor,
+     source:frame.contentWindow.location.href
+   }));
+   assert.match(appointmentAppearance.filter,/invert\(1\)/);
+   assert.equal(appointmentAppearance.background,"rgb(255, 255, 255)");
+   assert.equal(appointmentAppearance.source,"https://painel-agendazap.vercel.app/");
+   // Voltar explícito na página mantém o diálogo de origem.
+   await myAppointmentsFrame.locator("#pv-appointments-back").click();
+   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
+   // Também funciona com botão Voltar nativo do navegador.
+   await first.locator("#appointments-my-panel").click();
+   await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
+   await first.evaluate(()=>history.back());
+   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
+   await first.locator("#appointments-specialties").click();
+   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+
    // Somente um clique explícito no chat abre o SDK original de atendimento.
    await first.locator("#hub-native").click();
    await first.waitForFunction(()=>window.__sdkOpened===1,{timeout:15000});
