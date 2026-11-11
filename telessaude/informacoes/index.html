@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#4b0c8f">
+  <meta name="description" content="Informações sobre atendimento, privacidade e consentimento para beneficiários da Telessaúde PromoVie.">
+  <title>Informações | Telessaúde PromoVie</title>
+  <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{font-family:Inter,Arial,sans-serif;color:#281a40;background:#ffffff;color-scheme:light;font-synthesis:none}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;min-height:100dvh;background:#ffffff;color-scheme:light}
+    a{color:inherit}button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #00bde8;outline-offset:3px}
+    .shell{width:min(960px,calc(100% - 36px));margin:0 auto}
+    .topbar{border-bottom:1px solid #ece6f7;background:rgba(255,255,255,.93)}
+    .topbar-inner{min-height:86px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0}
+    .brand > img{width:52px;height:52px;object-fit:contain;flex:none}
+    .brand .pv-info-lockup{display:flex;align-items:center;justify-content:flex-start;min-width:0}
+    .brand .pv-info-lockup img.pv-heading-lettering{
+      display:block;width:147px;max-width:100%;height:auto;
+      aspect-ratio:178 / 29;object-fit:contain;flex:0 1 auto
+    }
+    .pv-footer-lockup{display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:9px}
+    .pv-footer-lockup img.pv-footer-heart{width:45px;height:45px;object-fit:contain;flex:0 0 auto}
+    .pv-footer-lockup img.pv-footer-lettering{
+      width:148px;max-width:100%;height:auto;aspect-ratio:178 / 29;object-fit:contain;flex:0 1 auto
+    }
+    .top-link{white-space:nowrap;border:1px solid #e2d7ef;border-radius:13px;padding:11px 14px;background:#fff;color:#501d8c;font-size:13px;font-weight:750;cursor:pointer}
+    .info-nav-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .info-nav-actions #back-info{background:#faf8ff;color:#5a4080}
+    .hero{padding:45px 0 26px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#efe9fb;border:1px solid #e4d5fb;border-radius:100px;color:#5b278d;padding:7px 13px;font-size:11px;letter-spacing:.06em;font-weight:800;text-transform:uppercase}
+    h1{font:800 clamp(26px,5vw,42px)/1.13 Sora,Inter,sans-serif;letter-spacing:-.04em;color:#3b1277;max-width:760px;margin:16px 0 14px}
+    .intro{max-width:770px;font-size:clamp(15px,2.5vw,17px);line-height:1.73;color:#5d526c;margin:0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin:24px 0}
+    .panel{padding:24px;background:#fff;border:1px solid #eee8f8;border-radius:19px;box-shadow:0 8px 32px rgba(39,20,70,.045)}
+    h2{font:800 20px/1.3 Sora,Inter,sans-serif;color:#411b71;margin:0 0 14px}
+    h3{font:800 15px/1.35 Inter,Arial,sans-serif;color:#3a2366;margin:17px 0 6px}
+    p{line-height:1.7}.panel p{font-size:14px;color:#62576e;margin:0 0 10px}
+    .panel p:last-child{margin-bottom:0}
+    .panel details{border-top:1px solid #eee8f8;margin-top:16px;padding-top:10px}
+    .panel summary{display:inline-flex;align-items:center;gap:9px;min-height:40px;padding:9px 0;color:#56239a;font-size:13px;font-weight:800;cursor:pointer;list-style:none;user-select:none}
+    .panel summary::-webkit-details-marker{display:none}
+    .panel summary:focus-visible{outline:3px solid #00bde8;outline-offset:3px;border-radius:6px}
+    .summary-chevron{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .15s}
+    details[open] .summary-chevron{transform:rotate(225deg)}
+    .panel-more{padding-top:4px}
+    .panel-more h3{margin-top:15px}
+    .panel-more p{line-height:1.75}
+    .pv-awareness{background:#fff;border:1px solid #e6dcf4;border-radius:18px;padding:20px 23px;margin:0 0 19px;box-shadow:0 8px 32px rgba(39,20,70,.045)}
+    .pv-awareness-label{display:flex;align-items:flex-start;gap:12px;cursor:pointer;color:#3e206b;font-size:14px;line-height:1.6;font-weight:750}
+    .pv-awareness-label input{width:20px;height:20px;flex:0 0 20px;margin:2px 0 0;accent-color:#4b0c8f;cursor:pointer}
+    .pv-awareness-feedback{margin:10px 0 0 32px;color:#5a338b;font-size:12px;line-height:1.5}
+    .top-link[aria-disabled="true"]{
+      filter:grayscale(1);background:#dedede!important;color:#686868!important;
+      border-color:#bdbdbd!important;cursor:not-allowed;opacity:.75
+    }
+    @media(max-width:700px){.pv-awareness{padding:19px 20px}.pv-awareness-feedback{margin-left:0}}
+    .copy-box{border:1px solid #e7e0f4;background:#fff;border-radius:20px;padding:25px;margin:20px 0 30px}
+    .copy-box p{color:#62576e;font-size:14px;margin:0 0 14px}
+    .copy-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;background:linear-gradient(110deg,#4b0c8f,#7644c2);border:1px solid #4b0c8f;color:#fff;padding:11px 18px;border-radius:12px;cursor:pointer;font-weight:750;font-size:13px}
+    .copy-action:hover{filter:brightness(1.07)}.copy-status{display:block;min-height:1.4em;font-size:12px;color:#55368a;margin-top:10px}
+    footer{padding:22px 0 30px;text-align:center;font-size:12px;line-height:1.6;color:#80718e;border-top:1px solid #e6def1}
+    @media(max-width:700px){.shell{width:min(100% - 28px,960px)}.topbar-inner{min-height:76px}.brand > img{width:43px;height:43px}.top-link{font-size:11px;padding:10px}.hero{padding:30px 0 20px}.grid{grid-template-columns:1fr;gap:13px}.panel,.copy-box{padding:20px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.summary-chevron{transition:none}}
+
+    /* Uma identidade: coração à esquerda, lettering proporcional à direita. */
+    .brand{min-width:0}
+    .brand > img{flex:0 0 auto}
+    @media(max-width:600px){
+      .topbar-inner{flex-wrap:wrap;padding-block:12px;row-gap:11px}
+      .topbar .brand{flex:1 1 100%;gap:11px}
+      .topbar .info-nav-actions{flex:1 1 100%;width:100%;justify-content:stretch}
+      .topbar .info-nav-actions .top-link{flex:1 1 calc(50% - 7px);min-height:42px;white-space:normal;text-align:center}
+      .brand > img{width:43px;height:43px}
+      .brand .pv-info-lockup img.pv-heading-lettering{width:137px}
+      
+    }
+    @media(max-width:350px){
+      .brand .pv-info-lockup img.pv-heading-lettering{width:122px}
+      .topbar-inner{row-gap:9px}
+      .hero h1{font-size:26px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand">
+        <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="52" height="52">
+        <div class="pv-info-lockup">
+          <img class="pv-heading-lettering" src="/telessaude/assets/telessaude-lettering.png" alt="Telessaúde" width="178" height="29">
+        </div>
+      </div>
+      <nav class="info-nav-actions" aria-label="Navegação das informações">
+        <button id="back-info" class="top-link" type="button">Voltar</button>
+        <button id="close-info" class="top-link" type="button">Especialidades</button>
+      </nav>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="hero" aria-label="Informações do atendimento">
+      <span class="eyebrow">Informações</span>
+    </section>
+    <div class="grid" id="resumo-pt">
+      <section class="panel" aria-labelledby="attendance-title">
+        <h2 id="attendance-title">Como funciona o atendimento</h2>
+        <p>O acesso à Telessaúde é individual. Você pode conhecer as especialidades disponíveis e escolher os profissionais autorizados para o seu atendimento.</p>
+        <p>As consultas a distância podem oferecer avaliação, orientação, acompanhamento e, quando adequado, receitas ou encaminhamentos. A indicação de cada conduta cabe ao profissional de saúde.</p>
+        <details>
+          <summary>Ler mais <span class="summary-chevron" aria-hidden="true"></span></summary>
+          <div class="panel-more">
+            <h3>Possibilidades e limites</h3>
+            <p>O atendimento pode ocorrer por chat, chamada de voz ou vídeo, conforme o serviço disponível. Nem todas as situações permitem um diagnóstico ou tratamento a distância. O profissional pode solicitar informações adicionais, exames ou avaliação presencial.</p>
+            <p>A emissão de receitas, documentos ou pedidos de exames depende da avaliação clínica, das regras do serviço e da legislação aplicável. Nenhum desses documentos é garantido automaticamente.</p>
+            <h3>Segurança e participação</h3>
+            <p>Forneça informações verdadeiras sobre sua saúde e procure realizar a consulta em um local reservado, com conexão adequada. Para crianças e pessoas legalmente representadas, podem ser exigidas verificações adicionais.</p>
+            <p>O atendimento remoto tem limitações e não substitui serviços de urgência e emergência. Se houver sintomas graves ou risco imediato, procure atendimento de urgência.</p>
+          </div>
+        </details>
+      </section>
+      <section class="panel" aria-labelledby="privacy-title">
+        <h2 id="privacy-title">Privacidade e consentimento</h2>
+        <p>Para realizar o atendimento, poderão ser tratados dados de identificação, contato, informações de saúde, registros de consultas e documentos compartilhados pelo paciente.</p>
+        <p>Essas informações são utilizadas para viabilizar o cuidado, registrar a assistência e cumprir obrigações aplicáveis. O consentimento para a assistência a distância, quando solicitado, é apresentado e registrado na própria plataforma de atendimento.</p>
+        <details>
+          <summary>Ler mais <span class="summary-chevron" aria-hidden="true"></span></summary>
+          <div class="panel-more">
+            <h3>Uso e proteção dos dados</h3>
+            <p>Profissionais autorizados podem precisar consultar informações clínicas e conversas anteriores para oferecer continuidade e segurança ao atendimento. Dados também podem ser tratados por serviços tecnológicos e compartilhados quando houver fundamento legal e garantias adequadas.</p>
+            <p>Podem ser coletadas informações técnicas, como dados do dispositivo e da conexão. Os registros são mantidos pelo período necessário às finalidades informadas e às obrigações legais aplicáveis, inclusive quando o paciente deixa de utilizar o serviço.</p>
+            <h3>Seus direitos e escolhas</h3>
+            <p>Você pode solicitar informações sobre o uso dos seus dados e exercer direitos como acesso, correção e, nas situações previstas em lei, eliminação, oposição ou portabilidade.</p>
+            <p>O consentimento pode ser retirado quando aplicável, sem invalidar os atendimentos já realizados nem impedir a conservação de registros legalmente exigidos. O uso de determinadas funcionalidades pode exigir consentimentos específicos.</p>
+          </div>
+        </details>
+      </section>
+    </div>
+    <section class="pv-awareness" aria-label="Ciência das informações">
+      <label class="pv-awareness-label" for="pv-awareness-check">
+        <input id="pv-awareness-check" type="checkbox">
+        <span>Eu li as informações acima sobre atendimento, privacidade e consentimento.</span>
+      </label>
+      <p class="pv-awareness-feedback" id="pv-awareness-feedback" role="status" aria-live="polite"></p>
+    </section>
+    <section class="copy-box" aria-labelledby="copy-title">
+      <h2 id="copy-title">Copiar resumo</h2>
+      <p>Você pode copiar o resumo explicativo para consultar depois.</p>
+      <button id="copy-summary" class="copy-action" type="button">Copiar resumo</button>
+      <span id="copy-status" class="copy-status" role="status" aria-live="polite"></span>
+    </section>
+  </main>
+  <footer>
+    <div class="shell">
+      <div class="pv-footer-lockup" role="group" aria-label="Telessaúde PromoVie">
+        <img class="pv-footer-heart" src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="45" height="45">
+        <img class="pv-footer-lettering" src="/telessaude/assets/telessaude-lettering.png" alt="Telessaúde" width="178" height="29">
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function(){
+      "use strict";
+      const close=document.getElementById("close-info");
+      const back=document.getElementById("back-info");
+      const copy=document.getElementById("copy-summary");
+      const state=document.getElementById("copy-status");
+      const awareness=document.getElementById("pv-awareness-check");
+      // A declaração de leitura é local, individual neste navegador e NÃO
+      // substitui os consentimentos próprios do SDK de atendimento.
+      const readingReference=new URLSearchParams(location.search).get("leitura")||"";
+      const validReference=/^pv2_[A-Za-z0-9_-]{43}$/.test(readingReference);
+      const awarenessKey=validReference?
+        "promovie:telessaude:teste-aceite:leitura:v2:"+readingReference:null;
+      const feedback=document.getElementById("pv-awareness-feedback");
+      function notifyAttendance(action){
+        if(!validReference||typeof BroadcastChannel!=="function")return;
+        const channel=new BroadcastChannel("pv-telessaude-teste-informacoes-v1");
+        channel.postMessage({action,readingReference});
+        // Aguarda o escoamento da mensagem entre abas antes de fechar o canal.
+        setTimeout(()=>channel.close(),300);
+      }
+      function refresh(){
+        const approved=awareness.checked;
+        close.setAttribute("aria-disabled",approved?"false":"true");
+        feedback.textContent=approved?
+          "Leitura confirmada. Você já pode acessar as especialidades.":"";
+      }
+      // A leitura confirmada fica salva neste navegador e beneficiário.
+      // A pessoa poderá revisar as informações e desmarcar a ciência depois.
+      const PREVIEW_ALWAYS_SHOW=false;
+      if(PREVIEW_ALWAYS_SHOW)awareness.checked=false;
+      else{
+        try{awareness.checked=Boolean(awarenessKey&&localStorage.getItem(awarenessKey)==="1")}
+        catch(error){awareness.checked=false}
+      }
+      refresh();
+      awareness.addEventListener("change",function(){
+        if(!PREVIEW_ALWAYS_SHOW){
+          try{
+            if(awarenessKey){
+              if(awareness.checked)localStorage.setItem(awarenessKey,"1");
+              else localStorage.removeItem(awarenessKey);
+            }
+          }catch(error){}
+        }
+        notifyAttendance(awareness.checked?"acknowledged":"revoked");
+        refresh();
+      });
+      // Retornar é sempre permitido, mesmo sem confirmar a leitura.
+      // Dentro da experiência, o quadro pai preserva a sessão autenticada.
+      function returnToPrevious(){
+        if(window.parent!==window){
+          window.parent.postMessage({type:"pv-information-back",readingReference},location.origin);
+          return;
+        }
+        try{
+          const previous=document.referrer&&new URL(document.referrer);
+          if(previous&&previous.origin===location.origin&&history.length>1){
+            history.back();return;
+          }
+        }catch{}
+        window.location.assign("/telessaude/");
+      }
+      back.addEventListener("click",returnToPrevious);
+      close.addEventListener("click",function(){
+        if(!awareness.checked){
+          feedback.textContent="Por gentileza, confirme a leitura das informações acima antes de acessar Especialidades.";
+          awareness.focus();
+          return;
+        }
+        if(window.parent!==window){
+          window.parent.postMessage({type:"pv-information-specialties",readingReference},location.origin);
+          return;
+        }
+        notifyAttendance("specialties");
+        window.close();
+        feedback.textContent="Retorne à aba de Especialidades da Telessaúde PromoVie.";
+        close.focus();
+      });
+      copy.addEventListener("click",async function(){
+        function readableText(element){
+          const copy=element.cloneNode(true);
+          for(const image of copy.querySelectorAll("img[alt]")){
+            image.replaceWith(document.createTextNode(image.alt));
+          }
+          return copy.textContent.trim().replace(/\s+/g," ");
+        }
+        const parts=[
+          "TELESSAÚDE PROMOVIE | INFORMAÇÕES",
+          "Informações necessárias para o seu atendimento"
+        ];
+        for(const panel of document.querySelectorAll("#resumo-pt .panel")){
+          parts.push("",readableText(panel.querySelector("h2")));
+          for(const paragraph of panel.querySelectorAll("h3,p"))parts.push(readableText(paragraph));
+        }
+        const summary=parts.join("\n\n");
+        try{
+          if(!navigator.clipboard?.writeText)throw new Error("sem permissão");
+          await navigator.clipboard.writeText(summary);
+          state.textContent="Resumo copiado. Você pode colá-lo onde preferir.";
+        }catch{
+          const field=document.createElement("textarea");
+          field.value=summary;field.setAttribute("readonly","");
+          field.style.cssText="position:fixed;top:0;left:0;opacity:.01";
+          document.body.appendChild(field);field.focus();field.select();
+          const succeeded=document.execCommand("copy");field.remove();
+          state.textContent=succeeded?
+            "Resumo copiado. Você pode colá-lo onde preferir.":
+            "Não foi possível copiar automaticamente. Selecione o texto da página para copiar.";
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

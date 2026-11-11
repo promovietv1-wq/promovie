@@ -51,7 +51,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-<title>Telessaúde PromoVie | Atendimento</title>
+<title>Acesse sua Telessaúde | PromoVie</title>
 <style>
 :root{
   --ink:#111827;--muted:#667085;--line:#e7edf6;
@@ -802,8 +802,29 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   min-height:42px;width:100%;border:0;border-radius:11px;
   background:#4b0c8f;color:#fff;font:750 14px var(--font-body);cursor:pointer
 }
+/* Identidade aprovada: mesma arte Telessaúde das demais telas experimentais. */
+.patient-login-title.pv-access-identity{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:5px 9px;max-width:100%;min-width:0;
+  letter-spacing:-.03em;color:#4b0c8f;
+}
+.patient-login-title.pv-access-identity > span{color:#4b0c8f;font-size:.75em;line-height:1.2}
+.patient-login-title.pv-access-identity .pv-access-lettering{
+  display:block;width:clamp(124px,12vw,174px);
+  max-width:100%;height:auto;object-fit:contain;
+  flex:0 1 auto;
+}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .patient-login-title.pv-access-identity,
+  .main.phone-expanded .patient-login-title.pv-access-identity{gap:4px 8px}
+  .patient-login-title.pv-access-identity .pv-access-lettering{width:144px}
+}
+@media(max-width:370px){
+  .patient-login-title.pv-access-identity .pv-access-lettering{width:132px}
+}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-1">
+
 </head>
 <body>
 <header class="site-header">
@@ -863,7 +884,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
             <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
           </span>
           <span class="patient-login-heading">
-            <strong class="patient-login-title">Acesse sua Telessaúde</strong>
+            <strong class="patient-login-title pv-access-identity"><span>Acesse sua</span><img class="pv-access-lettering" src="/telessaude/assets/telessaude-lettering.png" alt="Telessaúde" width="178" height="29" decoding="async" fetchpriority="high"></strong>
           </span>
         </div>
         <label class="patient-login-label" for="access-cpf">Seu CPF</label>
@@ -975,6 +996,9 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       ".access-result-brand":"Telessaúde"
     };
     for(const [selector,value] of Object.entries(names)){
+      // A entrada experimental usa a arte original. Nunca sobrescrevê-la
+      // com texto genérico depois que o HTML já carregou.
+      if(pulseProfilesTest&&selector===".patient-login-title")continue;
       const element=document.querySelector(selector);
       if(element)element.textContent=value;
     }
@@ -1101,6 +1125,26 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     label.textContent=ready?"Acessar":"Acesso em preparação";
     feedback(ready?"":"O acesso individual ainda está em preparação. Para receber orientação, entre em contato com a PromoVie.",ready?"info":"info");
   }
+  // Controle de leitura exclusivo da experiência experimental.
+  // Uma referência pseudônima por CPF e dispositivo, sem gravar CPF em texto.
+  async function createReadingReference(cpf){
+    try{
+      const secretKey="promovie:telessaude:teste-aceite:reading-secret:v2";
+      let secret=localStorage.getItem(secretKey);
+      if(!/^[A-Za-z0-9_-]{43}$/.test(secret||"")){
+        secret=base64url(crypto.getRandomValues(new Uint8Array(32)));
+        localStorage.setItem(secretKey,secret);
+      }
+      const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),
+        {name:"HMAC",hash:"SHA-256"},false,["sign"]);
+      const signature=await crypto.subtle.sign("HMAC",key,
+        new TextEncoder().encode("promovie:telessaude:leitura:v2:"+cpf));
+      return "pv2_"+base64url(new Uint8Array(signature));
+    }catch{
+      // Caso o armazenamento esteja restrito, a leitura vale apenas nesta sessão.
+      return "pv2_"+base64url(crypto.getRandomValues(new Uint8Array(32)));
+    }
+  }
   async function startWidget(){
     if(busy||!ready)return;
     const cpf=cpfInput.value.replace(/\D/g,"");
@@ -1144,6 +1188,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       // Preparar o Meu Espaço não modifica o token nem o SDK do atendimento.
       // Se o cofre estiver indisponível, a consulta continua normalmente.
       const spaceBootstrap=await prepareSpaceAccess(cpf,codigo);
+      const readingReference=await createReadingReference(cpf);
       // Transferencia de uma so utilizacao, entre paginas da mesma aba e mesma origem.
       // A pagina de atendimento remove o access token imediatamente ao recebe-lo.
       const handoffKey="promovie:mediquo:handoff:v1";
@@ -1153,6 +1198,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
           accessToken:result.access_token,
           environment:result.environment,
           createdAt:Date.now(),
+          ...(pulseProfilesTest?{readingReference}:{}),
           ...((directoryTest||legacyDirectoryTest||originalWorkingTest||specialtyFlowTest||richProfilesTest||brandedProfilesTest||cleanProfilesTest||consentProfilesTest||curriculumProfilesTest||pulseProfilesTest||originalChatTest)&&/^[A-Za-z0-9_-]{43}$/.test(result.directory_token||"")?
             {directoryToken:result.directory_token}:{}),
           ...(spaceBootstrap?{spaceBootstrap}:{})

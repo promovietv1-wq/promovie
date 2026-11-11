@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
 <meta http-equiv="Cache-Control" content="no-store">
-<title>Telessaúde | Especialidades e atendimentos</title>
+<title>Telessaúde PromoVie | Atendimento</title>
 <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -280,13 +280,142 @@ html body .mediquo-launcher{display:none!important}
 <link rel="stylesheet" href="/telesaude/atalho-curriculos-20261109.css?v=1">
 <link rel="stylesheet" href="/telesaude/identidade-batimentos-20261109.css?v=1">
 <link rel="stylesheet" href="/telesaude/atalhos-flutuantes-mobile-20261109.css?v=x-discreto-6">
-</head>
+<style>
+.pv-brand-intro{box-sizing:border-box;width:min(92vw,480px);max-height:90dvh;margin:auto;border:1px solid #e8def8;border-radius:24px;padding:0;background:white;color:#291946;box-shadow:0 24px 90px rgba(34,20,68,.28);font-family:Inter,Arial,sans-serif;overflow:auto}
+.pv-brand-intro::backdrop{background:rgba(22,13,51,.70);backdrop-filter:blur(4px)}
+.pv-brand-intro-body{padding:clamp(22px,6vw,35px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px}
+.pv-brand-intro-body img{object-fit:contain}
+.pv-brand-lettering{display:block;width:178px;max-width:100%;height:auto;object-fit:contain}
+.pv-topbar-lettering{display:block;width:143px;max-width:100%;height:auto;object-fit:contain}
+.pv-directory-lettering{display:block;width:145px;max-width:100%;height:auto;object-fit:contain}
+.pv-brand-intro-body h2{margin:0;font:800 clamp(21px,4vw,28px)/1.25 Sora,Inter,Arial,sans-serif;letter-spacing:-.035em;color:#36166b}
+.pv-brand-intro-body p{margin:0;line-height:1.58;font-size:15px}
+.pv-brand-intro-body button{width:100%;min-height:49px;border-radius:13px;font:750 14px Inter,Arial,sans-serif;cursor:pointer}
+#pv-brand-intro-back{border:1px solid #4b0c8f;color:#fff;background:linear-gradient(115deg,#4b0c8f,#7334d8)}
+#pv-brand-intro-back:hover{filter:brightness(1.08)}
+/* A confirmação de leitura controla apenas esta apresentação PromoVie. */
+#pv-brand-intro-back[aria-disabled="true"],
+.topbar #directory-open[aria-disabled="true"]{
+  background:#dedede!important;color:#666!important;border-color:#bcbcbc!important;
+  filter:grayscale(1)!important;cursor:not-allowed;opacity:.76
+}
+#pv-brand-intro-back[aria-disabled="true"]:hover{filter:grayscale(1)!important}
+#pv-read-blocked{font:600 12px/1.55 Inter,Arial,sans-serif;color:#67349c;margin:0;text-align:center}
+/* Informações em uma camada branca, com retorno na própria página e no navegador. */
+.pv-information-dialog{
+  box-sizing:border-box;position:fixed;inset:0;
+  margin:0;padding:0;width:100vw;max-width:none;height:100vh;
+  height:100dvh;max-height:none;border:0;border-radius:0;
+  background:#fff;color:#302349;overflow:hidden;color-scheme:light
+}
+.pv-information-dialog::backdrop{background:rgba(24,13,49,.42)}
+.pv-information-dialog iframe{
+  display:block;width:100%;height:100%;border:0;background:#fff;
+  color-scheme:light
+}
+/* Currículos públicos em camada de navegação branca, com Voltar nativo.
+   Não altera o SDK ou o iframe de consultas médicas. */
+.pv-curricula-dialog{
+  box-sizing:border-box;position:fixed;inset:0;margin:0;padding:0;
+  width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;
+  border:0;border-radius:0;background:#fff;color:#302349;
+  overflow:hidden;
+}
+.pv-curricula-dialog::backdrop{background:rgba(26,15,53,.4)}
+.pv-curricula-toolbar{
+  box-sizing:border-box;min-height:57px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:8px max(14px,env(safe-area-inset-right)) 8px max(14px,env(safe-area-inset-left));
+  border-bottom:1px solid #e4dcec;background:#fff;color:#3f197a;
+}
+.pv-curricula-toolbar strong{font:750 14px/1.3 Inter,Arial,sans-serif}
+.pv-curricula-close{
+  min-width:80px;min-height:40px;padding:8px 14px;
+  background:#fff;color:#51218d;border:1px solid #d9c9eb;
+  border-radius:11px;font:750 13px/1.25 Inter,Arial,sans-serif;cursor:pointer
+}
+.pv-curricula-close:hover{background:#f8f3fd}
+.pv-curricula-close:focus-visible{outline:3px solid #7334d8;outline-offset:2px}
+.pv-curricula-frame{
+  display:block;width:100%;height:calc(100vh - 57px);
+  height:calc(100dvh - 57px);border:0;background:#fff;color-scheme:light
+}
+.pv-brand-info-card{width:100%;display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:8px;background:linear-gradient(135deg,#f6f1ff,#fcfaff);border:1px solid #e7d9f8;border-radius:16px;padding:15px 17px}
+.pv-brand-info-card strong{font-size:13px;line-height:1.4;font-weight:800;color:#4b0c8f}
+.pv-brand-info-card p{font-size:12px;line-height:1.55;color:#635273;margin:0}
+.pv-brand-info-card a{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:40px;padding:9px 11px;background:#fff;color:#491a85;text-decoration:none;border:1px solid #d9c6ef;border-radius:10px;font-size:12px;font-weight:800}
+.pv-brand-info-card a:hover{background:#efe7fb}
+.pv-brand-info-card a:focus-visible{outline:3px solid #00bde8;outline-offset:2px}
+.pv-brand-intro-body small{font-size:11px;line-height:1.45;color:#655a73;margin-top:5px}
+@media(max-width:600px){.pv-brand-intro{width:calc(100vw - 24px);border-radius:20px}.pv-brand-intro-body{padding:22px;gap:11px}}
+
+/* Assinatura única e responsiva: coração original ao lado do lettering aprovado.
+   Nunca aplicar dimensões quadradas das imagens de ícones ao lettering horizontal. */
+.topbar .identity-copy{display:flex;align-items:center;flex:0 1 auto;min-width:0}
+.topbar .identity .pv-topbar-lockup{display:flex;align-items:center;justify-content:flex-start;min-width:0}
+.topbar .identity img.pv-topbar-lettering{
+  display:block!important;width:142px!important;height:auto!important;
+  max-width:100%!important;aspect-ratio:178 / 29;
+  object-fit:contain!important;filter:none!important;flex:0 1 auto;
+}
+.hub-dialog .hub-brand-strip strong.pv-brand-name.pv-directory-lockup{
+  display:flex;flex-direction:row;align-items:center;justify-content:flex-start;
+  min-width:0;max-width:calc(100% - 100px);margin:0;padding:0;border:0;
+  background:transparent;box-shadow:none;line-height:1;
+}
+.hub-dialog .hub-brand-strip img.pv-directory-lettering{
+  display:block!important;width:142px!important;height:auto!important;
+  max-width:100%!important;aspect-ratio:178 / 29;
+  object-fit:contain!important;filter:none!important;flex:0 1 auto;
+}
+.pv-brand-intro-body .pv-lockup{
+  display:flex;flex-direction:row;align-items:center;justify-content:center;
+  gap:clamp(10px,3vw,18px);width:100%;max-width:100%;margin:0;
+}
+.pv-brand-intro-body .pv-lockup img.pv-lockup-heart{
+  display:block;width:min(35%,144px)!important;height:auto!important;
+  aspect-ratio:1;object-fit:contain!important;flex:0 0 auto;
+}
+.pv-brand-intro-body .pv-lockup img.pv-brand-lettering{
+  display:block;width:min(41%,142px)!important;height:auto!important;
+  max-width:100%;aspect-ratio:178 / 29;
+  object-fit:contain!important;filter:none!important;flex:0 0 auto;
+}
+.pv-brand-intro-body{gap:11px}
+.pv-brand-intro-body p{overflow-wrap:break-word;text-wrap:pretty}
+.pv-brand-intro-body h2{text-wrap:balance}
+@media(max-width:700px){
+  .topbar .identity img.pv-topbar-lettering{width:110px!important}
+  .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:124px!important}
+  .pv-brand-intro{max-height:calc(100dvh - 20px)}
+  .pv-brand-intro-body{padding:20px;gap:10px}
+  .pv-brand-intro-body h2{font-size:clamp(20px,5.4vw,25px);line-height:1.24}
+  .pv-brand-intro-body p{font-size:14px;line-height:1.52}
+  .pv-brand-info-card{padding:13px 14px}
+}
+@media(max-width:390px){
+  .topbar .identity img.pv-topbar-lettering{width:94px!important}
+  .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:113px!important}
+  .pv-brand-intro-body{padding:17px;gap:9px}
+}
+@media(max-width:345px){
+  .topbar .identity img.pv-topbar-lettering{width:81px!important}
+  .hub-dialog .hub-brand-strip img.pv-directory-lettering{width:102px!important}
+}
+@media(max-width:700px){
+  html.pv-chat-mode .topbar .identity img.pv-topbar-lettering{width:91px!important;height:auto!important}
+}
+@media(max-width:345px){
+  html.pv-chat-mode .topbar .identity img.pv-topbar-lettering{width:75px!important}
+}
+</style></head>
 <body class="pv-navigation-mode">
 <header class="topbar">
   <div class="identity">
     <img src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" width="56" height="56" alt="Coração PromoVie">
     <div class="identity-copy">
-      <strong class="pv-brand-name">Telessaúde</strong>
+      <span class="pv-topbar-lockup">
+        <img class="pv-topbar-lettering" src="/telessaude/assets/telessaude-lettering.png" width="178" height="29" alt="Telessaúde">
+      </span>
     </div>
   </div>
   <div class="clinic-tools">
@@ -357,6 +486,7 @@ html body .mediquo-launcher{display:none!important}
   </div>
   <p class="agenda-modal-lead">Agende uma consulta ou entre em contato com a PromoVie.</p>
   <div class="agenda-modal-actions">
+
     <a class="agenda-modal-link" href="https://tinyurl.com/agendamq" target="_blank" rel="noopener noreferrer"><span>Agendar consulta</span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
     <a id="promovie-contato-whatsapp" class="agenda-modal-link pv-contact-match" href="https://wa.me/5527999417458?text=Ol%C3%A1!%20Vim%20pela%20Telessa%C3%BAde%20PromoVie%2C%20na%20%C3%A1rea%20de%20Agendamentos%20e%20Suporte%2C%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida." target="_blank" rel="noopener noreferrer" aria-label="Dúvidas e orientações: conversar com a PromoVie pelo WhatsApp"><span class="pv-contact-label"><svg class="pv-contact-whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.4 11.6a8.4 8.4 0 0 1-12.3 7.5L3.7 20.3l1.3-4.2a8.4 8.4 0 1 1 15.4-4.5Z"/><path d="M9 8.2c-.4-.5-.9-.4-1.1.1-.8 1.7 2.4 4.9 5 6.4 2.1 1.2 3.2 1.3 4 .4.4-.4.5-.9 0-1.2l-1.8-1a.6.6 0 0 0-.8.1l-.5.7a7 7 0 0 1-3.6-3.5l.6-.6a.6.6 0 0 0 .1-.7Z"/></svg><span>Dúvidas e orientações</span></span><svg class="agenda-link-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
   </div>
@@ -394,6 +524,26 @@ html body .mediquo-launcher{display:none!important}
   
 </dialog>
 
+<dialog id="pv-brand-intro" class="pv-brand-intro" aria-label="Apresentação da Telessaúde" aria-describedby="pv-brand-intro-desc">
+<div class="pv-brand-intro-body">
+  <div class="pv-lockup" role="group" aria-label="Telessaúde PromoVie">
+    <img class="pv-lockup-heart" src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="144" height="144">
+    <img class="pv-brand-lettering" src="/telessaude/assets/telessaude-lettering.png" alt="Telessaúde" width="142" height="23">
+  </div>
+
+<p id="pv-brand-intro-desc">A Telessaúde PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada e organizada para você.</p>
+<div class="pv-brand-info-card" aria-label="Informações em português sobre o atendimento">
+  <a id="pv-brand-info-link" href="/telessaude/informacoes/" target="_blank" rel="noopener noreferrer">Informações necessárias para o seu atendimento <span aria-hidden="true">↗</span></a>
+</div>
+<button type="button" id="pv-brand-intro-back" aria-disabled="true">Especialidades</button>
+<p id="pv-read-blocked" role="status" aria-live="polite" hidden></p>
+
+</div></dialog>
+<!-- As informações ficam dentro do atendimento autenticado para o botão Voltar
+     do navegador não perder a sessão nem depender da troca entre abas. -->
+<dialog id="pv-information-dialog" class="pv-information-dialog" aria-label="Informações necessárias para o seu atendimento">
+  <iframe id="pv-information-frame" title="Informações necessárias para o seu atendimento"></iframe>
+</dialog>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
 (function(){
@@ -748,11 +898,200 @@ html body .mediquo-launcher{display:none!important}
       }
       return openPromise;
     }
-    // A mesma rota individual do conector 20261107 é preservada.
-    // Só abre o Widget após uma escolha explícita de Chat ou profissional.
+    // A etapa educativa é opcional somente após a declaração de leitura
+    // neste dispositivo e para o mesmo beneficiário autenticado.
+    // NÃO modifica termos, consentimento, autenticação ou serviços da Médiquo.
+    const readingReference=/^pv2_[A-Za-z0-9_-]{43}$/.test(handoff.readingReference||"")?
+      handoff.readingReference:null;
+    const acknowledgementKey=readingReference?
+      "promovie:telessaude:teste-aceite:leitura:v2:"+readingReference:null;
+    const intro=document.getElementById("pv-brand-intro");
+    const specialtiesButton=document.getElementById("pv-brand-intro-back");
+    const topSpecialties=document.getElementById("directory-open");
+    const feedback=document.getElementById("pv-read-blocked");
+    const infoLink=document.getElementById("pv-brand-info-link");
+    if(readingReference){
+      const infoUrl=new URL(infoLink.href,location.origin);
+      infoUrl.searchParams.set("leitura",readingReference);
+      infoLink.href=infoUrl.pathname+infoUrl.search;
+    }
+    // Documento informativo aberto dentro do próprio atendimento,
+    // independente do SDK e sem transportar tokens para a página.
+    const informationDialog=document.getElementById("pv-information-dialog");
+    const informationFrame=document.getElementById("pv-information-frame");
+    function closeInformation(){
+      if(!informationDialog.open)return;
+      informationDialog.close();
+      // Evita adicionar navegações about:blank ao histórico conjunto do iframe.
+    }
+    function returnFromInformation(){
+      if(history.state?.pvInformationOverlay)history.back();
+      else closeInformation();
+    }
+    infoLink.addEventListener("click",event=>{
+      if(event.defaultPrevented||event.button!==0||event.metaKey||
+         event.ctrlKey||event.shiftKey||event.altKey)return;
+      event.preventDefault();
+      if(informationDialog.open)return;
+      const previous=history.state&&typeof history.state==="object"?history.state:{};
+      // replace() evita que a navegação interna do iframe consuma o primeiro
+      // toque no Voltar nativo antes de chegar ao histórico do atendimento.
+      informationFrame.contentWindow.location.replace(infoLink.href);
+      history.pushState({...previous,pvInformationOverlay:true},"",location.href);
+      informationDialog.showModal();
+    });
+    informationDialog.addEventListener("cancel",event=>{
+      event.preventDefault();
+      returnFromInformation();
+    });
+    window.addEventListener("message",event=>{
+      if(event.origin!==location.origin||!informationDialog.open||
+         event.source!==informationFrame.contentWindow||
+         !readingReference||event.data?.readingReference!==readingReference)return;
+      if(event.data.type==="pv-information-back"){
+        returnFromInformation();
+      }else if(event.data.type==="pv-information-specialties"){
+        // A confirmação foi produzida pelo próprio documento da PromoVie.
+        acknowledgedInSession=true;
+        refreshReadGate();
+        closeInformation();
+        if(history.state?.pvInformationOverlay)history.back();
+        if(intro.open)specialtiesButton.click();
+        else if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+      }
+    });
+    // Após confirmar a leitura uma vez, acessos futuros deste beneficiário
+    // no mesmo navegador iniciam diretamente na tela de Especialidades.
+    const PREVIEW_ALWAYS_SHOW=false;
+    let introViewed=false,introRunning=null,acknowledgedInSession=false;
+    const hasRead=()=>{
+      if(PREVIEW_ALWAYS_SHOW)return acknowledgedInSession;
+      if(acknowledgedInSession)return true;
+      try{return Boolean(acknowledgementKey&&localStorage.getItem(acknowledgementKey)==="1")}
+      catch{return false}
+    };
+    const refreshReadGate=()=>{
+      const locked=!hasRead();
+      specialtiesButton.setAttribute("aria-disabled",String(locked));
+      if(topSpecialties)topSpecialties.setAttribute("aria-disabled",String(locked));
+      if(!locked){feedback.hidden=true;feedback.textContent="";}
+      return !locked;
+    };
+    function showReadReminder(){
+      feedback.textContent="Por gentileza, leia as informações necessárias para o seu atendimento.";
+      feedback.hidden=false;
+      specialtiesButton.focus({preventScroll:true});
+    }
+    topSpecialties?.addEventListener("click",event=>{
+      if(refreshReadGate())return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if(!intro.open)ensurePromoVieIntro();
+      showReadReminder();
+    },true);
+    async function ensurePromoVieIntro(){
+      if(introViewed||hasRead()){introViewed=true;return;}
+      if(introRunning)return introRunning;
+      refreshReadGate();
+      introRunning=new Promise(resolve=>{
+        function onSpecialties(){
+          if(!refreshReadGate()){showReadReminder();return;}
+          specialtiesButton.removeEventListener("click",onSpecialties);
+          intro.removeEventListener("cancel",onCancel);
+          if(intro.open)intro.close();
+          introViewed=true;
+          resolve();
+          if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+        }
+        function onCancel(event){
+          event.preventDefault();
+          // Voltar/Escape não deixa a pessoa presa na apresentação.
+          // Sem ciência, a etapa anterior é o acesso por CPF e código.
+          if(refreshReadGate())specialtiesButton.click();
+          else window.location.assign("/telessaude/");
+        }
+        specialtiesButton.addEventListener("click",onSpecialties);
+        intro.addEventListener("cancel",onCancel);
+        intro.showModal();
+      }).finally(()=>{introRunning=null;});
+      return introRunning;
+    }
+    // O Voltar na raiz de Especialidades retorna à apresentação anterior.
+    // Somente o X encerra a experiência completa, sem nova autenticação.
+    let introReopenedFromDirectory=false;
+    window.addEventListener("pv:telesaude:show-intro",()=>{
+      if(intro.open||informationDialog.open)return;
+      const directoryDialog=document.getElementById("directory-dialog");
+      if(directoryDialog?.open)directoryDialog.close();
+      introReopenedFromDirectory=true;
+      refreshReadGate();
+      function returnToSpecialties(){
+        if(!refreshReadGate()){showReadReminder();return;}
+        specialtiesButton.removeEventListener("click",returnToSpecialties);
+        intro.removeEventListener("cancel",onReturnCancel);
+        introReopenedFromDirectory=false;
+        if(intro.open)intro.close();
+        if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+        window.dispatchEvent(new Event("pv:telesaude:rearm-back"));
+      }
+      function onReturnCancel(event){
+        event.preventDefault();
+        returnToSpecialties();
+      }
+      specialtiesButton.addEventListener("click",returnToSpecialties);
+      intro.addEventListener("cancel",onReturnCancel);
+      intro.showModal();
+    });
+    // Confirmação recebida apenas de outra aba da MESMA origem e para esta
+    // referência temporária de leitura; não transporta credenciais médicas.
+    if(typeof BroadcastChannel==="function"){
+      const channel=new BroadcastChannel("pv-telessaude-teste-informacoes-v1");
+      channel.addEventListener("message",event=>{
+        if(!readingReference||event.data?.readingReference!==readingReference)return;
+        if(event.data?.action==="acknowledged")acknowledgedInSession=true;
+        if(event.data?.action==="revoked")acknowledgedInSession=false;
+        if(event.data?.action==="specialties"){
+          if(!refreshReadGate()){showReadReminder();return;}
+          if(intro.open)specialtiesButton.click();
+          else if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+          window.focus();
+          return;
+        }
+        refreshReadGate();
+      });
+    }
+    // Voltar do smartphone, desktop ou navegador na primeira apresentação.
+    // Nas telas clínicas, quem navega permanece sendo o widget Mediquo.
+    window.addEventListener("popstate",event=>{
+      // Informação dentro de moldura: Voltar fecha a moldura, sem novo login.
+      if(informationDialog.open){
+        closeInformation();
+        event.stopImmediatePropagation();
+        return;
+      }
+      if(!intro.open)return;
+      if(introReopenedFromDirectory){
+        if(refreshReadGate())specialtiesButton.click();
+        event.stopImmediatePropagation();
+        return;
+      }
+      // Na primeira apresentação o histórico anterior é a tela de acesso.
+      if(refreshReadGate())specialtiesButton.click();
+      else window.location.replace("/telessaude/");
+      event.stopImmediatePropagation();
+    });
+    window.addEventListener("focus",refreshReadGate);
+    if(acknowledgementKey)window.addEventListener("storage",event=>{
+      if(event.key===acknowledgementKey){
+        acknowledgedInSession=false;
+        refreshReadGate();
+      }
+    });
+    // Os métodos e tokens do SDK permanecem idênticos à versão principal.
     const medicalBridge={
-      open:activateWidget,
+      open:async()=>{await ensurePromoVieIntro();return activateWidget();},
       navigate:async path=>{
+        await ensurePromoVieIntro();
         const widget=await activateWidget();
         if(typeof widget.navigate==="function")return widget.navigate(path);
         const match=path.match(/^\/professionals\/([A-Za-z0-9_-]{1,128})\/room$/);
@@ -761,6 +1100,7 @@ html body .mediquo-launcher{display:none!important}
         throw Error("Abertura individual indisponível neste Widget.");
       },
       open_room:async id=>{
+        await ensurePromoVieIntro();
         const widget=await activateWidget();
         if(typeof widget.open_room==="function")return widget.open_room(id);
         if(typeof widget.navigate==="function")
@@ -769,12 +1109,20 @@ html body .mediquo-launcher{display:none!important}
       }
     };
     try{
-      const module=await import("/telesaude/diretorio-perfis-20261109-batimentos.mjs?v=curriculos-brancos-20261110");
+      const module=await import("/telessaude/diretorio.mjs?v=1");
       module.initSpecialtyDirectory(medicalBridge,handoff.directoryToken,handoff.accessToken);
       status.hidden=true;
       // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.
       // Qualquer falha é comunicada quando o beneficiário optar por abrir o Chat.
-      prepareSdk().catch(()=>{});
+      // O primeiro acesso solicita a leitura; os próximos, para o mesmo
+      // beneficiário e navegador, abrem diretamente Especialidades.
+      refreshReadGate();
+      if(hasRead()){
+        introViewed=true;
+        topSpecialties.click();
+      }else{
+        ensurePromoVieIntro().catch(error=>console.error("Apresentação indisponível",error));
+      }
     }catch{
       errorState("Não conseguimos carregar as especialidades. Retorne ao acesso e tente novamente.");
     }
