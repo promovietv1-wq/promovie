@@ -190,16 +190,24 @@
         feedback.textContent=approved?
           "Leitura confirmada. Você já pode acessar as especialidades.":"";
       }
-      try{awareness.checked=Boolean(awarenessKey&&localStorage.getItem(awarenessKey)==="1")}
-      catch(error){awareness.checked=false}
+      // Revisão de layout em tablet e smartphone: cada visita reabre as
+      // informações e a confirmação não é armazenada em definitivo.
+      const PREVIEW_ALWAYS_SHOW=true;
+      if(PREVIEW_ALWAYS_SHOW)awareness.checked=false;
+      else{
+        try{awareness.checked=Boolean(awarenessKey&&localStorage.getItem(awarenessKey)==="1")}
+        catch(error){awareness.checked=false}
+      }
       refresh();
       awareness.addEventListener("change",function(){
-        try{
-          if(awarenessKey){
-            if(awareness.checked)localStorage.setItem(awarenessKey,"1");
-            else localStorage.removeItem(awarenessKey);
-          }
-        }catch(error){}
+        if(!PREVIEW_ALWAYS_SHOW){
+          try{
+            if(awarenessKey){
+              if(awareness.checked)localStorage.setItem(awarenessKey,"1");
+              else localStorage.removeItem(awarenessKey);
+            }
+          }catch(error){}
+        }
         notifyAttendance(awareness.checked?"acknowledged":"revoked");
         refresh();
       });
