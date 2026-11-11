@@ -164,7 +164,6 @@
         <img class="pv-footer-heart" src="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1" alt="Coração PromoVie" width="45" height="45">
         <img class="pv-footer-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.png" alt="Telessaúde" width="178" height="29">
       </div>
-      Este material é informativo e complementar.
     </div>
   </footer>
   <script>
@@ -263,7 +262,6 @@
           parts.push("",readableText(panel.querySelector("h2")));
           for(const paragraph of panel.querySelectorAll("h3,p"))parts.push(readableText(paragraph));
         }
-        parts.push("","Este material é informativo e complementar.");
         const summary=parts.join("\n\n");
         try{
           if(!navigator.clipboard?.writeText)throw new Error("sem permissão");
