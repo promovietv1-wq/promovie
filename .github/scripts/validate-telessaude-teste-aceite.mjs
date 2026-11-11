@@ -80,7 +80,7 @@ try{
    assert.equal(await info.locator(".hero .intro").count(),0);
    const src=await first.locator("#pv-information-frame").evaluate(frame=>frame.contentWindow.location.href);
    assert.match(new URL(src,base).searchParams.get("leitura")||"",/^pv2_[A-Za-z0-9_-]{43}$/);
-   assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"true");
+   await info.locator('#close-info[aria-disabled="true"]').waitFor({timeout:10000});
    await info.locator("#back-info").click();
    await first.waitForFunction(()=>!document.getElementById("pv-information-dialog").open);
    assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),true);
