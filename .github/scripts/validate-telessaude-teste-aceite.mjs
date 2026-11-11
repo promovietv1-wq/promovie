@@ -14,7 +14,7 @@ assert.ok(encodedPng&&encodedPng.length>2000,"Preservar arte original");
 assert.ok(entry.includes('src="/telessaude/teste-aceite/assets/telessaude-lettering.png"'),"Usar a arte PNG real no acesso");
 assert.ok(attendance.includes('Informações necessárias para o seu atendimento'));
 assert.ok(information.includes('Eu li as informações acima sobre atendimento, privacidade e consentimento.'));
-assert.ok(attendance.includes('Por gentileza, leia as informações sobre o seu atendimento no botão acima.'));
+assert.ok(attendance.includes('Por gentileza, leia as informações necessárias para o seu atendimento.'));
 assert.ok(attendance.includes('if(hasRead())'));
 assert.ok(information.includes('readingReference'));
 assert.ok(directory.includes("initSpecialtyDirectory"));
