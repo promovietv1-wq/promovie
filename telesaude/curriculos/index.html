@@ -21,11 +21,57 @@
   <link rel="stylesheet" href="https://profissionais-telessaude.vercel.app/css/common.css">
   <link rel="stylesheet" href="https://profissionais-telessaude.vercel.app/css/public.css">
 
-  <!-- Tema claro fixo: mantém os currículos coerentes com a Telessaúde PromoVie. -->
-  <style>
-    :root, html[data-theme="light"] { color-scheme: light !important; }
-    html, body { background:#fff !important; color-scheme:light !important; }
-    .app-container, .app-header, main, .app-footer { color-scheme:light; }
+  <!-- Tema claro fixo da versão PromoVie, inclusive cards internos e popovers. -->
+  <style id="pv-force-light">
+    :root, html[data-theme="light"], html[data-theme="dark"]{
+      color-scheme:light!important;
+      --bg:#ffffff;--bg-primary:#ffffff;--bg-secondary:#ffffff;
+      --background:#ffffff;--background-primary:#ffffff;--surface:#ffffff;
+      --surface-primary:#ffffff;--surface-secondary:#ffffff;
+      --card-bg:#ffffff;--card-background:#ffffff;
+      --text:#302349;--text-primary:#302349;--text-secondary:#706781;
+      --border:#e6def1;--border-color:#e6def1;
+    }
+    html,body,.app-container,.app-header,.app-header .header-top,
+    main,.app-footer,.professionals-grid,.prof-card,.prof-info,.prof-header,
+    .filters-bar,.filter-dropdown,.filter-options,.filter-option,
+    .legend-popover,.info-count-popover,.empty-state,.loading-state,
+    .photo-hint,.photo-zoom-content{
+      background:#ffffff!important;color-scheme:light!important;
+    }
+    html,body{color:#302349!important}
+    .app-container,.app-header,.app-footer,.prof-card,.prof-info,
+    .prof-name,.brand-text,.legend-popover,.info-count-popover,
+    .filter-options,.filter-area-name,.empty-title,.empty-text,
+    .results-count{color:#302349!important}
+    .prof-card{border:1px solid #e6def1!important;box-shadow:0 9px 30px rgba(53,29,91,.055)!important}
+    .search-wrapper,.search-input,.filter-toggle-btn,.legend-toggle-btn,
+    .info-count-btn,.filter-action-btn,.filter-option,.prof-photo-placeholder,
+    .prof-expand-btn,.search-clear{
+      background:#ffffff!important;color:#3f197a!important;
+      color-scheme:light!important;border-color:#dcd2ed!important;
+    }
+    .search-input::placeholder{color:#8c8497!important}
+    .filter-dropdown,.legend-popover,.info-count-popover,
+    .photo-hint{border:1px solid #e4dcf0!important;box-shadow:0 12px 34px rgba(51,29,88,.11)!important}
+    .prof-descricao,.prof-inscricao,.prof-unavailable,.prof-tag,
+    .legend-item p,.info-count-popover p{color:#625775!important}
+    .photo-zoom-overlay{background:rgba(240,235,249,.95)!important}
+    .photo-zoom-name{color:#2c1b4a!important}
+    .pv-curricula-return{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:37px;max-width:100%;margin-left:auto;
+      padding:8px 12px;background:#fff;color:#50258e;
+      border:1px solid #d7c9e7;border-radius:11px;
+      font:700 12px/1.25 "Nunito Sans",Arial,sans-serif;
+      cursor:pointer;white-space:nowrap
+    }
+    .pv-curricula-return:hover{background:#f6f2fb!important}
+    .pv-curricula-return:focus-visible{outline:3px solid #7b43cc;outline-offset:2px}
+    @media(max-width:520px){
+      .header-top{gap:10px!important;flex-wrap:wrap}
+      .pv-curricula-return{margin-left:auto}
+    }
   </style>
 
   <!-- Favicon (purple heart - health) -->
@@ -46,8 +92,7 @@
           </div>
           <span class="brand-text">Telessaúde - Equipe de saúde</span>
         </div>
-
-
+        <button class="pv-curricula-return" id="pv-curricula-return" type="button" aria-label="Voltar às especialidades">Voltar</button>
       </div>
 
       <!-- Busca -->
@@ -1071,6 +1116,23 @@
     setTimeout(showPhotoHint, 1000);
   };
 
+  // Retorno consistente para a grade que abriu os currículos.
+  const pvReturn=document.getElementById("pv-curricula-return");
+  pvReturn?.addEventListener("click",()=>{
+    if(window.parent!==window){
+      window.parent.postMessage({type:"pv-curricula-close"},location.origin);
+      return;
+    }
+    let fromPromoVie=false;
+    try{
+      const ref=new URL(document.referrer);
+      fromPromoVie=ref.origin===location.origin&&
+        (/^\\/telessaude\\/teste-aceite\\/atendimento\\/$/.test(ref.pathname)||
+         /^\\/telesaude\\/atendimento-perfis-/.test(ref.pathname));
+    }catch{}
+    if(fromPromoVie&&history.length>1)history.back();
+    else location.assign("/telessaude/teste-aceite/");
+  });
   // ─── Start ──────────────────────────────────────────────
 
   if (document.readyState === 'loading') {
