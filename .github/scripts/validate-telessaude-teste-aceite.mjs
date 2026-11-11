@@ -13,6 +13,11 @@ const encodedPng=lettering.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)
 assert.ok(encodedPng&&encodedPng.length>2000,"Preservar arte original");
 assert.ok(entry.includes('src="/telessaude/teste-aceite/assets/telessaude-lettering.png"'),"Usar a arte PNG real no acesso");
 assert.ok(attendance.includes('Informações necessárias para o seu atendimento'));
+assert.ok(!attendance.includes('Os atendimentos clínicos são realizados por profissionais habilitados, conforme suas atribuições e responsabilidades.'));
+assert.ok(!attendance.includes('id="appointments-my-panel"'));
+assert.ok(attendance.includes('>Agendar consulta</span>'));
+assert.ok(directory.includes('url.origin==="https://profissionais-telessaude.vercel.app"'));
+
 assert.ok(information.includes('Eu li as informações acima sobre atendimento, privacidade e consentimento.'));
 assert.ok(attendance.includes('Por gentileza, leia as informações necessárias para o seu atendimento.'));
 assert.ok(attendance.includes('if(hasRead())'));
@@ -152,7 +157,17 @@ try{
    // sem acesso às informações internas do iframe ou aos tokens Médiquo.
    await first.locator("#hub-shortcut-appointments").click();
    await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
-   await first.locator("#appointments-my-panel").click();
+   assert.equal(await first.locator("#appointments-my-panel").count(),0,
+     "Sem o botão adicional de Meus Agendamentos");
+   assert.equal((await first.locator('.agenda-modal-actions .agenda-modal-link').first().textContent()).trim(),"Agendar consulta");
+   await first.evaluate(()=>{
+     const link=document.createElement("a");
+     link.href="https://painel-agendazap.vercel.app/";
+     link.id="pv-test-remote-appointments";
+     link.textContent="Teste automático do link do provedor";
+     document.querySelector("#appointments-dialog .agenda-modal-actions").append(link);
+   });
+   await first.locator("#pv-test-remote-appointments").click();
    await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
    const myAppointmentsFrame=first.frameLocator(".pv-appointments-panel-dialog iframe");
    await myAppointmentsFrame.locator("#pv-appointments-external").waitFor({timeout:10000});
@@ -170,7 +185,7 @@ try{
    await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
    assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
    // Também funciona com botão Voltar nativo do navegador.
-   await first.locator("#appointments-my-panel").click();
+   await first.locator("#pv-test-remote-appointments").click();
    await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
    await first.evaluate(()=>history.back());
    await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
