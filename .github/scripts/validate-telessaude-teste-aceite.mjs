@@ -67,7 +67,7 @@ try{
    assert.equal(await first.locator("#pv-brand-intro-back").getAttribute("aria-disabled"),"true");
    assert.equal(await first.locator("#directory-open").getAttribute("aria-disabled"),"true");
    assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
-   await first.locator("#pv-brand-intro-back").click();
+   await first.locator("#pv-brand-intro-back").click({force:true});
    assert.match(await first.locator("#pv-read-blocked").textContent(),/Por gentileza, leia/);
    assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),true);
 
@@ -77,7 +77,7 @@ try{
    await info.waitForLoadState("domcontentloaded");
    assert.match(new URL(info.url()).searchParams.get("leitura")||"",/^pv2_[A-Za-z0-9_-]{43}$/);
    assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"true");
-   await info.locator("#close-info").click();
+   await info.locator("#close-info").click({force:true});
    assert.match(await info.locator("#pv-awareness-feedback").textContent(),/confirme a leitura/i);
    await info.locator("#pv-awareness-check").check();
    assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"false");
