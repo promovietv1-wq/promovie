@@ -469,6 +469,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  document.body.appendChild(myAppointmentsLayer);
  const myAppointmentsFrame=myAppointmentsLayer.querySelector("iframe");
  let myAppointmentsOpen=false,myAppointmentsHistoryReturn=false;
+ let suppressAppointmentDismissal=false;
  let myAppointmentsReturnTo="appointments";
  function closeMyAppointments(){
    if(!myAppointmentsLayer.open)return;
@@ -476,6 +477,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    myAppointmentsOpen=false;
    // Retorna exatamente ao ponto de origem, sem refazer a autenticação.
    if(myAppointmentsReturnTo==="appointments"){
+     if(dialog.open)dialog.close();
      if(appointmentDialog&&!appointmentDialog.open)appointmentDialog.showModal();
    }else if(myAppointmentsReturnTo==="chat"){
      document.body.classList.remove("pv-navigation-mode");
@@ -523,7 +525,10 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(myAppointmentsLayer.open)return;
    myAppointmentsReturnTo=from;
    myAppointmentsOpen=true;
-   if(appointmentDialog?.open)appointmentDialog.close();
+   if(appointmentDialog?.open){
+     suppressAppointmentDismissal=true;
+     appointmentDialog.close();
+   }
    if(dialog.open)dialog.close();
    const previous=history.state&&typeof history.state==="object"?history.state:{};
    history.pushState({...previous,pvAppointmentsPanelOverlay:true},"",location.href);
@@ -751,6 +756,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  // Fechar Agendamentos devolve às Especialidades, nunca ao chat de forma involuntária.
  if(appointmentDialog){
    appointmentDialog.addEventListener("close",()=>{
+     // O evento close pode ser emitido depois de a janela de origem
+     // ter sido restaurada; jamais abrir a grade por cima dela.
+     if(suppressAppointmentDismissal){suppressAppointmentDismissal=false;return;}
      if(myAppointmentsOpen)return;
      const destination=appointmentReturn;
      appointmentReturn="specialties";
