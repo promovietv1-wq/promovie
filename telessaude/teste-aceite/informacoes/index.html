@@ -34,6 +34,8 @@
       width:148px;max-width:100%;height:auto;aspect-ratio:178 / 29;object-fit:contain;flex:0 1 auto
     }
     .top-link{white-space:nowrap;border:1px solid #e2d7ef;border-radius:13px;padding:11px 14px;background:#fff;color:#501d8c;font-size:13px;font-weight:750;cursor:pointer}
+    .info-nav-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .info-nav-actions #back-info{background:#faf8ff;color:#5a4080}
     .hero{padding:45px 0 26px}
     .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#efe9fb;border:1px solid #e4d5fb;border-radius:100px;color:#5b278d;padding:7px 13px;font-size:11px;letter-spacing:.06em;font-weight:800;text-transform:uppercase}
     h1{font:800 clamp(26px,5vw,42px)/1.13 Sora,Inter,sans-serif;letter-spacing:-.04em;color:#3b1277;max-width:760px;margin:16px 0 14px}
@@ -76,7 +78,8 @@
     @media(max-width:600px){
       .topbar-inner{flex-wrap:wrap;padding-block:12px;row-gap:11px}
       .topbar .brand{flex:1 1 100%;gap:11px}
-      .topbar .top-link{flex:1 1 100%;min-height:42px;white-space:normal;text-align:center}
+      .topbar .info-nav-actions{flex:1 1 100%;width:100%;justify-content:stretch}
+      .topbar .info-nav-actions .top-link{flex:1 1 calc(50% - 7px);min-height:42px;white-space:normal;text-align:center}
       .brand > img{width:43px;height:43px}
       .brand .pv-info-lockup img.pv-heading-lettering{width:137px}
       
@@ -97,7 +100,10 @@
           <img class="pv-heading-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.png" alt="Telessaúde" width="178" height="29">
         </div>
       </div>
-      <button id="close-info" class="top-link" type="button">Especialidades</button>
+      <nav class="info-nav-actions" aria-label="Navegação das informações">
+        <button id="back-info" class="top-link" type="button">Voltar</button>
+        <button id="close-info" class="top-link" type="button">Especialidades</button>
+      </nav>
     </div>
   </header>
   <main class="shell">
@@ -165,6 +171,7 @@
     (function(){
       "use strict";
       const close=document.getElementById("close-info");
+      const back=document.getElementById("back-info");
       const copy=document.getElementById("copy-summary");
       const state=document.getElementById("copy-status");
       const awareness=document.getElementById("pv-awareness-check");
@@ -209,10 +216,30 @@
         notifyAttendance(awareness.checked?"acknowledged":"revoked");
         refresh();
       });
+      // Retornar é sempre permitido, mesmo sem confirmar a leitura.
+      // Dentro da experiência, o quadro pai preserva a sessão autenticada.
+      function returnToPrevious(){
+        if(window.parent!==window){
+          window.parent.postMessage({type:"pv-information-back",readingReference},location.origin);
+          return;
+        }
+        try{
+          const previous=document.referrer&&new URL(document.referrer);
+          if(previous&&previous.origin===location.origin&&history.length>1){
+            history.back();return;
+          }
+        }catch{}
+        window.location.assign("/telessaude/teste-aceite/");
+      }
+      back.addEventListener("click",returnToPrevious);
       close.addEventListener("click",function(){
         if(!awareness.checked){
           feedback.textContent="Por gentileza, confirme a leitura das informações acima antes de acessar Especialidades.";
           awareness.focus();
+          return;
+        }
+        if(window.parent!==window){
+          window.parent.postMessage({type:"pv-information-specialties",readingReference},location.origin);
           return;
         }
         notifyAttendance("specialties");
