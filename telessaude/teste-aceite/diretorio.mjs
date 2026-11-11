@@ -469,12 +469,21 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  document.body.appendChild(myAppointmentsLayer);
  const myAppointmentsFrame=myAppointmentsLayer.querySelector("iframe");
  let myAppointmentsOpen=false,myAppointmentsHistoryReturn=false;
+ let myAppointmentsReturnTo="appointments";
  function closeMyAppointments(){
    if(!myAppointmentsLayer.open)return;
    myAppointmentsLayer.close();
    myAppointmentsOpen=false;
-   // Retorna ao painel de origem, sem novo CPF ou login.
-   if(appointmentDialog&&!appointmentDialog.open)appointmentDialog.showModal();
+   // Retorna exatamente ao ponto de origem, sem refazer a autenticação.
+   if(myAppointmentsReturnTo==="appointments"){
+     if(appointmentDialog&&!appointmentDialog.open)appointmentDialog.showModal();
+   }else if(myAppointmentsReturnTo==="chat"){
+     document.body.classList.remove("pv-navigation-mode");
+     document.documentElement.classList.add("pv-chat-mode");
+     chatShell?.removeAttribute("hidden");
+   }else{
+     restorePane(myAppointmentsReturnTo);
+   }
  }
  function backFromMyAppointments(){
    const hasEntry=Boolean(history.state?.pvAppointmentsPanelOverlay);
@@ -498,19 +507,40 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
       event.data?.type!=="pv-appointments-close")return;
    backFromMyAppointments();
  });
+ function openMyAppointmentsPanel(from){
+   if(myAppointmentsLayer.open)return;
+   myAppointmentsReturnTo=from;
+   myAppointmentsOpen=true;
+   if(appointmentDialog?.open)appointmentDialog.close();
+   if(dialog.open)dialog.close();
+   const previous=history.state&&typeof history.state==="object"?history.state:{};
+   history.pushState({...previous,pvAppointmentsPanelOverlay:true},"",location.href);
+   myAppointmentsFrame.contentWindow.location.replace("/telesaude/meus-agendamentos/");
+   myAppointmentsLayer.showModal();
+ }
  myAppointmentsLink?.addEventListener("click",event=>{
    if(event.defaultPrevented||event.button!==0||event.metaKey||
       event.ctrlKey||event.shiftKey||event.altKey)return;
    event.preventDefault();
-   if(myAppointmentsLayer.open)return;
-   myAppointmentsOpen=true;
-   if(appointmentDialog?.open)appointmentDialog.close();
-   const previous=history.state&&typeof history.state==="object"?history.state:{};
-   // Navegar dentro do mesmo endereço permite usar o botão Voltar nativo.
-   history.pushState({...previous,pvAppointmentsPanelOverlay:true},"",location.href);
-   myAppointmentsFrame.contentWindow.location.replace("/telesaude/meus-agendamentos/");
-   myAppointmentsLayer.showModal();
+   openMyAppointmentsPanel("appointments");
  });
+ // Quando o SDK exibe um link HTML direto para este painel, usamos a
+ // mesma página clara sem alterar a lógica clínica ou reescrever o SDK.
+ // Links dentro de iframes de outra origem continuam sob controle do provedor.
+ document.addEventListener("click",event=>{
+   if(event.defaultPrevented||event.button!==0||event.metaKey||
+      event.ctrlKey||event.shiftKey||event.altKey)return;
+   const anchor=event.composedPath().find(n=>n instanceof HTMLAnchorElement&&n.href);
+   if(!anchor)return;
+   let url;
+   try{url=new URL(anchor.href)}catch{return;}
+   if(url.origin!=="https://painel-agendazap.vercel.app")return;
+   event.preventDefault();
+   event.stopImmediatePropagation();
+   const from=appointmentDialog?.open?"appointments":
+     dialog.open?activePane():"chat";
+   openMyAppointmentsPanel(from);
+ },true);
  const curriculumLink=el("hub-professionals-link");
  const curriculaLayer=document.createElement("dialog");
  curriculaLayer.className="pv-curricula-dialog";
