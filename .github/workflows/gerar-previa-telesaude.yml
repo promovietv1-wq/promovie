@@ -17,35 +17,23 @@ jobs:
       - name: Combinar coracao e lettering original, sem alterar marcas
         run: |
           python - <<'PY'
-          from PIL import Image, ImageDraw, ImageFilter
+          from PIL import Image
           from pathlib import Path
           W,H=1200,630
           out=Path('telesaude/assets/telesaude-compartilhamento.png')
           out.parent.mkdir(parents=True,exist_ok=True)
           base=Image.new('RGBA',(W,H),(255,255,255,255))
-          design=Image.new('RGBA',(W,H),(0,0,0,0))
-          d=ImageDraw.Draw(design)
-          d.rounded_rectangle((48,58,1152,572),radius=58,fill=(252,250,255,255))
-          d.ellipse((138,110,505,518),fill=(243,237,254,255))
-          blur=design.filter(ImageFilter.GaussianBlur(26))
-          base=Image.alpha_composite(base,blur)
-          base=Image.alpha_composite(base,design)
           heart=Image.open('app/assets/coracao-promovie-com-logo.webp').convert('RGBA')
           word=Image.open('telessaude/teste-aceite/assets/telessaude-lettering.png').convert('RGBA')
           heart.thumbnail((260,260),Image.Resampling.LANCZOS)
           word.thumbnail((550,180),Image.Resampling.LANCZOS)
-          # Larger picture retains the exact approved heart and pixel lettering.
+          # Fundo branco uniforme. Preserva tamanho, posicao e proporcao das marcas originais.
           if word.width<530:
              word=word.resize((530,round(530*word.height/word.width)),Image.Resampling.LANCZOS)
           hx=210+(260-heart.width)//2
           hy=(H-heart.height)//2
           wx=510
           wy=(H-word.height)//2
-          shadow=Image.new('RGBA',base.size,(0,0,0,0))
-          shadow.alpha_composite(heart,(hx,hy+6))
-          alpha=shadow.getchannel('A').filter(ImageFilter.GaussianBlur(15))
-          shadow.putalpha(alpha.point(lambda a:int(a*0.09)))
-          base=Image.alpha_composite(base,shadow)
           base.alpha_composite(heart,(hx,hy))
           base.alpha_composite(word,(wx,wy))
           base.convert('RGB').save(out,'PNG',optimize=True)
@@ -58,6 +46,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add telesaude/assets/telesaude-compartilhamento.png
           if ! git diff --cached --quiet; then
-            git commit -m "assets(telessaude): previsualizacao do coracao e lettering para WhatsApp"
+            git commit -m "assets(telessaude): remove moldura circulo e sombras do preview"
             git push origin HEAD:main
           fi
