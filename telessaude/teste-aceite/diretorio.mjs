@@ -168,7 +168,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  const headTitle=el("directory-title"),headSubtitle=el("hub-subtitle");
  const serviceHead=serviceTitle.parentElement, searchField=query.closest(".hub-search");
  let catalog=[],chosenService=null,chosenPerson=null,loaded=false,busy=false,profileFromSearch=false;
- let appointmentReturn="specialties";
+ let appointmentReturn="specialties",appointmentReturnPane="categories";
  const providerService=key=>SERVICES.find(s=>s.key===key)||EXTRA;
  const say=message=>{feedback.textContent=message||"";};
  function showPane(pane){
@@ -373,14 +373,22 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    showPane("profile");
    open.focus({preventScroll:true});
  }
- function reopen(){
-   renderCategories();showPane("categories");say("");
+ function activePane(){
+   return !profile.hidden?"profile":!professionals.hidden?"professionals":"categories";
+ }
+ function restorePane(pane){
+   if(pane==="profile"&&chosenPerson)showPane("profile");
+   else if(pane==="professionals"&&chosenService)showPane("professionals");
+   else {renderCategories();showPane("categories");}
+   say("");
    document.body.classList.add("pv-navigation-mode");
    document.documentElement.classList.remove("pv-chat-mode");
    document.getElementById("chat-search-shell")?.setAttribute("hidden","");
    if(!dialog.open)dialog.showModal();
  }
+ function reopen(){restorePane("categories");}
  function openAppointments(){
+   appointmentReturnPane=activePane();
    if(dialog.open)dialog.close();
    appointmentReturn="specialties";
    document.body.classList.add("pv-navigation-mode");
@@ -458,11 +466,12 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  ].join("");
  document.body.appendChild(curriculaLayer);
  const curriculaFrame=curriculaLayer.querySelector("iframe");
+ let curriculumReturnPane="categories";
  function closeCurricula(){
    if(!curriculaLayer.open)return;
    curriculaLayer.close();
    curriculaFrame.removeAttribute("src");
-   reopen();
+   restorePane(curriculumReturnPane);
  }
  function backFromCurricula(){
    if(history.state?.pvCurriculaOverlay)history.back();
@@ -486,6 +495,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
       event.ctrlKey||event.shiftKey||event.altKey)return;
    event.preventDefault();
    if(curriculaLayer.open)return;
+   curriculumReturnPane=activePane();
    if(dialog.open)dialog.close();
    const previous=history.state&&typeof history.state==="object"?history.state:{};
    history.pushState({...previous,pvCurriculaOverlay:true},"",location.href);
@@ -583,9 +593,12 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  });
  query.addEventListener("input",renderPeople);
  topBack.addEventListener("click",()=>{
-   chosenService=null;
-   showPane("categories");
-   say("");
+   if(!profile.hidden&&!profileFromSearch){
+     showPane("professionals");
+     query.focus({preventScroll:true});
+     return;
+   }
+   chosenService=null;showPane("categories");say("");
    globalQuery.focus({preventScroll:true});
  });
  el("hub-other").addEventListener("click",()=>{
@@ -594,8 +607,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  });
  dialog.addEventListener("cancel",e=>{
    e.preventDefault(); // não revelar a lista nativa antes de uma escolha explícita
-   if(!profile.hidden)showPane("professionals");
+   if(!profile.hidden)showPane(profileFromSearch?"categories":"professionals");
    else if(!professionals.hidden)showPane("categories");
+   else window.dispatchEvent(new Event("pv:telesaude:show-intro"));
  });
  async function openNative(){
    // Não abre a interface médica na carga inicial. Somente após clique explícito.
@@ -631,9 +645,12 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
        chatShell?.removeAttribute("hidden");
        return;
      }
-     requestAnimationFrame(reopen);
+     requestAnimationFrame(()=>restorePane(appointmentReturnPane));
    });
-   el("appointments-specialties")?.addEventListener("click",()=>appointmentDialog.close());
+   el("appointments-specialties")?.addEventListener("click",()=>{
+     appointmentReturnPane="categories";
+     appointmentDialog.close();
+   });
    el("appointments-space")?.addEventListener("click",openMySpace);
    el("appointments-chat")?.addEventListener("click",()=>{
      appointmentReturn="chat";
@@ -682,9 +699,12 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
        history.pushState({...base,[guardKey]:true},"",location.href);
      }catch{/* O botão de retorno visível continua disponível. */}
    }
+   window.addEventListener("pv:telesaude:rearm-back",armInternalBack);
    window.addEventListener("popstate",event=>{
-     // O Meu Espaço já possui histórico próprio. Ao fechá-lo,
-     // retornamos ao estado guardado, sem interferência deste ouvinte.
+     // A apresentação e a leitura têm navegação própria. O Meu Espaço
+     // também conserva seu histórico sem passar por esta rotina.
+     if(document.getElementById("pv-brand-intro")?.open||
+        document.getElementById("pv-information-dialog")?.open)return;
      if(event.state?.[guardKey]||event.state?.promovieSpaceOverlay)return;
      const space=el("space-embedded");
      if(space&&!space.hidden)return;
@@ -693,7 +713,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      }else if(dialog.open){
        if(!profile.hidden)showPane(profileFromSearch?"categories":"professionals");
        else if(!professionals.hidden)showPane("categories");
-       else reopen();
+       else window.dispatchEvent(new Event("pv:telesaude:show-intro"));
      }else if(document.documentElement.classList.contains("pv-chat-mode")){
        reopen();
      }else{
