@@ -301,6 +301,32 @@ html body .mediquo-launcher{display:none!important}
 }
 #pv-brand-intro-back[aria-disabled="true"]:hover{filter:grayscale(1)!important}
 #pv-read-blocked{font:600 12px/1.55 Inter,Arial,sans-serif;color:#67349c;margin:0;text-align:center}
+/* Currículos públicos em camada de navegação branca, com Voltar nativo.
+   Não altera o SDK ou o iframe de consultas médicas. */
+.pv-curricula-dialog{
+  box-sizing:border-box;position:fixed;inset:0;margin:0;padding:0;
+  width:100vw;max-width:none;height:100vh;height:100dvh;max-height:none;
+  border:0;border-radius:0;background:#fff;color:#302349;
+  overflow:hidden;
+}
+.pv-curricula-dialog::backdrop{background:rgba(26,15,53,.4)}
+.pv-curricula-toolbar{
+  box-sizing:border-box;min-height:57px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:8px max(14px,env(safe-area-inset-right)) 8px max(14px,env(safe-area-inset-left));
+  border-bottom:1px solid #e4dcec;background:#fff;color:#3f197a;
+}
+.pv-curricula-toolbar strong{font:750 14px/1.3 Inter,Arial,sans-serif}
+.pv-curricula-close{
+  min-width:80px;min-height:40px;padding:8px 14px;
+  background:#fff;color:#51218d;border:1px solid #d9c9eb;
+  border-radius:11px;font:750 13px/1.25 Inter,Arial,sans-serif;cursor:pointer
+}
+.pv-curricula-close:hover{background:#f8f3fd}
+.pv-curricula-close:focus-visible{outline:3px solid #7334d8;outline-offset:2px}
+.pv-curricula-frame{
+  display:block;width:100%;height:calc(100vh - 57px);
+  height:calc(100dvh - 57px);border:0;background:#fff;color-scheme:light
+}
 .pv-brand-info-card{width:100%;display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:8px;background:linear-gradient(135deg,#f6f1ff,#fcfaff);border:1px solid #e7d9f8;border-radius:16px;padding:15px 17px}
 .pv-brand-info-card strong{font-size:13px;line-height:1.4;font-weight:800;color:#4b0c8f}
 .pv-brand-info-card p{font-size:12px;line-height:1.55;color:#635273;margin:0}
@@ -912,7 +938,10 @@ html body .mediquo-launcher{display:none!important}
         }
         function onCancel(event){
           event.preventDefault();
-          if(!refreshReadGate())showReadReminder();
+          // Voltar/Escape não deixa a pessoa presa na apresentação.
+          // Sem ciência, a etapa anterior é o acesso por CPF e código.
+          if(refreshReadGate())specialtiesButton.click();
+          else window.location.assign("/telessaude/teste-aceite/");
         }
         specialtiesButton.addEventListener("click",onSpecialties);
         intro.addEventListener("cancel",onCancel);
@@ -938,6 +967,13 @@ html body .mediquo-launcher{display:none!important}
         refreshReadGate();
       });
     }
+    // Voltar do smartphone, desktop ou navegador na primeira apresentação.
+    // Nas telas clínicas, quem navega permanece sendo o widget Mediquo.
+    window.addEventListener("popstate",()=>{
+      if(!intro.open)return;
+      if(refreshReadGate())specialtiesButton.click();
+      else window.location.replace("/telessaude/teste-aceite/");
+    });
     window.addEventListener("focus",refreshReadGate);
     if(acknowledgementKey)window.addEventListener("storage",event=>{
       if(event.key===acknowledgementKey){
