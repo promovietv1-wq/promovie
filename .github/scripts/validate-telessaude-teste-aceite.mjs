@@ -158,12 +158,13 @@ try{
    await myAppointmentsFrame.locator("#pv-appointments-external").waitFor({timeout:10000});
    const appointmentAppearance=await myAppointmentsFrame.locator("#pv-appointments-external").evaluate(frame=>({
      filter:getComputedStyle(frame).filter,
-     background:getComputedStyle(document.body).backgroundColor,
-     source:frame.contentWindow.location.href
+     background:getComputedStyle(document.body).backgroundColor
    }));
    assert.match(appointmentAppearance.filter,/invert\(1\)/);
    assert.equal(appointmentAppearance.background,"rgb(255, 255, 255)");
-   assert.equal(appointmentAppearance.source,"https://painel-agendazap.vercel.app/");
+   // Somente o navegador automatizado inspeciona o frame remoto.
+   await myAppointmentsFrame.frameLocator("#pv-appointments-external")
+     .locator("#consultaForm").waitFor({timeout:15000});
    // Voltar explícito na página mantém o diálogo de origem.
    await myAppointmentsFrame.locator("#pv-appointments-back").click();
    await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
