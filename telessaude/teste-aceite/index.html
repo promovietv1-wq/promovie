@@ -786,6 +786,25 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
   min-height:42px;width:100%;border:0;border-radius:11px;
   background:#4b0c8f;color:#fff;font:750 14px var(--font-body);cursor:pointer
 }
+/* Identidade aprovada: mesma arte Telessaúde das demais telas experimentais. */
+.patient-login-title.pv-access-identity{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:5px 9px;max-width:100%;min-width:0;
+  letter-spacing:-.03em;
+}
+.patient-login-title.pv-access-identity .pv-access-lettering{
+  display:block;width:clamp(124px,12vw,174px);
+  max-width:100%;height:auto;object-fit:contain;
+  flex:0 1 auto;
+}
+@media(max-width:700px){
+  .main:not(.phone-expanded) .patient-login-title.pv-access-identity,
+  .main.phone-expanded .patient-login-title.pv-access-identity{gap:4px 8px}
+  .patient-login-title.pv-access-identity .pv-access-lettering{width:144px}
+}
+@media(max-width:370px){
+  .patient-login-title.pv-access-identity .pv-access-lettering{width:132px}
+}
 </style>
 <link rel="stylesheet" href="/telesaude/atalhos-agenda.css?v=20261107-1">
 
@@ -848,7 +867,7 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
             <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
           </span>
           <span class="patient-login-heading">
-            <strong class="patient-login-title">Acesse sua Telessaúde</strong>
+            <strong class="patient-login-title pv-access-identity"><span>Acesse sua</span><img class="pv-access-lettering" src="/telessaude/teste-aceite/assets/telessaude-lettering.svg" alt="Telessaúde" width="178" height="29" decoding="async"></strong>
           </span>
         </div>
         <label class="patient-login-label" for="access-cpf">Seu CPF</label>
