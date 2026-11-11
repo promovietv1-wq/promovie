@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Área administrativa protegida de beneficiários da TeleSaúde PromoVie.">
+  <link rel="icon" type="image/webp" href="/app/assets/coracao-promovie-com-logo.webp?v=transparente-1">
+  <link rel="apple-touch-icon" href="/app/icons/apple-touch-coracao-promovie.png?v=14" sizes="180x180">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <title>Gestão de beneficiários | PromoVie TeleSaúde</title>
+  <style>
+  /* Identidade visual oficial PromoVie: Inter, Sora, gradiente violeta/ciano e logo original. */
+  :root {
+    --ink:#111827;--muted:#667085;--line:#e7edf6;
+    --purple:#4b0c8f;--violet:#7334d8;--cyan:#00bde8;--pink:#e6008d;
+    --grad:linear-gradient(112deg,#4b0c8f 0%,#7334d8 55%,#00bde8 100%);
+    --font-body:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    --font-display:Sora,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color-scheme:light;font-synthesis:none
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{min-width:320px;scroll-behavior:smooth}
+  body{
+    margin:0;min-height:100svh;color:var(--ink);
+    font:400 15px/1.6 var(--font-body);-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(ellipse 34% 35% at 92% 10%,rgba(115,52,216,.075),transparent 90%),
+      radial-gradient(ellipse 32% 40% at 3% 83%,rgba(0,189,232,.065),transparent 90%),
+      #fff
+  }
+  img,svg{display:block;max-width:100%}
+  a{color:var(--purple);text-decoration:none}
+  button,input{font:inherit}
+  button{border:0;cursor:pointer;touch-action:manipulation;min-height:44px}
+  a:focus-visible,button:focus-visible,input:focus-visible{
+    outline:3px solid var(--cyan);outline-offset:3px
+  }
+  [hidden]{display:none!important}
+  .site-header{
+    background:rgba(255,255,255,.96);border-bottom:1px solid rgba(219,222,236,.7);
+    box-shadow:0 4px 22px rgba(65,40,91,.035)
+  }
+  .site-header-inner{
+    width:min(1160px,calc(100% - 48px));min-height:80px;margin:auto;
+    display:flex;align-items:center;justify-content:space-between;gap:18px
+  }
+  .site-brand{display:flex;align-items:center;min-width:0;flex-shrink:0}
+  .site-brand img{width:171px;max-height:63px;height:auto;object-fit:contain;object-position:left}
+  .site-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .site-nav a{
+    font-size:13px;font-weight:700;color:#5d507f;border:1px solid #e9e4f4;
+    padding:9px 13px;border-radius:999px;white-space:nowrap;
+    transition:background .2s ease,border-color .2s ease
+  }
+  .site-nav a:hover{background:#f5f0fd;border-color:#d4c5ec}
+  .site-nav .nav-current{background:#f6f1fe;color:var(--purple)}
+  .site-nav #logout{min-height:38px;padding:7px 13px}
+  main{width:min(1160px,calc(100% - 48px));margin:0 auto;padding:37px 0 47px}
+  .eyebrow{
+    color:#6937af;font-size:11px;font-weight:800;letter-spacing:.13em;
+    text-transform:uppercase;margin:0 0 7px
+  }
+  h1,h2,h3{font-family:var(--font-display);letter-spacing:-.042em}
+  h1{
+    font-size:clamp(28px,3.6vw,42px);font-weight:700;line-height:1.19;
+    margin:0 0 12px;color:var(--purple)
+  }
+  h1.gradient{
+    background:var(--grad);background-clip:text;-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent
+  }
+  h2{font-size:clamp(17px,2vw,20px);line-height:1.3;margin:0 0 10px;color:#352059}
+  h3{font-size:15px;margin:0 0 9px;color:#352059}
+  p{margin:8px 0 15px;color:#667085;line-height:1.7}
+  .subtitle{font-size:14px;max-width:650px}
+  .muted{color:#6a7588;font-size:13px;line-height:1.65}
+  .card{
+    position:relative;background:rgba(255,255,255,.98);
+    border:1px solid #e8edf6;border-radius:24px;padding:25px;
+    box-shadow:0 14px 45px rgba(75,12,143,.055),0 3px 14px rgba(42,58,92,.028);
+    min-width:0
+  }
+  .login{
+    max-width:540px;margin:clamp(15px,4vh,46px) auto 26px;
+    padding:clamp(24px,4vw,39px)
+  }
+  .login-art{
+    display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:10px
+  }
+  .login-art img{
+    width:96px;height:96px;object-fit:contain;flex-shrink:0;
+    filter:drop-shadow(0 9px 15px rgba(76,22,126,.13))
+  }
+  .login h1{font-size:clamp(27px,5.5vw,35px)}
+  .login .intro{font-size:14px;margin:8px 0 22px;max-width:450px}
+  .form-note{border-top:1px solid var(--line);margin:21px 0 0;padding-top:15px}
+  label{display:block;margin:15px 0 7px;font-size:13px;font-weight:750;color:#394158}
+  input{
+    width:100%;min-width:0;min-height:47px;padding:12px 14px;
+    border:1px solid #d6dfed;border-radius:13px;background:#fff;color:#15243c;
+    transition:border-color .2s,box-shadow .2s
+  }
+  input::placeholder{color:#8a94a7;opacity:1}
+  input:focus{border-color:#9166d7;box-shadow:0 0 0 3px rgba(115,52,216,.10);outline:none}
+  input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  button{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:10px 17px;border-radius:13px;
+    background:var(--grad);color:#fff;font-weight:750;
+    box-shadow:0 8px 20px rgba(90,34,147,.13);
+    transition:transform .18s,filter .18s,box-shadow .18s
+  }
+  button:hover:not(:disabled){filter:brightness(1.045);box-shadow:0 10px 23px rgba(90,34,147,.18)}
+  button:active:not(:disabled){transform:translateY(1px)}
+  button.ghost{background:#f2eefb;color:var(--purple);box-shadow:none}
+  button.secondary{background:#f5f7fc;color:#4e5870;border:1px solid #e3e9f2;box-shadow:none}
+  button.danger{background:#fff2f2;color:#9d3d52;border:1px solid #f0dadd;box-shadow:none}
+  button.small{padding:9px 13px;font-size:13px;min-height:40px}
+  button:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
+  .actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  #login-button{width:100%;min-height:49px;margin-top:19px}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .panel-head>div{min-width:0}
+  .dashboard-hero{
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+    padding:0 0 6px;border-bottom:1px solid var(--line)
+  }
+  .dashboard-hero .panel-head{flex:1}
+  .dashboard-hero-image{height:115px;width:115px;object-fit:contain;flex-shrink:0;
+    filter:drop-shadow(0 8px 16px rgba(76,22,126,.12))}
+  .dashboard-hero h1{margin-bottom:4px}
+  .dashboard-hero .subtitle{margin:4px 0 18px}
+  .toolbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;margin:22px 0 17px
+  }
+  .toolbar input{flex:1 1 280px;max-width:395px}
+  .columns{
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+    align-items:start;gap:20px
+  }
+  .columns .card{min-height:255px}
+  .record-list{display:flex;flex-direction:column;gap:9px;margin-top:15px}
+  button.record{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+    background:#fbfcff;color:var(--ink);border:1px solid #e6eaf4;
+    border-radius:14px;padding:13px 15px;text-align:left;box-shadow:none;
+    font-weight:400;min-width:0
+  }
+  button.record:hover{background:#f7f3fe;border-color:#dbd0f0;box-shadow:none}
+  .record>div{min-width:0;overflow-wrap:anywhere}
+  .record strong{display:block;font-size:14px;line-height:1.35;color:#293146;font-weight:750}
+  .record small{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+  .tag{
+    flex-shrink:0;border-radius:999px;background:#f0eef7;color:#615276;
+    font-size:11px;font-weight:800;padding:5px 10px;white-space:nowrap
+  }
+  .tag[data-type="ativo"]{background:#e6f7ed;color:#24724a}
+  .tag[data-type="enviado"]{background:#fff3dc;color:#825d1b}
+  .tag[data-type="arquivado"]{background:#f5e9ec;color:#874553}
+  .detail-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px 20px;margin:19px 0 23px
+  }
+  .detail-grid dt{font-size:12px;color:var(--muted);margin:0 0 5px}
+  .detail-grid dd{font-size:14px;margin:0;font-weight:700;color:#26334b;overflow-wrap:anywhere}
+  .info{
+    background:#f5f2fc;border:1px solid #e8dff8;
+    color:#574b70;border-radius:13px;padding:13px 15px;font-size:13px
+  }
+  .notice{
+    margin:15px 0;padding:13px 16px;border:1px solid #e1e6f6;
+    border-radius:13px;background:#f2f6fe;color:#334b72;
+    font-size:13px;white-space:pre-wrap;line-height:1.65;
+    overflow-wrap:anywhere
+  }
+  .notice[data-kind="error"]{background:#fff1ef;color:#87383c;border-color:#f4dad7}
+  .notice[data-kind="ok"]{background:#eff9f4;color:#225b42;border-color:#d5ecdf}
+  .empty{font-size:14px;color:#69798d;text-align:center;padding:26px 12px}
+  .history{padding:0 0 0 19px;font-size:13px;color:#637084;line-height:1.8}
+  .history li{padding:0 0 7px 2px;overflow-wrap:anywhere}
+  .divider{border:0;border-top:1px solid var(--line);margin:23px 0}
+  #record-detail .actions{margin-bottom:8px}
+  .footer{border-top:1px solid var(--line);margin-top:35px;padding:23px 0 8px;
+    font-size:12px;color:#7a8191;line-height:1.7;text-align:center}
+  .footer a{font-weight:750}
+  @media(max-width:850px){
+    .columns{grid-template-columns:1fr;gap:16px}
+    .columns .card{min-height:0}
+    .dashboard-hero-image{width:95px;height:95px}
+  }
+  @media(max-width:650px){
+    .site-header-inner{width:calc(100% - 28px);min-height:69px;gap:8px}
+    .site-brand img{width:143px;max-height:54px}
+    .site-nav{gap:6px}
+    .site-nav a{font-size:12px;padding:7px 10px}
+    main{width:calc(100% - 28px);padding:19px 0 32px}
+    .login{margin:22px auto 12px}
+    .dashboard-hero-image{width:75px;height:75px}
+    .dashboard-hero{align-items:flex-start;gap:6px}
+    .dashboard-hero .panel-head{gap:10px}
+    .dashboard-hero .panel-head>div{flex-basis:100%}
+    .dashboard-hero .subtitle{margin-bottom:12px}
+    .toolbar{margin:18px 0 14px}
+    .toolbar input{flex-basis:100%;max-width:none}
+  }
+  @media(max-width:440px){
+    .site-header-inner{flex-wrap:wrap;justify-content:center;padding:9px 0}
+    .site-nav{justify-content:center}
+    .site-brand img{width:140px}
+    .card{padding:19px;border-radius:20px}
+    .login{padding:22px}
+    .login-art img{width:78px;height:78px}
+    .dashboard-hero{gap:4px}
+    .dashboard-hero-image{width:61px;height:61px}
+    .dashboard-hero .panel-head{flex:1 1 220px}
+    .dashboard-hero .panel-head>div{flex-basis:100%}
+    .detail-grid{gap:13px 12px}
+    .record{gap:8px}
+    .record strong{font-size:13px}
+    .tag{font-size:10px;padding:4px 8px}
+    #record-detail .actions button{flex:1 1 auto}
+    #new-form .actions button{flex:1 1 125px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
+  }
+.access-code-dialog{width:min(450px,calc(100% - 32px));border:1px solid #e7e0f1;border-radius:23px;padding:26px;background:#fff;color:#252139;box-shadow:0 22px 70px #1b143455;font-family:var(--font-body)}
+.access-code-dialog::backdrop{background:rgba(22,13,42,.65);backdrop-filter:blur(4px)}
+.access-code-dialog h2{font:700 22px var(--font-display);margin:0 0 11px;color:#4b0c8f}
+.access-code-dialog p{color:#626071;font-size:13px;line-height:1.7}
+.access-code-dialog code{display:block;overflow-wrap:anywhere;text-align:center;letter-spacing:2px;font:750 clamp(15px,3.7vw,20px)/1.65 ui-monospace,monospace;border:1px dashed #bcabd9;border-radius:13px;background:#f7f4fe;padding:14px 8px;margin:16px 0}
+.access-code-dialog .actions{display:flex;gap:10px;flex-wrap:wrap}
+.access-code-dialog button{min-height:42px}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-brand" href="/telessaude/" aria-label="PromoVie, voltar à TeleSaúde">
+      <img src="/preview-promovie-logo.webp" width="171" height="63" alt="PromoVie | Soluções Organizacionais Integradas" decoding="async">
+    </a>
+    <nav class="site-nav" aria-label="Navegação TeleSaúde">
+      <a href="/telessaude/">TeleSaúde</a>
+      <a href="/telessaude/gestao/" class="nav-current" aria-current="page">Gestão</a>
+      <button id="logout" class="secondary small" type="button" hidden>Sair</button>
+    </nav>
+  </div>
+</header>
+<main>
+
+  <section id="login-card" class="card login">
+    <div class="login-art">
+      <div>
+        <div class="eyebrow">TeleSaúde PromoVie</div>
+        <h1 class="gradient">Entrar no painel</h1>
+      </div>
+      <img src="/app/assets/coracao-promovie-com-logo.webp" alt="" width="96" height="96" decoding="async">
+    </div>
+    <p class="intro">Acompanhe os beneficiários, consulte informações administrativas e mantenha o histórico dos registros em um só lugar.</p>
+    <form id="login-form" autocomplete="off">
+      <label for="admin-password">Senha administrativa</label>
+      <input type="password" id="admin-password" minlength="16" autocomplete="current-password" required placeholder="Digite sua senha do painel">
+      <button type="submit" id="login-button">Entrar com segurança</button>
+    </form>
+    <p class="muted form-note">Acesso restrito à administração PromoVie. Utilize somente sua senha administrativa, nunca as chaves do Token PromoVie.</p>
+    <div id="login-status" class="notice" role="status" aria-live="polite" hidden></div>
+  </section>
+
+  <section id="dashboard" hidden>
+    <div class="dashboard-hero">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">TeleSaúde PromoVie | Gestão</div>
+          <h1 class="gradient">Beneficiários</h1>
+          <p class="subtitle">Cadastro, acompanhamento e histórico administrativo em um ambiente organizado e protegido.</p>
+        </div>
+        <button id="add-button" type="button">+ Novo beneficiário</button>
+      </div>
+      <img class="dashboard-hero-image" src="/app/assets/coracao-promovie-com-logo.webp" alt="" width="115" height="115" loading="lazy" decoding="async">
+    </div>
+    <div id="banner" class="notice" role="status" aria-live="polite" hidden></div>
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Pesquisar nome ou final do CPF" aria-label="Pesquisar beneficiários">
+      <div class="actions"><button id="refresh" type="button" class="secondary small">Atualizar</button><span id="count" class="muted"></span></div>
+    </div>
+    <div class="columns">
+      <section class="card" aria-labelledby="list-title">
+        <div class="panel-head"><h2 id="list-title">Pessoas cadastradas</h2><span class="tag" id="page-label">Página 1</span></div>
+        <div id="record-list" class="record-list"><p class="empty">Carregando registros...</p></div>
+        <div class="actions" style="margin-top:20px">
+          <button id="previous" class="secondary small" disabled>Anterior</button>
+          <button id="next" class="secondary small" disabled>Próxima</button>
+        </div>
+      </section>
+      <section class="card" aria-labelledby="detail-title">
+        <div id="empty-detail">
+          <h2 id="detail-title">Detalhes do beneficiário</h2>
+          <p>Selecione uma pessoa para conferir seus dados e histórico, ou crie um novo registro administrativo.</p>
+          <p class="info">Os dados são armazenados no banco da PromoVie com criptografia. Não cadastramos prontuários, diagnósticos ou informações clínicas.</p>
+        </div>
+        <form id="new-form" hidden autocomplete="off">
+          <h2>Novo beneficiário</h2>
+          <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no Token PromoVie ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
+          <label for="new-name">Nome completo</label>
+          <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
+          <label for="new-cpf">CPF</label>
+          <input id="new-cpf" required inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00">
+          <label for="new-email">E-mail do beneficiário (obrigatório para ativar e enviar acesso)</label>
+          <input id="new-email" type="email" maxlength="180" autocomplete="off" placeholder="exemplo@email.com">
+          <label for="new-phone">Telefone com DDD (opcional)</label>
+          <input id="new-phone" type="tel" maxlength="20" autocomplete="off" placeholder="(27) 99999-9999">
+          <div class="actions" style="margin-top:20px">
+            <button id="save-activate-button" type="submit">Cadastrar e ativar</button>
+            <button id="save-button" type="submit" class="secondary">Salvar apenas</button>
+            <button id="cancel-button" type="button" class="secondary">Cancelar</button>
+          </div>
+        </form>
+        <div id="record-detail" hidden>
+          <div class="panel-head"><h2 id="selected-name">Beneficiário</h2><span id="selected-status" class="tag"></span></div>
+          <dl class="detail-grid">
+            <div><dt>CPF</dt><dd id="detail-cpf"></dd></div>
+            <div><dt>Plano</dt><dd id="detail-plan"></dd></div>
+            <div><dt>E-mail</dt><dd id="detail-email"></dd></div>
+            <div><dt>Telefone</dt><dd id="detail-phone"></dd></div>
+            <div><dt>Incluído em</dt><dd id="detail-created"></dd></div>
+            <div><dt>Enviado ao Token PromoVie</dt><dd id="detail-sent"></dd></div>
+          </dl>
+          <div class="actions">
+            <button id="check-button" class="ghost small" type="button">Consultar Token PromoVie</button>
+            <button id="send-button" class="small" type="button">Ativar Token PromoVie</button>
+            <button id="archive-button" class="danger small" type="button">Arquivar</button>
+            <button id="restore-button" class="secondary small" type="button" hidden>Restaurar</button>
+            <button id="generate-access-button" class="secondary small" type="button" hidden>Enviar novo código por e-mail</button>
+            <button id="revoke-access-button" class="ghost small" type="button" hidden>Revogar código</button>
+          </div>
+          <hr class="divider">
+          <h3>Histórico administrativo</h3>
+          <ol id="history" class="history"><li>Carregando...</li></ol>
+          <p class="muted">Arquivar aqui não suspende nem cancela uma licença no Token PromoVie. O envio de um cadastro depende de confirmação da API e da liberação de escrita.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+  <footer class="footer">PromoVie | Soluções Organizacionais Integradas<br>
+    Gestão administrativa de TeleSaúde. Prontuários e atendimentos permanecem na plataforma de saúde.
+    <a href="/telessaude/">Voltar à TeleSaúde</a>.
+  </footer>
+</main>
+<dialog id="access-code-dialog" class="access-code-dialog" aria-labelledby="access-code-title">
+  <h2 id="access-code-title">Envio de acesso solicitado</h2>
+  <p>O código pessoal foi gerado de forma segura e encaminhado ao serviço de e-mail para envio direto ao beneficiário. Ele não aparece no gerenciador.</p>
+  <p>O aceite do provedor não confirma a entrega. Peça ao beneficiário que confira também a pasta de spam.</p>
+  <div class="actions">
+    <button id="close-access-code" class="secondary" type="button">Fechar</button>
+  </div>
+</dialog>
+<script>
+(() => {
+  'use strict';
+  const API='https://backend.promovie.tv.br/api/promovie/admin/v1';
+  const $=id=>document.getElementById(id);
+  let page=0,more=false,records=[],selectedId='',busy=false;
+  const labels={rascunho:'Rascunho',enviado:'Enviado',ativo:'Ativo',arquivado:'Arquivado'};
+  function msg(id,value,kind='info'){const el=$(id);el.hidden=!value;el.dataset.kind=kind;el.textContent=value||'';}
+  function setBusy(v){busy=v;for(const id of ['login-button','save-activate-button','save-button','send-button','archive-button','check-button','restore-button','generate-access-button','revoke-access-button'])$(id).disabled=v;}
+  function date(s){return s?new Date(s).toLocaleString('pt-BR'):'Não informado';}
+  async function request(path,{method='GET',body}={}){
+    const res=await fetch(API+path,{
+      method,cache:'no-store',credentials:'include',referrerPolicy:'no-referrer',
+      headers:body?{'Content-Type':'application/json'}:{},
+      ...(body?{body:JSON.stringify(body)}:{})
+    });
+    const data=await res.json().catch(()=>({}));
+    if(res.status===401&&path!=='/login'){showLogin();throw Error(path==='/me'?'Faça login para acessar o painel.':'Sua sessão terminou. Entre novamente.');}
+    if(!res.ok)throw Error(String(data.error||'Operação indisponível. Tente novamente.').replace(/m[eé]diquo/gi,'Token PromoVie'));
+    return data;
+  }
+  function showLogin(){
+    $('dashboard').hidden=true;$('logout').hidden=true;$('login-card').hidden=false;
+    $('admin-password').value='';
+  }
+  function showPanel(){
+    $('dashboard').hidden=false;$('logout').hidden=false;$('login-card').hidden=true;
+    msg('login-status','');
+  }
+  async function boot(){
+    try{await request('/me');showPanel();await loadPage();}
+    catch(e){showLogin();if(!String(e.message).includes('Faça login'))msg('login-status',e.message,'error');}
+  }
+  $('login-form').addEventListener('submit',async e=>{
+    e.preventDefault();if(busy)return;setBusy(true);msg('login-status','Autenticando...');
+    try{await request('/login',{method:'POST',body:{senha:$('admin-password').value}});
+      showPanel();await loadPage();
+    }catch(e){msg('login-status',e.message,'error');}
+    finally{setBusy(false);$('admin-password').value='';}
+  });
+  $('logout').addEventListener('click',async()=>{
+    try{await request('/logout',{method:'POST',body:{}});}catch{}
+    selectedId='';records=[];showLogin();msg('login-status','Sessão encerrada.','ok');
+  });
+  function newElement(tag,cls,value){
+    const el=document.createElement(tag);
+    if(cls)el.className=cls;
+    if(value!==undefined)el.textContent=String(value);
+    return el;
+  }
+  function statusTag(value){
+    const el=newElement('span','tag',labels[value]||value);
+    el.dataset.type=value;return el;
+  }
+  function renderList(){
+    const el=$('record-list');el.replaceChildren();
+    const query=$('search').value.trim().toLocaleLowerCase('pt-BR');
+    const cpfQuery=query.replace(/\D/g,'');
+    const filtered=records.filter(r=>!query||
+      (r.nome||'').toLocaleLowerCase('pt-BR').includes(query)||
+      (cpfQuery.length>=2&&(r.cpf||'').replace(/\D/g,'').endsWith(cpfQuery)));
+    $('count').textContent=filtered.length+' nesta página';
+    $('page-label').textContent='Página '+(page+1);
+    $('previous').disabled=page===0;$('next').disabled=!more;
+    if(filtered.length===0){
+      el.append(newElement('p','empty','Nenhum beneficiário encontrado nesta página.'));
+      return;
+    }
+    for(const r of filtered){
+      const item=newElement('button','record');
+      item.type='button';item.setAttribute('aria-label','Abrir cadastro de '+r.nome);
+      const left=newElement('div');
+      left.append(newElement('strong','',r.nome),newElement('small','',r.cpf+' | '+date(r.criado_em)));
+      item.append(left,statusTag(r.situacao));
+      item.addEventListener('click',()=>openRecord(r.id));
+      el.append(item);
+    }
+  }
+  async function loadPage(){
+    try{
+      const data=await request('/records?page='+page);
+      records=data.registros||[];more=!!data.mais;renderList();
+    }catch(e){msg('banner',e.message,'error');}
+  }
+  function toggle(section){
+    $('empty-detail').hidden=section!=='empty';
+    $('new-form').hidden=section!=='new';
+    $('record-detail').hidden=section!=='detail';
+  }
+  $('add-button').addEventListener('click',()=>{toggle('new');$('new-form').reset();$('new-name').focus();});
+  $('cancel-button').addEventListener('click',()=>toggle('empty'));
+  $('new-form').addEventListener('submit',async e=>{
+    e.preventDefault();if(busy)return;
+    const activate=e.submitter?.id==='save-activate-button';
+    if(activate&&!$('new-email').value.trim()){
+      msg('banner','Informe o e-mail do beneficiário para ativar e enviar o acesso.','error');
+      $('new-email').focus();return;
+    }
+    setBusy(true);msg('banner','Verificando disponibilidade do envio...');
+    try{
+      if(activate){
+        const health=await request('/health');
+        if(health.email_delivery_ready!==true){
+          msg('banner','O envio automático ainda não está publicado e ativado no backend. Nenhum cadastro foi realizado. Tente novamente após a liberação.','error');
+          return;
+        }
+        if(health.cadastro_real_habilitado!==true){
+          msg('banner','A emissão de novas licenças ainda está bloqueada para proteger a integração do Token PromoVie. Nenhum cadastro foi realizado. Solicite a liberação controlada antes de cadastrar e ativar.','error');
+          return;
+        }
+      }
+      msg('banner','Salvando no arquivo privado...');
+      const data=await request('/records',{method:'POST',body:{
+        nome:$('new-name').value,cpf:$('new-cpf').value,email:$('new-email').value,
+        telefone:$('new-phone').value
+      }});
+      const id=encodeURIComponent(data.id);
+      if(!activate){
+        msg('banner','Beneficiário salvo no arquivo da PromoVie. Nenhuma licença do Token PromoVie foi utilizada.','ok');
+      }else{
+        // O backend verifica a autorização de escrita, o CPF permitido e a duplicidade
+        // antes de enviar qualquer dado. Nunca repetir automaticamente um PUT incerto.
+        msg('banner','Registro salvo. Enviando uma única vez ao Token PromoVie...');
+        let envioConfirmado=false;
+        try{
+          await request('/records/'+id+'/send',{method:'POST',body:{}});
+          envioConfirmado=true;
+        }catch(err){
+          msg('banner','Registro salvo na PromoVie, mas o envio ao Token PromoVie não foi confirmado: '+err.message+
+            ' Não tente cadastrar de novo. Consulte este registro antes de qualquer novo envio.','error');
+        }
+        if(envioConfirmado){
+          msg('banner','Cadastro enviado ao Token PromoVie. Conferindo a ativação...');
+          try{
+            const result=await request('/records/'+id+'/verify',{method:'POST',body:{}});
+            if(result.encontrado&&result.ativo){
+              msg('banner','Beneficiário cadastrado e ativo no plano 345 do Token PromoVie.','ok');
+              // Uma unica ativacao seguida de codigo pessoal, sem novo envio ao SDK.
+              try{
+                const personal=await request('/records/'+id+'/access-code',{method:'POST',body:{}});
+                if(personal.entrega_email!=='aceito')throw Error('A solicitação de envio não foi confirmada.');
+                $('access-code-dialog').showModal();
+                msg('banner','Beneficiário ativo. O serviço de e-mail aceitou o código para envio direto ao titular.','ok');
+              }catch(err){
+                msg('banner','Beneficiário ativo, mas o acesso ainda não foi enviado: '+err.message+' Verifique a configuração do e-mail e tente novamente pelo cadastro.','error');
+              }
+            }else{
+              msg('banner','Cadastro enviado ao Token PromoVie, mas a ativação no plano 345 ainda não foi confirmada. Use Consultar Token PromoVie mais tarde.','info');
+            }
+          }catch(err){
+            msg('banner','Cadastro enviado ao Token PromoVie. Não foi possível confirmar a ativação agora: '+
+              err.message+' Use Consultar Token PromoVie para conferir, sem reenviar o cadastro.','info');
+          }
+        }
+      }
+      page=0;await loadPage();await openRecord(data.id);
+    }catch(err){
+      msg('banner','Não foi possível confirmar o cadastro local: '+err.message+
+        ' Confira a lista antes de tentar cadastrar novamente.','error');
+    }finally{setBusy(false);}
+  });
+  async function openRecord(id){
+    selectedId=id;toggle('detail');$('history').replaceChildren(newElement('li','','Consultando histórico...'));
+    try{
+      const data=await request('/records/'+encodeURIComponent(id));
+      if(selectedId!==id)return;
+      const r=data.registro;
+      $('selected-name').textContent=r.nome;
+      $('selected-status').replaceWith(statusTag(r.situacao));
+      $('record-detail').querySelector('.panel-head .tag').id='selected-status';
+      $('detail-cpf').textContent=r.cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/,'$1.$2.$3-$4');
+      $('detail-plan').textContent=r.plano;
+      $('detail-email').textContent=r.email||'Não informado';
+      $('detail-phone').textContent=r.telefone||'Não informado';
+      $('detail-created').textContent=date(r.criado_em);
+      $('detail-sent').textContent=date(r.enviado_em);
+      $('send-button').hidden=r.situacao==='arquivado'||r.situacao==='ativo'||r.situacao==='enviado';
+      $('archive-button').hidden=r.situacao==='arquivado';
+      $('restore-button').hidden=r.situacao!=='arquivado';
+      $('check-button').hidden=r.situacao==='arquivado';
+      $('generate-access-button').hidden=r.situacao!=='ativo';
+      $('revoke-access-button').hidden=r.situacao!=='ativo';
+      const hist=await request('/records/'+encodeURIComponent(id)+'/history');
+      if(selectedId!==id)return;
+      $('history').replaceChildren();
+      if(!hist.historico?.length)$('history').append(newElement('li','','Nenhum evento.'));
+      for(const ev of hist.historico){
+        const description=(ev.evento.replace(/_/g,' ')+' | '+date(ev.registrado_em)+(ev.detalhes?' | '+ev.detalhes:'')).replace(/m[eé]diquo/gi,'Token PromoVie');
+        $('history').append(newElement('li','',description));
+      }
+    }catch(e){msg('banner',e.message,'error');}
+  }
+  async function change(action,confirmation){
+    if(!selectedId||busy)return;
+    if(confirmation&&!confirm(confirmation))return;
+    const id=selectedId;setBusy(true);msg('banner','Processando operação...');
+    try{
+      const out=await request('/records/'+encodeURIComponent(id)+'/'+action,{method:'POST',body:{}});
+      let message=String(out.informacao||out.explicacao||'Alteração registrada.').replace(/m[eé]diquo/gi,'Token PromoVie');
+      if(action==='verify'){
+        message=out.encontrado?(out.ativo?'Paciente ativo no plano 345.':'Cadastro encontrado, mas o plano 345 não foi confirmado.'):
+          'O CPF ainda não foi encontrado no Token PromoVie.';
+      }
+      msg('banner',message,'ok');await loadPage();await openRecord(id);
+    }catch(e){msg('banner',e.message,'error');}
+    finally{setBusy(false);}
+  }
+  const personalDialog=$('access-code-dialog');
+  $('close-access-code').addEventListener('click',()=>personalDialog.close());
+  $('generate-access-button').addEventListener('click',async()=>{
+    if(!selectedId||busy)return;
+    if(!confirm('Enviar um novo código pessoal diretamente ao e-mail cadastrado? O código anterior será substituído somente se o provedor aceitar o envio.'))return;
+    setBusy(true);msg('banner','Solicitando envio do código pessoal...');
+    try{
+      const health=await request('/health');
+      if(health.email_delivery_ready!==true)
+        throw Error('O envio automático ainda não está publicado e ativado no backend. Nenhum código foi emitido.');
+      const result=await request('/records/'+encodeURIComponent(selectedId)+'/access-code',{method:'POST',body:{}});
+      if(result.entrega_email!=='aceito')throw Error('O serviço de e-mail não confirmou a solicitação.');
+      personalDialog.showModal();
+      msg('banner','Solicitação de envio aceita pelo serviço de e-mail. Confirme o recebimento com o beneficiário.','ok');
+      await openRecord(selectedId);
+    }catch(err){msg('banner',err.message,'error');}
+    finally{setBusy(false);}
+  });
+  $('revoke-access-button').addEventListener('click',async()=>{
+    if(!selectedId||busy)return;
+    if(!confirm('Revogar o código pessoal deste beneficiário? Novas entradas serão bloqueadas até gerar outro código.'))return;
+    setBusy(true);
+    try{
+      await request('/records/'+encodeURIComponent(selectedId)+'/revoke-access',{method:'POST',body:{}});
+      msg('banner','Código pessoal revogado. Novas entradas ficam bloqueadas.','ok');
+      await openRecord(selectedId);
+    }catch(err){msg('banner',err.message,'error');}
+    finally{setBusy(false);}
+  });
+  $('check-button').addEventListener('click',()=>change('verify'));
+  $('send-button').addEventListener('click',()=>change('send','Confirma o envio deste cadastro real para o Token PromoVie? Isso poderá utilizar uma licença do seu pacote. A operação só será permitida após a liberação técnica.'));
+  $('archive-button').addEventListener('click',()=>change('archive','Deseja arquivar este registro SOMENTE na PromoVie? Isso NÃO cancela nem suspende a licença do Token PromoVie.'));
+  $('restore-button').addEventListener('click',()=>change('restore'));
+  $('refresh').addEventListener('click',loadPage);
+  $('previous').addEventListener('click',()=>{if(page>0){page--;loadPage();}});
+  $('next').addEventListener('click',()=>{if(more){page++;loadPage();}});
+  $('search').addEventListener('input',renderList);
+  $('new-cpf').addEventListener('input',()=>{
+    let cpf=$('new-cpf').value.replace(/\D/g,'').slice(0,11);
+    cpf=cpf.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+    $('new-cpf').value=cpf;
+  });
+  boot();
+})();
+</script>
+</body>
+</html>
