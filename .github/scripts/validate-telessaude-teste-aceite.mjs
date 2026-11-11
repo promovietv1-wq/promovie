@@ -102,6 +102,10 @@ try{
    await info.locator("#close-info").click({force:true});
    assert.match(await info.locator("#pv-awareness-feedback").textContent(),/confirme a leitura/i);
    await info.locator("#pv-awareness-check").check();
+   assert.equal(await info.locator("body").evaluate((body,ref)=>{
+     const key="promovie:telessaude:teste-aceite:leitura:v2:"+ref;
+     return body.ownerDocument.defaultView.localStorage.getItem(key);
+   },new URL(src,base).searchParams.get("leitura")),"1");
    assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"false");
    await first.waitForFunction(()=>
      document.querySelector("#pv-brand-intro-back")?.getAttribute("aria-disabled")==="false");
@@ -221,12 +225,12 @@ try{
    assert.equal(await first.evaluate(()=>window.__sdkConfig.environment),"production");
    await first.close();
 
-   // Modo de revisão: mesmo beneficiário também vê apresentação novamente.
+   // Depois do primeiro Eu li, o mesmo beneficiário entra nas Especialidades.
    const repeat=await context.newPage();
    repeat.on("pageerror",error=>errors.push(error.message));
    await login(repeat,"12345678909");
-   await repeat.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
-   assert.equal(await repeat.locator("#pv-brand-intro").evaluate(d=>d.open),true);
+   await repeat.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await repeat.locator("#pv-brand-intro").evaluate(d=>d.open),false);
    await repeat.close();
 
    // Segundo CPF no mesmo navegador não herda indevidamente a ciência do primeiro.
