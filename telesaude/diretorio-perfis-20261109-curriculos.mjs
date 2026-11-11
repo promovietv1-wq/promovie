@@ -133,7 +133,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  '<h2 id="directory-title">Vamos te ajudar a cuidar de você.</h2>',
  '<p id="hub-subtitle">Selecione uma especialidade para conhecer os profissionais.</p></div>',
  '<div class="hub-head-tools">',
- '<a id="hub-professionals-link" class="hub-professionals-link" href="https://profissionais-telessaude.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Conheça nossos profissionais (abre em nova aba)" title="Conheça nossos profissionais"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m13 2-9 11h7l-1 9 10-12h-7l1-8Z"/></svg></a>',
+ '<a id="hub-professionals-link" class="hub-professionals-link" href="/telesaude/curriculos/" target="_blank" rel="noopener noreferrer" aria-label="Conheça nossos profissionais (abre em nova aba)" title="Conheça nossos profissionais"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m13 2-9 11h7l-1 9 10-12h-7l1-8Z"/></svg></a>',
  '<button id="hub-top-back" class="hub-exit" type="button" hidden>← Voltar às especialidades</button>',
  '</div></div>',
  '<section id="hub-categories" class="hub-pane" aria-label="Selecionar especialidade">',
