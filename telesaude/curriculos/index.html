@@ -1127,8 +1127,8 @@
     try{
       const ref=new URL(document.referrer);
       fromPromoVie=ref.origin===location.origin&&
-        (/^\\/telessaude\\/teste-aceite\\/atendimento\\/$/.test(ref.pathname)||
-         /^\\/telesaude\\/atendimento-perfis-/.test(ref.pathname));
+        (ref.pathname==="/telessaude/teste-aceite/atendimento/"||
+         ref.pathname.startsWith("/telesaude/atendimento-perfis-"));
     }catch{}
     if(fromPromoVie&&history.length>1)history.back();
     else location.assign("/telessaude/teste-aceite/");
