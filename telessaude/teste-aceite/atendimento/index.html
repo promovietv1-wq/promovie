@@ -301,6 +301,18 @@ html body .mediquo-launcher{display:none!important}
 }
 #pv-brand-intro-back[aria-disabled="true"]:hover{filter:grayscale(1)!important}
 #pv-read-blocked{font:600 12px/1.55 Inter,Arial,sans-serif;color:#67349c;margin:0;text-align:center}
+/* Informações em uma camada branca, com retorno na própria página e no navegador. */
+.pv-information-dialog{
+  box-sizing:border-box;position:fixed;inset:0;
+  margin:0;padding:0;width:100vw;max-width:none;height:100vh;
+  height:100dvh;max-height:none;border:0;border-radius:0;
+  background:#fff;color:#302349;overflow:hidden;color-scheme:light
+}
+.pv-information-dialog::backdrop{background:rgba(24,13,49,.42)}
+.pv-information-dialog iframe{
+  display:block;width:100%;height:100%;border:0;background:#fff;
+  color-scheme:light
+}
 /* Currículos públicos em camada de navegação branca, com Voltar nativo.
    Não altera o SDK ou o iframe de consultas médicas. */
 .pv-curricula-dialog{
@@ -526,6 +538,11 @@ html body .mediquo-launcher{display:none!important}
 <p id="pv-read-blocked" role="status" aria-live="polite" hidden></p>
 <small>Os atendimentos clínicos são realizados por profissionais habilitados, conforme suas atribuições e responsabilidades.</small>
 </div></dialog>
+<!-- As informações ficam dentro do atendimento autenticado para o botão Voltar
+     do navegador não perder a sessão nem depender da troca entre abas. -->
+<dialog id="pv-information-dialog" class="pv-information-dialog" aria-label="Informações necessárias para o seu atendimento">
+  <iframe id="pv-information-frame" title="Informações necessárias para o seu atendimento"></iframe>
+</dialog>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
 <script>
 (function(){
@@ -897,6 +914,49 @@ html body .mediquo-launcher{display:none!important}
       infoUrl.searchParams.set("leitura",readingReference);
       infoLink.href=infoUrl.pathname+infoUrl.search;
     }
+    // Documento informativo aberto dentro do próprio atendimento,
+    // independente do SDK e sem transportar tokens para a página.
+    const informationDialog=document.getElementById("pv-information-dialog");
+    const informationFrame=document.getElementById("pv-information-frame");
+    function closeInformation(){
+      if(!informationDialog.open)return;
+      informationDialog.close();
+      informationFrame.removeAttribute("src");
+    }
+    function returnFromInformation(){
+      if(history.state?.pvInformationOverlay)history.back();
+      else closeInformation();
+    }
+    infoLink.addEventListener("click",event=>{
+      if(event.defaultPrevented||event.button!==0||event.metaKey||
+         event.ctrlKey||event.shiftKey||event.altKey)return;
+      event.preventDefault();
+      if(informationDialog.open)return;
+      const previous=history.state&&typeof history.state==="object"?history.state:{};
+      history.pushState({...previous,pvInformationOverlay:true},"",location.href);
+      informationFrame.src=infoLink.href;
+      informationDialog.showModal();
+    });
+    informationDialog.addEventListener("cancel",event=>{
+      event.preventDefault();
+      returnFromInformation();
+    });
+    window.addEventListener("message",event=>{
+      if(event.origin!==location.origin||!informationDialog.open||
+         event.source!==informationFrame.contentWindow||
+         !readingReference||event.data?.readingReference!==readingReference)return;
+      if(event.data.type==="pv-information-back"){
+        returnFromInformation();
+      }else if(event.data.type==="pv-information-specialties"){
+        // A confirmação foi produzida pelo próprio documento da PromoVie.
+        acknowledgedInSession=true;
+        refreshReadGate();
+        closeInformation();
+        if(history.state?.pvInformationOverlay)history.back();
+        if(intro.open)specialtiesButton.click();
+        else if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+      }
+    });
     // Modo revisão: apresentação exibida novamente a cada novo acesso.
     // Ativar retenção do aceite somente após aprovação final do layout.
     const PREVIEW_ALWAYS_SHOW=true;
@@ -974,6 +1034,8 @@ html body .mediquo-launcher{display:none!important}
     // Voltar do smartphone, desktop ou navegador na primeira apresentação.
     // Nas telas clínicas, quem navega permanece sendo o widget Mediquo.
     window.addEventListener("popstate",()=>{
+      // Prioridade absoluta para fechar a leitura, sem sair da sessão.
+      if(informationDialog.open){closeInformation();return;}
       if(!intro.open)return;
       if(refreshReadGate())specialtiesButton.click();
       else window.location.replace("/telessaude/teste-aceite/");
