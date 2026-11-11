@@ -21,6 +21,13 @@
   <link rel="stylesheet" href="https://profissionais-telessaude.vercel.app/css/common.css">
   <link rel="stylesheet" href="https://profissionais-telessaude.vercel.app/css/public.css">
 
+  <!-- Tema claro fixo: mantém os currículos coerentes com a Telessaúde PromoVie. -->
+  <style>
+    :root, html[data-theme="light"] { color-scheme: light !important; }
+    html, body { background:#fff !important; color-scheme:light !important; }
+    .app-container, .app-header, main, .app-footer { color-scheme:light; }
+  </style>
+
   <!-- Favicon (purple heart - health) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
 </head>
@@ -40,14 +47,7 @@
           <span class="brand-text">Telessaúde - Equipe de saúde</span>
         </div>
 
-        <button id="themeToggle" class="theme-toggle" title="Alternar tema" aria-label="Alternar entre tema claro e escuro">
-          <svg id="iconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-          <svg id="iconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        </button>
+
       </div>
 
       <!-- Busca -->
@@ -207,7 +207,6 @@
     infoCountPopover: $('#infoCountPopover'),
     legendToggleBtn: $('#legendToggleBtn'),
     legendPopover: $('#legendPopover'),
-    themeToggle: $('#themeToggle'),
     loadingState: $('#loadingState'),
     emptyState: $('#emptyState'),
   };
@@ -273,26 +272,11 @@
   // ─── Tema ───────────────────────────────────────────────
 
   const initTheme = () => {
-    // A entrada dos currículos PromoVie sempre começa no tema claro.
-    const theme = 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeIcon(theme);
-  };
-
-  const toggleTheme = () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('promovie:curriculos:theme', next); } catch { /* ok */ }
-    updateThemeIcon(next);
-  };
-
-  /** @param {string} theme */
-  const updateThemeIcon = (theme) => {
-    const moon = $('#iconMoon');
-    const sun = $('#iconSun');
-    if (moon) moon.style.display = theme === 'dark' ? 'block' : 'none';
-    if (sun) sun.style.display = theme === 'light' ? 'block' : 'none';
+    // Esta página pública usa sempre o tema claro, independentemente de
+    // preferências anteriores de tema e do tema do dispositivo.
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.documentElement.style.colorScheme = 'light';
+    try { localStorage.removeItem('promovie:curriculos:theme'); } catch { /* ok */ }
   };
 
   // ─── Toast ──────────────────────────────────────────────
@@ -1000,7 +984,6 @@
     initTheme();
 
     // Event listeners
-    if (dom.themeToggle) dom.themeToggle.addEventListener('click', toggleTheme);
     if (dom.searchInput) dom.searchInput.addEventListener('input', handleSearch);
     if (dom.searchClear) dom.searchClear.addEventListener('click', clearSearch);
     if (dom.filterToggle) dom.filterToggle.addEventListener('click', toggleFilterDropdown);
