@@ -56,8 +56,12 @@
     .pv-awareness{background:#fff;border:1px solid #e6dcf4;border-radius:18px;padding:20px 23px;margin:0 0 19px;box-shadow:0 8px 32px rgba(39,20,70,.045)}
     .pv-awareness-label{display:flex;align-items:flex-start;gap:12px;cursor:pointer;color:#3e206b;font-size:14px;line-height:1.6;font-weight:750}
     .pv-awareness-label input{width:20px;height:20px;flex:0 0 20px;margin:2px 0 0;accent-color:#4b0c8f;cursor:pointer}
-    .pv-awareness-note{margin:11px 0 0 32px;color:#6a6077;font-size:13px;line-height:1.65}
-    @media(max-width:700px){.pv-awareness{padding:19px 20px}.pv-awareness-note{margin-left:0}}
+    .pv-awareness-feedback{margin:10px 0 0 32px;color:#5a338b;font-size:12px;line-height:1.5}
+    .top-link[aria-disabled="true"]{
+      filter:grayscale(1);background:#dedede!important;color:#686868!important;
+      border-color:#bdbdbd!important;cursor:not-allowed;opacity:.75
+    }
+    @media(max-width:700px){.pv-awareness{padding:19px 20px}.pv-awareness-feedback{margin-left:0}}
     .copy-box{border:1px solid #e7e0f4;background:#fff;border-radius:20px;padding:25px;margin:20px 0 30px}
     .copy-box p{color:#62576e;font-size:14px;margin:0 0 14px}
     .copy-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;background:linear-gradient(110deg,#4b0c8f,#7644c2);border:1px solid #4b0c8f;color:#fff;padding:11px 18px;border-radius:12px;cursor:pointer;font-weight:750;font-size:13px}
@@ -141,7 +145,7 @@
         <input id="pv-awareness-check" type="checkbox">
         <span>Eu li as informações acima sobre atendimento, privacidade e consentimento.</span>
       </label>
-      
+      <p class="pv-awareness-feedback" id="pv-awareness-feedback" role="status" aria-live="polite"></p>
     </section>
     <section class="copy-box" aria-labelledby="copy-title">
       <h2 id="copy-title">Copiar resumo</h2>
@@ -166,25 +170,48 @@
       const copy=document.getElementById("copy-summary");
       const state=document.getElementById("copy-status");
       const awareness=document.getElementById("pv-awareness-check");
-      // A ciência local não é o consentimento clínico exigido pelo atendimento.
-      const awarenessKey="promovie:telessaude:teste-aceite:informacoes-ciente:v1";
-      try{awareness.checked=localStorage.getItem(awarenessKey)==="1"}catch(error){}
+      // A declaração de leitura é local, individual neste navegador e NÃO
+      // substitui os consentimentos próprios do SDK de atendimento.
+      const readingReference=new URLSearchParams(location.search).get("leitura")||"";
+      const validReference=/^pv2_[A-Za-z0-9_-]{43}$/.test(readingReference);
+      const awarenessKey=validReference?
+        "promovie:telessaude:teste-aceite:leitura:v2:"+readingReference:null;
+      const feedback=document.getElementById("pv-awareness-feedback");
+      function notifyAttendance(action){
+        if(!validReference||typeof BroadcastChannel!=="function")return;
+        const channel=new BroadcastChannel("pv-telessaude-teste-informacoes-v1");
+        channel.postMessage({action,readingReference});
+        // Aguarda o escoamento da mensagem entre abas antes de fechar o canal.
+        setTimeout(()=>channel.close(),300);
+      }
+      function refresh(){
+        const approved=awareness.checked;
+        close.setAttribute("aria-disabled",approved?"false":"true");
+        feedback.textContent=approved?
+          "Leitura confirmada. Você já pode acessar Especialidades.":"";
+      }
+      try{awareness.checked=Boolean(awarenessKey&&localStorage.getItem(awarenessKey)==="1")}
+      catch(error){awareness.checked=false}
+      refresh();
       awareness.addEventListener("change",function(){
         try{
-          if(awareness.checked)localStorage.setItem(awarenessKey,"1");
-          else localStorage.removeItem(awarenessKey);
+          if(awarenessKey){
+            if(awareness.checked)localStorage.setItem(awarenessKey,"1");
+            else localStorage.removeItem(awarenessKey);
+          }
         }catch(error){}
+        notifyAttendance(awareness.checked?"acknowledged":"revoked");
+        refresh();
       });
       close.addEventListener("click",function(){
-        // Solicita retorno à tela já autenticada de Especialidades, sem tokens.
-        // No caso de acesso direto, oferece o caminho para a tela de entrada.
-        if(typeof BroadcastChannel==="function"){
-          const channel=new BroadcastChannel("pv-telessaude-teste-informacoes-v1");
-          channel.postMessage({action:"specialties"});
-          channel.close();
+        if(!awareness.checked){
+          feedback.textContent="Por gentileza, confirme a leitura das informações acima antes de acessar Especialidades.";
+          awareness.focus();
+          return;
         }
+        notifyAttendance("specialties");
         window.close();
-        state.textContent="Retorne à aba de Especialidades da Telessaúde PromoVie.";
+        feedback.textContent="Retorne à aba de Especialidades da Telessaúde PromoVie.";
         close.focus();
       });
       copy.addEventListener("click",async function(){
