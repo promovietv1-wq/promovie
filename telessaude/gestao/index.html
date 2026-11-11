@@ -307,14 +307,14 @@
         <form id="new-form" hidden autocomplete="off">
           <h2>Novo beneficiário</h2>
           <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no Token PromoVie ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
-          <label for="new-name">Nome completo</label>
+          <label for="new-name">Nome completo (exatamente como consta no documento)</label>
           <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
           <label for="new-cpf">CPF</label>
           <input id="new-cpf" required inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00">
-          <label for="new-email">E-mail do beneficiário (obrigatório para ativar e enviar acesso)</label>
-          <input id="new-email" type="email" maxlength="180" autocomplete="off" placeholder="exemplo@email.com">
-          <label for="new-phone">Telefone com DDD (opcional)</label>
-          <input id="new-phone" type="tel" maxlength="20" autocomplete="off" placeholder="(27) 99999-9999">
+          <label for="new-email">E-mail do beneficiário</label>
+          <input id="new-email" type="email" required maxlength="180" autocomplete="off" placeholder="exemplo@email.com">
+          <label for="new-phone">Telefone com DDD</label>
+          <input id="new-phone" type="tel" required inputmode="tel" maxlength="20" autocomplete="off" placeholder="(27) 99999-9999">
           <div class="actions" style="margin-top:20px">
             <button id="save-activate-button" type="submit">Cadastrar e ativar</button>
             <button id="save-button" type="submit" class="secondary">Salvar apenas</button>
@@ -454,6 +454,11 @@
   $('new-form').addEventListener('submit',async e=>{
     e.preventDefault();if(busy)return;
     const activate=e.submitter?.id==='save-activate-button';
+    const phoneDigits=$('new-phone').value.replace(/\D/g,'');
+    if(![10,11].includes(phoneDigits.length)){
+      msg('banner','Informe um telefone válido com DDD (10 ou 11 dígitos).','error');
+      $('new-phone').focus();return;
+    }
     if(activate&&!$('new-email').value.trim()){
       msg('banner','Informe o e-mail do beneficiário para ativar e enviar o acesso.','error');
       $('new-email').focus();return;
