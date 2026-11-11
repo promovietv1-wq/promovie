@@ -442,19 +442,55 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    }
  }
 
- // O link externo abre na mesma aba. Ao usar o Voltar nativo,
- // recupera a grade de especialidades quando o navegador restaura esta sessão.
- // Nenhum dado médico ou token é persistido para esta navegação.
- let leftForCurricula=false;
+ // Currículos são conteúdo informativo público, exibido numa moldura
+ // PromoVie. O navegador permanece no atendimento autenticado, sem depender
+ // da restauração do handoff médico ao usar o Voltar no mobile ou desktop.
  const curriculumLink=el("hub-professionals-link");
- curriculumLink?.addEventListener("click",event=>{
-   if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-   leftForCurricula=true;
- });
- window.addEventListener("pageshow",event=>{
-   if(!leftForCurricula||!event.persisted)return;
-   leftForCurricula=false;
+ const curriculaLayer=document.createElement("dialog");
+ curriculaLayer.className="pv-curricula-dialog";
+ curriculaLayer.setAttribute("aria-label","Currículos profissionais");
+ curriculaLayer.innerHTML=[
+   '<header class="pv-curricula-toolbar">',
+   '<strong>Currículos profissionais</strong>',
+   '<button type="button" class="pv-curricula-close" aria-label="Voltar às especialidades">Voltar</button>',
+   '</header>',
+   '<iframe class="pv-curricula-frame" title="Currículos profissionais" loading="lazy"></iframe>'
+ ].join("");
+ document.body.appendChild(curriculaLayer);
+ const curriculaFrame=curriculaLayer.querySelector("iframe");
+ function closeCurricula(){
+   if(!curriculaLayer.open)return;
+   curriculaLayer.close();
+   curriculaFrame.removeAttribute("src");
    reopen();
+ }
+ function backFromCurricula(){
+   if(history.state?.pvCurriculaOverlay)history.back();
+   else closeCurricula();
+ }
+ curriculaLayer.querySelector(".pv-curricula-close")?.addEventListener("click",backFromCurricula);
+ curriculaLayer.addEventListener("cancel",event=>{
+   event.preventDefault();
+   backFromCurricula();
+ });
+ window.addEventListener("popstate",event=>{
+   if(curriculaLayer.open&&!event.state?.pvCurriculaOverlay)closeCurricula();
+ });
+ window.addEventListener("message",event=>{
+   if(event.origin!==location.origin||event.source!==curriculaFrame.contentWindow||
+      event.data?.type!=="pv-curricula-close")return;
+   backFromCurricula();
+ });
+ curriculumLink?.addEventListener("click",event=>{
+   if(event.defaultPrevented||event.button!==0||event.metaKey||
+      event.ctrlKey||event.shiftKey||event.altKey)return;
+   event.preventDefault();
+   if(curriculaLayer.open)return;
+   if(dialog.open)dialog.close();
+   const previous=history.state&&typeof history.state==="object"?history.state:{};
+   history.pushState({...previous,pvCurriculaOverlay:true},"",location.href);
+   curriculaFrame.src="/telesaude/curriculos/";
+   curriculaLayer.showModal();
  });
  trigger.hidden=false;trigger.addEventListener("click",reopen);
  globalQuery.addEventListener("input",renderGlobalSearch);
@@ -637,7 +673,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  // Mobile: o Voltar nativo navega entre as telas locais da PromoVie.
  // Uma entrada de histórico na mesma URL evita retornar à tela de CPF;
  // o X do cabeçalho continua sendo o caminho explícito para sair.
- if(window.matchMedia?.("(max-width:700px)").matches){
+ {
    const guardKey="promovieMobileInternalBack";
    function armInternalBack(){
      try{
