@@ -979,6 +979,9 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
       ".access-result-brand":"Telessaúde"
     };
     for(const [selector,value] of Object.entries(names)){
+      // A entrada experimental usa a arte original. Nunca sobrescrevê-la
+      // com texto genérico depois que o HTML já carregou.
+      if(pulseProfilesTest&&selector===".patient-login-title")continue;
       const element=document.querySelector(selector);
       if(element)element.textContent=value;
     }
