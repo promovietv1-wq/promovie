@@ -194,9 +194,9 @@
         feedback.textContent=approved?
           "Leitura confirmada. Você já pode acessar as especialidades.":"";
       }
-      // Revisão de layout em tablet e smartphone: cada visita reabre as
-      // informações e a confirmação não é armazenada em definitivo.
-      const PREVIEW_ALWAYS_SHOW=true;
+      // A leitura confirmada fica salva neste navegador e beneficiário.
+      // A pessoa poderá revisar as informações e desmarcar a ciência depois.
+      const PREVIEW_ALWAYS_SHOW=false;
       if(PREVIEW_ALWAYS_SHOW)awareness.checked=false;
       else{
         try{awareness.checked=Boolean(awarenessKey&&localStorage.getItem(awarenessKey)==="1")}
