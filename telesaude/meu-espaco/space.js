@@ -47,9 +47,8 @@
     document.title="Meu Espaço de Saúde | Telessaúde PromoVie";
     const identity=document.querySelector(".identity");
     if(identity){
-      identity.setAttribute("aria-label","Telessaúde PromoVie, página de acesso");
-      const label=identity.querySelector("strong");
-      if(label)label.textContent="Telessaúde PromoVie";
+      identity.setAttribute("aria-label","Telessaúde, página de acesso");
+      // A assinatura institucional é uma imagem, não deve virar texto comum.
     }
     const back=document.getElementById("back-to-access");
     if(back)back.textContent="Voltar à Telessaúde";
