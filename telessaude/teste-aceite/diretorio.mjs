@@ -488,7 +488,13 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  function backFromMyAppointments(){
    const hasEntry=Boolean(history.state?.pvAppointmentsPanelOverlay);
    closeMyAppointments();
-   if(hasEntry)history.back();
+   if(hasEntry){
+     // Ignora apenas o popstate gerado por este próprio botão.
+     // Sem isso a grade de Especialidades poderia abrir por cima de
+     // Agendamentos e Suporte, deixando duas janelas modais ativas.
+     myAppointmentsHistoryReturn=true;
+     history.back();
+   }
  }
  myAppointmentsLayer.querySelector(".pv-curricula-close")?.addEventListener("click",backFromMyAppointments);
  myAppointmentsLayer.addEventListener("cancel",event=>{
@@ -496,10 +502,16 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    backFromMyAppointments();
  });
  window.addEventListener("popstate",event=>{
+   if(myAppointmentsHistoryReturn){
+     myAppointmentsHistoryReturn=false;
+     event.stopImmediatePropagation();
+     return;
+   }
    if(myAppointmentsLayer.open&&!event.state?.pvAppointmentsPanelOverlay){
-     myAppointmentsHistoryReturn=true;
      closeMyAppointments();
-     requestAnimationFrame(()=>{myAppointmentsHistoryReturn=false;});
+     // A tela de origem foi restaurada; os outros níveis de
+     // navegação não devem processar novamente o mesmo clique Voltar.
+     event.stopImmediatePropagation();
    }
  });
  window.addEventListener("message",event=>{
