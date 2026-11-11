@@ -960,9 +960,9 @@ html body .mediquo-launcher{display:none!important}
         else if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
       }
     });
-    // Modo revisão: apresentação exibida novamente a cada novo acesso.
-    // Ativar retenção do aceite somente após aprovação final do layout.
-    const PREVIEW_ALWAYS_SHOW=true;
+    // Após confirmar a leitura uma vez, acessos futuros deste beneficiário
+    // no mesmo navegador iniciam diretamente na tela de Especialidades.
+    const PREVIEW_ALWAYS_SHOW=false;
     let introViewed=false,introRunning=null,acknowledgedInSession=false;
     const hasRead=()=>{
       if(PREVIEW_ALWAYS_SHOW)return acknowledgedInSession;
