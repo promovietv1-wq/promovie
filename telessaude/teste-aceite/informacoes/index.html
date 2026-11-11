@@ -188,7 +188,7 @@
         const approved=awareness.checked;
         close.setAttribute("aria-disabled",approved?"false":"true");
         feedback.textContent=approved?
-          "Leitura confirmada. Você já pode acessar Especialidades.":"";
+          "Leitura confirmada. Você já pode acessar as especialidades.":"";
       }
       try{awareness.checked=Boolean(awarenessKey&&localStorage.getItem(awarenessKey)==="1")}
       catch(error){awareness.checked=false}
