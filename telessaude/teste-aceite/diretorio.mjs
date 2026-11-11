@@ -453,6 +453,64 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  // Currículos são conteúdo informativo público, exibido numa moldura
  // PromoVie. O navegador permanece no atendimento autenticado, sem depender
  // da restauração do handoff médico ao usar o Voltar no mobile ou desktop.
+ // O painel externo fica em origem isolada. Apenas a apresentação visual
+ // é clara; consultas e alterações permanecem no serviço original.
+ const myAppointmentsLink=el("appointments-my-panel");
+ const myAppointmentsLayer=document.createElement("dialog");
+ myAppointmentsLayer.className="pv-curricula-dialog pv-appointments-panel-dialog";
+ myAppointmentsLayer.setAttribute("aria-label","Meus Agendamentos");
+ myAppointmentsLayer.innerHTML=[
+   '<header class="pv-curricula-toolbar">',
+   '<strong>Meus Agendamentos</strong>',
+   '<button type="button" class="pv-curricula-close" aria-label="Voltar a Agendamentos e Suporte">Voltar</button>',
+   '</header>',
+   '<iframe class="pv-curricula-frame" title="Meus Agendamentos em fundo claro" loading="lazy"></iframe>'
+ ].join("");
+ document.body.appendChild(myAppointmentsLayer);
+ const myAppointmentsFrame=myAppointmentsLayer.querySelector("iframe");
+ let myAppointmentsOpen=false,myAppointmentsHistoryReturn=false;
+ function closeMyAppointments(){
+   if(!myAppointmentsLayer.open)return;
+   myAppointmentsLayer.close();
+   myAppointmentsOpen=false;
+   // Retorna ao painel de origem, sem novo CPF ou login.
+   if(appointmentDialog&&!appointmentDialog.open)appointmentDialog.showModal();
+ }
+ function backFromMyAppointments(){
+   const hasEntry=Boolean(history.state?.pvAppointmentsPanelOverlay);
+   closeMyAppointments();
+   if(hasEntry)history.back();
+ }
+ myAppointmentsLayer.querySelector(".pv-curricula-close")?.addEventListener("click",backFromMyAppointments);
+ myAppointmentsLayer.addEventListener("cancel",event=>{
+   event.preventDefault();
+   backFromMyAppointments();
+ });
+ window.addEventListener("popstate",event=>{
+   if(myAppointmentsLayer.open&&!event.state?.pvAppointmentsPanelOverlay){
+     myAppointmentsHistoryReturn=true;
+     closeMyAppointments();
+     requestAnimationFrame(()=>{myAppointmentsHistoryReturn=false;});
+   }
+ });
+ window.addEventListener("message",event=>{
+   if(event.origin!==location.origin||event.source!==myAppointmentsFrame.contentWindow||
+      event.data?.type!=="pv-appointments-close")return;
+   backFromMyAppointments();
+ });
+ myAppointmentsLink?.addEventListener("click",event=>{
+   if(event.defaultPrevented||event.button!==0||event.metaKey||
+      event.ctrlKey||event.shiftKey||event.altKey)return;
+   event.preventDefault();
+   if(myAppointmentsLayer.open)return;
+   myAppointmentsOpen=true;
+   if(appointmentDialog?.open)appointmentDialog.close();
+   const previous=history.state&&typeof history.state==="object"?history.state:{};
+   // Navegar dentro do mesmo endereço permite usar o botão Voltar nativo.
+   history.pushState({...previous,pvAppointmentsPanelOverlay:true},"",location.href);
+   myAppointmentsFrame.contentWindow.location.replace("/telesaude/meus-agendamentos/");
+   myAppointmentsLayer.showModal();
+ });
  const curriculumLink=el("hub-professionals-link");
  const curriculaLayer=document.createElement("dialog");
  curriculaLayer.className="pv-curricula-dialog";
@@ -642,6 +700,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  // Fechar Agendamentos devolve às Especialidades, nunca ao chat de forma involuntária.
  if(appointmentDialog){
    appointmentDialog.addEventListener("close",()=>{
+     if(myAppointmentsOpen)return;
      const destination=appointmentReturn;
      appointmentReturn="specialties";
      if(destination==="space")return;
@@ -711,6 +770,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
      // também conserva seu histórico sem passar por esta rotina.
      if(document.getElementById("pv-brand-intro")?.open||
         document.getElementById("pv-information-dialog")?.open)return;
+     if(myAppointmentsHistoryReturn||myAppointmentsLayer.open||
+        event.state?.pvAppointmentsPanelOverlay)return;
      if(event.state?.[guardKey]||event.state?.promovieSpaceOverlay)return;
      const space=el("space-embedded");
      if(space&&!space.hidden)return;
