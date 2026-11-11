@@ -475,8 +475,11 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    restorePane(curriculumReturnPane);
  }
  function backFromCurricula(){
-   if(history.state?.pvCurriculaOverlay)history.back();
-   else closeCurricula();
+   // Fecha a janela imediatamente, mesmo se o navegador demorar ou
+   // consumir uma navegação histórica do iframe interno.
+   const overlayWasInHistory=Boolean(history.state?.pvCurriculaOverlay);
+   closeCurricula();
+   if(overlayWasInHistory)history.back();
  }
  curriculaLayer.querySelector(".pv-curricula-close")?.addEventListener("click",backFromCurricula);
  curriculaLayer.addEventListener("cancel",event=>{
