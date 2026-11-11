@@ -1,9 +1,8 @@
-name: Diagnostico temporario preview publico Telessaude
+name: Validar preview publico Telessaude (temporario)
 on:
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/diagnostico-preview-publico.yml'
+    paths: ['.github/workflows/diagnostico-preview-publico.yml']
 permissions:
   contents: read
 jobs:
@@ -11,33 +10,37 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
-      - uses: actions/checkout@v4
-      - name: Inspecionar respostas HTTP publica para bots
-        shell: bash
+      - name: Validar metadata social no HTML publicado e imagem publica
         run: |
           python - <<'PY'
-          import urllib.request,urllib.error,re,struct
+          import urllib.request,re,struct
           base='https://www.promovie.tv.br'
-          urls=['/telessaude/','/telessaude/teste-aceite/','/telesaude/','/telesaude/assets/telesaude-compartilhamento.png','/robots.txt']
-          for path in urls:
-            for agent in ('Mozilla/5.0 (compatible; facebookexternalhit/1.1; +http://www.facebook.com/externalhit_uatext.php)','WhatsApp/2.24.24 i','Mozilla/5.0'):
-              print('CHECK',path,'UA',agent.split()[0])
-              try:
-                req=urllib.request.Request(base+path,headers={'User-Agent':agent,'Accept':'text/html,image/avif,image/webp,image/*,*/*;q=0.8'})
-                with urllib.request.urlopen(req,timeout=12) as r:
-                  data=r.read(170000)
-                  print('RESULT',r.status,'final',r.url,'type',r.headers.get('Content-Type'),'bytes-read',len(data),'length',r.headers.get('Content-Length'),'cache',r.headers.get('cache-control'),'robots',r.headers.get('x-robots-tag'),'server',r.headers.get('server'),'CF challenge',r.headers.get('cf-mitigated'))
-                  if path.endswith('.png'):
-                    print('PNG',data[:8],struct.unpack('>II',data[16:24]) if data[:8]==b'\\x89PNG\\r\\n\\x1a\\n' else None)
-                  elif path.endswith('.txt'):
-                    print('ROBOTS',data.decode('utf8','replace')[:400])
-                  else:
-                    html=data.decode('utf8','replace')
-                    for tag in ('og:image','og:title','og:url','robots'):
-                      m=re.findall('<meta[^>]+(?:property|name)=["\\\']'+tag+'["\\\'][^>]*>',html,re.I)
-                      print('META',tag,m[:2])
-                    print('PAGE',re.findall(r'<title[^>]*>(.*?)</title>',html,re.I|re.S)[:1])
-              except urllib.error.HTTPError as e:
-                print('HTTP ERROR',e.code,e.url,'cf-mitigated',e.headers.get('cf-mitigated'),'server',e.headers.get('server'))
-              except Exception as e: print('ERROR',type(e).__name__,str(e)[:170])
+          paths=['/telessaude/','/telessaude/teste-aceite/','/telesaude/']
+          agents=['facebookexternalhit/1.1','WhatsApp/2.24.24','Mozilla/5.0']
+          img=base+'/telesaude/assets/telesaude-compartilhamento.png?pv=20261111-preview2'
+          for path in paths:
+            for agent in agents:
+              url=base+path
+              req=urllib.request.Request(url,headers={'User-Agent':agent})
+              with urllib.request.urlopen(req,timeout=14) as response:
+                body=response.read(100000).decode('utf-8','replace')
+                assert response.status==200
+                assert 'property="og:title"' in body
+                assert 'property="og:image"' in body
+                assert img in body
+                robots=re.findall(r'<meta name="robots" content="([^"]+)"',body)
+                assert robots and not any('noindex' in x for x in robots), (path,robots)
+                print('PASS HTML',agent,path, 'og:image',img,'robots',robots)
+          for agent in agents:
+            req=urllib.request.Request(img,headers={'User-Agent':agent})
+            with urllib.request.urlopen(req,timeout=14) as response:
+              png=response.read()
+              assert response.status==200
+              assert response.headers.get('Content-Type','').startswith('image/png')
+              assert png[:8]==bytes([137,80,78,71,13,10,26,10])
+              width,height=struct.unpack('>II',png[16:24])
+              assert (width,height)==(1200,630),(width,height)
+              assert len(png)<500000,len(png)
+              print('PASS IMAGE',agent,(width,height),'bytes',len(png))
+          print('PUBLIC PREVIEW REQUIREMENTS VALIDATED')
           PY
