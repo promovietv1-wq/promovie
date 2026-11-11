@@ -126,6 +126,28 @@ try{
    await first.waitForFunction(()=>!document.querySelector(".pv-curricula-dialog").open);
    await first.locator("#directory-dialog[open]").waitFor();
 
+   // Um link do provedor de currículos presente na camada PromoVie
+   // deve abrir a cópia local branca, sem criar uma nova autenticação.
+   await first.evaluate(()=>{
+     const a=document.createElement("a");
+     a.href="https://profissionais-telessaude.vercel.app/";
+     a.id="pv-test-external-curricula";
+     a.textContent="Teste de currículo do provedor";
+     document.querySelector("#directory-dialog .hub-footer").append(a);
+   });
+   await first.locator("#pv-test-external-curricula").click();
+   await first.locator(".pv-curricula-dialog:not(.pv-appointments-panel-dialog)[open]").waitFor({timeout:10000});
+   const localCurricula=first.frameLocator(".pv-curricula-dialog:not(.pv-appointments-panel-dialog) .pv-curricula-frame");
+   await localCurricula.locator("#pv-curricula-return").waitFor();
+   const colors=await localCurricula.locator("body").evaluate(body=>({
+     background:getComputedStyle(body).backgroundColor,
+     theme:document.documentElement.getAttribute("data-theme")
+   }));
+   assert.deepEqual(colors,{background:"rgb(255, 255, 255)",theme:"light"});
+   await localCurricula.locator("#pv-curricula-return").click();
+   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
+
    // Da grade inicial, Voltar retorna à apresentação, não à tela de CPF.
    await first.evaluate(()=>history.back());
    await first.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
