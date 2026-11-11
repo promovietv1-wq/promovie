@@ -109,14 +109,14 @@ try{
    // Currículos: volta nativa e botão dentro da página restauram a sessão.
    await first.locator("#hub-professionals-link").click();
    await first.locator(".pv-curricula-dialog[open]").waitFor({timeout:10000});
-   await first.frameLocator(".pv-curricula-frame").locator("#pv-curricula-return").waitFor();
+   await first.frameLocator(".pv-curricula-dialog:not(.pv-appointments-panel-dialog) .pv-curricula-frame").locator("#pv-curricula-return").waitFor();
    await first.evaluate(()=>history.back());
    await first.waitForFunction(()=>!document.querySelector(".pv-curricula-dialog").open);
    await first.locator("#directory-dialog[open]").waitFor();
    assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
    await first.locator("#hub-professionals-link").click();
    await first.locator(".pv-curricula-dialog[open]").waitFor();
-   const curriculum=first.frameLocator(".pv-curricula-frame");
+   const curriculum=first.frameLocator(".pv-curricula-dialog:not(.pv-appointments-panel-dialog) .pv-curricula-frame");
    await curriculum.locator("#pv-curricula-return").click();
    await first.waitForFunction(()=>!document.querySelector(".pv-curricula-dialog").open);
    await first.locator("#directory-dialog[open]").waitFor();
