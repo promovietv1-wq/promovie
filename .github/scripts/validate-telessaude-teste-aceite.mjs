@@ -71,12 +71,29 @@ try{
    assert.match(await first.locator("#pv-read-blocked").textContent(),/Por gentileza, leia/);
    assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),true);
 
-   const popupPromise=first.waitForEvent("popup");
+   // Voltar visível nunca exige confirmar os documentos.
    await first.locator("#pv-brand-info-link").click();
-   const info=await popupPromise;
-   await info.waitForLoadState("domcontentloaded");
-   assert.match(new URL(info.url()).searchParams.get("leitura")||"",/^pv2_[A-Za-z0-9_-]{43}$/);
+   await first.locator("#pv-information-dialog[open]").waitFor({timeout:10000});
+   const info=first.frameLocator("#pv-information-frame");
+   await info.locator("#back-info").waitFor();
+   assert.equal(await info.locator("#info-title").count(),0,"Introdução redundante deve sair");
+   assert.equal(await info.locator(".hero .intro").count(),0);
+   const src=await first.locator("#pv-information-frame").getAttribute("src");
+   assert.match(new URL(src,base).searchParams.get("leitura")||"",/^pv2_[A-Za-z0-9_-]{43}$/);
    assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"true");
+   await info.locator("#back-info").click();
+   await first.waitForFunction(()=>!document.getElementById("pv-information-dialog").open);
+   assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),true);
+   // O botão físico/nativo do navegador também fecha a página de leitura.
+   await first.locator("#pv-brand-info-link").click();
+   await first.locator("#pv-information-dialog[open]").waitFor();
+   await info.locator("#back-info").waitFor();
+   await first.evaluate(()=>history.back());
+   await first.waitForFunction(()=>!document.getElementById("pv-information-dialog").open,{timeout:10000});
+   assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),true);
+   // Confirmar e ir para as especialidades, sem recarregar a autenticação.
+   await first.locator("#pv-brand-info-link").click();
+   await first.locator("#pv-information-dialog[open]").waitFor();
    await info.locator("#close-info").click({force:true});
    assert.match(await info.locator("#pv-awareness-feedback").textContent(),/confirme a leitura/i);
    await info.locator("#pv-awareness-check").check();
@@ -84,10 +101,46 @@ try{
    await first.waitForFunction(()=>
      document.querySelector("#pv-brand-intro-back")?.getAttribute("aria-disabled")==="false");
    await info.locator("#close-info").click();
+   await first.waitForFunction(()=>!document.getElementById("pv-information-dialog").open);
    await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
    assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),false);
    assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
 
+   // Currículos: volta nativa e botão dentro da página restauram a sessão.
+   await first.locator("#hub-professionals-link").click();
+   await first.locator(".pv-curricula-dialog[open]").waitFor({timeout:10000});
+   await first.frameLocator(".pv-curricula-frame").locator("#pv-curricula-return").waitFor();
+   await first.evaluate(()=>history.back());
+   await first.waitForFunction(()=>!document.querySelector(".pv-curricula-dialog").open);
+   await first.locator("#directory-dialog[open]").waitFor();
+   assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
+   await first.locator("#hub-professionals-link").click();
+   await first.locator(".pv-curricula-dialog[open]").waitFor();
+   const curriculum=first.frameLocator(".pv-curricula-frame");
+   await curriculum.locator("#pv-curricula-return").click();
+   await first.waitForFunction(()=>!document.querySelector(".pv-curricula-dialog").open);
+   await first.locator("#directory-dialog[open]").waitFor();
+
+   // Da grade inicial, Voltar retorna à apresentação, não à tela de CPF.
+   await first.evaluate(()=>history.back());
+   await first.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
+   assert.match(first.url(),/\/telessaude\/teste-aceite\/atendimento\//);
+   await first.locator("#pv-brand-intro-back").click();
+   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+
+   // Ao navegar para uma especialidade, Voltar restaura a grade anterior.
+   await first.locator('button.hub-category[data-key="Psicologia"]').click();
+   await first.locator("#hub-professionals:not([hidden])").waitFor();
+   await first.evaluate(()=>history.back());
+   await first.locator("#hub-categories:not([hidden])").waitFor({timeout:10000});
+   await first.locator("#directory-dialog[open]").waitFor();
+
+   // Agendamentos também se fecham com o histórico nativo.
+   await first.locator("#hub-shortcut-appointments").click();
+   await first.locator("#appointments-dialog[open]").waitFor();
+   await first.evaluate(()=>history.back());
+   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await first.locator("#appointments-dialog").evaluate(d=>d.open),false);
    // Somente um clique explícito no chat abre o SDK original de atendimento.
    await first.locator("#hub-native").click();
    await first.waitForFunction(()=>window.__sdkOpened===1,{timeout:15000});
