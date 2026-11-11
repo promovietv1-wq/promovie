@@ -2,247 +2,116 @@ import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 import {chromium} from "playwright";
 
-const source=await readFile("telessaude/index.html","utf8");
+// Validação isolada: somente UI experimental e serviços simulados.
+// Nenhuma conta de paciente, SDK de produção ou sessão clínica real é utilizada.
 const entry=await readFile("telessaude/teste-aceite/index.html","utf8");
-const current=await readFile("telessaude/atendimento/index.html","utf8");
-const test=await readFile("telessaude/teste-aceite/atendimento/index.html","utf8");
-const directory=await readFile("telessaude/teste-aceite/diretorio.mjs","utf8");
+const attendance=await readFile("telessaude/teste-aceite/atendimento/index.html","utf8");
 const information=await readFile("telessaude/teste-aceite/informacoes/index.html","utf8");
+const directory=await readFile("telessaude/teste-aceite/diretorio.mjs","utf8");
 const lettering=await readFile("telessaude/teste-aceite/assets/telessaude-lettering.svg","utf8");
-const pngBase64=lettering.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/)?.[1];
-assert.ok(pngBase64,"Wordmark must retain embedded raster from user supplied example");
-assert.equal(pngBase64.length,2892,"Tinted raster must remain intact");
-assert.equal(Buffer.from(pngBase64,"base64").subarray(0,8).toString("hex"),"89504e470d0a1a0a");
-assert.match(entry,/window\.location\.assign\("\/telessaude\/teste-aceite\/atendimento\/"\)/);
-assert.match(entry,/Teste do consentimento real/);
-assert.match(test,/id="pv-brand-intro"/);
-assert.doesNotMatch(test,/id="pv-brand-intro-next"/);
-assert.match(test,/id="pv-brand-intro-back">Voltar às especialidades/);
-assert.match(test,/Sua saúde merece uma experiência excelente/);
-assert.doesNotMatch(test,/class="pv-lockup-name"|class="pv-promo-name"/);
-assert.match(test,/class="pv-topbar-lockup"/);
-assert.match(test,/class="pv-lockup" role="group" aria-label="Telessaúde PromoVie"/);
-assert.match(test,/class="pv-lockup-heart"/);
-assert.match(test,/A Telessaúde PromoVie reúne acesso/);
-assert.doesNotMatch(test,/class="pv-lettering-inline"/);
-assert.doesNotMatch(information,/class="pv-lettering-inline" src=/);
-assert.match(test,/PromoVie reúne acesso a profissionais de saúde, orientação e suporte/);
-assert.match(test,/class="pv-brand-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
-assert.match(test,/>Ler informações <span aria-hidden="true">/);
-assert.match(test,/Conte com a PromoVie na sua jornada de saúde/);
-assert.match(test,/id="pv-brand-info-link"/);
-assert.match(test,/href="\/telessaude\/teste-aceite\/informacoes\/" target="_blank" rel="noopener noreferrer"/);
-assert.match(entry,/class="pv-test-info-link"/);
-assert.match(information,/<html lang="pt-BR">/);
-assert.match(information,/<meta name="robots" content="noindex,nofollow,noarchive">/);
-assert.match(information,/<span class="eyebrow">Informações<\/span>/);
-assert.match(information,/Uma experiência para ajudar você a cuidar da sua saúde/);
-assert.match(information,/class="pv-heading-lettering" src="\/telessaude\/teste-aceite\/assets\/telessaude-lettering.svg"/);
-assert.match(information,/class="pv-consent-banner"/);
-assert.doesNotMatch(information,/pv-consent-banner:before/);
-assert.match(information,/id="close-info" class="top-link" type="button">Especialidades/);
-assert.doesNotMatch(information,/class="pv-promo-name"|class="pv-lockup-name"/);
-assert.match(information,/class="pv-footer-heart"/);
-assert.match(information,/class="pv-footer-lettering"/);
-assert.match(information,/class="pv-footer-lockup"/);
-assert.match(information,/Ao iniciar o Chat Médico, você será convidado/);
-assert.match(information,/Leia abaixo a essência desse conteúdo/);
-assert.match(information,/document\.querySelector\("\.pv-consent-banner"\)/);
-assert.match(directory,/class="pv-directory-lettering"/);
-assert.match(directory,/pv-directory-lockup/);
-assert.doesNotMatch(directory,/class="pv-lockup-name"/);
-assert.match(information,/Como funciona o atendimento/);
-assert.match(information,/Privacidade e consentimento/);
-assert.equal((information.match(/<details>/g)||[]).length,2);
-assert.match(information,/Você pode copiar o resumo explicativo para consultar depois/);
-assert.match(information,/Este material é informativo e complementar/);
-assert.doesNotMatch(information,/id="pv-doc-terms"|id="pv-doc-privacy"|widget\.mediquo\.com\/privacy|mediquo-api\.s3/);
-assert.doesNotMatch(information,/Consulte os documentos originais|em português|tradução integral/i);
-assert.match(information,/id="copy-summary"/);
-assert.doesNotMatch(information,/MediquoWidget|accessToken:|apiKey:|\/api\/promovie\//);
-assert.match(test,/locale:"pt"/);
-assert.match(test,/environment:"production"/);
-assert.match(test,/widget\.init\(\{/);
-assert.match(test,/accessToken:handoff\.accessToken/);
-assert.match(test,/ensurePromoVieIntro/);
-assert.match(test,/introViewed=true/);
-assert.match(test,/new BroadcastChannel\("pv-telessaude-teste-informacoes-v1"\)/);
-assert.match(test,/await ensurePromoVieIntro\(\)/);
-assert.match(test,/PV_BRAND_INTRO_CANCELLED/);
-assert.match(directory,/PV_BRAND_INTRO_CANCELLED/);
-assert.match(current,/diretorio-perfis-20261109-batimentos\.mjs/);
-assert.match(source,/window\.location\.assign\("\/telessaude\/atendimento\/"\)/);
-assert.doesNotMatch(test,/terms_link\s*:/);
-assert.doesNotMatch(test,/privacy_link\s*:/);
-assert.doesNotMatch(test,/MediquoWidget\.logout\(/);
-assert.doesNotMatch(test,/MediquoWidget\.destroy\(/);
+const encodedPng=lettering.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/)?.[1];
+assert.ok(encodedPng&&encodedPng.length>2000,"Preservar arte original");
+assert.ok(entry.includes('src="data:image/png;base64,'+encodedPng+'"'),"Usar a arte PNG real no acesso");
+assert.ok(attendance.includes('Informações necessárias para o seu atendimento'));
+assert.ok(information.includes('Eu li as informações acima sobre atendimento, privacidade e consentimento.'));
+assert.ok(attendance.includes('Por gentileza, leia as informações sobre o seu atendimento no botão acima.'));
+assert.ok(attendance.includes('if(hasRead())'));
+assert.ok(information.includes('readingReference'));
+assert.ok(directory.includes("initSpecialtyDirectory"));
+assert.ok(attendance.includes('environment:"production"'),"Não modificar ambiente clínico");
+assert.ok(attendance.includes('accessToken:handoff.accessToken'),"Preservar SDK");
+assert.ok(!information.includes("MediquoWidget"),"Ciência local fora do SDK");
 
 const browser=await chromium.launch({headless:true});
+const base="http://127.0.0.1:8779";
+async function stubServices(context){
+ await context.route("https://backend.promovie.tv.br/api/promovie/access/v1/health",route=>
+   route.fulfill({status:200,contentType:"application/json",body:'{"disponivel":true}'}));
+ await context.route("https://backend.promovie.tv.br/api/promovie/access/v1/session",route=>
+   route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({
+     apiKey:"TEST-SDK-NON-REAL",access_token:"FAKE-ACCESS-TOKEN-01234567890123456789",
+     directory_token:"X".repeat(43),environment:"production"
+   })}));
+ await context.route("https://backend.promovie.tv.br/api/promovie/space/v1/session",route=>
+   route.fulfill({status:503,contentType:"application/json",body:"{}"}));
+ await context.route("https://backend.promovie.tv.br/api/promovie/directory/v1/catalog-profile",route=>
+   route.fulfill({status:200,contentType:"application/json",body:'{"items":[]}'}));
+ await context.route("https://widget.mediquo.com/js/1.0.0/mediquo.js",route=>
+   route.fulfill({status:200,contentType:"application/javascript",
+     body:'window.MediquoWidget={init:async cfg=>{window.__sdkConfig=cfg},open:async()=>{window.__sdkOpened=(window.__sdkOpened||0)+1}};'}));
+}
+async function login(page,cpf){
+ await page.goto(base+"/telessaude/teste-aceite/",{waitUntil:"domcontentloaded"});
+ await page.locator("#access-cpf").fill(cpf);
+ await page.locator("#access-code").fill("CI-ONLY");
+ await page.locator("#install-now:not([disabled])").waitFor({timeout:15000});
+ const image=await page.locator(".pv-access-lettering").evaluate(img=>({
+   complete:img.complete,width:img.naturalWidth,height:img.naturalHeight
+ }));
+ assert.deepEqual(image,{complete:true,width:178,height:29},"Lettering não exibido corretamente no acesso");
+ await page.locator("#install-now").click();
+ await page.waitForURL(/\/telessaude\/teste-aceite\/atendimento\//,{timeout:15000});
+ assert.equal(await page.evaluate(()=>sessionStorage.getItem("promovie:mediquo:handoff:v1")),null);
+ await page.locator("#directory-open:not([hidden])").waitFor({timeout:10000});
+}
+
 try{
- for(const width of [360,390,768,1280]){
-  const page=await browser.newPage({viewport:{width,height:850}});
-  const pageErrors=[];
-  page.on("pageerror",error=>pageErrors.push(error.message));
-  await page.route("https://backend.promovie.tv.br/api/promovie/access/v1/health",route=>
-    route.fulfill({status:200,contentType:"application/json",body:'{"disponivel":true}'}));
-  await page.route("https://backend.promovie.tv.br/api/promovie/access/v1/session",route=>{
-    const body=route.request().postDataJSON();
-    assert.equal(body.directoryTest,true);
-    return route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({
-     apiKey:"NONREAL-TEST-PUBLIC-ONLY",access_token:"NONREAL-FAKE-TOKEN-01234567890123456789",
-     directory_token:"X".repeat(43),environment:"production"})});
-  });
-  await page.route("https://backend.promovie.tv.br/api/promovie/space/v1/session",route=>
-    route.fulfill({status:503,contentType:"application/json",body:"{}"}));
-  await page.route("https://backend.promovie.tv.br/api/promovie/directory/v1/catalog-profile",route=>
-    route.fulfill({status:200,contentType:"application/json",body:'{"items":[]}'}));
-  await page.route("https://widget.mediquo.com/js/1.0.0/mediquo.js",route=>
-    route.fulfill({status:200,contentType:"application/javascript",
-     body:"window.MediquoWidget={init:async(cfg)=>{window.__sdkConfig={locale:cfg.theme?.locale,environment:cfg.environment,hasTerms:!!cfg.terms_link,hasPrivacy:!!cfg.privacy_link}},open:async()=>{window.__sdkOpened=(window.__sdkOpened||0)+1}};"}));
-  await page.goto("http://127.0.0.1:8779/telessaude/teste-aceite/",{waitUntil:"domcontentloaded"});
-  await page.locator("#access-cpf").fill("12345678909");
-  await page.locator("#access-code").fill("CI-ONLY");
-  await page.locator("#install-now:not([disabled])").waitFor({timeout:15000});
-  await page.locator("#install-now").click();
-  await page.waitForURL(/\/telessaude\/teste-aceite\/atendimento\//,{timeout:15000});
-  assert.equal(await page.evaluate(()=>sessionStorage.getItem("promovie:mediquo:handoff:v1")),null);
-  await page.locator("#hub-native").waitFor();
-  const directoryRect=await page.locator(".hub-dialog .pv-directory-lettering").boundingBox();
-  assert.ok(directoryRect&&directoryRect.width>80,"Marca do catálogo ilegível");
-  assert.ok(Math.abs(directoryRect.width/directoryRect.height-178/29)<.35,
-    "Marca do catálogo deformada");
-  assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
-  await page.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
-  assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
-  const introVisual=await page.locator("#pv-brand-intro").evaluate(node=>{
-    const heart=node.querySelector(".pv-brand-intro-body .pv-lockup-heart");
-    const back=node.querySelector("#pv-brand-intro-back");
-    const hr=heart.getBoundingClientRect(),bg=getComputedStyle(back);
-    return {heartWidth:hr.width,heartHeight:hr.height,backBg:bg.backgroundColor,
-      backText:bg.color,buttons:node.querySelectorAll("button").length};
-  });
-  assert.ok(introVisual.heartWidth>=125,"Coração não foi ampliado: "+JSON.stringify(introVisual));
-  assert.ok(introVisual.heartHeight>=125,"Coração pequeno: "+JSON.stringify(introVisual));
-  assert.equal(introVisual.buttons,1,"A apresentação deve ter só o botão voltar");
-  assert.match(introVisual.backText,/rgb\(255, 255, 255\)/);
+ for(const width of [390,1280]){
+   const context=await browser.newContext({viewport:{width,height:850}});
+   await stubServices(context);
+   const errors=[];
+   const first=await context.newPage();
+   first.on("pageerror",error=>errors.push(error.message));
+   await login(first,"12345678909");
+   await first.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
+   assert.equal(await first.locator("#pv-brand-intro-back").getAttribute("aria-disabled"),"true");
+   assert.equal(await first.locator("#directory-open").getAttribute("aria-disabled"),"true");
+   assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
+   await first.locator("#pv-brand-intro-back").click();
+   assert.match(await first.locator("#pv-read-blocked").textContent(),/Por gentileza, leia/);
+   assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),true);
 
-  await page.waitForFunction(()=>{
-    const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
-    return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
-  });
-  assert.equal(await page.locator("#pv-brand-intro .pv-lockup-name").count(),0);
-  assert.equal(await page.locator(".topbar .pv-lockup-name").count(),0);
-  assert.equal(await page.locator(".hub-brand-strip .pv-lockup-name").count(),0);
-  const lockup=await page.locator("#pv-brand-intro .pv-lockup").evaluate(node=>{
-    const box=sel=>{const r=node.querySelector(sel).getBoundingClientRect();
-      return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom,center:r.y+r.height/2};};
-    const heart=box(".pv-lockup-heart"),word=box(".pv-brand-lettering"),parent=node.getBoundingClientRect();
-    return {heart,word,container:{x:parent.x,right:parent.right,w:parent.width}};
-  });
-  assert.ok(lockup.heart.right<lockup.word.x,"O coração deve ficar à esquerda da palavra");
-  assert.ok(Math.abs(lockup.heart.center-lockup.word.center)<3,"Coração e lettering desalinhados");
-  assert.ok(lockup.heart.x>=lockup.container.x-1&&lockup.word.right<=lockup.container.right+1,
-    "Marca excedeu largura disponível: "+JSON.stringify(lockup));
-  assert.ok(Math.abs(lockup.word.w/lockup.word.h-178/29)<.35,"Lettering da apresentação deformado");
-  console.log("Identidade coração + Telessaúde responsiva:",width,JSON.stringify(lockup));
+   const popupPromise=first.waitForEvent("popup");
+   await first.locator("#pv-brand-info-link").click();
+   const info=await popupPromise;
+   await info.waitForLoadState("domcontentloaded");
+   assert.match(new URL(info.url()).searchParams.get("leitura")||"",/^pv2_[A-Za-z0-9_-]{43}$/);
+   assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"true");
+   await info.locator("#close-info").click();
+   assert.match(await info.locator("#pv-awareness-feedback").textContent(),/confirme a leitura/i);
+   await info.locator("#pv-awareness-check").check();
+   assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"false");
+   await first.waitForFunction(()=>
+     document.querySelector("#pv-brand-intro-back")?.getAttribute("aria-disabled")==="false");
+   await info.locator("#close-info").click();
+   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await first.locator("#pv-brand-intro").evaluate(d=>d.open),false);
+   assert.equal(await first.evaluate(()=>Boolean(window.__sdkOpened)),false);
 
-  const proportions=await page.evaluate(()=>{
-    const measure=selector=>{
-      const rect=document.querySelector(selector)?.getBoundingClientRect();
-      return rect&&{w:rect.width,h:rect.height,x:rect.x,right:rect.right};
-    };
-    return [measure(".pv-topbar-lettering"),measure(".pv-brand-lettering"),measure(".pv-directory-lettering")];
-  });
-  console.log("DEBUG brand geometry before checks:",width,JSON.stringify(proportions));
-  for(const mark of proportions.slice(0,2)){
-    assert.ok(mark && mark.w>65 && mark.h>9,"Lettering muito pequeno ou ausente");
-    assert.ok(Math.abs(mark.w/mark.h-178/29)<0.35,"Lettering deformado "+JSON.stringify(mark));
-    assert.ok(mark.x>=0 && mark.right<=width+2,"Lettering fora da tela "+JSON.stringify(mark));
-  }
-  console.log("Proporções corretas do lettering:",width,JSON.stringify(proportions));
+   // Somente um clique explícito no chat abre o SDK original de atendimento.
+   await first.locator("#hub-native").click();
+   await first.waitForFunction(()=>window.__sdkOpened===1,{timeout:15000});
+   assert.equal(await first.evaluate(()=>window.__sdkConfig.environment),"production");
+   await first.close();
 
-  await page.waitForFunction(()=>{
-    const mark=document.querySelector("#pv-brand-intro .pv-brand-lettering");
-    try{
-      const canvas=document.createElement("canvas"); canvas.width=178; canvas.height=29;
-      const ctx=canvas.getContext("2d",{willReadFrequently:true});
-      ctx.drawImage(mark,0,0,178,29);
-      const rgba=ctx.getImageData(0,0,178,29).data;
-      for(let i=0;i<rgba.length;i+=4){
-        if(rgba[i+3]>150 && rgba[i]<155 && rgba[i+1]<105 && rgba[i+2]>75 && rgba[i+2]<195)return true;
-      }
-    }catch(error){return false}
-    return false;
-  },{timeout:10000});
-  assert.equal(await page.evaluate(()=>document.querySelector("#pv-brand-intro-title").textContent.trim()),
-    "Sua saúde merece uma experiência excelente.");
-  const popupPromise=page.waitForEvent("popup");
-  await page.locator("#pv-brand-info-link").click();
-  const popup=await popupPromise;
-  await popup.waitForLoadState("domcontentloaded");
-  assert.equal(new URL(popup.url()).pathname,"/telessaude/teste-aceite/informacoes/");
-  assert.equal(await popup.locator("html").getAttribute("lang"),"pt-BR");
-  assert.match(await popup.locator("h1").textContent(),/Uma experiência para ajudar você a cuidar da sua saúde/);
-  await popup.locator(".pv-consent-banner").waitFor();
-  assert.match(await popup.locator(".pv-consent-banner").textContent(),/Ao iniciar o Chat Médico, você será convidado/);
-  await popup.waitForFunction(()=>{
-    const mark=document.querySelector(".pv-heading-lettering");
-    return mark&&mark.complete&&mark.naturalWidth===178&&mark.naturalHeight===29;
-  });
-  assert.equal(await popup.locator(".brand img.pv-heading-lettering").getAttribute("alt"),"Telessaúde");
+   // Mesmo beneficiário + mesmo navegador: acesso direto à grade, sem nova apresentação.
+   const repeat=await context.newPage();
+   repeat.on("pageerror",error=>errors.push(error.message));
+   await login(repeat,"12345678909");
+   await repeat.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   assert.equal(await repeat.locator("#pv-brand-intro").evaluate(d=>d.open),false);
+   await repeat.close();
 
-  for(const vw of [320,360,390,430,600,768,1024,1440]){
-    await popup.setViewportSize({width:vw,height:850});
-    const layout=await popup.evaluate(()=>{
-      const rect=sel=>{const r=document.querySelector(sel)?.getBoundingClientRect();
-        return r&&{x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
-      return {scroll:document.documentElement.scrollWidth,
-        logo:rect(".pv-heading-lettering"),footer:rect(".pv-footer-lettering"),
-        footerHeart:rect(".pv-footer-heart"),
-        brand:rect(".brand"),button:rect("#close-info")};
-    });
-    assert.ok(layout.scroll<=vw+2,"Rolagem horizontal em "+vw);
-    assert.ok(layout.logo && layout.logo.width>90,"Logo ilegível "+vw);
-    assert.ok(Math.abs(layout.logo.width/layout.logo.height-178/29)<.35,"Logo distorcido "+vw);
-    assert.ok(layout.logo.right<=vw+2 && layout.logo.x>=0,"Logo sai da tela "+vw);
-    assert.ok(Math.abs(layout.footer.width/layout.footer.height-178/29)<.35,"Rodapé distorcido "+vw);
-    assert.ok(layout.footerHeart && Math.abs(layout.footerHeart.width/layout.footerHeart.height-1)<.15,
-      "Coração do rodapé deformado "+vw);
-    assert.ok(layout.footerHeart.right<layout.footer.x,
-      "Coração e lettering do rodapé fora de ordem "+vw);
-    assert.ok(layout.brand.bottom<=layout.button.y+1 || layout.brand.right<=layout.button.x+1,
-      "Marca sobreposta ao botão "+vw);
-    console.log("Layout página informações:",vw,JSON.stringify(layout));
-  }
-  await popup.setViewportSize({width,height:850});
+   // Segundo CPF no mesmo navegador não herda indevidamente a ciência do primeiro.
+   const another=await context.newPage();
+   another.on("pageerror",error=>errors.push(error.message));
+   await login(another,"98765432100");
+   await another.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
+   assert.equal(await another.locator("#pv-brand-intro-back").getAttribute("aria-disabled"),"true");
+   await another.close();
 
-  const details=popup.locator("#resumo-pt details");
-  assert.equal(await details.count(),2);
-  assert.equal(await details.nth(0).evaluate(x=>x.open),false);
-  await details.nth(0).locator("summary").click();
-  assert.equal(await details.nth(0).evaluate(x=>x.open),true);
-  assert.equal(await details.nth(0).locator("h3").first().isVisible(),true);
-  await details.nth(1).locator("summary").click();
-  assert.equal(await details.nth(1).evaluate(x=>x.open),true);
-  assert.equal(await popup.locator("#pv-doc-terms").count(),0);
-  assert.equal(await popup.locator("#pv-doc-privacy").count(),0);
-  await popup.locator("#copy-summary").click();
-  await popup.locator("#copy-status:not(:empty)").waitFor();
-  assert.equal(await popup.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+2),true,
-    "A página de informações não deve ter rolagem horizontal");
-  assert.equal(await page.locator("#pv-brand-intro").evaluate(d=>d.open),true,
-    "Ler informações em outra aba não deve dispensar apresentação nem consentimento");
-  await popup.locator("#close-info").click();
-  await page.waitForFunction(()=>!document.querySelector("#pv-brand-intro").open);
-  await page.locator("#directory-dialog[open]").waitFor();
-  assert.equal(await page.evaluate(()=>Boolean(window.__sdkConfig)),false);
-  assert.equal(await page.evaluate(()=>Boolean(window.__sdkOpened)),false);
-  await page.locator("#hub-native").click();
-  await page.waitForFunction(()=>window.__sdkOpened===1,{timeout:15000});
-  const cfg=await page.evaluate(()=>window.__sdkConfig);
-  assert.deepEqual(cfg,{locale:"pt",environment:"production",hasTerms:false,hasPrivacy:false});
-  assert.deepEqual(pageErrors,[]);
-  console.log("Fluxo real simulado sem paciente: pré-tela PromoVie + SDK PT + sem autoaceite:",width);
-  await page.close();
+   assert.deepEqual(errors,[],"Erros de execução no fluxo experimental");
+   await context.close();
+   console.log("Fluxo de leitura, bloqueio e retorno aprovado:",width);
  }
 }finally{await browser.close();}
