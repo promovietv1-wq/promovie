@@ -78,7 +78,7 @@ try{
    await info.locator("#back-info").waitFor();
    assert.equal(await info.locator("#info-title").count(),0,"Introdução redundante deve sair");
    assert.equal(await info.locator(".hero .intro").count(),0);
-   const src=await first.locator("#pv-information-frame").getAttribute("src");
+   const src=await first.locator("#pv-information-frame").evaluate(frame=>frame.contentWindow.location.href);
    assert.match(new URL(src,base).searchParams.get("leitura")||"",/^pv2_[A-Za-z0-9_-]{43}$/);
    assert.equal(await info.locator("#close-info").getAttribute("aria-disabled"),"true");
    await info.locator("#back-info").click();
