@@ -306,6 +306,8 @@
         </div>
         <form id="new-form" hidden autocomplete="off">
           <h2>Novo beneficiário</h2>
+          <p class="muted">Para preencher tudo de uma vez, copie a mensagem recebida e cole no campo <strong>Nome completo</strong>. Nome, CPF, e-mail e telefone serão distribuídos automaticamente. Confira os dados antes de cadastrar.</p>
+          <p id="paste-status" class="info" role="status" aria-live="polite" hidden></p>
           <p class="muted">Cadastre o beneficiário e escolha entre ativar diretamente no Token PromoVie ou salvar apenas no arquivo da PromoVie. A ativação pode utilizar uma licença do plano 345 e depende da habilitação administrativa prévia.</p>
           <label for="new-name">Nome completo (exatamente como consta no documento)</label>
           <input id="new-name" required maxlength="100" autocomplete="off" placeholder="Nome e sobrenome">
@@ -449,7 +451,59 @@
     $('new-form').hidden=section!=='new';
     $('record-detail').hidden=section!=='detail';
   }
-  $('add-button').addEventListener('click',()=>{toggle('new');$('new-form').reset();$('new-name').focus();});
+  // Colagem inteligente somente no formulário privado, sem envio ou armazenamento automático.
+  function parseBeneficiaryPaste(source){
+    const result={};
+    let awaiting='';
+    const lines=String(source||'').split(/\r?\n/).map(s=>s.replace(/\*/g,'').trim()).filter(Boolean);
+    for(const line of lines){
+      const matched=line.match(/^(nome(?:\s+completo)?|cpf|e[\s-]?mail(?:\s+do\s+benefici[aá]rio)?|telefone(?:\s+com\s+ddd)?|celular(?:\s+com\s+ddd)?)\s*:?\s*(.*)$/i);
+      if(matched){
+        const label=matched[1].toLowerCase();
+        awaiting=label.startsWith('nome')?'nome':label==='cpf'?'cpf':label.startsWith('e')?'email':'telefone';
+        result[awaiting]=matched[2].trim();
+      }else if(awaiting&&!result[awaiting]){
+        result[awaiting]=line;
+        awaiting='';
+      }
+    }
+    const cpf=String(result.cpf||'').replace(/\D/g,'');
+    const phone=String(result.telefone||'').replace(/\D/g,'');
+    const email=String(result.email||'').trim();
+    const nome=String(result.nome||'').trim();
+    if(nome.length<3||nome.length>100||!nome.includes(' ')||
+      cpf.length!==11||!validCPFForPaste(cpf)||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||
+      ![10,11].includes(phone.length))return null;
+    return {nome,cpf,email,telefone:result.telefone.trim()};
+  }
+  function validCPFForPaste(cpf){
+    if(/^(\d)\1{10}$/.test(cpf))return false;
+    for(let n=9;n<=10;n++){
+      let sum=0;for(let i=0;i<n;i++)sum+=Number(cpf[i])*(n+1-i);
+      let digit=(sum*10)%11;if(digit===10)digit=0;
+      if(digit!==Number(cpf[n]))return false;
+    }
+    return true;
+  }
+  $('new-form').addEventListener('paste',event=>{
+    const text=event.clipboardData?.getData('text/plain')||'';
+    if(!text.includes('\n')||!/(?:^|\n)\s*\*?\s*cpf\b/i.test(text)||
+       !/(?:^|\n)\s*\*?\s*(?:telefone|celular)\b/i.test(text)||
+       !/(?:^|\n)\s*\*?\s*nome\b/i.test(text))return;
+    event.preventDefault();
+    const data=parseBeneficiaryPaste(text);
+    if(!data){
+      msg('paste-status','Não foi possível reconhecer os quatro campos. Confira o formato, o CPF e o telefone antes de tentar novamente.','error');
+      return;
+    }
+    $('new-name').value=data.nome;
+    $('new-cpf').value=data.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+    $('new-email').value=data.email;
+    $('new-phone').value=data.telefone;
+    msg('paste-status','Os quatro campos foram preenchidos. Confira os dados antes de salvar ou ativar.','ok');
+  });
+  $('add-button').addEventListener('click',()=>{toggle('new');$('new-form').reset();msg('paste-status','');$('new-name').focus();});
   $('cancel-button').addEventListener('click',()=>toggle('empty'));
   $('new-form').addEventListener('submit',async e=>{
     e.preventDefault();if(busy)return;
