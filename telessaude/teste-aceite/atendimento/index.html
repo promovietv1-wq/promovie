@@ -1013,6 +1013,32 @@ html body .mediquo-launcher{display:none!important}
       }).finally(()=>{introRunning=null;});
       return introRunning;
     }
+    // O Voltar na raiz de Especialidades retorna à apresentação anterior.
+    // Somente o X encerra a experiência completa, sem nova autenticação.
+    let introReopenedFromDirectory=false;
+    window.addEventListener("pv:telesaude:show-intro",()=>{
+      if(intro.open||informationDialog.open)return;
+      const directoryDialog=document.getElementById("directory-dialog");
+      if(directoryDialog?.open)directoryDialog.close();
+      introReopenedFromDirectory=true;
+      refreshReadGate();
+      function returnToSpecialties(){
+        if(!refreshReadGate()){showReadReminder();return;}
+        specialtiesButton.removeEventListener("click",returnToSpecialties);
+        intro.removeEventListener("cancel",onReturnCancel);
+        introReopenedFromDirectory=false;
+        if(intro.open)intro.close();
+        if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+        window.dispatchEvent(new Event("pv:telesaude:rearm-back"));
+      }
+      function onReturnCancel(event){
+        event.preventDefault();
+        returnToSpecialties();
+      }
+      specialtiesButton.addEventListener("click",returnToSpecialties);
+      intro.addEventListener("cancel",onReturnCancel);
+      intro.showModal();
+    });
     // Confirmação recebida apenas de outra aba da MESMA origem e para esta
     // referência temporária de leitura; não transporta credenciais médicas.
     if(typeof BroadcastChannel==="function"){
@@ -1033,12 +1059,23 @@ html body .mediquo-launcher{display:none!important}
     }
     // Voltar do smartphone, desktop ou navegador na primeira apresentação.
     // Nas telas clínicas, quem navega permanece sendo o widget Mediquo.
-    window.addEventListener("popstate",()=>{
-      // Prioridade absoluta para fechar a leitura, sem sair da sessão.
-      if(informationDialog.open){closeInformation();return;}
+    window.addEventListener("popstate",event=>{
+      // Informação dentro de moldura: Voltar fecha a moldura, sem novo login.
+      if(informationDialog.open){
+        closeInformation();
+        event.stopImmediatePropagation();
+        return;
+      }
       if(!intro.open)return;
+      if(introReopenedFromDirectory){
+        if(refreshReadGate())specialtiesButton.click();
+        event.stopImmediatePropagation();
+        return;
+      }
+      // Na primeira apresentação o histórico anterior é a tela de acesso.
       if(refreshReadGate())specialtiesButton.click();
       else window.location.replace("/telessaude/teste-aceite/");
+      event.stopImmediatePropagation();
     });
     window.addEventListener("focus",refreshReadGate);
     if(acknowledgementKey)window.addEventListener("storage",event=>{
