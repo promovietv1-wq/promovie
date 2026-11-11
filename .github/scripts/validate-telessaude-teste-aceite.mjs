@@ -56,7 +56,7 @@ async function login(page,cpf){
 }
 
 try{
- for(const width of [390,1280]){
+ for(const width of [390,768,1280]){
    const context=await browser.newContext({viewport:{width,height:850}});
    await stubServices(context);
    const errors=[];
@@ -127,6 +127,13 @@ try{
    assert.match(first.url(),/\/telessaude\/teste-aceite\/atendimento\//);
    await first.locator("#pv-brand-intro-back").click();
    await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   // Voltar duas vezes deve navegar grade -> apresentação -> grade,
+   // sem redirecionar indevidamente à tela inicial de CPF.
+   await first.evaluate(()=>history.back());
+   await first.locator("#pv-brand-intro[open]").waitFor({timeout:10000});
+   await first.evaluate(()=>history.back());
+   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
+   assert.match(first.url(),/\/telessaude\/teste-aceite\/atendimento\//);
 
    // Ao navegar para uma especialidade, Voltar restaura a grade anterior.
    await first.locator('button.hub-category[data-key="Psicologia"]').click();
