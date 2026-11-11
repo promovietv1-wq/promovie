@@ -706,6 +706,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offse
   .main:not(.phone-expanded) .patient-login{box-shadow:0 10px 24px rgba(48,28,98,.065)}
 }
 
+/* Assinatura serifada do atendimento experimental, reutilizada no acesso. */
+.patient-login-title .pv-access-serif{
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:700;
+  font-style:normal;
+  letter-spacing:-.045em;
+  white-space:nowrap;
+}
 </style>
 <link rel="stylesheet" href="/telesaude/portal-premium.css?v=20261106-2">
 <style>
@@ -963,6 +971,15 @@ html[data-pwa-device="desktop"] .pwa-install-desktop{display:flex}
     for(const [selector,value] of Object.entries(names)){
       const element=document.querySelector(selector);
       if(element)element.textContent=value;
+    }
+    // Reutiliza a assinatura serifada já aprovada no cabeçalho do atendimento
+    // experimental, sem afetar o título da versão principal.
+    const accessHeading=document.querySelector(".patient-login-title");
+    if(accessHeading){
+      const brand=document.createElement("span");
+      brand.className="pv-access-serif";
+      brand.textContent="Telessaúde";
+      accessHeading.replaceChildren(document.createTextNode("Acesse sua "),brand);
     }
     document.querySelector(".phone")?.setAttribute("aria-label",
       "Prévia ilustrativa dos serviços de Telessaúde. Selecione um serviço para saber como acessar");
