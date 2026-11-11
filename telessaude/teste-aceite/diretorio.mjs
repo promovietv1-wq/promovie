@@ -470,7 +470,8 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  function closeCurricula(){
    if(!curriculaLayer.open)return;
    curriculaLayer.close();
-   curriculaFrame.removeAttribute("src");
+   // Não descarregar o iframe por src="", pois isso acrescenta entradas
+   // ocultas ao histórico conjunto e pode consumir o botão Voltar.
    restorePane(curriculumReturnPane);
  }
  function backFromCurricula(){
@@ -499,7 +500,9 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(dialog.open)dialog.close();
    const previous=history.state&&typeof history.state==="object"?history.state:{};
    history.pushState({...previous,pvCurriculaOverlay:true},"",location.href);
-   curriculaFrame.src="/telesaude/curriculos/";
+   // Substitui a navegação interna, preservando somente um nível no
+   // histórico do atendimento para Voltar do smartphone e desktop.
+   curriculaFrame.contentWindow.location.replace("/telesaude/curriculos/");
    curriculaLayer.showModal();
  });
  trigger.hidden=false;trigger.addEventListener("click",reopen);
