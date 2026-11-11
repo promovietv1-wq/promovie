@@ -293,6 +293,14 @@ html body .mediquo-launcher{display:none!important}
 .pv-brand-intro-body button{width:100%;min-height:49px;border-radius:13px;font:750 14px Inter,Arial,sans-serif;cursor:pointer}
 #pv-brand-intro-back{border:1px solid #4b0c8f;color:#fff;background:linear-gradient(115deg,#4b0c8f,#7334d8)}
 #pv-brand-intro-back:hover{filter:brightness(1.08)}
+/* A confirmação de leitura controla apenas esta apresentação PromoVie. */
+#pv-brand-intro-back[aria-disabled="true"],
+.topbar #directory-open[aria-disabled="true"]{
+  background:#dedede!important;color:#666!important;border-color:#bcbcbc!important;
+  filter:grayscale(1)!important;cursor:not-allowed;opacity:.76
+}
+#pv-brand-intro-back[aria-disabled="true"]:hover{filter:grayscale(1)!important}
+#pv-read-blocked{font:600 12px/1.55 Inter,Arial,sans-serif;color:#67349c;margin:0;text-align:center}
 .pv-brand-info-card{width:100%;display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:8px;background:linear-gradient(135deg,#f6f1ff,#fcfaff);border:1px solid #e7d9f8;border-radius:16px;padding:15px 17px}
 .pv-brand-info-card strong{font-size:13px;line-height:1.4;font-weight:800;color:#4b0c8f}
 .pv-brand-info-card p{font-size:12px;line-height:1.55;color:#635273;margin:0}
@@ -486,9 +494,10 @@ html body .mediquo-launcher{display:none!important}
 
 <p id="pv-brand-intro-desc">A Telessaúde PromoVie reúne acesso a profissionais de saúde, orientação e suporte em uma experiência integrada e organizada para você.</p>
 <div class="pv-brand-info-card" aria-label="Informações em português sobre o atendimento">
-  <a id="pv-brand-info-link" href="/telessaude/teste-aceite/informacoes/" target="_blank" rel="noopener noreferrer">Informações sobre o seu atendimento <span aria-hidden="true">↗</span></a>
+  <a id="pv-brand-info-link" href="/telessaude/teste-aceite/informacoes/" target="_blank" rel="noopener noreferrer">Informações necessárias para o seu atendimento <span aria-hidden="true">↗</span></a>
 </div>
-<button type="button" id="pv-brand-intro-back">Especialidades</button>
+<button type="button" id="pv-brand-intro-back" aria-disabled="true">Especialidades</button>
+<p id="pv-read-blocked" role="status" aria-live="polite" hidden></p>
 <small>Os atendimentos clínicos são realizados por profissionais habilitados, conforme suas atribuições e responsabilidades.</small>
 </div></dialog>
 <script defer src="/telesaude/agendamentos.js?v=20261107-1"></script>
@@ -845,43 +854,97 @@ html body .mediquo-launcher{display:none!important}
       }
       return openPromise;
     }
-    // Apresentação anterior à escolha clínica. Não registra aceite nem altera SDK.
-    let introViewed=false, introRunning=null;
+    // A etapa educativa é opcional somente após a declaração de leitura
+    // neste dispositivo e para o mesmo beneficiário autenticado.
+    // NÃO modifica termos, consentimento, autenticação ou serviços da Médiquo.
+    const readingReference=/^pv2_[A-Za-z0-9_-]{43}$/.test(handoff.readingReference||"")?
+      handoff.readingReference:null;
+    const acknowledgementKey=readingReference?
+      "promovie:telessaude:teste-aceite:leitura:v2:"+readingReference:null;
+    const intro=document.getElementById("pv-brand-intro");
+    const specialtiesButton=document.getElementById("pv-brand-intro-back");
+    const topSpecialties=document.getElementById("directory-open");
+    const feedback=document.getElementById("pv-read-blocked");
+    const infoLink=document.getElementById("pv-brand-info-link");
+    if(readingReference){
+      const infoUrl=new URL(infoLink.href,location.origin);
+      infoUrl.searchParams.set("leitura",readingReference);
+      infoLink.href=infoUrl.pathname+infoUrl.search;
+    }
+    let introViewed=false,introRunning=null,acknowledgedInSession=false;
+    const hasRead=()=>{
+      if(acknowledgedInSession)return true;
+      try{return Boolean(acknowledgementKey&&localStorage.getItem(acknowledgementKey)==="1")}
+      catch{return false}
+    };
+    const refreshReadGate=()=>{
+      const locked=!hasRead();
+      specialtiesButton.setAttribute("aria-disabled",String(locked));
+      if(topSpecialties)topSpecialties.setAttribute("aria-disabled",String(locked));
+      if(!locked){feedback.hidden=true;feedback.textContent="";}
+      return !locked;
+    };
+    function showReadReminder(){
+      feedback.textContent="Por gentileza, leia as informações sobre o seu atendimento no botão acima.";
+      feedback.hidden=false;
+      specialtiesButton.focus({preventScroll:true});
+    }
+    topSpecialties?.addEventListener("click",event=>{
+      if(refreshReadGate())return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if(!intro.open)ensurePromoVieIntro();
+      showReadReminder();
+    },true);
     async function ensurePromoVieIntro(){
-      if(introViewed)return;
+      if(introViewed||hasRead()){introViewed=true;return;}
       if(introRunning)return introRunning;
-      const intro=document.getElementById("pv-brand-intro");
-      const back=document.getElementById("pv-brand-intro-back");
-      introRunning=new Promise((resolve,reject)=>{
-        function finish(){
-          back.removeEventListener("click",onBack);
+      refreshReadGate();
+      introRunning=new Promise(resolve=>{
+        function onSpecialties(){
+          if(!refreshReadGate()){showReadReminder();return;}
+          specialtiesButton.removeEventListener("click",onSpecialties);
           intro.removeEventListener("cancel",onCancel);
           if(intro.open)intro.close();
           introViewed=true;
-          reject(new Error("PV_BRAND_INTRO_CANCELLED"));
+          resolve();
+          if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
         }
-        function onBack(){finish();}
-        function onCancel(event){event.preventDefault();finish();}
-        back.addEventListener("click",onBack,{once:true});
+        function onCancel(event){
+          event.preventDefault();
+          if(!refreshReadGate())showReadReminder();
+        }
+        specialtiesButton.addEventListener("click",onSpecialties);
         intro.addEventListener("cancel",onCancel);
         intro.showModal();
       }).finally(()=>{introRunning=null;});
       return introRunning;
     }
-    // Navegação entre abas restrita ao comando de voltar às Especialidades.
+    // Confirmação recebida apenas de outra aba da MESMA origem e para esta
+    // referência temporária de leitura; não transporta credenciais médicas.
     if(typeof BroadcastChannel==="function"){
       const channel=new BroadcastChannel("pv-telessaude-teste-informacoes-v1");
       channel.addEventListener("message",event=>{
-        if(event.data?.action!=="specialties")return;
-        const intro=document.getElementById("pv-brand-intro");
-        if(intro?.open)document.getElementById("pv-brand-intro-back")?.click();
-        else{
-          const specialties=document.getElementById("directory-open");
-          if(specialties&&!specialties.hidden)specialties.click();
+        if(!readingReference||event.data?.readingReference!==readingReference)return;
+        if(event.data?.action==="acknowledged")acknowledgedInSession=true;
+        if(event.data?.action==="revoked")acknowledgedInSession=false;
+        if(event.data?.action==="specialties"){
+          if(!refreshReadGate()){showReadReminder();return;}
+          if(intro.open)specialtiesButton.click();
+          else if(topSpecialties&&!topSpecialties.hidden)topSpecialties.click();
+          window.focus();
+          return;
         }
-        window.focus();
+        refreshReadGate();
       });
     }
+    window.addEventListener("focus",refreshReadGate);
+    if(acknowledgementKey)window.addEventListener("storage",event=>{
+      if(event.key===acknowledgementKey){
+        acknowledgedInSession=false;
+        refreshReadGate();
+      }
+    });
     // Os métodos e tokens do SDK permanecem idênticos à versão principal.
     const medicalBridge={
       open:async()=>{await ensurePromoVieIntro();return activateWidget();},
@@ -909,11 +972,15 @@ html body .mediquo-launcher{display:none!important}
       status.hidden=true;
       // Pré-carrega SDK e autenticação, sem widget.open() e sem mostrar a lista médica.
       // Qualquer falha é comunicada quando o beneficiário optar por abrir o Chat.
-      // A marca aparece uma vez antes de abrir qualquer atendimento.
-      // Depois de voltar às Especialidades, a escolha clínica abre o SDK original.
-      ensurePromoVieIntro().catch(error=>{
-        if(error?.message!=="PV_BRAND_INTRO_CANCELLED")console.error("Apresentação indisponível",error);
-      });
+      // O primeiro acesso solicita a leitura; os próximos, para o mesmo
+      // beneficiário e navegador, abrem diretamente Especialidades.
+      refreshReadGate();
+      if(hasRead()){
+        introViewed=true;
+        topSpecialties.click();
+      }else{
+        ensurePromoVieIntro().catch(error=>console.error("Apresentação indisponível",error));
+      }
     }catch{
       errorState("Não conseguimos carregar as especialidades. Retorne ao acesso e tente novamente.");
     }
