@@ -897,8 +897,12 @@ html body .mediquo-launcher{display:none!important}
       infoUrl.searchParams.set("leitura",readingReference);
       infoLink.href=infoUrl.pathname+infoUrl.search;
     }
+    // Modo revisão: apresentação exibida novamente a cada novo acesso.
+    // Ativar retenção do aceite somente após aprovação final do layout.
+    const PREVIEW_ALWAYS_SHOW=true;
     let introViewed=false,introRunning=null,acknowledgedInSession=false;
     const hasRead=()=>{
+      if(PREVIEW_ALWAYS_SHOW)return acknowledgedInSession;
       if(acknowledgedInSession)return true;
       try{return Boolean(acknowledgementKey&&localStorage.getItem(acknowledgementKey)==="1")}
       catch{return false}
