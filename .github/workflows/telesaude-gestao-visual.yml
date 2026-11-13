@@ -140,7 +140,7 @@ jobs:
               }));
               assert.ok(admin.scroll<=admin.viewport+1,'Rolagem horizontal no painel em '+width+': '+JSON.stringify(admin));
               await page.screenshot({path:'/tmp/pv-prints/painel-'+width+'.png',fullPage:true});
-              const pastePayload='Nome completo: Maria Exemplo\\nCPF: 529.982.247-25\\nE-mail utilizado: maria@example.com\\nTelefone com DDD: (27) 99999-9999';
+              const pastePayload='Nome completo: Maria Exemplo\nCPF: 529.982.247-25\nE-mail utilizado: maria@example.com\nTelefone com DDD: (27) 99999-9999';
               await page.locator('#new-name').evaluate((input,payload)=>{
                 const transfer=new DataTransfer();
                 transfer.setData('text/plain',payload);
