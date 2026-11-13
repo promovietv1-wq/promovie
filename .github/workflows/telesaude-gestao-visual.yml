@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'telesaude/gestao/index.html'
+      - 'telessaude/gestao/index.html'
       - 'telesaude/index.html'
       - 'telesaude/atendimento/index.html'
       - 'telesaude/space-entry.js'
@@ -139,7 +140,41 @@ jobs:
               }));
               assert.ok(admin.scroll<=admin.viewport+1,'Rolagem horizontal no painel em '+width+': '+JSON.stringify(admin));
               await page.screenshot({path:'/tmp/pv-prints/painel-'+width+'.png',fullPage:true});
-              console.log('Layout responsivo aprovado:',width+'px');
+              const pastePayload='Nome completo: Maria Exemplo\\nCPF: 529.982.247-25\\nE-mail utilizado: maria@example.com\\nTelefone com DDD: (27) 99999-9999';
+              await page.locator('#new-name').evaluate((input,payload)=>{
+                const transfer=new DataTransfer();
+                transfer.setData('text/plain',payload);
+                input.dispatchEvent(new ClipboardEvent('paste',{bubbles:true,cancelable:true,clipboardData:transfer}));
+              },pastePayload);
+              assert.equal(await page.locator('#new-name').inputValue(),'Maria Exemplo');
+              assert.equal(await page.locator('#new-cpf').inputValue(),'529.982.247-25');
+              assert.equal(await page.locator('#new-email').inputValue(),'maria@example.com');
+              assert.equal(await page.locator('#new-phone').inputValue(),'(27) 99999-9999');
+              assert.match(await page.locator('#paste-status').innerText(),/Os quatro campos foram preenchidos/);
+              // A URL /telessaude/gestao/ deve oferecer exatamente a mesma colagem.
+              const alias=await browser.newPage({viewport:{width,height:850}});
+              await alias.route('https://backend.promovie.tv.br/**',route=>route.fulfill({
+                status:401,contentType:'application/json',
+                headers:{'Access-Control-Allow-Origin':'https://www.promovie.tv.br','Access-Control-Allow-Credentials':'true'},
+                body:JSON.stringify({error:'Sessão de teste, sem acesso a dados reais.'})
+              }));
+              await alias.goto('http://127.0.0.1:8765/telessaude/gestao/',{waitUntil:'load'});
+              await alias.evaluate(()=>{
+                document.querySelector('#login-card').hidden=true;
+                document.querySelector('#dashboard').hidden=false;
+              });
+              await alias.locator('#add-button').click();
+              await alias.locator('#new-name').evaluate((input,payload)=>{
+                const transfer=new DataTransfer();
+                transfer.setData('text/plain',payload);
+                input.dispatchEvent(new ClipboardEvent('paste',{bubbles:true,cancelable:true,clipboardData:transfer}));
+              },pastePayload);
+              assert.equal(await alias.locator('#new-name').inputValue(),'Maria Exemplo');
+              assert.equal(await alias.locator('#new-cpf').inputValue(),'529.982.247-25');
+              assert.equal(await alias.locator('#new-email').inputValue(),'maria@example.com');
+              assert.equal(await alias.locator('#new-phone').inputValue(),'(27) 99999-9999');
+              await alias.close();
+              console.log('Layout e colagem inteligente aprovados:',width+'px');
               await page.close();
             }
           }finally{await browser.close();}

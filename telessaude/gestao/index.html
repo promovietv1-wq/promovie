@@ -457,7 +457,7 @@
     let awaiting='';
     const lines=String(source||'').split(/\r?\n/).map(s=>s.replace(/\*/g,'').trim()).filter(Boolean);
     for(const line of lines){
-      const matched=line.match(/^(nome(?:\s+completo)?|cpf|e[\s-]?mail(?:\s+do\s+benefici[aá]rio)?|telefone(?:\s+com\s+ddd)?|celular(?:\s+com\s+ddd)?)\s*:?\s*(.*)$/i);
+      const matched=line.match(/^(nome(?:\s+completo)?|cpf|e[\s-]?mail(?:\s+(?:do\s+benefici[aá]rio|utilizado))?|telefone(?:\s+com\s+ddd)?|celular(?:\s+com\s+ddd)?)\s*:?\s*(.*)$/i);
       if(matched){
         const label=matched[1].toLowerCase();
         awaiting=label.startsWith('nome')?'nome':label==='cpf'?'cpf':label.startsWith('e')?'email':'telefone';
