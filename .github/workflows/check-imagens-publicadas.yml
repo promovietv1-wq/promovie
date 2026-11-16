@@ -1,0 +1,66 @@
+name: Conferir imagens publicadas no site PromoVie
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-imagens-publicadas.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conferir paginas publicas e as 27 imagens WebP sem alterar dados
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          from urllib.request import Request,urlopen
+          from urllib.error import HTTPError
+          import time
+          base='https://www.promovie.tv.br'
+          pages=[
+            ('/conecta-gestao/',12),
+            ('/experiencia/',12),
+            ('/audiovisual/',27),
+            ('/',0),
+            ('/app/',0),
+            ('/telessaude/',0),
+            ('/telesaude/',0),
+            ('/telessaude/gestao/',0),
+          ]
+          class ImageExtractor(HTMLParser):
+            def __init__(self):
+              super().__init__()
+              self.urls=[]
+            def handle_starttag(self,tag,attrs):
+              if tag!='img':return
+              src=dict(attrs).get('src','')
+              if src.startswith('/audiovisual/thumbs/'): self.urls.append(src)
+          def download(path):
+            req=Request(base+path,headers={'User-Agent':'Mozilla/5.0 (compatible; PromoVieSiteAudit/1.0)'})
+            with urlopen(req,timeout=25) as response:
+              status=response.status
+              content_type=response.headers.get('content-type','')
+              payload=response.read()
+              return status,content_type,payload
+          all_local=set()
+          for path,expected in pages:
+            status,typ,payload=download(path)
+            assert status==200 and 'html' in typ.lower(),(path,status,typ)
+            parser=ImageExtractor()
+            parser.feed(payload.decode('utf-8'))
+            assert len(parser.urls)==expected,(path,'expected',expected,'actual',len(parser.urls))
+            all_local.update(parser.urls)
+            print('PASS page',path,'HTML',status,'portfolio thumbs',len(parser.urls),flush=True)
+          assert len(all_local)==27,('Expected 27 distinct thumbs',len(all_local))
+          for index,path in enumerate(sorted(all_local),1):
+            status,typ,payload=download(path)
+            assert status==200 and ('webp' in typ.lower() or payload[:4]==b'RIFF'),(path,status,typ)
+            assert len(payload)>400 and payload[:4]==b'RIFF' and payload[8:12]==b'WEBP',(path,len(payload))
+            print('PASS image',index,Path(path).name,len(payload),'bytes',flush=True)
+          print('PASS: 8 public pages and 27 published thumbnail assets',flush=True)
+          PY
