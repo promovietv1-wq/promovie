@@ -1,0 +1,34 @@
+name: Verificar carregamento de imagens do site
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'conecta-gestao/index.html'
+      - 'experiencia/index.html'
+      - 'audiovisual/index.html'
+      - 'audiovisual/thumbs/**'
+      - '.github/scripts/validate-image-performance.mjs'
+      - '.github/workflows/validate-image-performance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testar sintaxe
+        run: node --check .github/scripts/validate-image-performance.mjs
+      - name: Instalar navegador
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Testar imagens em celular e desktop sem alterar servicos externos
+        run: |
+          python -m http.server 8779 --bind 127.0.0.1 >/tmp/promovie-imagens.log 2>&1 &
+          sleep 2
+          node .github/scripts/validate-image-performance.mjs
