@@ -25,7 +25,19 @@ jobs:
           from io import BytesIO
           import re, time
           html=Path('audiovisual/index.html').read_text(encoding='utf-8')
-          urls=list(dict.fromkeys(re.findall(r'<img\\b[^>]*?src="(https://static\\.wixstatic\\.com/media/279d86_[^"]+?\\.jpg)"',html,re.I)))
+          from html.parser import HTMLParser
+          class ImageExtractor(HTMLParser):
+            def __init__(self):
+              super().__init__()
+              self.images=[]
+            def handle_starttag(self,tag,attrs):
+              if tag!='img': return
+              src=dict(attrs).get('src','')
+              if src.startswith('https://static.wixstatic.com/media/279d86_') and src.endswith('.jpg'):
+                self.images.append(src)
+          parser=ImageExtractor()
+          parser.feed(html)
+          urls=list(dict.fromkeys(parser.images))
           assert len(urls)==27, f'Esperadas 27 capas, encontradas {len(urls)}'
           folder=Path('audiovisual/thumbs')
           folder.mkdir(parents=True,exist_ok=True)
