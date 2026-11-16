@@ -9,7 +9,7 @@ const pages=[
 ];
 for(const entry of pages){
  const source=await readFile(entry.path,'utf8');
- const urls=[...source.matchAll(/src="(\\/audiovisual\\/thumbs\\/[^"]+\\.webp)"/g)].map(x=>x[1]);
+ const urls=[...source.matchAll(/src="([^"]+)"/g)].map(x=>x[1]).filter(url=>url.startsWith('/audiovisual/thumbs/')&&url.endsWith('.webp'));
  assert.equal(urls.length,entry.count,entry.url+' deve servir miniaturas locais');
  for(const url of urls){
   const image=await readFile('.'+url);
