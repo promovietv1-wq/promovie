@@ -24,6 +24,12 @@ assert.match(attendance,/environment:"production"/);
 assert.match(attendance,/accessToken:handoff\.accessToken/);
 assert.match(attendance,/Agendamentos e Suporte/);
 assert.match(attendance,/promovie-contato-whatsapp/);
+assert.match(attendance,/id="appointments-my-panel"/);
+assert.match(attendance,/href="https:\/\/painel-agendazap\.vercel\.app\/"\s+target="_blank"/);
+assert.ok(attendance.indexOf('<span>Agendar consulta</span>')<
+          attendance.indexOf('<span>Meus agendamentos</span>'));
+assert.ok(attendance.indexOf('<span>Meus agendamentos</span>')<
+          attendance.indexOf('<span>Dúvidas e orientações</span>'));
 assert.equal(manifest.start_url,"/telessaude/");
 assert.equal(manifest.scope,"/telessaude/");
 assert.equal(manifest.display,"browser");
