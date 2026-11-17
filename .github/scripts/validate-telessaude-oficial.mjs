@@ -219,7 +219,7 @@ try{
    await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
    await first.locator("#appointments-my-panel").click();
    await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
-   await myAppointmentsFrame.locator("#pv-appointments-back").click({force:true});
+   await myAppointmentsFrame.locator("#pv-appointments-back").evaluate(button=>button.click());
    await first.locator("#directory-dialog[open] #hub-categories:not([hidden])").waitFor({timeout:10000});
    assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
    // O botão nativo Voltar também restaura Especialidades.
