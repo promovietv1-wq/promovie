@@ -462,7 +462,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
  myAppointmentsLayer.innerHTML=[
    '<header class="pv-curricula-toolbar">',
    '<strong>Meus Agendamentos</strong>',
-   '<button type="button" class="pv-curricula-close" aria-label="Voltar a Agendamentos e Suporte">Voltar</button>',
+   '<button type="button" class="pv-curricula-close" aria-label="Voltar às especialidades">Voltar</button>',
    '</header>',
    '<iframe class="pv-curricula-frame" title="Meus Agendamentos em fundo claro" loading="lazy"></iframe>'
  ].join("");
@@ -475,17 +475,13 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(!myAppointmentsLayer.open)return;
    myAppointmentsLayer.close();
    myAppointmentsOpen=false;
-   // Retorna exatamente ao ponto de origem, sem refazer a autenticação.
-   if(myAppointmentsReturnTo==="appointments"){
-     if(dialog.open)dialog.close();
-     if(appointmentDialog&&!appointmentDialog.open)appointmentDialog.showModal();
-   }else if(myAppointmentsReturnTo==="chat"){
-     document.body.classList.remove("pv-navigation-mode");
-     document.documentElement.classList.add("pv-chat-mode");
-     chatShell?.removeAttribute("hidden");
-   }else{
-     restorePane(myAppointmentsReturnTo);
+   // Voltar sempre retorna diretamente à grade de Especialidades,
+   // sem reabrir Agendamentos e Suporte e sem encerrar a sessão médica.
+   if(appointmentDialog?.open){
+     suppressAppointmentDismissal=true;
+     appointmentDialog.close();
    }
+   restorePane("categories");
  }
  function backFromMyAppointments(){
    const hasEntry=Boolean(history.state?.pvAppointmentsPanelOverlay);
@@ -532,7 +528,7 @@ export function initSpecialtyDirectory(widget,grant,accessToken){
    if(dialog.open)dialog.close();
    const previous=history.state&&typeof history.state==="object"?history.state:{};
    history.pushState({...previous,pvAppointmentsPanelOverlay:true},"",location.href);
-   myAppointmentsFrame.contentWindow.location.replace("/telesaude/meus-agendamentos/");
+   myAppointmentsFrame.contentWindow.location.replace("/telesaude/meus-agendamentos/?embedded=1");
    myAppointmentsLayer.showModal();
  }
  myAppointmentsLink?.addEventListener("click",event=>{

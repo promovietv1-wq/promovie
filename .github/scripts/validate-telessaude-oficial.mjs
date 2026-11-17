@@ -192,6 +192,7 @@ try{
    await first.locator("#appointments-my-panel").click();
    await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
    const myAppointmentsFrame=first.frameLocator(".pv-appointments-panel-dialog iframe");
+   await first.waitForFunction(()=>document.querySelector(".pv-appointments-panel-dialog iframe")?.contentWindow?.location?.search.includes("embedded=1"),null,{timeout:10000});
    await myAppointmentsFrame.locator("#pv-appointments-external").waitFor({timeout:10000});
    const appointmentAppearance=await myAppointmentsFrame.locator("#pv-appointments-external").evaluate(frame=>({
      filter:getComputedStyle(frame).filter,
@@ -202,18 +203,34 @@ try{
    // Somente o navegador automatizado inspeciona o frame remoto.
    await myAppointmentsFrame.frameLocator("#pv-appointments-external")
      .locator("#consultaForm").waitFor({timeout:15000});
-   // Voltar explícito na página mantém o diálogo de origem.
-   await myAppointmentsFrame.locator("#pv-appointments-back").click();
-   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
+   // Somente uma barra de título é exibida, mesmo com o painel em iframe.
+   assert.equal(await first.locator(".pv-appointments-panel-dialog .pv-curricula-toolbar").count(),1);
+   assert.equal(await myAppointmentsFrame.locator("header").isVisible(),false,
+     "O título interno não pode duplicar Meus Agendamentos");
+   assert.equal(await first.locator(".pv-appointments-panel-dialog .pv-curricula-close").getAttribute("aria-label"),
+     "Voltar às especialidades");
+   // Voltar da tela interna vai diretamente às Especialidades, mantendo a sessão.
+   await first.locator(".pv-appointments-panel-dialog .pv-curricula-close").click();
+   await first.locator("#directory-dialog[open] #hub-categories:not([hidden])").waitFor({timeout:10000});
    assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
-   // Também funciona com botão Voltar nativo do navegador.
+   assert.equal(await first.locator("#appointments-dialog").evaluate(d=>d.open),false);
+   // Voltar do próprio iframe tem o mesmo resultado.
+   await first.locator("#hub-shortcut-appointments").click();
+   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
+   await first.locator("#appointments-my-panel").click();
+   await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
+   await myAppointmentsFrame.locator("#pv-appointments-back").click({force:true});
+   await first.locator("#directory-dialog[open] #hub-categories:not([hidden])").waitFor({timeout:10000});
+   assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
+   // O botão nativo Voltar também restaura Especialidades.
+   await first.locator("#hub-shortcut-appointments").click();
+   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
    await first.locator("#appointments-my-panel").click();
    await first.locator(".pv-appointments-panel-dialog[open]").waitFor({timeout:10000});
    await first.evaluate(()=>history.back());
-   await first.locator("#appointments-dialog[open]").waitFor({timeout:10000});
+   await first.locator("#directory-dialog[open] #hub-categories:not([hidden])").waitFor({timeout:10000});
+   assert.equal(await first.locator("#appointments-dialog").evaluate(d=>d.open),false);
    assert.equal(await first.locator(".pv-appointments-panel-dialog").evaluate(d=>d.open),false);
-   await first.locator("#appointments-specialties").click();
-   await first.locator("#directory-dialog[open]").waitFor({timeout:10000});
 
    // Somente um clique explícito no chat abre o SDK original de atendimento.
    await first.locator("#hub-native").click();
