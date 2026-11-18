@@ -2929,6 +2929,31 @@ document.addEventListener('DOMContentLoaded', function(){
 #contato .saudeContactButtons .btn.primary{background:#fff!important;color:#4b0c8f!important;border:1px solid #fff!important}
 #contato .saudeContactButtons .btn.outline{background:rgba(255,255,255,.13)!important;color:#fff!important;border:1px solid rgba(255,255,255,.65)!important}
 </style>
+
+<style id="saude-refinamentos-20261118">
+/* Ajustes exclusivos da página Saúde: hero e vídeos inferiores preservados. */
+#conceito .head h2.cgSectionTitle{line-height:1.26!important;padding-bottom:.13em!important;overflow:visible!important;letter-spacing:-.032em!important}
+#inicio .saudeVideoPlayer{position:relative;isolation:isolate}
+#inicio .saudeVideoPlayer video{width:100%;height:100%;object-fit:contain;display:block}
+#inicio .saudeHeroPlay{position:absolute!important;inset:0!important;z-index:7!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;outline-offset:-4px;background:transparent!important;color:#fff!important;cursor:pointer!important;appearance:none}
+#inicio .saudeHeroPlayBadge{display:block;position:relative;width:102px;height:102px;border-radius:50%;background:rgba(103,42,187,.33);border:1px solid rgba(255,255,255,.37);backdrop-filter:blur(7px);box-shadow:0 13px 30px rgba(35,12,74,.23),0 0 0 1px rgba(115,52,216,.16);transition:transform .18s ease,background .18s ease}
+#inicio .saudeHeroPlayBadge:before{content:"";display:block;position:absolute;inset:15px;border-radius:50%;background:linear-gradient(145deg,#7228cf,#4b0c8f);box-shadow:0 4px 17px rgba(68,14,121,.42)}
+#inicio .saudeHeroPlayBadge:after{content:"";position:absolute;left:calc(50% + 3px);top:50%;transform:translate(-50%,-50%);border-top:13px solid transparent;border-bottom:13px solid transparent;border-left:21px solid #fff}
+#inicio .saudeHeroPlay:hover .saudeHeroPlayBadge{transform:scale(1.065);background:rgba(103,42,187,.45)}
+#inicio .saudeHeroPlay:focus-visible{outline:3px solid #00bde8}
+#inicio .saudeVideoPlayer.is-playing .saudeHeroPlay{display:none!important}
+#inicio .saudeVideoBrand{display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;padding:9px 0 2px!important;min-height:46px!important}
+#inicio .saudeVideoBrand img{display:block!important;width:38px!important;height:38px!important;flex:0 0 38px!important;object-fit:contain!important}
+#inicio .saudeVideoBrand span{font-family:Georgia,"Times New Roman",serif!important;color:#4b0c8f!important;font-size:21px!important;line-height:1.13!important;letter-spacing:-.025em!important;font-weight:700!important;-webkit-text-fill-color:#4b0c8f!important;white-space:nowrap!important}
+/* Garantir texto legível mesmo com regras anteriores de estilo ou versão promocional. */
+#contato .saudeContactButtons{display:flex!important;flex-direction:column!important;gap:12px!important;align-items:stretch!important;justify-content:center!important;min-width:225px!important;width:100%!important;max-width:330px!important}
+#contato .saudeContactButtons>a.btn,
+#contato .ctaBox .saudeContactButtons>a.btn{display:flex!important;opacity:1!important;visibility:visible!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important;min-height:53px!important;text-decoration:none!important;font-family:var(--font-body),Inter,Arial,sans-serif!important;font-size:.94rem!important;font-weight:800!important;line-height:1.3!important;text-align:center!important;letter-spacing:0!important;padding:14px 18px!important;border-radius:999px!important;background-image:none!important;background-clip:padding-box!important;-webkit-background-clip:padding-box!important;filter:none!important}
+#contato .saudeContactButtons>a.btn.primary{background:#fff!important;color:#4b0c8f!important;-webkit-text-fill-color:#4b0c8f!important;border:1px solid #fff!important}
+#contato .saudeContactButtons>a.btn.outline{background:rgba(255,255,255,.15)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:1px solid rgba(255,255,255,.75)!important}
+@media(max-width:760px){#conceito .head h2.cgSectionTitle{line-height:1.3!important;padding-bottom:.16em!important}#contato .saudeContactButtons{width:100%!important;max-width:none!important}#inicio .saudeHeroPlayBadge{width:90px;height:90px}#inicio .saudeHeroPlayBadge:before{inset:13px}}
+@media(prefers-reduced-motion:reduce){#inicio .saudeHeroPlayBadge{transition:none}}
+</style>
 </head>
 <body>
 <div class="page">
@@ -2945,16 +2970,16 @@ document.addEventListener('DOMContentLoaded', function(){
     <p class="heroLead">Cuidar de pessoas também fortalece organizações.</p>
     <p class="heroText">A PromoVie integra comunicação, liderança e promoção da saúde para transformar conhecimento científico em iniciativas que favorecem a autonomia, o autocuidado e hábitos saudáveis.</p>
     <p class="heroText">Com acompanhamento estratégico e ferramentas digitais, aproximamos pessoas, instituições e grupos de orientações qualificadas e possibilidades reais de cuidado.</p>
-    <div class="heroActions"><a class="btn primary" href="#video-principal" id="watchVideo">Assistir ao vídeo</a><a class="btn outline" href="#telessaude">Conhecer a Telessaúde</a></div>
+    <div class="heroActions"><a class="btn primary" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20Telessa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer">Conhecer a Telessaúde</a></div>
     <div class="aside">Uma atuação integrada, humana e orientada às necessidades de cada organização.</div>
   </div>
   <div id="video-principal" class="videoPanel" aria-label="Vídeo institucional da Saúde PromoVie">
-    <div class="frame"><video id="heroVideo" controls playsinline preload="metadata" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
+    <div class="frame saudeVideoPlayer" id="saudeVideoPlayer"><video id="heroVideo" playsinline preload="metadata" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/1080p/mp4/file.mp4" type="video/mp4">
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/file" type="video/mp4">
       Seu navegador não conseguiu reproduzir este vídeo.
-    </video></div>
-    <div class="videoLegend"><span>Vídeo institucional</span><strong>Telessaúde PromoVie</strong></div>
+    </video><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
+    <div class="videoLegend saudeVideoBrand"><img alt="" src="/app/assets/coracao-promovie-com-logo.webp" width="38" height="38" loading="eager" decoding="async"><span>Telessaúde</span></div>
   </div>
 </div></section><section id="conexoes">
 <div class="wrap">
@@ -2975,7 +3000,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <article class="card reveal"><div class="icon">04</div><h3>Telessaúde PromoVie</h3><p>Solução digital para acesso de beneficiários habilitados a médicos e profissionais qualificados, conforme disponibilidade, modalidades e condições do serviço.</p></article>
 </div>
 </div>
-</section><section id="conceito"><div class="wrap"><div class="head reveal"><span class="kicker">Como funciona</span><h2 class="cgSectionTitle">Da informação à autonomia e à ação.</h2></div><div class="experienceIntro reveal"><div class="experiencePoint"><b>Compreensão</b><p>Reconhecer a realidade das pessoas e as condições que influenciam suas escolhas e sua saúde.</p></div><div class="experiencePoint"><b>Orientação</b><p>Transformar conhecimento científico em mensagens acessíveis, direcionamentos e iniciativas possíveis.</p></div><div class="experiencePoint"><b>Aplicação</b><p>Integrar comunicação, liderança e acesso digital a profissionais à rotina de grupos e organizações.</p></div></div></div></section><section class="soft promovieIntro" id="promovie"><div class="wrap"><div class="head reveal"><span class="kicker">PromoVie na prática</span><h2 class="cgSectionTitle">Comunicação que aproxima pessoas, conhecimento e cuidado.</h2><p>A PromoVie utiliza conteúdos e recursos audiovisuais para comunicar iniciativas de forma humana e acessível. Conheça três exemplos da nossa produção institucional.</p></div><div class="reelGrid reveal"><div class="mediaCard reelEmbedCard reveal"><div class="reelPlayer" data-video-src="https://video.wixstatic.com/video/279d86_1580035b0dad4209ac386d0da7e43e3a/1080p/mp4/file.mp4"><button aria-label="Assistir vídeo 1" class="reelPoster" type="button"><img alt="Prévia do vídeo 1 da PromoVie" class="coverNormal" src="/experiencia/reel-cover-1.jpg"/><span aria-hidden="true" class="reelPlayBadge"></span></button><video aria-label="Vídeo 1" controls="" playsinline="" preload="none" src="https://video.wixstatic.com/video/279d86_1580035b0dad4209ac386d0da7e43e3a/1080p/mp4/file.mp4" webkit-playsinline=""></video></div></div><div class="mediaCard reelEmbedCard reveal"><div class="reelPlayer" data-video-src="https://video.wixstatic.com/video/279d86_4843d14afbf3457e8dfbb4f74fafef8b/1080p/mp4/file.mp4"><button aria-label="Assistir vídeo 2" class="reelPoster" type="button"><img alt="Prévia do vídeo 2 da PromoVie" class="coverNormal" src="/experiencia/reel-cover-2.jpg"/><span aria-hidden="true" class="reelPlayBadge"></span></button><video aria-label="Vídeo 2" controls="" playsinline="" preload="none" src="https://video.wixstatic.com/video/279d86_4843d14afbf3457e8dfbb4f74fafef8b/1080p/mp4/file.mp4" webkit-playsinline=""></video></div></div><div class="mediaCard reelEmbedCard reveal"><div class="reelPlayer" data-video-src="https://video.wixstatic.com/video/279d86_2d70b05c92f742228a50f653ed50f3e2/720p/mp4/file.mp4"><button aria-label="Assistir vídeo 3" class="reelPoster" type="button"><img alt="Prévia do vídeo 3 da PromoVie" class="coverNormal" src="/experiencia/reel-cover-3.jpg"/><span aria-hidden="true" class="reelPlayBadge"></span></button><video aria-label="Vídeo 3" controls="" playsinline="" preload="none" src="https://video.wixstatic.com/video/279d86_2d70b05c92f742228a50f653ed50f3e2/720p/mp4/file.mp4" webkit-playsinline=""></video></div></div></div></div></section><section id="audiovisual">
+</section><section id="conceito"><div class="wrap"><div class="head reveal"><span class="kicker">Como funciona</span><h2 class="cgSectionTitle">Da informação à autonomia e à ação.</h2></div><div class="experienceIntro reveal"><div class="experiencePoint"><b>Compreensão</b><p>Reconhecer a realidade das pessoas e as condições que influenciam suas escolhas e sua saúde.</p></div><div class="experiencePoint"><b>Orientação</b><p>Transformar conhecimento científico em mensagens acessíveis, direcionamentos e iniciativas possíveis.</p></div><div class="experiencePoint"><b>Aplicação</b><p>Integrar comunicação, liderança e acesso digital a profissionais à rotina de grupos e organizações.</p></div></div></div></section><section class="soft promovieIntro" id="promovie"><div class="wrap"><div class="head reveal"><span class="kicker">PromoVie na prática</span><h2 class="cgSectionTitle">Comunicação que aproxima pessoas, conhecimento e cuidado.</h2><p>A PromoVie utiliza conteúdos e recursos audiovisuais para comunicar iniciativas de forma humana e acessível. Conheça um pouco mais do nosso trabalho institucional.</p></div><div class="reelGrid reveal"><div class="mediaCard reelEmbedCard reveal"><div class="reelPlayer" data-video-src="https://video.wixstatic.com/video/279d86_1580035b0dad4209ac386d0da7e43e3a/1080p/mp4/file.mp4"><button aria-label="Assistir vídeo 1" class="reelPoster" type="button"><img alt="Prévia do vídeo 1 da PromoVie" class="coverNormal" src="/experiencia/reel-cover-1.jpg"/><span aria-hidden="true" class="reelPlayBadge"></span></button><video aria-label="Vídeo 1" controls="" playsinline="" preload="none" src="https://video.wixstatic.com/video/279d86_1580035b0dad4209ac386d0da7e43e3a/1080p/mp4/file.mp4" webkit-playsinline=""></video></div></div><div class="mediaCard reelEmbedCard reveal"><div class="reelPlayer" data-video-src="https://video.wixstatic.com/video/279d86_4843d14afbf3457e8dfbb4f74fafef8b/1080p/mp4/file.mp4"><button aria-label="Assistir vídeo 2" class="reelPoster" type="button"><img alt="Prévia do vídeo 2 da PromoVie" class="coverNormal" src="/experiencia/reel-cover-2.jpg"/><span aria-hidden="true" class="reelPlayBadge"></span></button><video aria-label="Vídeo 2" controls="" playsinline="" preload="none" src="https://video.wixstatic.com/video/279d86_4843d14afbf3457e8dfbb4f74fafef8b/1080p/mp4/file.mp4" webkit-playsinline=""></video></div></div><div class="mediaCard reelEmbedCard reveal"><div class="reelPlayer" data-video-src="https://video.wixstatic.com/video/279d86_2d70b05c92f742228a50f653ed50f3e2/720p/mp4/file.mp4"><button aria-label="Assistir vídeo 3" class="reelPoster" type="button"><img alt="Prévia do vídeo 3 da PromoVie" class="coverNormal" src="/experiencia/reel-cover-3.jpg"/><span aria-hidden="true" class="reelPlayBadge"></span></button><video aria-label="Vídeo 3" controls="" playsinline="" preload="none" src="https://video.wixstatic.com/video/279d86_2d70b05c92f742228a50f653ed50f3e2/720p/mp4/file.mp4" webkit-playsinline=""></video></div></div></div></div></section><section id="audiovisual">
 <div class="wrap">
 <div class="head reveal"><span class="kicker">Design e audiovisual</span><h2 class="cgSectionTitle">Conteúdo que comunica cuidado e valoriza pessoas.</h2><p>Da pesquisa ao acabamento, cada produção procura tornar a informação mais clara, conectar equipes e contribuir para uma cultura de cuidado e promoção da saúde.</p></div>
 <div class="production reveal"><div><b>Criação</b><span>Conceito e direção da mensagem.</span></div><div><b>Pesquisa de imagem</b><span>Curadoria visual adequada ao conteúdo.</span></div><div><b>Edição</b><span>Montagem, ritmo e acabamento.</span></div><div><b>Narração</b><span>Voz aplicada com clareza e presença.</span></div><div><b>Trilha sonora</b><span>Atmosfera, identidade e emoção.</span></div></div>
@@ -3016,7 +3041,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="wrap">
 <div class="ctaBox reveal">
 <div class="cgContactCopy"><h2 class="cgSectionTitle">Saúde</h2><p>Saúde melhora a vida e fortalece os grupos. Vamos conversar sobre como a PromoVie pode integrar orientação, comunicação e cuidado às necessidades da sua organização.</p></div>
-<div class="quote saudeContactButtons"><a class="btn primary" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Promo%C3%A7%C3%A3o%20da%20Sa%C3%BAde%20da%20PromoVie." aria-label="Conversar sobre Saúde PromoVie pelo WhatsApp">Vamos conversar</a><a class="btn outline" href="/telesaude/">Conhecer a Telessaúde</a></div>
+<div class="quote saudeContactButtons"><a class="btn primary" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20quero%20conhecer%20a%20Promo%C3%A7%C3%A3o%20da%20Sa%C3%BAde%20da%20PromoVie." aria-label="Conversar sobre Saúde PromoVie pelo WhatsApp">Vamos conversar</a><a class="btn outline" href="/telesaude/">Acessar o portal de Telessaúde</a></div>
 </div>
 <p class="formatNote noteEnd">A PromoVie desenvolve ações estratégicas e de comunicação. Os atendimentos de saúde são realizados por profissionais habilitados, nas modalidades e condições oferecidas pelo serviço de Telessaúde.</p>
 </div>
@@ -3146,7 +3171,26 @@ reelPlayers.forEach(player=>{
 </script>
 
 <script id="saude-hero-video-control">
-(()=>{'use strict';const b=document.getElementById('watchVideo'),v=document.getElementById('heroVideo');if(b&&v){b.addEventListener('click',()=>{const promise=v.play();if(promise&&promise.catch)promise.catch(()=>{});});}document.querySelectorAll('video').forEach(video=>video.addEventListener('play',()=>{document.querySelectorAll('video').forEach(other=>{if(other!==video&&!other.paused)other.pause();});}));})();
+(()=>{'use strict';
+const button=document.getElementById('saudeHeroPlay');
+const video=document.getElementById('heroVideo');
+const holder=document.getElementById('saudeVideoPlayer');
+if(button&&video&&holder){
+  const start=()=>{
+    video.controls=true;
+    const p=video.play();
+    if(p&&typeof p.catch==='function')p.catch(()=>{holder.classList.remove('is-playing');video.controls=false;});
+  };
+  button.addEventListener('click',start);
+  video.addEventListener('play',()=>{holder.classList.add('is-playing');video.controls=true;});
+  video.addEventListener('pause',()=>{if(video.currentTime===0||video.ended){holder.classList.remove('is-playing');video.controls=false;}});
+  video.addEventListener('ended',()=>{holder.classList.remove('is-playing');video.controls=false;});
+  video.addEventListener('error',()=>{holder.classList.remove('is-playing');video.controls=false;});
+}
+document.querySelectorAll('video').forEach(v=>{
+  v.addEventListener('play',()=>{document.querySelectorAll('video').forEach(other=>{if(other!==v&&!other.paused)other.pause();});});
+});
+})();
 </script>
 </body>
 </html>
