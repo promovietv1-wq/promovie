@@ -3046,6 +3046,65 @@ document.addEventListener('DOMContentLoaded', function(){
   #inicio .videoPanel .frame{border-radius:19px!important}
 }
 </style>
+
+<style id="saude-mobile-intro-video-primeiro-20261118">
+/* Capa real do vídeo, visível antes da reprodução, incluindo navegadores móveis. */
+#inicio .saudeVideoPlayer{position:relative;isolation:isolate;background:#ece6f9}
+#inicio .saudeVideoPlayer .saudeHeroPoster{
+  display:block!important;position:absolute!important;inset:0!important;
+  z-index:5!important;width:100%!important;height:100%!important;
+  object-fit:cover!important;object-position:center!important;
+  margin:0!important;border:0!important;pointer-events:none!important;
+}
+#inicio .saudeVideoPlayer.is-playing .saudeHeroPoster{display:none!important}
+#inicio .saudeVideoPlayer .saudeHeroPlay{z-index:7!important}
+@media(max-width:800px){
+  /* Só no celular: Saúde > vídeo > explicação > Fale conosco. */
+  #inicio.saudeHero{padding-top:18px!important;padding-bottom:44px!important}
+  #inicio .heroGrid{
+    display:flex!important;flex-direction:column!important;
+    align-items:stretch!important;justify-content:flex-start!important;
+    width:min(460px,92vw)!important;gap:0!important;
+  }
+  #inicio .heroGrid > div:first-child{display:contents!important}
+  #inicio .eyebrow{display:none!important}
+  #inicio h1{
+    order:0!important;align-self:stretch!important;
+    margin:0 0 12px!important;padding:0!important;
+    text-align:center!important;
+    font-size:clamp(3.75rem,15.5vw,4.95rem)!important;
+    line-height:1.07!important;letter-spacing:-.075em!important;
+  }
+  #inicio .videoPanel{
+    order:1!important;align-self:center!important;
+    width:min(284px,75vw)!important;max-width:min(284px,75vw)!important;
+    min-width:0!important;margin:0 auto 28px!important;
+  }
+  #inicio .heroLead{
+    order:2!important;align-self:stretch!important;
+    margin:0 0 14px!important;
+    max-width:100%!important;text-align:left!important;
+    font-size:clamp(1.55rem,6.3vw,2rem)!important;
+    line-height:1.22!important;
+  }
+  #inicio .heroText{
+    order:3!important;align-self:stretch!important;
+    margin:0 0 13px!important;
+    max-width:100%!important;text-align:left!important;
+    font-size:1rem!important;line-height:1.78!important;
+  }
+  #inicio .heroActions{
+    order:4!important;align-self:stretch!important;
+    margin:12px 0 0!important;
+    flex-direction:column!important;align-items:stretch!important;
+  }
+}
+@media(max-width:375px){
+  #inicio.saudeHero{padding-top:13px!important}
+  #inicio .videoPanel{width:min(266px,76vw)!important;max-width:min(266px,76vw)!important}
+  #inicio h1{margin-bottom:8px!important}
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3065,11 +3124,11 @@ document.addEventListener('DOMContentLoaded', function(){
     <div class="heroActions"><a class="btn primary" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20sobre%20a%20Sa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Fale conosco pelo WhatsApp, abre em nova aba">Fale conosco</a></div>
   </div>
   <div id="video-principal" class="videoPanel" aria-label="Vídeo institucional da Saúde PromoVie">
-    <div class="frame saudeVideoPlayer" id="saudeVideoPlayer"><video id="heroVideo" playsinline preload="metadata" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
+    <div class="frame saudeVideoPlayer" id="saudeVideoPlayer"><video id="heroVideo" playsinline preload="none" poster="https://static.wixstatic.com/media/279d86_97460edf8861450ab2e870a5ed962f35~mv2.jpg" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/1080p/mp4/file.mp4" type="video/mp4">
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/file" type="video/mp4">
       Seu navegador não conseguiu reproduzir este vídeo.
-    </video><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
+    </video><img class="saudeHeroPoster" src="https://static.wixstatic.com/media/279d86_97460edf8861450ab2e870a5ed962f35~mv2.jpg" alt="" aria-hidden="true" width="270" height="480" loading="eager" decoding="async" fetchpriority="high"><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
   </div>
 </div></section><section id="conexoes">
 <div class="wrap">
