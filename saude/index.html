@@ -3107,65 +3107,73 @@ document.addEventListener('DOMContentLoaded', function(){
 </style>
 
 <style id="saude-mobile-primeira-tela-20261118">
-/* Apenas mobile: abrir diretamente com Saúde + vídeo. Cabeçalho aparece com a rolagem. */
-@media(max-width:800px){
-  body .page > header.top{
-    position:fixed!important;inset:0 0 auto 0!important;
-    width:100%!important;z-index:1000!important;
-    transition:transform .25s ease,opacity .2s ease,visibility .2s ease!important;
+/* Exclusivo da página Saúde em telas de celular. */
+@media (max-width:800px) {
+  body .page > header.top {
+    position:fixed!important;
+    inset:0 0 auto 0!important;
+    width:100%!important;
+    z-index:1000!important;
+    transition:transform .24s ease,opacity .2s ease,visibility .2s ease!important;
   }
-  html:not(.pv-saude-mobile-scrolled) body .page > header.top{
+  /* Cabeçalho só surge ao rolar para cima, nunca na descida. */
+  html:not(.pv-saude-mobile-scrolled) body .page > header.top {
     opacity:0!important;visibility:hidden!important;
     transform:translateY(calc(-100% - 16px))!important;
     pointer-events:none!important;
   }
-  html.pv-saude-mobile-scrolled body .page > header.top{
+  html.pv-saude-mobile-scrolled body .page > header.top {
     opacity:1!important;visibility:visible!important;
-    transform:translateY(0)!important;
-    pointer-events:auto!important;
+    transform:translateY(0)!important;pointer-events:auto!important;
     box-shadow:0 12px 28px rgba(31,22,64,.10)!important;
   }
-  #inicio.saudeHero{
-    padding:18px 0 40px!important;
-    scroll-margin-top:0!important;
-  }
-  #inicio .heroGrid{
+  #inicio.saudeHero{padding:14px 0 40px!important;scroll-margin-top:0!important}
+  #inicio .heroGrid {
     width:min(460px,92vw)!important;
-    padding:0!important;
-    display:flex!important;flex-direction:column!important;
-    align-items:stretch!important;gap:0!important;
+    padding:0!important;display:flex!important;
+    flex-direction:column!important;align-items:stretch!important;gap:0!important;
   }
-  #inicio .heroGrid > div:first-child{display:contents!important}
-  #inicio .eyebrow{display:none!important}
-  #inicio h1{
+  #inicio .heroGrid > div:first-child {display:contents!important}
+  #inicio .eyebrow {display:none!important}
+  #inicio h1 {
     order:0!important;
-    margin:0 0 13px!important;
+    align-self:stretch!important;
+    margin:0 0 10px!important;
     padding:0 0 .03em!important;
+    font-size:clamp(3.5rem,15vw,4.9rem)!important;
+    line-height:1.06!important;letter-spacing:-.075em!important;
     text-align:center!important;
-    font-size:clamp(3.75rem,15.5vw,5.25rem)!important;
-    line-height:1.06!important;
   }
-  #inicio .videoPanel{
-    order:1!important;
-    width:100%!important;
-    max-width:100%!important;
-    margin:0 auto var(--saude-mobile-espaco-apos-video,28px)!important;
+  #inicio .videoPanel {
+    order:1!important;align-self:center!important;
+    box-sizing:border-box!important;
+    width:min(100%,var(--saude-mobile-video-width,290px))!important;
+    max-width:min(100%,var(--saude-mobile-video-width,290px))!important;
+    min-width:0!important;
+    margin:0 auto var(--saude-mobile-espaco-apos-video,30px)!important;
     padding:12px!important;
     flex:none!important;
-    box-sizing:border-box!important;
   }
   #inicio .saudeVideoPlayer{width:100%!important;aspect-ratio:9/16!important}
-  #inicio .heroLead{order:2!important;max-width:100%!important}
-  #inicio .heroText{order:3!important;max-width:100%!important}
-  #inicio .heroActions{order:4!important;max-width:100%!important}
+  #inicio .saudeVideoPlayer .saudeHeroPoster {
+    object-fit:contain!important;object-position:center!important;
+    background:#f7f5fa!important;
+  }
+  #inicio .saudeVideoPlayer video {
+    width:100%!important;height:100%!important;
+    object-fit:contain!important;object-position:center!important;
+  }
+  #inicio .heroLead {order:2!important;max-width:100%!important}
+  #inicio .heroText {order:3!important;max-width:100%!important}
+  #inicio .heroActions {order:4!important;max-width:100%!important}
 }
-@media(max-width:375px){
-  #inicio.saudeHero{padding-top:11px!important}
-  #inicio h1{margin-bottom:8px!important}
-  #inicio .videoPanel{padding:10px!important}
+@media (max-width:375px) {
+  #inicio.saudeHero {padding-top:10px!important}
+  #inicio h1 {margin-bottom:7px!important}
+  #inicio .videoPanel {padding:12px!important}
 }
-@media(prefers-reduced-motion:reduce){
-  body .page > header.top{transition:none!important}
+@media (prefers-reduced-motion:reduce) {
+  body .page > header.top {transition:none!important}
 }
 </style>
 </head>
@@ -3409,28 +3417,80 @@ document.querySelectorAll('video').forEach(v=>{
 (()=>{'use strict';
  const root=document.documentElement;
  const hero=document.getElementById('inicio');
- const videoPanel=document.getElementById('video-principal');
+ const panel=document.getElementById('video-principal');
+ const heading=hero&&hero.querySelector('h1');
  const mobile=window.matchMedia('(max-width:800px)');
- if(!hero||!videoPanel)return;
- function refresh(){
-   const isMobile=mobile.matches;
-   root.classList.toggle('pv-saude-mobile-scrolled',isMobile&&window.scrollY>56);
-   if(!isMobile){hero.style.removeProperty('--saude-mobile-espaco-apos-video');return;}
-   // Reserva o primeiro visor só para o título e o vídeo.
-   const bottom=videoPanel.getBoundingClientRect().bottom;
-   const gap=Math.max(28,Math.ceil(window.innerHeight-bottom+22));
-   hero.style.setProperty('--saude-mobile-espaco-apos-video',gap+'px');
+ if(!hero||!panel||!heading)return;
+ let lastScrollY=Math.max(0,window.scrollY);
+ let lastDirection=0;
+ let movement=0;
+ let rafPending=false;
+ const showHeader=show=>root.classList.toggle('pv-saude-mobile-scrolled',mobile.matches&&!!show);
+ function visibleHeight(){
+   const visual=window.visualViewport&&window.visualViewport.height;
+   return visual>0?Math.min(window.innerHeight,visual):window.innerHeight;
  }
- let pending=false;
+ function fitFirstScreen(){
+   if(!mobile.matches){
+     hero.style.removeProperty('--saude-mobile-video-width');
+     hero.style.removeProperty('--saude-mobile-espaco-apos-video');
+     showHeader(false);
+     return;
+   }
+   const availableViewport=visibleHeight();
+   const panelTopOnPage=panel.getBoundingClientRect().top+window.scrollY;
+   const borderAndPadding=26;
+   const bottomReserve=20;
+   // Ajusta a largura pela altura visível, mantendo o vídeo completo (9:16).
+   const widthByHeight=Math.floor(
+     Math.max(0,availableViewport-panelTopOnPage-bottomReserve-borderAndPadding)*9/16
+     +borderAndPadding
+   );
+   const widthByScreen=Math.floor(Math.min(460,window.innerWidth*.92));
+   const targetWidth=Math.max(120,Math.min(widthByScreen,widthByHeight));
+   hero.style.setProperty('--saude-mobile-video-width',targetWidth+'px');
+   const finalBottomOnPage=panel.getBoundingClientRect().bottom+window.scrollY;
+   const gap=Math.max(28,Math.ceil(availableViewport-finalBottomOnPage+25));
+   hero.style.setProperty('--saude-mobile-espaco-apos-video',gap+'px');
+   if(window.scrollY<=12)showHeader(false);
+ }
+ function processScroll(){
+   rafPending=false;
+   const y=Math.max(0,window.scrollY);
+   const diff=y-lastScrollY;
+   lastScrollY=y;
+   if(!mobile.matches||y<=12){
+     movement=0;lastDirection=0;showHeader(false);return;
+   }
+   if(Math.abs(diff)<.5)return;
+   const direction=diff<0?-1:1;
+   if(direction!==lastDirection){lastDirection=direction;movement=0;}
+   movement+=Math.abs(diff);
+   if(direction===1 && movement>=6){
+     showHeader(false);
+   }else if(direction===-1 && movement>=12 && y>90){
+     showHeader(true);
+   }else if(direction===-1 && y<=90){
+     showHeader(false);
+   }
+ }
  window.addEventListener('scroll',()=>{
-   if(pending)return;
-   pending=true;
-   requestAnimationFrame(()=>{pending=false;root.classList.toggle('pv-saude-mobile-scrolled',mobile.matches&&window.scrollY>56);});
+   if(rafPending)return;
+   rafPending=true;
+   requestAnimationFrame(processScroll);
  },{passive:true});
- window.addEventListener('resize',refresh,{passive:true});
- window.addEventListener('orientationchange',refresh,{passive:true});
- window.addEventListener('pageshow',refresh);
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
+ window.addEventListener('resize',fitFirstScreen,{passive:true});
+ window.addEventListener('orientationchange',fitFirstScreen,{passive:true});
+ if(window.visualViewport){
+   window.visualViewport.addEventListener('resize',fitFirstScreen,{passive:true});
+ }
+ window.addEventListener('pageshow',()=>{
+   lastScrollY=Math.max(0,window.scrollY);
+   movement=0;lastDirection=0;showHeader(false);fitFirstScreen();
+ });
+ if(document.readyState==='loading'){
+   document.addEventListener('DOMContentLoaded',fitFirstScreen,{once:true});
+ }else{fitFirstScreen();}
 })();
 </script>
 </body>
