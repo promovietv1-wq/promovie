@@ -3109,23 +3109,18 @@ document.addEventListener('DOMContentLoaded', function(){
 <style id="saude-mobile-primeira-tela-20261118">
 /* Exclusivo da página Saúde em telas de celular. */
 @media (max-width:800px) {
+  /* O cabeçalho permanece no fluxo da página e só volta à tela ao alcançar o topo. */
   body .page > header.top {
-    position:fixed!important;
-    inset:0 0 auto 0!important;
+    position:relative!important;
+    inset:auto!important;
     width:100%!important;
-    z-index:1000!important;
-    transition:transform .24s ease,opacity .2s ease,visibility .2s ease!important;
-  }
-  /* Cabeçalho só surge ao rolar para cima, nunca na descida. */
-  html:not(.pv-saude-mobile-scrolled) body .page > header.top {
-    opacity:0!important;visibility:hidden!important;
-    transform:translateY(calc(-100% - 16px))!important;
-    pointer-events:none!important;
-  }
-  html.pv-saude-mobile-scrolled body .page > header.top {
-    opacity:1!important;visibility:visible!important;
-    transform:translateY(0)!important;pointer-events:auto!important;
-    box-shadow:0 12px 28px rgba(31,22,64,.10)!important;
+    z-index:2!important;
+    transition:none!important;
+    transform:none!important;
+    opacity:1!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+    box-shadow:0 8px 28px rgba(75,12,143,.035)!important;
   }
   #inicio.saudeHero{padding:14px 0 40px!important;scroll-margin-top:0!important}
   #inicio .heroGrid {
@@ -3483,97 +3478,61 @@ document.querySelectorAll('video').forEach(v=>{
  const root=document.documentElement;
  const hero=document.getElementById('inicio');
  const panel=document.getElementById('video-principal');
- const heading=hero&&hero.querySelector('h1');
- const mobile=window.matchMedia('(max-width:800px)');
- if(!hero||!panel||!heading)return;
- let lastScrollY=Math.max(0,window.scrollY);
- let lastDirection=0;
- let movement=0;
- let rafPending=false;
  const header=document.querySelector('body .page > header.top');
- const titleWouldBeCovered=()=>{
-   const titleRect=heading.getBoundingClientRect();
-   const headerHeight=header?header.getBoundingClientRect().height:72;
-   // Ao voltar ao início, deixa "Saúde" totalmente visível, sem cabeçalho sobreposto.
-   return titleRect.bottom>0&&titleRect.top<headerHeight+12;
- };
- const showHeader=show=>root.classList.toggle('pv-saude-mobile-scrolled',mobile.matches&&!!show&&!titleWouldBeCovered());
+ const mobile=window.matchMedia('(max-width:800px)');
+ if(!hero||!panel||!header)return;
+ const headerHeight=()=>Math.ceil(header.getBoundingClientRect().height);
  function visibleHeight(){
    const visual=window.visualViewport&&window.visualViewport.height;
    return visual>0?Math.min(window.innerHeight,visual):window.innerHeight;
+ }
+ function showHeroFirst(){
+   if(!mobile.matches||location.hash||window.scrollY>2)return;
+   // Preserva a posição ao atualizar ou voltar pelo histórico.
+   const nav=window.performance&&performance.getEntriesByType('navigation')[0];
+   if(nav&&nav.type!=='navigate')return;
+   // Abre visualmente em "Saúde" e no vídeo, com o cabeçalho logo acima
+   // da área visível, sem posição fixa ou sobreposição.
+   const previousBehavior=root.style.scrollBehavior;
+   root.style.scrollBehavior='auto';
+   window.scrollTo(0,headerHeight());
+   root.style.scrollBehavior=previousBehavior;
  }
  function fitFirstScreen(){
    if(!mobile.matches){
      hero.style.removeProperty('--saude-mobile-video-width');
      hero.style.removeProperty('--saude-mobile-espaco-apos-video');
-     showHeader(false);
      return;
    }
    const availableViewport=visibleHeight();
-   const panelTopOnPage=panel.getBoundingClientRect().top+window.scrollY;
+   const headerOffset=headerHeight();
+   // O enquadramento inicial começa depois do cabeçalho em fluxo normal.
+   const panelTopOnFirstView=panel.getBoundingClientRect().top+window.scrollY-headerOffset;
    const borderAndPadding=26;
    const bottomReserve=20;
-   // Ajusta a largura pela altura visível, mantendo o vídeo completo (9:16).
    const widthByHeight=Math.floor(
-     Math.max(0,availableViewport-panelTopOnPage-bottomReserve-borderAndPadding)*9/16
+     Math.max(0,availableViewport-panelTopOnFirstView-bottomReserve-borderAndPadding)*9/16
      +borderAndPadding
    );
    const widthByScreen=Math.floor(Math.min(460,window.innerWidth*.92));
    const targetWidth=Math.max(120,Math.min(widthByScreen,widthByHeight));
    hero.style.setProperty('--saude-mobile-video-width',targetWidth+'px');
-   const finalBottomOnPage=panel.getBoundingClientRect().bottom+window.scrollY;
-   const gap=Math.max(28,Math.ceil(availableViewport-finalBottomOnPage+25));
+   const finalBottomOnFirstView=panel.getBoundingClientRect().bottom+window.scrollY-headerOffset;
+   const gap=Math.max(28,Math.ceil(availableViewport-finalBottomOnFirstView+25));
    hero.style.setProperty('--saude-mobile-espaco-apos-video',gap+'px');
  }
- function processScroll(){
-   rafPending=false;
-   const y=Math.max(0,window.scrollY);
-   const diff=y-lastScrollY;
-   lastScrollY=y;
-   if(titleWouldBeCovered()&&root.classList.contains('pv-saude-mobile-scrolled'))showHeader(false);
-   if(!mobile.matches){
-     movement=0;lastDirection=0;showHeader(false);return;
-   }
-   if(Math.abs(diff)<.5)return;
-   const direction=diff<0?-1:1;
-   if(direction!==lastDirection){lastDirection=direction;movement=0;}
-   movement+=Math.abs(diff);
-   if(direction===1 && movement>=6){
-     showHeader(false);
-   }else if(direction===-1 && movement>=8){
-     showHeader(true);
-   }
+ function fitIfNearTop(){
+   if(window.scrollY<=headerHeight()+55)fitFirstScreen();
  }
- window.addEventListener('scroll',()=>{
-   if(rafPending)return;
-   rafPending=true;
-   requestAnimationFrame(processScroll);
- },{passive:true});
- // Permite mostrar o cabeçalho ao puxar a página para baixo mesmo no topo (scrollY=0).
- let touchStartY=null;
- window.addEventListener('touchstart',event=>{
-   touchStartY=(mobile.matches&&event.touches.length===1)?event.touches[0].clientY:null;
- },{passive:true});
- window.addEventListener('touchmove',event=>{
-   if(touchStartY===null||!mobile.matches||event.touches.length!==1)return;
-   if(window.scrollY<=12&&event.touches[0].clientY-touchStartY>=18)showHeader(true);
- },{passive:true});
- window.addEventListener('touchend',()=>{touchStartY=null;},{passive:true});
- window.addEventListener('touchcancel',()=>{touchStartY=null;},{passive:true});
- // Evita saltos de layout quando a barra do navegador muda de altura durante a rolagem.
- const fitIfNearTop=()=>{if(window.scrollY<=55)fitFirstScreen();};
  window.addEventListener('resize',fitIfNearTop,{passive:true});
  window.addEventListener('orientationchange',fitFirstScreen,{passive:true});
  if(window.visualViewport){
    window.visualViewport.addEventListener('resize',fitIfNearTop,{passive:true});
  }
- window.addEventListener('pageshow',()=>{
-   lastScrollY=Math.max(0,window.scrollY);
-   movement=0;lastDirection=0;showHeader(false);fitFirstScreen();
- });
- if(document.readyState==='loading'){
-   document.addEventListener('DOMContentLoaded',fitFirstScreen,{once:true});
- }else{fitFirstScreen();}
+ window.addEventListener('pageshow',fitFirstScreen);
+ // Executado ao final do HTML, antes do primeiro enquadramento visível.
+ showHeroFirst();
+ fitFirstScreen();
 })();
 </script>
 </body>
