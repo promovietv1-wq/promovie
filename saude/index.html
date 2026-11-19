@@ -3479,10 +3479,12 @@ document.querySelectorAll('video').forEach(v=>{
    rafPending=true;
    requestAnimationFrame(processScroll);
  },{passive:true});
- window.addEventListener('resize',fitFirstScreen,{passive:true});
+ // Evita saltos de layout quando a barra do navegador muda de altura durante a rolagem.
+ const fitIfNearTop=()=>{if(window.scrollY<=55)fitFirstScreen();};
+ window.addEventListener('resize',fitIfNearTop,{passive:true});
  window.addEventListener('orientationchange',fitFirstScreen,{passive:true});
  if(window.visualViewport){
-   window.visualViewport.addEventListener('resize',fitFirstScreen,{passive:true});
+   window.visualViewport.addEventListener('resize',fitIfNearTop,{passive:true});
  }
  window.addEventListener('pageshow',()=>{
    lastScrollY=Math.max(0,window.scrollY);
