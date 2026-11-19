@@ -3021,6 +3021,31 @@ document.addEventListener('DOMContentLoaded', function(){
   #contato .ctaBox .quote.saudeContactButtons{max-width:none!important;}
 }
 </style>
+
+<style id="saude-cta-serifado-20261118">
+/* Destaque serifado de Telessaúde dentro do CTA original, sem itálico. */
+#inicio .heroActions a.saudeCtaBrand{
+  display:inline-flex!important;align-items:baseline!important;justify-content:center!important;
+  gap:.29em!important;flex-wrap:wrap!important;white-space:normal!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+  text-align:center!important;line-height:1.35!important;
+  padding:14px 23px!important;min-height:50px!important;
+}
+#inicio .saudeCtaPrefix{
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;
+  font-style:normal!important;font-size:.93rem!important;font-weight:750!important;
+  letter-spacing:0!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+#inicio .saudeCtaSerif{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-style:normal!important;font-size:1.13rem!important;font-weight:700!important;
+  letter-spacing:-.024em!important;line-height:1.15!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+#inicio .videoLegend.saudeVideoBrand{justify-content:center!important;gap:0!important;padding:8px 0 0!important;min-height:44px!important}
+#inicio .videoLegend.saudeVideoBrand img{width:38px!important;height:38px!important;flex:0 0 38px!important}
+@media(max-width:420px){#inicio .heroActions a.saudeCtaBrand{gap:.25em!important;}}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3037,7 +3062,7 @@ document.addEventListener('DOMContentLoaded', function(){
     <p class="heroLead">Cuidar de pessoas também fortalece organizações.</p>
     <p class="heroText">A PromoVie integra comunicação, liderança e promoção da saúde para transformar conhecimento científico em iniciativas que favorecem a autonomia, o autocuidado e hábitos saudáveis.</p>
     <p class="heroText">Com acompanhamento estratégico e ferramentas digitais, aproximamos pessoas, instituições e grupos de orientações qualificadas e possibilidades reais de cuidado.</p>
-    <div class="heroActions"><a class="btn primary" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20Telessa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer">Conhecer a Telessaúde</a></div>
+    <div class="heroActions"><a class="btn primary saudeCtaBrand" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20Telessa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Conheça a Telessaúde PromoVie pelo WhatsApp"><span class="saudeCtaPrefix">Conheça a</span> <span class="saudeCtaSerif">Telessaúde</span></a></div>
   </div>
   <div id="video-principal" class="videoPanel" aria-label="Vídeo institucional da Saúde PromoVie">
     <div class="frame saudeVideoPlayer" id="saudeVideoPlayer"><video id="heroVideo" playsinline preload="metadata" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
@@ -3045,7 +3070,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/file" type="video/mp4">
       Seu navegador não conseguiu reproduzir este vídeo.
     </video><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
-    <div class="videoLegend saudeVideoBrand"><img alt="" src="/app/assets/coracao-promovie-com-logo.webp" width="38" height="38" loading="eager" decoding="async"><span>Telessaúde</span></div>
+    <div class="videoLegend saudeVideoBrand"><img alt="Coração PromoVie" src="/app/assets/coracao-promovie-com-logo.webp" width="38" height="38" loading="eager" decoding="async"></div>
   </div>
 </div></section><section id="conexoes">
 <div class="wrap">
