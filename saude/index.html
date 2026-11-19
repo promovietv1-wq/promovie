@@ -3105,6 +3105,69 @@ document.addEventListener('DOMContentLoaded', function(){
   #inicio h1{margin-bottom:8px!important}
 }
 </style>
+
+<style id="saude-mobile-primeira-tela-20261118">
+/* Apenas mobile: abrir diretamente com Saúde + vídeo. Cabeçalho aparece com a rolagem. */
+@media(max-width:800px){
+  body .page > header.top{
+    position:fixed!important;inset:0 0 auto 0!important;
+    width:100%!important;z-index:1000!important;
+    transition:transform .25s ease,opacity .2s ease,visibility .2s ease!important;
+  }
+  html:not(.pv-saude-mobile-scrolled) body .page > header.top{
+    opacity:0!important;visibility:hidden!important;
+    transform:translateY(calc(-100% - 16px))!important;
+    pointer-events:none!important;
+  }
+  html.pv-saude-mobile-scrolled body .page > header.top{
+    opacity:1!important;visibility:visible!important;
+    transform:translateY(0)!important;
+    pointer-events:auto!important;
+    box-shadow:0 12px 28px rgba(31,22,64,.10)!important;
+  }
+  #inicio.saudeHero{
+    padding:18px 0 40px!important;
+    scroll-margin-top:0!important;
+  }
+  #inicio .heroGrid{
+    width:min(460px,92vw)!important;
+    padding:0!important;
+    display:flex!important;flex-direction:column!important;
+    align-items:stretch!important;gap:0!important;
+  }
+  #inicio .heroGrid > div:first-child{display:contents!important}
+  #inicio .eyebrow{display:none!important}
+  #inicio h1{
+    order:0!important;
+    margin:0 0 13px!important;
+    padding:0 0 .03em!important;
+    text-align:center!important;
+    font-size:clamp(3.75rem,15.5vw,5.25rem)!important;
+    line-height:1.06!important;
+  }
+  #inicio .videoPanel{
+    order:1!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 auto var(--saude-mobile-espaco-apos-video,28px)!important;
+    padding:12px!important;
+    flex:none!important;
+    box-sizing:border-box!important;
+  }
+  #inicio .saudeVideoPlayer{width:100%!important;aspect-ratio:9/16!important}
+  #inicio .heroLead{order:2!important;max-width:100%!important}
+  #inicio .heroText{order:3!important;max-width:100%!important}
+  #inicio .heroActions{order:4!important;max-width:100%!important}
+}
+@media(max-width:375px){
+  #inicio.saudeHero{padding-top:11px!important}
+  #inicio h1{margin-bottom:8px!important}
+  #inicio .videoPanel{padding:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body .page > header.top{transition:none!important}
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3124,11 +3187,11 @@ document.addEventListener('DOMContentLoaded', function(){
     <div class="heroActions"><a class="btn primary" href="https://wa.me/5527999417458?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20sobre%20a%20Sa%C3%BAde%20PromoVie." target="_blank" rel="noopener noreferrer" aria-label="Fale conosco pelo WhatsApp, abre em nova aba">Fale conosco</a></div>
   </div>
   <div id="video-principal" class="videoPanel" aria-label="Vídeo institucional da Saúde PromoVie">
-    <div class="frame saudeVideoPlayer" id="saudeVideoPlayer"><video id="heroVideo" playsinline preload="none" poster="https://static.wixstatic.com/media/279d86_97460edf8861450ab2e870a5ed962f35~mv2.jpg" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
+    <div class="frame saudeVideoPlayer" id="saudeVideoPlayer"><video id="heroVideo" playsinline preload="none" poster="https://static.wixstatic.com/media/279d86_55bfe5715f084f248b480eb179e519ba~mv2.jpg" aria-label="Saúde e Telessaúde PromoVie, vídeo institucional em formato vertical">
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/1080p/mp4/file.mp4" type="video/mp4">
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/file" type="video/mp4">
       Seu navegador não conseguiu reproduzir este vídeo.
-    </video><img class="saudeHeroPoster" src="https://static.wixstatic.com/media/279d86_97460edf8861450ab2e870a5ed962f35~mv2.jpg" alt="" aria-hidden="true" width="270" height="480" loading="eager" decoding="async" fetchpriority="high"><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
+    </video><img class="saudeHeroPoster" src="https://static.wixstatic.com/media/279d86_55bfe5715f084f248b480eb179e519ba~mv2.jpg" alt="" aria-hidden="true" width="270" height="480" loading="eager" decoding="async" fetchpriority="high"><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
   </div>
 </div></section><section id="conexoes">
 <div class="wrap">
@@ -3339,6 +3402,35 @@ if(button&&video&&holder){
 document.querySelectorAll('video').forEach(v=>{
   v.addEventListener('play',()=>{document.querySelectorAll('video').forEach(other=>{if(other!==v&&!other.paused)other.pause();});});
 });
+})();
+</script>
+
+<script id="saude-mobile-viewport-control-20261118">
+(()=>{'use strict';
+ const root=document.documentElement;
+ const hero=document.getElementById('inicio');
+ const videoPanel=document.getElementById('video-principal');
+ const mobile=window.matchMedia('(max-width:800px)');
+ if(!hero||!videoPanel)return;
+ function refresh(){
+   const isMobile=mobile.matches;
+   root.classList.toggle('pv-saude-mobile-scrolled',isMobile&&window.scrollY>56);
+   if(!isMobile){hero.style.removeProperty('--saude-mobile-espaco-apos-video');return;}
+   // Reserva o primeiro visor só para o título e o vídeo.
+   const bottom=videoPanel.getBoundingClientRect().bottom;
+   const gap=Math.max(28,Math.ceil(window.innerHeight-bottom+22));
+   hero.style.setProperty('--saude-mobile-espaco-apos-video',gap+'px');
+ }
+ let pending=false;
+ window.addEventListener('scroll',()=>{
+   if(pending)return;
+   pending=true;
+   requestAnimationFrame(()=>{pending=false;root.classList.toggle('pv-saude-mobile-scrolled',mobile.matches&&window.scrollY>56);});
+ },{passive:true});
+ window.addEventListener('resize',refresh,{passive:true});
+ window.addEventListener('orientationchange',refresh,{passive:true});
+ window.addEventListener('pageshow',refresh);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
 })();
 </script>
 </body>
