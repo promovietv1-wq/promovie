@@ -3490,7 +3490,14 @@ document.querySelectorAll('video').forEach(v=>{
  let lastDirection=0;
  let movement=0;
  let rafPending=false;
- const showHeader=show=>root.classList.toggle('pv-saude-mobile-scrolled',mobile.matches&&!!show);
+ const header=document.querySelector('body .page > header.top');
+ const titleWouldBeCovered=()=>{
+   const titleRect=heading.getBoundingClientRect();
+   const headerHeight=header?header.getBoundingClientRect().height:72;
+   // Ao voltar ao início, deixa "Saúde" totalmente visível, sem cabeçalho sobreposto.
+   return titleRect.bottom>0&&titleRect.top<headerHeight+12;
+ };
+ const showHeader=show=>root.classList.toggle('pv-saude-mobile-scrolled',mobile.matches&&!!show&&!titleWouldBeCovered());
  function visibleHeight(){
    const visual=window.visualViewport&&window.visualViewport.height;
    return visual>0?Math.min(window.innerHeight,visual):window.innerHeight;
@@ -3523,6 +3530,7 @@ document.querySelectorAll('video').forEach(v=>{
    const y=Math.max(0,window.scrollY);
    const diff=y-lastScrollY;
    lastScrollY=y;
+   if(titleWouldBeCovered()&&root.classList.contains('pv-saude-mobile-scrolled'))showHeader(false);
    if(!mobile.matches){
      movement=0;lastDirection=0;showHeader(false);return;
    }
