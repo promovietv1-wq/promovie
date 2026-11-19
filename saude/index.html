@@ -3182,6 +3182,15 @@ document.addEventListener('DOMContentLoaded', function(){
   #inicio .heroText {text-align:center!important}
 }
 </style>
+<style id="saude-video-aguardar-primeiro-quadro-20261118">
+/* A capa permanece nítida durante o carregamento; o play sai sem escurecer a imagem. */
+#inicio .saudeVideoPlayer.is-loading .saudeHeroPlayBadge{
+  opacity:0!important;visibility:hidden!important;transition:none!important;
+}
+#inicio .saudeVideoPlayer.is-loading .saudeHeroPoster{
+  opacity:1!important;filter:none!important;
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3397,24 +3406,74 @@ reelPlayers.forEach(player=>{
 </script>
 
 <script id="saude-hero-video-control">
-(()=>{'use strict';
+(()=>{
+'use strict';
 const button=document.getElementById('saudeHeroPlay');
 const video=document.getElementById('heroVideo');
 const holder=document.getElementById('saudeVideoPlayer');
 if(button&&video&&holder){
-  const start=()=>{
-    video.controls=true;
-    const p=video.play();
-    if(p&&typeof p.catch==='function')p.catch(()=>{holder.classList.remove('is-playing');video.controls=false;});
+  const hasFinePointer=window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  let firstFrameRequested=false;
+  const reset=()=>{
+    firstFrameRequested=false;
+    holder.classList.remove('is-loading','is-playing');
+    video.controls=false;
   };
-  button.addEventListener('click',start);
-  video.addEventListener('play',()=>{holder.classList.add('is-playing');video.controls=true;});
-  video.addEventListener('pause',()=>{if(video.currentTime===0||video.ended){holder.classList.remove('is-playing');video.controls=false;}});
-  video.addEventListener('ended',()=>{holder.classList.remove('is-playing');video.controls=false;});
-  video.addEventListener('error',()=>{holder.classList.remove('is-playing');video.controls=false;});
+  const reveal=()=>{
+    firstFrameRequested=false;
+    if(video.paused||video.ended)return;
+    holder.classList.remove('is-loading');
+    holder.classList.add('is-playing');
+    // Como nos outros três vídeos: no celular, controles só no toque posterior.
+    video.controls=hasFinePointer;
+  };
+  const onPlaying=()=>{
+    if(holder.classList.contains('is-playing'))return;
+    // Manter a capa até o navegador realmente renderizar o primeiro quadro.
+    if(typeof video.requestVideoFrameCallback==='function'){
+      if(firstFrameRequested)return;
+      firstFrameRequested=true;
+      video.requestVideoFrameCallback(()=>reveal());
+    }else{
+      reveal();
+    }
+  };
+  button.addEventListener('click',()=>{
+    if(holder.classList.contains('is-loading'))return;
+    holder.classList.add('is-loading');
+    video.controls=false;
+    video.setAttribute('playsinline','');
+    video.setAttribute('webkit-playsinline','');
+    const p=video.play();
+    if(p&&typeof p.catch==='function')p.catch(()=>reset());
+  });
+  video.addEventListener('playing',onPlaying);
+  // Reserva para navegadores que não disparam o callback do primeiro quadro.
+  video.addEventListener('timeupdate',()=>{
+    if(holder.classList.contains('is-loading')&&!video.paused&&video.currentTime>0)reveal();
+  });
+  const offerControls=()=>{
+    if(!hasFinePointer&&holder.classList.contains('is-playing'))video.controls=true;
+  };
+  video.addEventListener('pointerdown',offerControls);
+  video.addEventListener('touchstart',offerControls,{passive:true});
+  video.addEventListener('pause',()=>{
+    firstFrameRequested=false;
+    holder.classList.remove('is-loading');
+    if(video.currentTime===0||video.ended)reset();
+  });
+  video.addEventListener('ended',()=>{
+    reset();
+    try{video.currentTime=0;}catch(e){}
+  });
+  video.addEventListener('error',reset);
 }
 document.querySelectorAll('video').forEach(v=>{
-  v.addEventListener('play',()=>{document.querySelectorAll('video').forEach(other=>{if(other!==v&&!other.paused)other.pause();});});
+  v.addEventListener('play',()=>{
+    document.querySelectorAll('video').forEach(other=>{
+      if(other!==v&&!other.paused)other.pause();
+    });
+  });
 });
 })();
 </script>
@@ -3458,14 +3517,13 @@ document.querySelectorAll('video').forEach(v=>{
    const finalBottomOnPage=panel.getBoundingClientRect().bottom+window.scrollY;
    const gap=Math.max(28,Math.ceil(availableViewport-finalBottomOnPage+25));
    hero.style.setProperty('--saude-mobile-espaco-apos-video',gap+'px');
-   if(window.scrollY<=12)showHeader(false);
  }
  function processScroll(){
    rafPending=false;
    const y=Math.max(0,window.scrollY);
    const diff=y-lastScrollY;
    lastScrollY=y;
-   if(!mobile.matches||y<=12){
+   if(!mobile.matches){
      movement=0;lastDirection=0;showHeader(false);return;
    }
    if(Math.abs(diff)<.5)return;
@@ -3474,10 +3532,8 @@ document.querySelectorAll('video').forEach(v=>{
    movement+=Math.abs(diff);
    if(direction===1 && movement>=6){
      showHeader(false);
-   }else if(direction===-1 && movement>=12 && y>90){
+   }else if(direction===-1 && movement>=8){
      showHeader(true);
-   }else if(direction===-1 && y<=90){
-     showHeader(false);
    }
  }
  window.addEventListener('scroll',()=>{
@@ -3485,6 +3541,17 @@ document.querySelectorAll('video').forEach(v=>{
    rafPending=true;
    requestAnimationFrame(processScroll);
  },{passive:true});
+ // Permite mostrar o cabeçalho ao puxar a página para baixo mesmo no topo (scrollY=0).
+ let touchStartY=null;
+ window.addEventListener('touchstart',event=>{
+   touchStartY=(mobile.matches&&event.touches.length===1)?event.touches[0].clientY:null;
+ },{passive:true});
+ window.addEventListener('touchmove',event=>{
+   if(touchStartY===null||!mobile.matches||event.touches.length!==1)return;
+   if(window.scrollY<=12&&event.touches[0].clientY-touchStartY>=18)showHeader(true);
+ },{passive:true});
+ window.addEventListener('touchend',()=>{touchStartY=null;},{passive:true});
+ window.addEventListener('touchcancel',()=>{touchStartY=null;},{passive:true});
  // Evita saltos de layout quando a barra do navegador muda de altura durante a rolagem.
  const fitIfNearTop=()=>{if(window.scrollY<=55)fitFirstScreen();};
  window.addEventListener('resize',fitIfNearTop,{passive:true});
