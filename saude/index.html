@@ -3023,6 +3023,29 @@ document.addEventListener('DOMContentLoaded', function(){
 </style>
 
 
+
+<style id="saude-video-margem-uniforme">
+/* Moldura uniforme nos quatro lados do vídeo, sem assinatura ou logomarca inferior. */
+#inicio .videoPanel{
+  padding:14px!important;
+  border-radius:30px!important;
+}
+#inicio .videoPanel .frame{
+  margin:0!important;
+  border-radius:22px!important;
+  aspect-ratio:9 / 16!important;
+}
+#inicio .videoPanel .frame video{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  display:block!important;
+}
+@media(max-width:420px){
+  #inicio .videoPanel{padding:12px!important;border-radius:27px!important}
+  #inicio .videoPanel .frame{border-radius:19px!important}
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3047,7 +3070,6 @@ document.addEventListener('DOMContentLoaded', function(){
       <source src="https://video.wixstatic.com/video/279d86_b3272135d351442588ca1c050623565b/file" type="video/mp4">
       Seu navegador não conseguiu reproduzir este vídeo.
     </video><button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo Saúde PromoVie"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button></div>
-    <div class="videoLegend saudeVideoBrand"><img alt="Coração PromoVie" src="/app/assets/coracao-promovie-com-logo.webp" width="38" height="38" loading="eager" decoding="async"></div>
   </div>
 </div></section><section id="conexoes">
 <div class="wrap">
