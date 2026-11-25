@@ -3274,6 +3274,11 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 }
 </style>
+
+<style id="associacoes-hero-first-frame-20261125">
+/* Capa inicial: quadro verdadeiro decodificado do vídeo; a miniatura do próprio vídeo é fallback. */
+#inicio .saudeVideoPlayer.is-first-frame-ready:not(.is-loading):not(.is-playing) .saudeHeroPoster{display:none!important}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3296,11 +3301,11 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <div id="video-principal" class="videoPanel" aria-label="Vídeo institucional PromoVie Associações">
     <div class="frame saudeVideoPlayer" id="saudeVideoPlayer">
-      <video id="heroVideo" playsinline webkit-playsinline preload="none" poster="https://static.wixstatic.com/media/279d86_5d247d462426447c81de95d2fe65b9f0~mv2.jpg" aria-label="PromoVie Associações, vídeo institucional em formato vertical">
+      <video id="heroVideo" playsinline webkit-playsinline preload="metadata" poster="https://static.wixstatic.com/media/279d86_00eea8f57cc74250aeeb6b0511d3854ef000.jpg" aria-label="PromoVie Associações, vídeo institucional em formato vertical">
         <source src="https://video.wixstatic.com/video/279d86_00eea8f57cc74250aeeb6b0511d3854e/file" type="video/mp4">
         Seu navegador não conseguiu reproduzir este vídeo.
       </video>
-      <img class="saudeHeroPoster" src="https://static.wixstatic.com/media/279d86_5d247d462426447c81de95d2fe65b9f0~mv2.jpg" alt="" aria-hidden="true" width="720" height="1280" loading="eager" decoding="async" fetchpriority="high">
+      <img class="saudeHeroPoster" src="https://static.wixstatic.com/media/279d86_00eea8f57cc74250aeeb6b0511d3854ef000.jpg" alt="" aria-hidden="true" width="720" height="1280" loading="eager" decoding="async" fetchpriority="high">
       <button class="saudeHeroPlay" id="saudeHeroPlay" type="button" aria-label="Reproduzir vídeo PromoVie Associações"><span class="saudeHeroPlayBadge" aria-hidden="true"></span></button>
     </div>
   </div>
@@ -3603,6 +3608,34 @@ document.querySelectorAll('video').forEach(v=>{
 })();
 </script>
 
+
+<script id="associacoes-hero-primeiro-frame-20261125">
+(()=>{
+  'use strict';
+  const video=document.getElementById('heroVideo');
+  const holder=document.getElementById('saudeVideoPlayer');
+  if(!video||!holder)return;
+  let requested=false;
+  const seekFirstFrame=()=>{
+    if(requested||!video.paused||!Number.isFinite(video.duration)||video.duration<=0)return;
+    requested=true;
+    try{video.currentTime=Math.min(0.001,video.duration/2)}catch(e){}
+  };
+  const displayFirstFrame=()=>{
+    if(video.paused&&!video.ended&&video.readyState>=HTMLMediaElement.HAVE_CURRENT_DATA
+       &&video.currentTime<0.1&&!holder.classList.contains('is-loading')){
+      video.removeAttribute('poster');
+      holder.classList.add('is-first-frame-ready');
+    }
+  };
+  video.addEventListener('loadedmetadata',seekFirstFrame);
+  video.addEventListener('loadeddata',displayFirstFrame);
+  video.addEventListener('seeked',displayFirstFrame);
+  video.addEventListener('play',()=>holder.classList.remove('is-first-frame-ready'));
+  if(video.readyState>=HTMLMediaElement.HAVE_METADATA)seekFirstFrame();
+  if(video.readyState>=HTMLMediaElement.HAVE_CURRENT_DATA)displayFirstFrame();
+})();
+</script>
 <script id="saude-mobile-viewport-control-20261118">
 (()=>{'use strict';
  const root=document.documentElement;
