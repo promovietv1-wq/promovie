@@ -3213,6 +3213,44 @@ document.addEventListener('DOMContentLoaded', function(){
   #telessaude .associacoesModalidadesHead{margin-top:48px;margin-bottom:24px}
 }
 </style>
+
+<style id="associacoes-icones-degrade-20261125">
+/* Ícones vetoriais: substituem exclusivamente as numerações dos cartões de Associações. */
+#conexoes .cards .pvIcon,
+#oferta .cards .pvIcon,
+#telessaude .associacoesCuidadoCards .pvIcon {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:68px!important;
+  height:68px!important;
+  min-width:68px!important;
+  min-height:68px!important;
+  padding:12px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#f4edff 0%,#f2f3ff 52%,#e9f9ff 100%)!important;
+  border:1px solid rgba(115,52,216,.13)!important;
+  box-shadow:0 10px 22px rgba(75,12,143,.075),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  margin-bottom:18px!important;
+  vertical-align:top;
+}
+#conexoes .cards .pvIcon svg,
+#oferta .cards .pvIcon svg,
+#telessaude .associacoesCuidadoCards .pvIcon svg{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  flex-shrink:0;
+}
+@media(max-width:620px){
+ #conexoes .cards .pvIcon,
+ #oferta .cards .pvIcon,
+ #telessaude .associacoesCuidadoCards .pvIcon{
+    width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;border-radius:18px!important
+ }
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -3251,9 +3289,9 @@ document.addEventListener('DOMContentLoaded', function(){
     <p>Confiança, comunicação consistente e iniciativas alinhadas às necessidades dos associados aproximam a gestão das pessoas e fortalecem a participação.</p>
   </div>
   <div class="cards conectaCards">
-    <article class="card reveal"><div class="icon" aria-hidden="true">01</div><h3>Valorização dos associados</h3><p>Reconhecer necessidades, ampliar o acesso à informação e tornar visíveis as iniciativas realizadas em benefício do grupo.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">02</div><h3>Comunicação da gestão</h3><p>Organizar mensagens claras e consistentes, dando transparência às decisões e proximidade ao relacionamento institucional.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">03</div><h3>Confiança e participação</h3><p>Favorecer o diálogo qualificado, a participação ativa e a construção de uma reputação sólida e duradoura.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-associados" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-associados)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="15" r="6"/><path d="M11 37v-3c0-6 5.5-10 13-10s13 4 13 10v3"/><path d="M10 24c-4 1-6 4-6 8v4M38 24c4 1 6 4 6 8v4"/><path d="M10 12a5 5 0 0 0 0 10M38 12a5 5 0 0 1 0 10"/></g></svg></div><h3>Valorização dos associados</h3><p>Reconhecer necessidades, ampliar o acesso à informação e tornar visíveis as iniciativas realizadas em benefício do grupo.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-dialogo" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-dialogo)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11h21a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H18l-8 7v-7a6 6 0 0 1-6-6v-8a6 6 0 0 1 4-6Z"/><path d="M33 19h4a7 7 0 0 1 7 7v4a7 7 0 0 1-7 7h-3l-4 5v-5"/><path d="M14 20h15M14 25h9"/></g></svg></div><h3>Comunicação da gestão</h3><p>Organizar mensagens claras e consistentes, dando transparência às decisões e proximidade ao relacionamento institucional.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-confianca" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-confianca)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4 40 10v12c0 10-6.6 17-16 22C14.6 39 8 32 8 22V10L24 4Z"/><path d="m16 23 5.5 5.5L33 17"/></g></svg></div><h3>Confiança e participação</h3><p>Favorecer o diálogo qualificado, a participação ativa e a construção de uma reputação sólida e duradoura.</p></article>
   </div>
 </div>
 </section><section class="soft" id="oferta">
@@ -3264,10 +3302,10 @@ document.addEventListener('DOMContentLoaded', function(){
     <p>A PromoVie apoia dirigentes na tomada de decisões, na valorização de suas ações e no aprimoramento das relações institucionais.</p>
   </div>
   <div class="cards">
-    <article class="card reveal"><div class="icon" aria-hidden="true">01</div><h3>Orientação estratégica</h3><p>Captação de informações, escuta e análise para apoiar decisões e iniciativas coerentes com as prioridades da associação.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">02</div><h3>Comunicação institucional</h3><p>Mensagens, conteúdos educativos e materiais que valorizam as ações da gestão e ajudam a manter os associados informados.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">03</div><h3>Produção de vídeos</h3><p>Vídeos com linguagem institucional, pesquisa, narrativa e acabamento adequados a cada público e objetivo.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">04</div><h3>Atendimento e Telessaúde</h3><p>Acesso a recursos digitais e atendimentos individuais on-line, de acordo com as modalidades e condições contratadas.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-estrategia" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-estrategia)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40h32"/><rect x="10" y="28" width="7" height="12" rx="1"/><rect x="21" y="20" width="7" height="20" rx="1"/><rect x="32" y="12" width="7" height="28" rx="1"/><path d="m9 21 11-9 7 3 12-10M32 5h7v7"/></g></svg></div><h3>Orientação estratégica</h3><p>Captação de informações, escuta e análise para apoiar decisões e iniciativas coerentes com as prioridades da associação.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-institucional" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-institucional)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10l21-10v27L17 28H7a4 4 0 0 1-4-4v0a4 4 0 0 1 4-4Z"/><path d="m14 28 5 13h8l-6-11M42 17l3-3M42 28l3 3"/></g></svg></div><h3>Comunicação institucional</h3><p>Mensagens, conteúdos educativos e materiais que valorizam as ações da gestão e ajudam a manter os associados informados.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-videos" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-videos)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="16" width="36" height="26" rx="4"/><path d="M6 16 10 7l8-3 24 8-4 9"/><path d="m16 6 5 11M27 9l5 10"/><path d="m20 23 11 6-11 6V23Z"/></g></svg></div><h3>Produção de vídeos</h3><p>Vídeos com linguagem institucional, pesquisa, narrativa e acabamento adequados a cada público e objetivo.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-telessaude" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-telessaude)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="M24 41S5 28.8 5 17.5A10 10 0 0 1 24 13a10 10 0 0 1 19 4.5C43 28.8 24 41 24 41Z"/><path d="M12 25h8l4-8 4 15 4-7h5"/></g></svg></div><h3>Atendimento e Telessaúde</h3><p>Acesso a recursos digitais e atendimentos individuais on-line, de acordo com as modalidades e condições contratadas.</p></article>
   </div>
 </div>
 </section><section id="conceito">
@@ -3321,9 +3359,9 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="wrap">
   <div class="head reveal"><span class="kicker">Cuidado e desenvolvimento</span><h2 class="cgSectionTitle">O cuidado com as pessoas também fortalece a associação.</h2><p>Entre os recursos disponíveis estão atendimentos individuais on-line e a Telessaúde PromoVie, que facilita o acesso a profissionais qualificados para beneficiários habilitados.</p></div>
   <div class="cards associacoesCuidadoCards">
-    <article class="card reveal"><div class="icon" aria-hidden="true">01</div><h3>Orientação e autocuidado</h3><p>Informações confiáveis e iniciativas educativas para ampliar a autonomia e a valorização das pessoas.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">02</div><h3>Atendimento digital</h3><p>Acesso remoto a profissionais de saúde, conforme as especialidades, condições e disponibilidade de cada modalidade.</p></article>
-    <article class="card reveal"><div class="icon" aria-hidden="true">03</div><h3>Valorização humana</h3><p>Recursos que podem complementar a atuação institucional e contribuir para vínculos coletivos mais fortes.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-autocuidado" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-autocuidado)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="12" r="6"/><path d="M11 40v-7c0-7 5.5-12 13-12 3 0 5.8.8 8 2.2"/><path d="M34 29c3-4 10-2 10 3 0 5-10 11-10 11s-10-6-10-11c0-5 7-7 10-3Z"/></g></svg></div><h3>Orientação e autocuidado</h3><p>Informações confiáveis e iniciativas educativas para ampliar a autonomia e a valorização das pessoas.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-digital" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-digital)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="8" width="34" height="25" rx="3"/><path d="M3 39h42M18 22h12M24 16v12"/><path d="M13 33v6M35 33v6"/></g></svg></div><h3>Atendimento digital</h3><p>Acesso remoto a profissionais de saúde, conforme as especialidades, condições e disponibilidade de cada modalidade.</p></article>
+    <article class="card reveal"><div class="icon pvIcon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="pvIconGradient-humana" x1="5" y1="43" x2="43" y2="5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5513ad"/><stop offset=".53" stop-color="#7835e0"/><stop offset="1" stop-color="#00bde8"/></linearGradient></defs><g stroke="url(#pvIconGradient-humana)" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"><path d="M24 19c-3-5-11-5-11 2 0 5 11 12 11 12s11-7 11-12c0-7-8-7-11-2Z"/><path d="M4 28v9l9 7h11M44 28v9l-9 7H24"/><path d="m4 30 10-5 8 9-6 4M44 30l-10-5-8 9 6 4"/></g></svg></div><h3>Valorização humana</h3><p>Recursos que podem complementar a atuação institucional e contribuir para vínculos coletivos mais fortes.</p></article>
   </div>
   <div class="head reveal associacoesModalidadesHead">
     <span class="kicker">Especialidades e atendimentos</span>
