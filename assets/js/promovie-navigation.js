@@ -6,6 +6,17 @@
  */
 (function () {
   "use strict";
+  /* Correção responsiva exclusiva da página /associacoes/. */
+  if (/^\/associacoes\/?(?:index\.html)?$/i.test(window.location.pathname)) {
+    var titleFix = document.createElement("style");
+    titleFix.id = "pv-associacoes-title-fit";
+    titleFix.textContent = [
+      "#inicio h1{box-sizing:border-box!important;width:100%!important;max-width:100%!important;font-size:clamp(3rem,4.9vw,4.4rem)!important;line-height:1.12!important;letter-spacing:-.065em!important;white-space:nowrap!important;overflow:visible!important;padding-bottom:.1em!important}",
+      "@media(max-width:800px){#inicio h1{font-size:clamp(2rem,10vw,3.55rem)!important;line-height:1.12!important;margin-bottom:10px!important;padding:0 0 .12em!important;text-align:center!important}}",
+      "@media(max-width:360px){#inicio h1{font-size:clamp(1.9rem,9.4vw,2.4rem)!important}}"
+    ].join("\n");
+    document.head.appendChild(titleFix);
+  }
   var key = "promovie:last-page:v1";
   var defaultTarget = "/experiencia/";
   function normalize(value) {
